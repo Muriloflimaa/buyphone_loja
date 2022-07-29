@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const ProductCard = (props: any) => {
     return (
-        <div className="card w-36 mx-auto shadow-xl bg-colorCard hover:scale-105 hover:shadow-2xl ease-in-out duration-300 sm:w-48 md:w-48 lg:w-64 xl:w-72">
+        <div className="card w-36 mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300 sm:w-48 md:w-48 lg:w-64 xl:w-72">
             <figure className="px-4 pt-4">
                 <Image src={props.image} layout="fixed" />
             </figure>
