@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
                         href="https://fonts.googleapis.com/icon?family=Material+Icons"
                     />
                 </Head>
-                <body>
+                <body className="bg-Primary">
                     <Main />
                     <NextScript />
                 </body>

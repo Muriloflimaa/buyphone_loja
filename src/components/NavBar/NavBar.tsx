@@ -51,8 +51,8 @@ const NavBar = () => {
             <div
                 className={
                     isOn
-                        ? 'drawer absolute -mt-16 z-20'
-                        : 'drawer absolute -mt-16 -z-10'
+                        ? 'drawer absolute -mt-16 z-20 transition-all duration-500'
+                        : 'drawer absolute -mt-16 -z-10  transition-all duration-500'
                 }
             >
                 <input

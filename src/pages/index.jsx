@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
-import iPhone from '../assets/images/banner.webp'
 import iPhoneProduct from '../assets/images/product.svg'
 import { useState } from 'react'
-import  MyAppBar  from '../components/MyNav/MyBottomNavigation';
+import  MyBottomNavigation  from '../components/MyBottomNavigation/MyBottomNavigation';
 
 const Home = () => {
     const [click, setClick] = useState(false)
@@ -29,8 +28,8 @@ const Home = () => {
   <div className="flickity-viewport" >
     <div className="flickity-slider" >
     <div className="absolute flex justify-between transform -translate-y-1/2 left-5 mx-auto max-w-7xl px-4 right-5 mt-[6.5rem]" onClick={() => setClick(!click)}>
-      <a href={click ? "#item1" : "#item2"} className="btn btn-circle text-white" aria-hidden="true">❮</a> 
-      <a href={click ? "#item1" : "#item2"} className="btn btn-circle text-white" aria-hidden="true">❯</a>
+    <a href={click ? "#item1" : "#item2"} className="btn btn-circle text-PrimaryText" aria-hidden="true">❮</a> 
+      <a href={click ? "#item1" : "#item2"} className="btn btn-circle text-PrimaryText" aria-hidden="true">❯</a>
     </div>
     <img src="https://loja.buyphone.com.br/img/banner2.webp" className="w-full" alt=""  aria-hidden="true"/>
       
@@ -50,9 +49,9 @@ const Home = () => {
             </div>
   </div>
 </div> 
-<div className="flex justify-center w-full py-6 gap-2">
-  <a href="#item2" onClick={() => setClick(!click)} className={click ? "bg-white rounded-full btn btn-xs w-2 h-2 p-1 min-h-0" : "bg-Primary rounded-full btn btn-xs w-2 h-2 p-1 min-h-0"}></a> 
-  <a href="#item1" onClick={() => setClick(!click)} className={!click ? "bg-white rounded-full btn btn-xs w-2 h-2 p-1 min-h-0" : "bg-Primary rounded-full btn btn-xs w-2 h-2 p-1 min-h-0"}></a>
+<div className="flex justify-center w-full py-6 gap-2 ">
+  <a href="#item2" onClick={() => setClick(!click)} className={click ? "bg-PrimaryText rounded-full btn btn-xs w-2 h-2 p-1 min-h-0  hover:bg-blue-700" : "bg-blue-700 rounded-full btn btn-xs w-2 h-2 p-1 min-h-0 hover:bg-blue-700"}></a> 
+  <a href="#item1" onClick={() => setClick(!click)} className={!click ? "bg-PrimaryText rounded-full btn btn-xs w-2 h-2 p-1 min-h-0  hover:bg-blue-700" : "bg-blue-700 rounded-full btn btn-xs w-2 h-2 p-1 min-h-0 hover:bg-blue-700"}></a>
 </div>
 
 
@@ -64,7 +63,7 @@ const Home = () => {
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
 </div>
-<MyAppBar />
+<MyBottomNavigation />
         </div>
         
     )

@@ -12,6 +12,9 @@ module.exports = {
                 border: '#5F5F5F',
                 colorCard: '#212B36',
             },
+            backgroundImage: {
+                curved: "url('../src/assets/images/download.svg')",
+            },
         },
     },
     plugins: [require('daisyui')],
