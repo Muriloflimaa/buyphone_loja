@@ -7,47 +7,40 @@ import {
     ShoppingCartIcon,
     BellIcon,
 } from '@heroicons/react/solid'
+import { useRouter, useEffect } from 'next/router'
+import Link from 'next/link';
+
 
 const MyBottomNavigation = () => {
-    const [value, setValue] = React.useState(3)
-    const [move, setMove] = React.useState('50%')
+    const router = useRouter();
+    const [pos, setPos] = React.useState('')
+    const [move, setMove] = React.useState('-150%')
     const [color, setColor] = React.useState('#7959FD')
     const positions = [10, 30, 50, 70, 90]
-    const [pos, setPos] = React.useState('50')
     const colors = ['#FFE85B', '#EE466B', '#7959FD', '#3E9EFB', '#4CF0DE']
-
+    
     const handleSlide = (where) => {
-        const moveTo = positions[where] + '%'
-        setMove(moveTo)
+        setMove(positions[where] + '%' )
         setColor(colors[where])
+        setPos(positions[where])
 
-        if (moveTo == '10%') {
-            setPos('10')
-        }
-        if (moveTo == '30%') {
-            setPos('30')
-        }
-        if (moveTo == '50%') {
-            setPos('50')
-        }
-        if (moveTo == '70%') {
-            setPos('70')
-        }
-        if (moveTo == '90%') {
-            setPos('90')
-        } else {
-            return 0
-        }
     }
+    React.useEffect(() => {
+            if(router.asPath === '/cart'){
+                handleSlide(3)
+            }
+            if(router.asPath === '/'){
+                handleSlide(2)
+             }
+        
+      }, [router.asPath]);
 
     return (
         <div
-            className="flex justify-around items-center fixed bottom-0 w-full h-16 p-0 bg-black"
-            value={value}
-            onChange={( newValue ) => { setValue(newValue)}}
+            className="flex justify-around items-center max-w-[1600px] fixed bottom-0 w-full h-16 p-0 bg-black"   
         >
             <div
-                className="flex justify-center items-center absolute w-[151px] h-[100px] -mt-[28px] left-[50%] transition-all duration-300 ease-in-out bg-curved"
+                className={"flex justify-center items-center absolute w-[151px] h-[100px] -mt-[28px] transition-all duration-300 ease-in-out bg-curved" }
                 style={{ transform: 'translateX(-50%)', left: `${move}` }}
             >
                 <span
@@ -59,9 +52,7 @@ const MyBottomNavigation = () => {
             <div
                 onClick={() => handleSlide(0)}
                 className={
-                    pos == '10'
-                        ? 'w-auto text-PrimaryText cursor-pointer z-50 -mt-7 scale-125 ease-in-out duration-300'
-                        : 'w-auto text-PrimaryText cursor-pointer z-50 mt-0 scale-100 ease-in-out duration-300'
+                  'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 10 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
                 }
             >
                 <ChartBarIcon
@@ -72,43 +63,38 @@ const MyBottomNavigation = () => {
             <div
                 onClick={() => handleSlide(1)}
                 className={
-                    pos == '30'
-                        ? 'w-auto text-PrimaryText cursor-pointer z-50 -mt-7 scale-125 ease-in-out duration-300'
-                        : 'w-auto text-PrimaryText cursor-pointer z-50 mt-0 scale-100 ease-in-out duration-300'
-                }
+                    'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 30 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+                  }
             >
                 <CashIcon id="CashIcon" className="h-5 w-5 text-PrimaryText" />
             </div>
             <div
                 onClick={() => handleSlide(2)}
                 className={
-                    pos == '50'
-                        ? 'w-auto text-PrimaryText cursor-pointer z-50 -mt-7 scale-125 ease-in-out duration-300'
-                        : 'w-auto text-PrimaryText cursor-pointer z-50 mt-0 scale-100 ease-in-out duration-300'
-                }
+                    'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 50 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+                  }
             >
-                <HomeIcon id="HomeIcon" className="h-5 w-5 text-PrimaryText" />
+                <HomeIcon onClick={() => router.push('/')} id="HomeIcon" className="h-5 w-5 text-PrimaryText" />
+           
             </div>
             <div
                 onClick={() => handleSlide(3)}
                 className={
-                    pos == '70'
-                        ? 'w-auto text-PrimaryText cursor-pointer z-50 -mt-7 scale-125 ease-in-out duration-300'
-                        : 'w-auto text-PrimaryText cursor-pointer z-50 mt-0 scale-100 ease-in-out duration-300'
-                }
+                    'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 70 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+                  }
             >
+                 <Link href="/cart">
                 <ShoppingCartIcon
                     id="ShoppingCartIcon"
                     className="h-5 w-5 text-PrimaryText"
                 />
+                </Link>
             </div>
             <div
                 onClick={() => handleSlide(4)}
                 className={
-                    pos == '90'
-                        ? 'w-auto text-PrimaryText cursor-pointer z-50 -mt-7 scale-125 ease-in-out duration-300'
-                        : 'w-auto text-PrimaryText cursor-pointer z-50 mt-0 scale-100 ease-in-out duration-300'
-                }
+                    'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 90 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+                  }
             >
                 <BellIcon className="h-5 w-5 text-PrimaryText" />
             </div>

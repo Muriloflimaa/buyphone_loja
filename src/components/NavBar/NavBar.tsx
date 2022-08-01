@@ -52,7 +52,7 @@ const NavBar = () => {
                 className={
                     isOn
                         ? 'drawer absolute -mt-16 z-20 transition-all duration-500'
-                        : 'drawer absolute -mt-16 -z-10  transition-all duration-500'
+                        : 'drawer absolute -mt-16 -z-10 transition-all duration-500'
                 }
             >
                 <input
@@ -60,15 +60,23 @@ const NavBar = () => {
                     type="checkbox"
                     className="drawer-toggle"
                 />
-                <div className="drawer-content"></div>
-                <div className="drawer-side">
+                <div
+                    className={
+                        isOn ? 'drawer-content block' : 'drawer-content hidden'
+                    }
+                ></div>
+                <div
+                    className={
+                        isOn ? 'drawer-side block' : 'drawer-side hidden'
+                    }
+                >
                     <label
                         htmlFor="my-drawer"
                         className="drawer-overlay w-full h-full fixed"
                         onClick={handleClick}
                     ></label>
 
-                    <ul className="menu overflow-y-auto w-2/3 h-full bg-base-100 text-base-content fixed">
+                    <ul className="menu overflow-y-auto h-full bg-base-100 text-base-content fixed">
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>

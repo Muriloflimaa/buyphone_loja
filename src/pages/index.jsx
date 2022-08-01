@@ -1,16 +1,12 @@
-import Image from 'next/image'
-import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import iPhoneProduct from '../assets/images/product.svg'
 import { useState } from 'react'
-import  MyBottomNavigation  from '../components/MyBottomNavigation/MyBottomNavigation';
 
-const Home = () => {
+export default function Home(){
     const [click, setClick] = useState(false)
     return (
-        <div className='max-w-[1600px] mx-auto'>
-               <NavBar />
-               <div className='mt-[23px]'>
+       <div>
+               <div className='my-[23px]'>
                <div className="tabs text-PrimaryText flex justify-center">
   <a className="tab tab-bordered text-PrimaryText">Entrega Full</a> 
   <a className="tab tab-bordered tab-active ">iPhone XR</a> 
@@ -49,12 +45,10 @@ const Home = () => {
             </div>
   </div>
 </div> 
-<div className="flex justify-center w-full py-6 gap-2 ">
+<div className="justify-center w-full py-6 gap-2 hidden md:flex">
   <a href="#item2" onClick={() => setClick(!click)} className={click ? "bg-PrimaryText rounded-full btn btn-xs w-2 h-2 p-1 min-h-0  hover:bg-blue-700" : "bg-blue-700 rounded-full btn btn-xs w-2 h-2 p-1 min-h-0 hover:bg-blue-700"}></a> 
   <a href="#item1" onClick={() => setClick(!click)} className={!click ? "bg-PrimaryText rounded-full btn btn-xs w-2 h-2 p-1 min-h-0  hover:bg-blue-700" : "bg-blue-700 rounded-full btn btn-xs w-2 h-2 p-1 min-h-0 hover:bg-blue-700"}></a>
 </div>
-
-
 
 
 <div className='grid grid-cols-2 md:grid-cols-4 mx-auto gap-3 max-w-7xl'>
@@ -63,10 +57,7 @@ const Home = () => {
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
 </div>
-<MyBottomNavigation />
         </div>
         
     )
 }
-
-export default Home
