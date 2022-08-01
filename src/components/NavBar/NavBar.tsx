@@ -50,9 +50,8 @@ const NavBar = () => {
             {/* MENU */}
             <div
                 className={
-                    isOn
-                        ? 'drawer absolute -mt-16 z-20 transition-all duration-500'
-                        : 'drawer absolute -mt-16 -z-10 transition-all duration-500'
+                    'drawer absolute -mt-16 transition-all duration-500 ' +
+                    (isOn == false ? '-z-10' : 'z-20')
                 }
             >
                 <input
@@ -62,12 +61,14 @@ const NavBar = () => {
                 />
                 <div
                     className={
-                        isOn ? 'drawer-content block' : 'drawer-content hidden'
+                        'drawer-content transition-all duration-500 ' +
+                        (isOn == false ? 'block' : 'hidden')
                     }
                 ></div>
                 <div
                     className={
-                        isOn ? 'drawer-side block' : 'drawer-side hidden'
+                        'drawer-side transition-all duration-500 ' +
+                        (isOn == false ? 'block' : 'hidden')
                     }
                 >
                     <label
@@ -76,7 +77,14 @@ const NavBar = () => {
                         onClick={handleClick}
                     ></label>
 
-                    <ul className="menu overflow-y-auto h-full bg-base-100 text-base-content fixed">
+                    <ul
+                        className={
+                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed transition-all duration-500 ' +
+                            (isOn == true
+                                ? 'block'
+                                : 'transition-all duration-1000 delay-1000 hidden')
+                        }
+                    >
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>

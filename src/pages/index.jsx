@@ -56,8 +56,11 @@ export default function Home(){
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
+
+  {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}
 </div>
         </div>
         
     )
 }
+ 
