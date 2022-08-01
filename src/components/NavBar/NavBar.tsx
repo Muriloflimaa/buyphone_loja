@@ -8,6 +8,7 @@ import {
     ShoppingBagIcon,
     LogoutIcon,
     UserIcon,
+    ShoppingCartIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
 
@@ -20,8 +21,8 @@ const NavBar = () => {
 
     return (
         <nav>
-            <div className="w-full h-16 flex justify-between items-center bg-Primary border-b-[2px] border-border relative p-4 z-10">
-                <div>
+            <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 bg-Primary border-b-[2px] border-border relative p-4 z-10">
+                <div className="block md:hidden">
                     {/* CHAMA O MENU */}
                     <label
                         htmlFor="my-drawer"
@@ -43,15 +44,41 @@ const NavBar = () => {
                     </label>
                     {/* FIM */}
                 </div>
-                <Image src={Logo} layout="fixed" />
-
-                <SearchIcon className="h-5 w-5 text-PrimaryText " />
+                <Link href={'/'}>
+                    <Image
+                        src={Logo}
+                        className="cursor-pointer"
+                        layout="fixed"
+                    />
+                </Link>
+                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
+                <div className="hidden md:block w-full">
+                    <div>
+                        <label className="input-group">
+                            <input
+                                type="text"
+                                placeholder="Pesquisa..."
+                                className="input input-bordered rounded-md !important w-full text-PrimaryText"
+                            />
+                        </label>
+                    </div>
+                </div>
+                <div className="md:flex justify-end gap-3 w-full hidden">
+                    <div className="flex justify-end flex-col items-center">
+                        <UserIcon className="h-8 w-8 text-PrimaryText" />
+                        <p>Olá, João</p>
+                    </div>
+                    <div className="flex justify-end flex-col items-center">
+                        <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
+                        <p>Carrinho</p>
+                    </div>
+                </div>
             </div>
 
             {/* MENU */}
             <div
                 className={
-                    'drawer absolute -mt-16 transition-all duration-700 ' +
+                    'drawer absolute -mt-16 transition-all duration-500 block h-[100vh] ' +
                     (isOn == false ? '-z-10' : 'z-20')
                 }
             >
@@ -62,16 +89,11 @@ const NavBar = () => {
                 />
                 <div
                     className={
-                        'drawer-content transition-all duration-700 ' +
+                        'drawer-content transition-all duration-500 ' +
                         (isOn == false ? 'block' : 'hidden')
                     }
                 ></div>
-                <div
-                    className={
-                        'drawer-side transition-all duration-700 ' +
-                        (isOn == false ? 'block' : 'hidden')
-                    }
-                >
+                <div className="drawer-side">
                     <label
                         htmlFor="my-drawer"
                         className="drawer-overlay w-full h-full fixed"
@@ -80,7 +102,7 @@ const NavBar = () => {
 
                     <ul
                         className={
-                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed transition-all duration-1000 '
+                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed z-50'
                         }
                     >
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
@@ -99,7 +121,7 @@ const NavBar = () => {
                             </div>
                             <label
                                 htmlFor="my-drawer"
-                                className=" swap swap-rotate p-6"
+                                className="swap swap-rotate p-6"
                                 onClick={handleClick}
                             >
                                 <input type="checkbox" />
@@ -165,8 +187,6 @@ const NavBar = () => {
                     </ul>
                 </div>
             </div>
-
-            {/* FIM */}
         </nav>
     )
 }

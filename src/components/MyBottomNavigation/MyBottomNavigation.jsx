@@ -37,7 +37,7 @@ const MyBottomNavigation = () => {
 
     return (
         <div
-            className="flex justify-around items-center max-w-[1600px] fixed bottom-0 w-full h-16 p-0 bg-black"   
+            className="flex justify-around items-center max-w-[1600px] fixed bottom-0 w-full h-16 p-0 bg-black md:hidden"   
         >
             <div
                 className={"flex justify-center items-center absolute w-[151px] h-[100px] -mt-[28px] transition-all duration-300 ease-in-out bg-curved" }
