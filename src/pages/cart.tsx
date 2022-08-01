@@ -16,36 +16,36 @@ export default function Cart() {
                 <ProductCart
                     name="iPhone 12 pro MAX"
                     id="Azul / 256GB"
-                    qtd="1"
-                    price="5.201,00"
+                    qtd={1}
+                    price={5.2}
                     image={iPhoneProduct}
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
                     id="Azul / 256GB"
-                    qtd="1"
-                    price="5.201,00"
+                    qtd={1}
+                    price={5.2}
                     image={iPhoneProduct}
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
                     id="Azul / 256GB"
-                    qtd="1"
-                    price="5.201,00"
+                    qtd={1}
+                    price={5.2}
                     image={iPhoneProduct}
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
                     id="Azul / 256GB"
-                    qtd="1"
-                    price="5.201,00"
+                    qtd={1}
+                    price={5.2}
                     image={iPhoneProduct}
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
                     id="Azul / 256GB"
-                    qtd="1"
-                    price="5.201,00"
+                    qtd={1}
+                    price={5.2}
                     image={iPhoneProduct}
                 />
             </div>

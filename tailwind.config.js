@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    important: true,
     content: [
         './src/pages/**/*.{js,ts,jsx,tsx}',
         './src/components/**/*.{js,ts,jsx,tsx}',
@@ -10,6 +11,7 @@ module.exports = {
                 Primary: '#161C24',
                 PrimaryText: '#fff',
                 border: '#5F5F5F',
+                default: '#201942',
                 colorCard: '#212B36',
             },
             backgroundImage: {

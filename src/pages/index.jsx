@@ -53,8 +53,8 @@ export default function Home(){
 
 <div className='grid grid-cols-2 md:grid-cols-4 mx-auto gap-3 max-w-7xl'>
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
-    <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
-    <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
+    <ProductCard name='iPhone X' color='Branco' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
+    <ProductCard name='iPhone X' color='Vermelho' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
     <ProductCard name='iPhone X' color='Preto' priceOld='5.123,00' price='4.659,00' image={iPhoneProduct} />
 
   {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}

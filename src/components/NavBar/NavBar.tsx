@@ -9,6 +9,7 @@ import {
     LogoutIcon,
     UserIcon,
 } from '@heroicons/react/solid'
+import Link from 'next/link'
 
 const NavBar = () => {
     const [isOn, setIsOn] = useState(false)
@@ -50,7 +51,7 @@ const NavBar = () => {
             {/* MENU */}
             <div
                 className={
-                    'drawer absolute -mt-16 transition-all duration-500 ' +
+                    'drawer absolute -mt-16 transition-all duration-700 ' +
                     (isOn == false ? '-z-10' : 'z-20')
                 }
             >
@@ -61,13 +62,13 @@ const NavBar = () => {
                 />
                 <div
                     className={
-                        'drawer-content transition-all duration-500 ' +
+                        'drawer-content transition-all duration-700 ' +
                         (isOn == false ? 'block' : 'hidden')
                     }
                 ></div>
                 <div
                     className={
-                        'drawer-side transition-all duration-500 ' +
+                        'drawer-side transition-all duration-700 ' +
                         (isOn == false ? 'block' : 'hidden')
                     }
                 >
@@ -79,10 +80,7 @@ const NavBar = () => {
 
                     <ul
                         className={
-                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed transition-all duration-500 ' +
-                            (isOn == true
-                                ? 'block'
-                                : 'transition-all duration-1000 delay-1000 hidden')
+                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed transition-all duration-1000 '
                         }
                     >
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
@@ -119,12 +117,15 @@ const NavBar = () => {
                             </label>
                         </div>
                         <li>
-                            <div className="flex py-8">
-                                <HomeIcon className="h-5 w-5 text-PrimaryText" />
-                                <a className="text-PrimaryText">
-                                    Página inicial
-                                </a>
-                            </div>
+                            <Link href="/">
+                                <div className="flex py-8">
+                                    <HomeIcon className="h-5 w-5 text-PrimaryText" />
+
+                                    <a className="text-PrimaryText">
+                                        Página inicial
+                                    </a>
+                                </div>
+                            </Link>
                         </li>
 
                         <li className="flex">

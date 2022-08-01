@@ -57,13 +57,13 @@ const MyBottomNavigation = () => {
             >
                 <ChartBarIcon
                     id="ChartBarIcon"
-                    className="h-5 w- text-PrimaryText"
+                    className="h-5 w-5 text-PrimaryText"
                 />
             </div>
             <div
                 onClick={() => handleSlide(1)}
                 className={
-                    'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 30 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+                    'w-auto text-PrimaryText cursor-pointer z-50  ease-in-out transition-all duration-300 ' + (pos === 30 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
                   }
             >
                 <CashIcon id="CashIcon" className="h-5 w-5 text-PrimaryText" />
@@ -77,19 +77,21 @@ const MyBottomNavigation = () => {
                 <HomeIcon onClick={() => router.push('/')} id="HomeIcon" className="h-5 w-5 text-PrimaryText" />
            
             </div>
+            <Link href="/cart">
             <div
                 onClick={() => handleSlide(3)}
                 className={
                     'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' + (pos === 70 ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
                   }
             >
-                 <Link href="/cart">
+                
                 <ShoppingCartIcon
                     id="ShoppingCartIcon"
                     className="h-5 w-5 text-PrimaryText"
                 />
-                </Link>
+                
             </div>
+            </Link>
             <div
                 onClick={() => handleSlide(4)}
                 className={
