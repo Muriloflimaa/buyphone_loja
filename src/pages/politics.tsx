@@ -1,17 +1,6 @@
-import { ArrowLeftIcon } from '@heroicons/react/solid'
-import { useRouter } from 'next/router'
-
 export default function Politics() {
-    const router = useRouter()
     return (
         <div className="py-10 text-default grid gap-2">
-            <button
-                className="flex gap-2 font-bold text-lg justify-center items-center py-4"
-                onClick={() => router.back()}
-            >
-                <ArrowLeftIcon className="w-5 h-5" />
-                Clique para voltar
-            </button>
             <h1>POLÍTICA DE PRIVACIDADE</h1>
             <p>
                 O(a) Comprador e Vendedor autoriza a A BUYPHONE a realizar o

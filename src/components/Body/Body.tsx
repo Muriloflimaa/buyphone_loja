@@ -16,7 +16,7 @@ const Body = ({ children }: Homeprops) => {
                         <div className="h-[1px] w-full bg-white max-w-7xl mx-auto"></div>
                     </div>
 
-                    <div className="gap-6 px-6 grid grid-cols-1 md:grid-cols-3">
+                    <div className="gap-6 px-6 grid grid-cols-1 md:grid-cols-4">
                         <div>
                             <div className="mx-auto">
                                 <h1 className="text-3xl text-PrimaryText">
@@ -71,7 +71,7 @@ const Body = ({ children }: Homeprops) => {
                             </h1>
                             <h2>CNPJ: 40.779.273/0001-09</h2>
                         </div>
-                        <h3>Criado por Buyphone.com.br</h3>
+                        <h3>Criado com ❤️ por Buyphone.com.br</h3>
                     </div>
                 </div>
             </div>

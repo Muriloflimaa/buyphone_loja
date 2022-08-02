@@ -1,18 +1,7 @@
-import { ArrowLeftIcon } from '@heroicons/react/solid'
-import { useRouter } from 'next/router'
-
-export default function TermsOfServices() {
-    const router = useRouter()
+export default function Terms() {
     return (
-        <div className="py-10 text-default grid gap-2">
-            <button
-                className="flex gap-2 font-bold text-lg justify-center items-center py-4"
-                onClick={() => router.back()}
-            >
-                <ArrowLeftIcon className="w-5 h-5" />
-                Clique para voltar
-            </button>
-            <h1 className="font-bold">TERMOS DE USO DA BUYPHONE</h1>
+        <div className="py-10 px-5 text-default grid gap-2">
+            <h1>TERMOS DE USO DA BUYPHONE</h1>
             <p>Última Atualização: 27 de outubro de 2021</p>
             <p>Bem-vindo(a)! Obrigado por utilizar a BUYPHONE!</p>
             <p>

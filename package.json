@@ -12,6 +12,7 @@
         "next": "latest",
         "react": "18.1.0",
         "react-dom": "18.1.0",
+        "react-hot-toast": "^2.3.0",
         "sass": "^1.54.0"
     },
     "devDependencies": {

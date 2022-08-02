@@ -3,6 +3,8 @@ import Link from 'next/link'
 import styles from './styles.module.scss'
 import LogoSvg from '../../assets/images/LogoPurple.svg'
 import { ReactElement, useEffect, useState } from 'react'
+import { ArrowLeftIcon } from '@heroicons/react/solid'
+import { useRouter } from 'next/router'
 
 interface Homeprops {
     children: ReactElement
@@ -10,6 +12,15 @@ interface Homeprops {
 }
 
 const LoginRegister = ({ children, width }: Homeprops) => {
+    const [wid, setWidth] = useState(false)
+    const router = useRouter()
+    useEffect(() => {
+        if (router.asPath == '/terms' || router.asPath == '/politics') {
+            setWidth(true)
+        } else {
+            setWidth(false)
+        }
+    })
     return (
         <>
             <div className="glass z-10 fixed left-0 w-full h-full"></div>
@@ -49,6 +60,19 @@ const LoginRegister = ({ children, width }: Homeprops) => {
                                     </div>
                                 </Link>
                             </div>
+                            {wid == true ? (
+                                <div className="flex justify-center pt-4">
+                                    <button
+                                        className="flex gap-2 font-bold text-lg justify-center items-center py-4 text-default"
+                                        onClick={() => router.back()}
+                                    >
+                                        <ArrowLeftIcon className="w-5 h-5" />
+                                        Clique para voltar
+                                    </button>
+                                </div>
+                            ) : (
+                                ''
+                            )}
 
                             {children}
                         </div>

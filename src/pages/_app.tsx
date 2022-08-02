@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Body from '../components/Body/Body'
 import LoginRegister from '../components/Login-Register/Login-Register'
 import { useEffect, useState } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </LoginRegister>
             ) : (
                 <>
+                    <Toaster position="top-right" reverseOrder={false} />
                     <Body>
                         <Component {...pageProps} />
                     </Body>

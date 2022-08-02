@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Logo from '../../assets/images/logo.svg'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
     SearchIcon,
     UserCircleIcon,
@@ -11,12 +11,82 @@ import {
     ShoppingCartIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
+import ProductCart from '../ProductCart/ProductCart'
+import iPhoneProduct from '../../assets/images/product.svg'
+import { useRouter } from 'next/router'
 
 const NavBar = () => {
     const [isOn, setIsOn] = useState(false)
 
     function handleClick() {
         setIsOn(!isOn)
+    }
+
+    const router = useRouter()
+
+    const [show, setShow] = useState(false)
+    useEffect(() => {
+        if (router.asPath == '/shipping/address') {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
+    })
+
+    function cart() {
+        toast.custom((t) => (
+            <div
+                className={`${
+                    t.visible ? 'animate-enter' : 'animate-leave'
+                } max-w-md w-full bg-colorCard shadow-lg rounded-lg p-5`}
+            >
+                <div className="flex justify-between items-center">
+                    <h1 className="text-PrimaryText text-xl uppercase">
+                        Meu carrinho
+                    </h1>
+                    <h2 className="text-PrimaryText text-xs">2 itens</h2>
+                </div>
+                <div className="flex flex-col gap-3 p-3">
+                    <ProductCart
+                        name="iPhone 12 pro MAX"
+                        id="Azul / 256GB"
+                        qtd={1}
+                        price={5.2}
+                        image={iPhoneProduct}
+                        shadow=" "
+                    />
+                    <ProductCart
+                        name="iPhone 12 pro MAX"
+                        id="Azul / 256GB"
+                        qtd={1}
+                        price={5.2}
+                        image={iPhoneProduct}
+                        shadow=" "
+                    />
+                </div>
+
+                <div className="flex justify-center">
+                    <Link href={'/shipping'}>
+                        <button
+                            onClick={() => toast.dismiss(t.id)}
+                            className="bg-[#00A944] py-3 px-5 rounded-lg text-PrimaryText"
+                        >
+                            Ir para o pagamento
+                        </button>
+                    </Link>
+                </div>
+
+                <div className="flex justify-center">
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        className="text-lg text-PrimaryText"
+                    >
+                        Continuar comprando
+                    </button>
+                </div>
+            </div>
+        ))
     }
 
     return (
@@ -68,18 +138,32 @@ const NavBar = () => {
                         <UserIcon className="h-8 w-8 text-PrimaryText" />
                         <p>Olá, João</p>
                     </div>
-                    <div className="flex justify-end flex-col items-center">
-                        <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
-                        <p>Carrinho</p>
-                    </div>
+                    <Link href={'/cart'}>
+                        <div className="flex justify-end flex-col items-center cursor-pointer  md:hidden">
+                            <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
+                            <p>Carrinho</p>
+                        </div>
+                    </Link>
+
+                    {show == false ? (
+                        <div
+                            className="hidden justify-end flex-col items-center cursor-pointer  md:flex"
+                            onClick={cart}
+                        >
+                            <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
+                            <p>Carrinho</p>
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </div>
             </div>
 
             {/* MENU */}
             <div
                 className={
-                    'drawer absolute -mt-16 transition-all duration-500 block h-[100vh] ' +
-                    (isOn == false ? '-z-10' : 'z-20')
+                    'drawer absolute -mt-16 transition-all duration-500 h-[100vh] ' +
+                    (isOn == false ? '-z-10' : 'z-50')
                 }
             >
                 <input
@@ -89,8 +173,8 @@ const NavBar = () => {
                 />
                 <div
                     className={
-                        'drawer-content transition-all duration-500 ' +
-                        (isOn == false ? 'block' : 'hidden')
+                        'drawer-content transition-all duration-500 delay-500 ' +
+                        (isOn == true ? 'hidden' : 'block')
                     }
                 ></div>
                 <div className="drawer-side">
@@ -100,11 +184,7 @@ const NavBar = () => {
                         onClick={handleClick}
                     ></label>
 
-                    <ul
-                        className={
-                            'menu overflow-y-auto h-full bg-base-100 text-base-content fixed z-50'
-                        }
-                    >
+                    <ul className="menu overflow-y-auto h-full bg-base-100 text-base-content fixed  flex">
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>

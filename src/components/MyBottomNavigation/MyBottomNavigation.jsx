@@ -26,9 +26,10 @@ const MyBottomNavigation = () => {
 
     }
     React.useEffect(() => {
-            if(router.asPath === '/cart'){
+            if(router.asPath === '/cart' || router.asPath === '/shipping' || router.asPath === '/shipping/address' ){
                 handleSlide(3)
             }
+            
             if(router.asPath === '/'){
                 handleSlide(2)
              }

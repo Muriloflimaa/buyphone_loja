@@ -19,6 +19,7 @@ export default function Cart() {
                     qtd={1}
                     price={5.2}
                     image={iPhoneProduct}
+                    shadow="shadow-md"
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
@@ -26,6 +27,7 @@ export default function Cart() {
                     qtd={1}
                     price={5.2}
                     image={iPhoneProduct}
+                    shadow="shadow-md"
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
@@ -33,6 +35,7 @@ export default function Cart() {
                     qtd={1}
                     price={5.2}
                     image={iPhoneProduct}
+                    shadow="shadow-md"
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
@@ -40,6 +43,7 @@ export default function Cart() {
                     qtd={1}
                     price={5.2}
                     image={iPhoneProduct}
+                    shadow="shadow-md"
                 />
                 <ProductCart
                     name="iPhone 12 pro MAX"
@@ -47,6 +51,7 @@ export default function Cart() {
                     qtd={1}
                     price={5.2}
                     image={iPhoneProduct}
+                    shadow="shadow-md"
                 />
             </div>
         </div>
