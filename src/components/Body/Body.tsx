@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 import MyBottomNavigation from '../MyBottomNavigation/MyBottomNavigation'
 import NavBar from '../NavBar/NavBar'
+
 interface Homeprops {
     children: ReactElement
 }

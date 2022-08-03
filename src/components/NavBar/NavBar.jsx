@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Logo from '../../assets/images/logo.svg'
-import React, { useState, useRef, useEffect } from 'react'
+import styles from './styles.module.scss'
+
+import React, { useState, useEffect } from 'react'
 import {
     SearchIcon,
     UserCircleIcon,
@@ -16,7 +18,9 @@ import ProductCart from '../ProductCart/ProductCart'
 import iPhoneProduct from '../../assets/images/product.svg'
 import { useRouter } from 'next/router'
 
-const NavBar = () => {
+
+
+export default function NavBar() {
     const [isOn, setIsOn] = useState(false)
 
     function handleClick() {
@@ -27,7 +31,7 @@ const NavBar = () => {
 
     const [show, setShow] = useState(false)
     useEffect(() => {
-        if (router.asPath == '/shipping/address') {
+        if (router.asPath == '/shipping/address' || router.asPath == '/cart' || router.asPath == '/shipping' || router.asPath == '/payment') {
             setShow(true)
         } else {
             setShow(false)
@@ -39,7 +43,7 @@ const NavBar = () => {
             <div
                 className={`${
                     t.visible ? 'animate-enter' : 'animate-leave'
-                } max-w-md w-full bg-colorCard shadow-lg rounded-lg p-5`}
+                } max-w-sm w-full bg-colorCard shadow-lg rounded-xl p-5`}
             >
                 <div className="flex justify-between items-center">
                     <h1 className="text-PrimaryText text-xl uppercase">
@@ -47,7 +51,7 @@ const NavBar = () => {
                     </h1>
                     <h2 className="text-PrimaryText text-xs">2 itens</h2>
                 </div>
-                <div className="flex flex-col gap-3 p-3">
+                <div className="flex flex-col gap-9 my-4 mt-8">
                     <ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"
@@ -56,7 +60,10 @@ const NavBar = () => {
                         image={iPhoneProduct}
                         shadow=" "
                     />
-                    <ProductCart
+                   <div className="overflow-hidden">
+<div className={styles.divisorbuyphone}></div>
+</div>
+<ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"
                         qtd={1}
@@ -64,100 +71,110 @@ const NavBar = () => {
                         image={iPhoneProduct}
                         shadow=" "
                     />
+                   <div className="overflow-hidden">
+<div className={styles.divisorbuyphone}></div>
+</div>
                 </div>
 
                 <div className="flex justify-center">
                     <Link href={'/shipping'}>
                         <button
                             onClick={() => toast.dismiss(t.id)}
-                            className="bg-[#00A944] py-3 px-5 rounded-lg text-PrimaryText"
+                            className="bg-[#00A944] py-4 my-3 w-full rounded-lg text-PrimaryText"
                         >
                             Ir para o pagamento
                         </button>
                     </Link>
                 </div>
 
-                <div className="flex justify-center">
-                    <button
-                        onClick={() => toast.dismiss(t.id)}
-                        className="text-lg text-PrimaryText"
-                    >
-                        Continuar comprando
-                    </button>
-                </div>
             </div>
         ))
     }
 
     return (
         <nav>
-            <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 bg-Primary border-b-[2px] border-border relative p-4 z-10">
-                <div className="block md:hidden">
-                    {/* CHAMA O MENU */}
-                    <label
-                        htmlFor="my-drawer"
-                        className="btn btn-circle swap swap-rotate absolute -mt-6"
-                        onClick={handleClick}
-                    >
-                        <input type="checkbox" />
-                        <div>
-                            <svg
-                                className="swap-off fill-current text-PrimaryText z-20"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 512 512"
-                            >
-                                <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                            </svg>
-                        </div>
-                    </label>
-                    {/* FIM */}
-                </div>
-                <Link href={'/'}>
-                    <Image
-                        src={Logo}
-                        className="cursor-pointer"
-                        layout="fixed"
-                    />
-                </Link>
-                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
-                <div className="hidden md:block w-full">
-                    <div>
-                        <label className="input-group">
-                            <input
-                                type="text"
-                                placeholder="Pesquisa..."
-                                className="input input-bordered rounded-md !important w-full text-PrimaryText"
-                            />
-                        </label>
-                    </div>
-                </div>
-                <div className="md:flex justify-end gap-3 w-full hidden">
-                    <div className="flex justify-end flex-col items-center">
-                        <UserIcon className="h-8 w-8 text-PrimaryText" />
-                        <p>Olá, João</p>
-                    </div>
-                    <Link href={'/cart'}>
-                        <div className="flex justify-end flex-col items-center cursor-pointer  md:hidden">
-                            <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
-                            <p>Carrinho</p>
-                        </div>
-                    </Link>
-
-                    {show == false ? (
-                        <div
-                            className="hidden justify-end flex-col items-center cursor-pointer  md:flex"
-                            onClick={cart}
+            <div className="w-full">
+                <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 bg-Primary relative p-4 z-10 mx-auto max-w-7xl">
+                    <div className="block md:hidden">
+                        {/* CHAMA O MENU */}
+                        <label
+                            htmlFor="my-drawer"
+                            className="btn btn-circle swap swap-rotate absolute -mt-6"
+                            onClick={handleClick}
                         >
-                            <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
-                            <p>Carrinho</p>
+                            <input type="checkbox" />
+                            <div>
+                                <svg
+                                    className="swap-off fill-current text-PrimaryText z-20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 512 512"
+                                >
+                                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                                </svg>
+                            </div>
+                        </label>
+                        {/* FIM */}
+                    </div>
+                    <Link href={'/'}>
+                        <Image
+                            src={Logo}
+                            className="cursor-pointer"
+                            layout="fixed"
+                        />
+                    </Link>
+                    <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
+                    <div className="hidden md:block w-full">
+                        <div>
+                            <label className="input-group">
+                                <input
+                                    type="text"
+                                    placeholder="Pesquisa..."
+                                    className="input input-bordered rounded-md !important w-full text-PrimaryText"
+                                />
+                            </label>
                         </div>
-                    ) : (
-                        ''
-                    )}
+                    </div>
+
+                    <div className="md:flex justify-end gap-3 w-full hidden">
+                    <Link href={'/login'}>
+                        <div className="flex justify-end flex-col items-center cursor-pointer">
+                            <UserIcon className="h-8 w-8 text-PrimaryText" />
+                        </div>
+                        </Link>
+                        <Link href={'/cart'}>
+                            <div className="flex justify-end flex-col items-center cursor-pointer md:hidden">
+                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
+                            </div>
+                        </Link>
+
+                        {show == false ? (
+                            <div
+                                className="hidden justify-end flex-col items-center cursor-pointer md:flex relative"
+                                onClick={cart}
+                            >
+                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
+                                <div className='absolute'>
+                                <span class="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+</span>
+</div>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+                </div>
+                <div className="w-full mb-2 border-t-[1px] border-border">
+                    <div className="tabs text-PrimaryText w-full flex justify-center">
+                    {/* exibir produtos aqui */}
+                    </div>
                 </div>
             </div>
+
+            
 
             {/* MENU */}
             <div
@@ -270,5 +287,3 @@ const NavBar = () => {
         </nav>
     )
 }
-
-export default NavBar

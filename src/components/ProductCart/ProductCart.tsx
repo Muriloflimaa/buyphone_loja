@@ -9,6 +9,7 @@ const ProductCart = (props: any) => {
     const router = useRouter()
 
     const [show, setShow] = useState(false)
+    const [padding, setPadding] = useState(false)
     useEffect(() => {
         if (router.asPath == '/shipping/address') {
             setShow(true)
@@ -16,63 +17,74 @@ const ProductCart = (props: any) => {
             setShow(false)
         }
     })
+    useEffect(() => {
+        if (router.asPath == '/shipping/address') {
+            setPadding(true)
+        } else {
+            setPadding(false)
+        }
+    })
 
     return (
         <div
             className={
-                'bg-colorCard rounded-xl w-full h-min p-2 flex hero-content justify-between text-PrimaryText text-xs flex-col ' +
-                props.shadow
+                'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
+                props.shadow +
+                (padding == true ? ' p-4' : ' p-0')
             }
         >
             {show == true ? (
-                <div className="flex justify-between w-full p-4">
+                <div className="flex justify-between w-full pb-4">
                     <p className="uppercase mt-2">Meu carrinho</p>{' '}
                     <p className="mt-2">2 itens</p>
                 </div>
             ) : (
                 ' '
             )}
+
             <div className="flex justify-between w-full">
                 <div className="flex">
-                    <div className="w-auto ">
-                        <Image src={props.image} layout="fixed"></Image>
+                    <div className="w-20 h-full">
+                        <Image src={props.image} layout="responsive"></Image>
                     </div>
-                    <div className="flex flex-col justify-between p-3 gap-2">
+                    <div className="flex flex-col items-start justify-between h-full w-full">
                         <div>
                             <h1>{props.name}</h1>
-                            <h2>Id: {props.id}</h2>
+                            <h2>{props.id}</h2>
                         </div>
+                        <div className="flex items-end w-full justify-between">
+                            <h3>Quantidade: {qtd}</h3>
+                            <div className="flex flex-col">
+                                {show == false ? (
+                                    <div className="btn-group w-14">
+                                        <button
+                                            className="btn text-xs h-auto p-2 min-h-0 w-1/2"
+                                            onClick={() => {
+                                                setQtd(qtd - 1)
+                                                setPrice(price - props.price)
+                                            }}
+                                        >
+                                            -
+                                        </button>
 
-                        <h3>Quantidade: {qtd}</h3>
-                        {show == false ? (
-                            <div className="btn-group">
-                                <button
-                                    className="btn"
-                                    onClick={() => {
-                                        setQtd(qtd - 1)
-                                        setPrice(price - props.price)
-                                    }}
-                                >
-                                    -
-                                </button>
-                                <button className="btn"> {qtd}</button>
-                                <button
-                                    className="btn"
-                                    onClick={() => {
-                                        setQtd(qtd + 1)
-                                        setPrice(price + props.price)
-                                    }}
-                                >
-                                    +
-                                </button>
+                                        <button
+                                            className="btn text-xs h-auto p-2 min-h-0 w-1/2"
+                                            onClick={() => {
+                                                setQtd(qtd + 1)
+                                                setPrice(price + props.price)
+                                            }}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                ) : (
+                                    ' '
+                                )}
                             </div>
-                        ) : (
-                            ' '
-                        )}
+                        </div>
                     </div>
                 </div>
-
-                <div className="flex flex-col justify-center p-3 items-end">
+                <div className="flex flex-col justify-between items-end">
                     <h1 className="text-sm">R$ {price}</h1>
                     <TrashIcon className="h-4 w-4 text-PrimaryText" />
                 </div>

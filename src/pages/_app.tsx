@@ -27,6 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <LoginRegister width={width}>
                     <Component {...pageProps} />
                 </LoginRegister>
+            ) : /* config rota para renderizar apenas o component */ router.route ===
+              `/category` ? (
+                <Component {...pageProps} />
             ) : (
                 <>
                     <Toaster position="top-right" reverseOrder={false} />

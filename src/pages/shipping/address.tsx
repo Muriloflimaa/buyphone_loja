@@ -57,7 +57,31 @@ export default function adress() {
                         </button>
                     </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3">
+                    <ProductCart
+                        name="iPhone 12 pro MAX"
+                        id="Azul / 256GB"
+                        qtd={1}
+                        price={5.2}
+                        image={iPhoneProduct}
+                        shadow="shadow-md"
+                    />
+                    <ProductCart
+                        name="iPhone 12 pro MAX"
+                        id="Azul / 256GB"
+                        qtd={1}
+                        price={5.2}
+                        image={iPhoneProduct}
+                        shadow="shadow-md"
+                    />
+                    <ProductCart
+                        name="iPhone 12 pro MAX"
+                        id="Azul / 256GB"
+                        qtd={1}
+                        price={5.2}
+                        image={iPhoneProduct}
+                        shadow="shadow-md"
+                    />
                     <ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"

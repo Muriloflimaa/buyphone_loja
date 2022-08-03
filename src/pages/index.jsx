@@ -4,20 +4,10 @@ import { useState } from 'react'
 
 export default function Home(){
     const [click, setClick] = useState(false)
+
     return (
        <div>
-               <div className='my-[23px]'>
-               <div className="tabs text-PrimaryText flex justify-center">
-  <a className="tab tab-bordered text-PrimaryText">Entrega Full</a> 
-  <a className="tab tab-bordered tab-active ">iPhone XR</a> 
-  <a className="tab tab-bordered text-PrimaryText">iPhone 11</a>
-  <a className="tab tab-bordered text-PrimaryText">iPhone 12</a> 
-  <a className="tab tab-bordered text-PrimaryText">iPhone XR</a> 
-</div>
-               </div>
-
                <div className="carousel mx-auto w-7xl max-w-7xl rounded-2xl mt-2 hidden md:flex">
-
   
   <div id="item1" className="carousel-item w-full">
     
