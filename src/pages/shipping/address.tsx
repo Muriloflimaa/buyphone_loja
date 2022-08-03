@@ -1,6 +1,7 @@
 import ProductCart from '../../components/ProductCart/ProductCart'
 import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
 import iPhoneProduct from '../../assets/images/product.svg'
+import Link from 'next/link'
 export default function adress() {
     return (
         <div className="max-w-7xl mx-auto grid gap-3 my-10">
@@ -49,12 +50,14 @@ export default function adress() {
                         </label>
                     </div>
                     <div className="flex justify-end">
-                        <button
-                            type="submit"
-                            className="btn btn-info font-medium"
-                        >
-                            Avançar
-                        </button>
+                        <Link href={'/shipping/payment'}>
+                            <button
+                                type="submit"
+                                className="btn btn-info font-medium"
+                            >
+                                Avançar
+                            </button>
+                        </Link>
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">

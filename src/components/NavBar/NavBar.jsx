@@ -31,7 +31,7 @@ export default function NavBar() {
 
     const [show, setShow] = useState(false)
     useEffect(() => {
-        if (router.asPath == '/shipping/address' || router.asPath == '/cart' || router.asPath == '/shipping' || router.asPath == '/payment') {
+        if (router.asPath == '/shipping/address' || router.asPath == '/cart' || router.asPath == '/shipping' || router.asPath == '/shipping/payment' || router.asPath == '/shipping/payment/credit' || router.asPath == '/shipping/payment/pix') {
             setShow(true)
         } else {
             setShow(false)

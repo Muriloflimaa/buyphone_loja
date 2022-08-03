@@ -1,4 +1,24 @@
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
 const ShippingCard = (props: any) => {
+    const router = useRouter()
+    const [show, setShow] = useState(false)
+    const [mensage, setMensage] = useState('')
+
+    useEffect(() => {
+        if (router.asPath == '/shipping/payment') {
+            setMensage('Qual a forma de pagamento?')
+        } else if (router.asPath == '/shipping/payment/credit') {
+            setMensage('Pagamento via cartão de crédito')
+        } else if (router.asPath == '/shipping/payment/pix') {
+            setMensage('Pagamento via pix')
+        } else {
+            setMensage('Informações para entrega')
+        }
+    })
+
+    useEffect
     return (
         <>
             <div className="flex justify-between p-2">
@@ -7,7 +27,13 @@ const ShippingCard = (props: any) => {
             <div className="w-full px-2 bg-border h-[1px]"></div>
             <div className="flex flex-col items-center">
                 <h1 className="text-3xl text-PrimaryText">
-                    Informações para a entrega
+                    {mensage == 'Qual a forma de pagamento?'
+                        ? 'Qual a forma de pagamento?'
+                        : mensage == 'Pagamento via cartão de crédito'
+                        ? 'Pagamento via cartão de crédito'
+                        : mensage == 'Pagamento via pix'
+                        ? 'Pagamento via pix'
+                        : 'Informações para a entrega'}
                 </h1>
             </div>
         </>

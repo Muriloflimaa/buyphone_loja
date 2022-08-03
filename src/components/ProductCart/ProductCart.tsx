@@ -11,14 +11,20 @@ const ProductCart = (props: any) => {
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
     useEffect(() => {
-        if (router.asPath == '/shipping/address') {
+        if (
+            router.asPath == '/shipping/address' ||
+            router.asPath == '/shipping/payment/pix'
+        ) {
             setShow(true)
         } else {
             setShow(false)
         }
     })
     useEffect(() => {
-        if (router.asPath == '/shipping/address') {
+        if (
+            router.asPath == '/shipping/address' ||
+            router.asPath == '/shipping/payment/pix'
+        ) {
             setPadding(true)
         } else {
             setPadding(false)
@@ -33,15 +39,6 @@ const ProductCart = (props: any) => {
                 (padding == true ? ' p-4' : ' p-0')
             }
         >
-            {show == true ? (
-                <div className="flex justify-between w-full pb-4">
-                    <p className="uppercase mt-2">Meu carrinho</p>{' '}
-                    <p className="mt-2">2 itens</p>
-                </div>
-            ) : (
-                ' '
-            )}
-
             <div className="flex justify-between w-full">
                 <div className="flex">
                     <div className="w-20 h-full">
