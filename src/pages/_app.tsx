@@ -6,7 +6,7 @@ import LoginRegister from '../components/Login-Register/Login-Register'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
     const [width, setWidth] = useState('')
 
@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             setWidth('max-w-md')
         }
     })
+
     return (
         <>
             {router.route === `/login` ||
@@ -41,5 +42,3 @@ function MyApp({ Component, pageProps }: AppProps) {
         </>
     )
 }
-
-export default MyApp

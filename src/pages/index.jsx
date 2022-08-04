@@ -1,6 +1,6 @@
 import ProductCard from '../components/ProductCard/ProductCard'
 import iPhoneProduct from '../assets/images/product.svg'
-import { useState } from 'react'
+import {  useState } from 'react'
 
 export default function Home(){
     const [click, setClick] = useState(false)
@@ -18,9 +18,6 @@ export default function Home(){
       <a href={click ? "#item1" : "#item2"} className="btn btn-circle text-PrimaryText" aria-hidden="true">❯</a>
     </div>
     <img src="https://loja.buyphone.com.br/img/banner2.webp" className="w-full" alt=""  aria-hidden="true"/>
-      
-
-    
             </div>
             </div>
   </div>
@@ -54,4 +51,3 @@ export default function Home(){
         
     )
 }
- 
