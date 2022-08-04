@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const ProductCard = (props: any) => {
@@ -43,6 +44,11 @@ const ProductCard = (props: any) => {
                 <div className="card-actions">
                     <button className="btn btn-primary">Adicionar</button>
                 </div>
+                <Link href={'/description'}>
+                    <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
+                        Saiba mais
+                    </button>
+                </Link>
             </div>
         </div>
     )
