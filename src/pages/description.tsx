@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import iPhoneProduct from '../assets/images/imgcel.svg'
-import { StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
 
 export default function description() {
@@ -25,19 +25,20 @@ export default function description() {
                 </Link>
             </h1>
             <div className="flex w-full mt-10 justify-between">
-                <div className="flex flex-col gap-3 w-[20%]">
-                    <div className="w-24 h-auto">
+                <div className="flex flex-col items-center gap-3 w-[20%]">
+                    <div className="w-16 h-auto">
                         <Image src={iPhoneProduct} layout="responsive"></Image>
                     </div>
-                    <div className="w-24 h-auto">
+                    <div className="w-16 h-auto">
                         <Image src={iPhoneProduct} layout="intrinsic"></Image>
                     </div>
-                    <div className="w-24 h-auto">
+                    <div className="w-16 h-auto">
                         <Image src={iPhoneProduct} layout="intrinsic"></Image>
                     </div>
-                    <div className="w-24 h-auto">
+                    <div className="w-16 h-auto">
                         <Image src={iPhoneProduct} layout="intrinsic"></Image>
                     </div>
+                    <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                 </div>
                 <div className="w-[60%]">
                     <label
@@ -82,7 +83,6 @@ export default function description() {
                     <div>
                         <div className="flex gap-2 items-center">
                             <h1 className="text-2xl">iPhone 12</h1>
-                            <h2 className="badge badge-info">64gb</h2>
                         </div>
                         <div className="flex items-center">
                             <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
