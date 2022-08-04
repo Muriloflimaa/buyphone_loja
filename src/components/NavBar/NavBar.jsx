@@ -17,6 +17,8 @@ import toast from 'react-hot-toast'
 import ProductCart from '../ProductCart/ProductCart'
 import iPhoneProduct from '../../assets/images/product.svg'
 import { useRouter } from 'next/router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
 
 
 
@@ -93,93 +95,10 @@ export default function NavBar() {
 
     return (
         <nav>
-            <div className="w-full">
-                <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 bg-Primary relative p-4 z-10 mx-auto max-w-7xl">
-                    <div className="block md:hidden">
-                        {/* CHAMA O MENU */}
-                        <label
-                            htmlFor="my-drawer"
-                            className="btn btn-circle swap swap-rotate absolute -mt-6"
-                            onClick={handleClick}
-                        >
-                            <input type="checkbox" />
-                            <div>
-                                <svg
-                                    className="swap-off fill-current text-PrimaryText z-20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 512 512"
-                                >
-                                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                                </svg>
-                            </div>
-                        </label>
-                        {/* FIM */}
-                    </div>
-                    <Link href={'/'}>
-                        <Image
-                            src={Logo}
-                            className="cursor-pointer"
-                            layout="fixed"
-                        />
-                    </Link>
-                    <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
-                    <div className="hidden md:block w-full">
-                        <div>
-                            <label className="input-group">
-                                <input
-                                    type="text"
-                                    placeholder="Pesquisa..."
-                                    className="input input-bordered rounded-md !important w-full text-PrimaryText"
-                                />
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className="md:flex justify-end gap-3 w-full hidden">
-                    <Link href={'/login'}>
-                        <div className="flex justify-end flex-col items-center cursor-pointer">
-                            <UserIcon className="h-8 w-8 text-PrimaryText" />
-                        </div>
-                        </Link>
-                        <Link href={'/cart'}>
-                            <div className="flex justify-end flex-col items-center cursor-pointer md:hidden">
-                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
-                            </div>
-                        </Link>
-
-                        {show == false ? (
-                            <div
-                                className="hidden justify-end flex-col items-center cursor-pointer md:flex relative"
-                                onClick={cart}
-                            >
-                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
-                                <div className='absolute'>
-                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-</span>
-</div>
-                            </div>
-                        ) : (
-                            ''
-                        )}
-                    </div>
-                </div>
-                <div className="w-full mb-2 border-t-[1px] border-border">
-                    <div className="tabs text-PrimaryText w-full flex justify-center">
-                    {/* exibir produtos aqui */}
-                    </div>
-                </div>
-            </div>
-
-            
-
             {/* MENU */}
             <div
                 className={
-                    'drawer absolute -mt-16 transition-all duration-500 h-[100vh] ' +
+                    'drawer absolute transition-all duration-500 h-[100vh] ' +
                     (isOn == false ? '-z-10' : 'z-50')
                 }
             >
@@ -284,6 +203,105 @@ export default function NavBar() {
                     </ul>
                 </div>
             </div>
+
+
+            <div className="w-full">
+                <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
+                    <div className="block md:hidden">
+                        {/* CHAMA O MENU */}
+                        <label
+                            htmlFor="my-drawer"
+                            className="btn btn-circle swap swap-rotate absolute -mt-6"
+                            onClick={handleClick}
+                        >
+                            <input type="checkbox" />
+                            <div>
+                                <svg
+                                    className="swap-off fill-current text-PrimaryText z-20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 512 512"
+                                >
+                                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                                </svg>
+                            </div>
+                        </label>
+                        {/* FIM */}
+                    </div>
+                    <Link href={'/'}>
+                        <Image
+                            src={Logo}
+                            className="cursor-pointer"
+                            layout="fixed"
+                        />
+                    </Link>
+                    <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
+                    <div className="hidden md:block w-full">
+                        <div>
+                            <label className="input-group">
+                                <input
+                                    type="text"
+                                    placeholder="Pesquisa..."
+                                    className="input input-bordered rounded-md !important w-full text-PrimaryText"
+                                />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="md:flex justify-end gap-5 w-full hidden">
+                    <Link href={'/login'}>
+                        <div className="flex justify-end flex-col items-center cursor-pointer">
+                            {/* <UserCircleIcon className="h-8 w-8 text-PrimaryText" />
+                            <FontAwesomeIcon icon={UserCircleIcon} className='w-8 h-8 text-PrimaryText' /> */}
+                            <FontAwesomeIcon icon={faCircleUser} className='w-7 h-7 text-PrimaryText' />
+                        </div>
+                        </Link>
+                        <Link href={'/cart'}>
+                            <div className="flex justify-end flex-col items-center cursor-pointer md:hidden">
+                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
+                            </div>
+                        </Link>
+
+                        {show == false ? (
+                            <div
+                                className="hidden justify-end flex-col items-center cursor-pointer md:flex relative"
+                                onClick={cart}
+                            >
+                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
+                                <div className='absolute'>
+                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+</span>
+</div>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+                </div>
+                <div className='border-border max-w-7xl mx-auto border-t-[1px] opacity-50'></div>
+                <div className="w-full mb-2">
+              
+                    <div className="tabs text-PrimaryText w-full flex justify-center">
+                   <ul className='flex gap-3 w-full p-4 max-w-7xl'>
+                    <li>Todos</li>
+                    <li>iPhone 11</li>
+                    <li>iPhone 12</li>
+                    <li>iPhone 13</li>
+                    <li>iPhone 13 pro max</li>
+                   </ul>
+                    </div>
+                    <div className="overflow-hidden">
+<div className={styles.divisorbuyphone}></div>
+</div>
+                </div>
+            </div>
+
+            
+
+            
         </nav>
     )
 }
