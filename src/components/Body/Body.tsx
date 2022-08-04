@@ -1,4 +1,8 @@
-import { ReactElement } from 'react'
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { MailIcon } from '@heroicons/react/solid'
+import Link from 'next/link'
+import { ReactElement, useEffect } from 'react'
 import MyBottomNavigation from '../MyBottomNavigation/MyBottomNavigation'
 import NavBar from '../NavBar/NavBar'
 
@@ -42,8 +46,16 @@ const Body = ({ children }: Homeprops) => {
                                 </h1>
                                 <ul className="text-PrimaryText gap-1 opacity-50">
                                     <li>informações de entrega</li>
-                                    <li>Política de privacidade</li>
-                                    <li>Termos e condições</li>
+                                    <Link href={'/politics'}>
+                                        <li className="link cursor-pointer">
+                                            Política de privacidade
+                                        </li>
+                                    </Link>
+                                    <Link href={'/terms'}>
+                                        <li className="link cursor-pointer">
+                                            Termos e condições
+                                        </li>
+                                    </Link>
                                 </ul>
                             </div>
                         </div>
@@ -53,10 +65,42 @@ const Body = ({ children }: Homeprops) => {
                                 <h1 className="text-3xl text-PrimaryText">
                                     Contatos
                                 </h1>
-                                <ul className="text-PrimaryText gap-1 opacity-50">
-                                    <li>contatobuyphone@gmail.com</li>
-                                    <li>BuyPhone</li>
-                                    <li>buyphone.match</li>
+                                <ul className="text-sm block leading-6">
+                                    <li>
+                                        <a
+                                            href="mailto:contatobuyphone@gmail.com"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <MailIcon className="w-5 h-5" />
+                                            contatobuyphone@gmail.com
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://www.facebook.com/Buyphone.match"
+                                            target="_blank"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <FontAwesomeIcon
+                                                className="w-5 h-5"
+                                                icon={faFacebook}
+                                            />
+                                            BuyPhone
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://instagram.com/buyphone.match"
+                                            target="_blank"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <FontAwesomeIcon
+                                                className="w-5 h-5"
+                                                icon={faInstagram}
+                                            />
+                                            buyphone.match
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
