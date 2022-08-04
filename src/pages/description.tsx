@@ -1,13 +1,17 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import iPhoneProduct from '../assets/images/imgcel.svg'
-import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, SearchIcon, StarIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
 
-export default function description() {
+export default function description(this: any) {
     const [qtd, setQtd] = useState(0)
+    const [showMore, setShowMore] = useState(false)
+    const text =
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sesollicitudin lacus, ut interdum tellus elit sed risus.Maecenas eget condimentum velit, sit amet feugiat lectus.Class aptent taciti sociosqu ad litora torquent per conubinostra, per inceptos himenaeos. Praesent auctor purus luctuenim egestas, ac scelerisque ante pulvinar. Donec ut rhoncuex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabituvel bibendum lorem. Morbi convallis convallis diam sit ame'
+
     return (
-        <div className="max-w-4xl mx-auto w-full">
+        <div className="max-w-4xl mx-auto px-4 w-full">
             <h1 className="font-medium flex items-start gap-2">
                 <Link href={'/'}>
                     <a className="flex items-center gap-2 normal-case lg:gap-3 my-2">
@@ -24,8 +28,8 @@ export default function description() {
                     </a>
                 </Link>
             </h1>
-            <div className="flex w-full mt-10 justify-between">
-                <div className="flex flex-col items-center gap-3 w-[20%]">
+            <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
+                <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
                     <div className="w-16 h-auto">
                         <Image src={iPhoneProduct} layout="responsive"></Image>
                     </div>
@@ -40,12 +44,15 @@ export default function description() {
                     </div>
                     <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                 </div>
-                <div className="w-[60%]">
+                <div className="w-full h-full flex justify-center md:block md:w-[60%]">
                     <label
                         htmlFor="my-modal-4"
-                        className="btn modal-button hover:bg-transparent hover:border-transparent bg-transparent border-transparent"
+                        className="btn modal-button hover:bg-transparent hover:border-transparent bg-transparent border-transparent h-full"
                     >
-                        <div className="w-72 h-auto">
+                        <div className="w-40 md:w-72 h-auto relative">
+                            <div className="flex justify-end w-full absolute ml-3 -mt-2 z-10">
+                                <SearchIcon className="w-4 h-4" />
+                            </div>
                             <Image
                                 src={iPhoneProduct}
                                 layout="responsive"
@@ -70,7 +77,7 @@ export default function description() {
                         >
                             ✕
                         </label>
-                        <div className="w-64 h-auto scale-150">
+                        <div className="w-64 h-auto scale-150 ">
                             <Image
                                 src={iPhoneProduct}
                                 layout="responsive"
@@ -119,7 +126,7 @@ export default function description() {
                         </div>
                         <h2 className="text-2xl font-bold">R$ 2.000,00</h2>
                     </div>
-                    <div className="flex gap-3 items-center">
+                    <div className="hidden md:flex gap-3 items-center">
                         <div className="btn-group w-36 flex items-center">
                             <button
                                 className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md"
@@ -141,250 +148,83 @@ export default function description() {
                         </div>
                         <button className="btn btn-primary">Comprar</button>
                     </div>
-                    <div className="w-full rounded-lg bg-colorCard flex items-center justify-center p-4 gap-1">
-                        <h1>Frete: Grátis</h1>
-                        <h2 className="text-xs text-gray-400">
-                            (10 a 15 dias úteis)
-                        </h2>
+                    <div className="w-full rounded-lg bg-colorCard flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
+                        <div className="flex items-center md:items-center">
+                            <h1>Frete: Grátis</h1>
+                            <h2 className="text-xs text-gray-400">
+                                (10 a 15 dias úteis)
+                            </h2>
+                        </div>
+                        <div className="flex md:block gap-3 items-center">
+                            <div className="btn-group w-36 flex items-center md:hidden">
+                                <button
+                                    className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md bg-transparent"
+                                    onClick={() => {
+                                        setQtd(qtd - 1)
+                                    }}
+                                >
+                                    -
+                                </button>
+                                <h1 className="p-5">{qtd}</h1>
+                                <button
+                                    className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md bg-transparent"
+                                    onClick={() => {
+                                        setQtd(qtd + 1)
+                                    }}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button className="btn btn-primary block md:hidden">
+                                Comprar
+                            </button>
+                        </div>
+
+                        <div className="flex flex-col gap-3 md:hidden">
+                            <h1 className="text-xl">Descrição</h1>
+                            <p className="transition-all duration-500 delay-500">
+                                {showMore
+                                    ? text
+                                    : `${text.substring(0, 250)}` + '...'}
+                            </p>
+                            <div className="border-PrimaryText border-t-[1px]"></div>
+
+                            <p
+                                className="text-PrimaryText flex justify-center transition-all duration-500"
+                                onClick={() => setShowMore(!showMore)}
+                            >
+                                {showMore ? 'Ver menos' : 'Ver mais'}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="flex flex-col my-10 gap-3 text-PrimaryText">
-                <div className="w-full rounded-lg bg-colorCard flex items-center justify-start p-4 gap-1">
+                <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex">
                     <h1>Descrição</h1>
                 </div>
-                <div className="css-1yjvs5a eym5xli0">
-                    <h2 className="css-1v1b8pm e6dlnub0">Características</h2>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">Tipo</span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Barra</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">Som </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">
-                                MP3 Player
-                            </span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Grava vídeo{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Sim</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Slot para cartão{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Não</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Rádio FM{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Não</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                MP3 player{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Sim</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Bluetooth
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Sim</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">Wi-Fi </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Sim</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Suporte a GPS{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Sim</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Mensagens
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">SMS</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Mensagens
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">MMS</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Mensagens
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">E-mail</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Sistema Operacional
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">iOS</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Processador
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">
-                                A14 Bionic
-                            </span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Tecnologia{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">GSM</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Tecnologia{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">3G</span>
-                        </div>
-                    </div>
-                    <div className="css-qmnq66 eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Tecnologia{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">4G</span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Tecnologia{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">5G</span>
-                        </div>
-                    </div>
-                    <div className="css-8p77yg eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Memória interna{' '}
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">
-                                64 GB (Total, sendo uma parte usada para o
-                                sistema operacional e aplicativos
-                                pré-instalados)
-                            </span>
-                        </div>
-                    </div>
-                    <div className="css-njoe6m eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">Cor </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">Preto</span>
-                        </div>
-                    </div>
-                    <div className="css-8p77yg eym5xli0">
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-z37na9 eym5xli0">
-                                Características Gerais
-                            </span>
-                        </div>
-                        <div className="css-164ipk1 eym5xli0">
-                            <span className=" css-2pwwx6 eym5xli0">
-                                - Tela Super Retina XDR de 6.1 polegadas* -
-                                Ceramic Shield, mais resistente que qualquer
-                                vidro de qualquer smartphone - Compatível com
-                                5G*** - Chip A14 Bionic, o mais rápido em um
-                                smartphone - Sistema avançado de câmera dupla
-                                (ultra-angular e grande-angular) de 12 MP; modo
-                                Noite, Deep Fusion, HDR Inteligente 3, gravação
-                                de vídeo HDR com Dolby Vision 4K - Câmera
-                                frontal TrueDepth de 12 MP com modo Noite,
-                                gravação de vídeo HDR com Dolby Vision 4K -
-                                Classificação IP68 de resistência à água (líder
-                                do setor)***** - Compatível com acessórios
-                                MagSafe com encaixe fácil e recarga sem fio mais
-                                rápida**** - iOS - Material / Composição: Parte
-                                da frente em Ceramic Shield, Parte de trás em
-                                vidro e estrutura de alumínio - Sensores: Face
-                                ID, Barômetro, Giroscópio de três eixos,
-                                Acelerômetro, Sensor de proximidade, Sensor de
-                                luz ambiente - Modelo MGJ53BR/A
-                            </span>
-                        </div>
-                    </div>
+                <div className="hidden md:block">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Etiam eu turpis molestie, dictum est a, mattis tellus. Sed
+                    dignissim, metus nec fringilla accumsan, risus sem
+                    sollicitudin lacus, ut interdum tellus elit sed risus.
+                    Maecenas eget condimentum velit, sit amet feugiat lectus.
+                    Class aptent taciti sociosqu ad litora torquent per conubia
+                    nostra, per inceptos himenaeos. Praesent auctor purus luctus
+                    enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus
+                    ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur
+                    vel bibendum lorem. Morbi convallis convallis diam sit amet
+                    lacinia. Aliquam in elementum tellus. Curabitur tempor quis
+                    eros tempus lacinia. Nam bibendum pellentesque quam a
+                    convallis. Sed ut vulputate nisi. Integer in felis sed leo
+                    vestibulum venenatis. Suspendisse quis arcu sem. Aenean
+                    feugiat ex eu vestibulum vestibulum. Morbi a eleifend magna.
+                    Nam metus lacus, porttitor eu mauris a, blandit ultrices
+                    nibh. Mauris sit amet magna non ligula vestibulum eleifend.
+                    Nulla varius volutpat turpis sed lacinia. Nam eget mi in
+                    purus lobortis eleifend. Sed nec ante dictum sem condimentum
+                    ullamcorper quis venenatis nisi. Proin vitae facilisis nisi,
+                    ac posuere leo.
                 </div>
             </div>
         </div>
