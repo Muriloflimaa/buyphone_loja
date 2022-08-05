@@ -34,6 +34,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             ) : (
                 <>
                     <Toaster position="top-right" reverseOrder={false} />
+
                     <Component {...pageProps} />
 
                     <MyBottomNavigation />

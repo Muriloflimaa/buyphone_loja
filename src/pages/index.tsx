@@ -27,6 +27,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     return (
         <>
             <NavBar dataCategory={data} />
+            <div className="py-16"></div>
             <div className="h-auto">
                 <div className="carousel mx-auto w-7xl max-w-7xl rounded-2xl mt-2 hidden md:flex">
                     <div id="item1" className="carousel-item w-full">
@@ -93,7 +94,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         }
                     ></a>
                 </div>
-                <div className="alert alert-success bg-green-600 justify-center my-6 text-sm md:text-md max-w-7xl mx-auto">
+                <div className="alert alert-success bg-[#00a843] justify-center my-6 text-sm md:text-md max-w-7xl mx-auto">
                     <FontAwesomeIcon
                         icon={faTruckFast}
                         className="w-7 h-7 text-PrimaryText"
@@ -103,7 +104,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         15 dias úteis
                     </span>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-3 max-w-7xl">
+                <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     <ProductCard
                         name="iPhone X"
                         colorPhone="Preto"
@@ -143,7 +144,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 <a
                     href="https://api.whatsapp.com/send?phone=5518997188537"
                     target="_blank"
-                    className="alert alert-success justify-center my-6 text-sm md:text-md max-w-7xl mx-auto text-PrimaryText bg-green-600"
+                    className="alert alert-success justify-center my-6 text-sm md:text-md max-w-7xl mx-auto text-PrimaryText bg-[#00a843]"
                 >
                     <FontAwesomeIcon
                         icon={faWhatsapp}
