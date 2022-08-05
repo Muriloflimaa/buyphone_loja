@@ -1,5 +1,5 @@
-import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 import Link from 'next/link'
+import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 
 export default function payment() {
     return (
@@ -9,7 +9,7 @@ export default function payment() {
                 <h3 className="font-medium">Opções de pagamento</h3>
                 <div className="grid gap-8 text-PrimaryText">
                     <div>
-                        <Link href={'/shipping/payment/pix'}>
+                        <Link href={'/shipping/payment/pix'} passHref>
                             <a className="btn btn-outline w-full justify-between">
                                 <span>Pix</span>
                                 <svg
@@ -28,7 +28,7 @@ export default function payment() {
                         </span>
                     </div>
                     <div>
-                        <Link href={'/shipping/payment/credit'}>
+                        <Link href={'/shipping/payment/credit'} passHref>
                             <a className="btn btn-outline w-full justify-between">
                                 <span>Cartão de crédito</span>
                                 <svg

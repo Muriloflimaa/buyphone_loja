@@ -79,13 +79,13 @@ export default function register() {
                     />
                     <div className="ml-2 text-xs">
                         Eu li e concordo com os{' '}
-                        <Link href={'/terms'}>
+                        <Link href={'/terms'} passHref>
                             <a className="underline text-gray-600 hover:text-gray-900">
                                 Termos de Serviço
                             </a>
                         </Link>{' '}
                         e{' '}
-                        <Link href={'/politics'}>
+                        <Link href={'/politics'} passHref>
                             <a
                                 href="https://pedidos.buyphone.com.br/privacy-policy"
                                 className="underline text-gray-600 hover:text-gray-900"
@@ -104,7 +104,7 @@ export default function register() {
             </button>
             <div className="text-center text-sm">
                 Já é registrado?{' '}
-                <Link href={'/login'}>
+                <Link href={'/login'} passHref>
                     <a className="font-semibold text-blue-700 hover:text-blue-600">
                         Entrar
                     </a>

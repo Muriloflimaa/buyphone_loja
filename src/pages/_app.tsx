@@ -1,10 +1,10 @@
-import '../../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import Body from '../components/Body/Body'
-import LoginRegister from '../components/Login-Register/Login-Register'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
+import '../../styles/globals.scss'
+import Body from '../components/Body/Body'
+import LoginRegister from '../components/Login-Register/Login-Register'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
@@ -21,15 +21,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     return (
         <>
             {router.route === `/login` ||
-            router.route === `/register` ||
-            router.route === `/terms` ||
-            router.route === `/politics` ||
-            router.route === `/forgout-password` ? (
+                router.route === `/register` ||
+                router.route === `/terms` ||
+                router.route === `/politics` ||
+                router.route === `/forgout-password` ? (
                 <LoginRegister width={width}>
                     <Component {...pageProps} />
                 </LoginRegister>
             ) : /* config rota para renderizar apenas o component */ router.route ===
-              `/category` ? (
+                `/category` ? (
                 <Component {...pageProps} />
             ) : (
                 <>
