@@ -14,7 +14,7 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
-    console.log(data)
+
     return (
         <>
             <NavBar dataCategory={data} />

@@ -302,7 +302,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <ul className="flex justify-center gap-3 w-full p-4 max-w-7xl">
                             {dataCategory.data.map((category) => {
                                 return (
-                                    <li>{category.name}</li>
+                                    <li key={category.id}>{category.name}</li>
                                 )
                             })}
                         </ul>
