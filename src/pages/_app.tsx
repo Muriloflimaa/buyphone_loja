@@ -3,8 +3,9 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
-import Body from '../components/Body/Body'
+import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register/Login-Register'
+import MyBottomNavigation from '../components/MyBottomNavigation/MyBottomNavigation'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
@@ -34,9 +35,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             ) : (
                 <>
                     <Toaster position="top-right" reverseOrder={false} />
-                    <Body>
-                        <Component {...pageProps} />
-                    </Body>
+                    <Component {...pageProps} />
+                    <Footer />
+                    <MyBottomNavigation />
                 </>
             )}
         </>
