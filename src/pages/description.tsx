@@ -24,6 +24,7 @@ export default function description({ data }: DataProps) {
     return (
         <>
             <NavBar dataCategory={data} />
+            <div className="py-16"></div>
             <div className="max-w-4xl mx-auto px-4 w-full">
                 <h1 className="font-medium flex items-start gap-2">
                     <Link href={'/'} passHref>
