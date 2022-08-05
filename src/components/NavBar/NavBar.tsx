@@ -103,8 +103,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     }
 
     return (
-        <div className="fixed z-20 w-full">
-            <nav className="relative  mt-0 w-full bg-Primary">
+        <div className="fixed z-20 w-full glass">
+            <nav className="relative  mt-0 w-full bg-Primary opacity-90">
                 {/* MENU */}
 
                 <div

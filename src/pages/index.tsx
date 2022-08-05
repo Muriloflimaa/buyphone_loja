@@ -9,6 +9,7 @@ import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory, IProduct } from '../types'
+import 'tw-elements'
 
 interface DataProps {
     data: {
@@ -29,51 +30,59 @@ const Home: NextPage<DataProps> = ({ data }) => {
             <NavBar dataCategory={data} />
             <div className="py-20"></div>
             <div className="h-auto">
-                <div className="carousel mx-auto w-7xl max-w-7xl rounded-2xl mt-2 hidden md:flex">
-                    <div id="item1" className="carousel-item w-full">
-                        <div className="flickity-viewport">
-                            <div className="flickity-slider">
-                                <div
-                                    className="absolute flex justify-between transform -translate-y-1/2 left-5 mx-auto max-w-7xl px-4 right-5 mt-[6.5rem]"
-                                    onClick={() => setClick(!click)}
-                                >
-                                    <a
-                                        href={click ? '#item1' : '#item2'}
-                                        className="btn btn-circle text-PrimaryText"
-                                        aria-hidden="true"
-                                    >
-                                        ❮
-                                    </a>
-                                    <a
-                                        href={click ? '#item1' : '#item2'}
-                                        className="btn btn-circle text-PrimaryText"
-                                        aria-hidden="true"
-                                    >
-                                        ❯
-                                    </a>
-                                </div>
-                                <img
-                                    src="https://loja.buyphone.com.br/img/banner2.webp"
-                                    className="w-full"
-                                    alt=""
-                                    aria-hidden="true"
-                                />
-                            </div>
+                {/* começo */}
+                <div
+                    id="carouselExampleControls"
+                    className="carousel slide relative max-w-7xl mx-auto rounded-xl hidden md:block"
+                    data-bs-ride="carousel"
+                >
+                    <div className="carousel-inner relative w-full overflow-hidden">
+                        <div className="carousel-item active relative float-left w-full">
+                            <img
+                                src="https://loja.buyphone.com.br/img/banner1.webp"
+                                className="w-full"
+                                alt="Banner 1"
+                                aria-hidden="true"
+                            />
+                        </div>
+                        <div className="carousel-item relative float-left w-full">
+                            <img
+                                src="https://loja.buyphone.com.br/img/banner2.webp"
+                                className="w-full"
+                                alt="Banner 2"
+                                aria-hidden="true"
+                            />
                         </div>
                     </div>
-                    <div id="item2" className="carousel-item w-full">
-                        <div className="flickity-viewport">
-                            <div className="flickity-slider">
-                                <img
-                                    src="https://loja.buyphone.com.br/img/banner1.webp"
-                                    className="w-full"
-                                    alt=""
-                                    aria-hidden="true"
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <button
+                        className="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+                        type="button"
+                        data-bs-target="#carouselExampleControls"
+                        data-bs-slide="prev"
+                        onClick={() => setClick(!click)}
+                    >
+                        <span
+                            className="carousel-control-prev-icon inline-block bg-no-repeat"
+                            aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                        className="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+                        type="button"
+                        data-bs-target="#carouselExampleControls"
+                        data-bs-slide="next"
+                        onClick={() => setClick(!click)}
+                    >
+                        <span
+                            className="carousel-control-next-icon inline-block bg-no-repeat"
+                            aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Next</span>
+                    </button>
                 </div>
+                {/* fim */}
+
                 <div className="justify-center w-full py-6 gap-2 hidden md:flex">
                     <a
                         href="#item2"
