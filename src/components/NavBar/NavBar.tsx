@@ -1,46 +1,56 @@
 import Image from 'next/image'
 import Logo from '../../assets/images/logo.svg'
 import styles from './styles.module.scss'
-
-import React, { useState, useEffect } from 'react'
+import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-    SearchIcon,
-    UserCircleIcon,
     HomeIcon,
-    ShoppingBagIcon,
     LogoutIcon,
-    UserIcon,
+    SearchIcon,
+    ShoppingBagIcon,
     ShoppingCartIcon,
+    UserCircleIcon,
+    UserIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
-import toast from 'react-hot-toast'
-import ProductCart from '../ProductCart/ProductCart'
-import iPhoneProduct from '../../assets/images/product.svg'
 import { useRouter } from 'next/router'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import iPhoneProduct from '../../assets/images/product.svg'
+import { ICategory } from '../../types'
+import ProductCart from '../ProductCart/ProductCart'
 
-
-
-export default function NavBar() {
-    const [isOn, setIsOn] = useState(false)
-
-    function handleClick() {
-        setIsOn(!isOn)
+interface NavBarProps {
+    dataCategory: {
+        data: Array<ICategory>
     }
+}
 
+export default function NavBar({ dataCategory }: NavBarProps) {
     const router = useRouter()
-
+    const [isOn, setIsOn] = useState(false)
     const [show, setShow] = useState(false)
+
     useEffect(() => {
-        if (router.asPath == '/shipping/address' || router.asPath == '/cart' || router.asPath == '/shipping' || router.asPath == '/shipping/payment' || router.asPath == '/shipping/payment/credit' || router.asPath == '/shipping/payment/pix') {
+        if (
+            router.asPath == '/shipping/address' ||
+            router.asPath == '/cart' ||
+            router.asPath == '/shipping' ||
+            router.asPath == '/shipping/payment' ||
+            router.asPath == '/shipping/payment/credit' ||
+            router.asPath == '/shipping/payment/pix'
+        ) {
             setShow(true)
         } else {
             setShow(false)
         }
     })
 
-    function cart() {
+    const handleClick = () => {
+        setIsOn(!isOn)
+    }
+
+    const handleCart = () => {
         toast.custom((t) => (
             <div
                 className={`${
@@ -57,29 +67,29 @@ export default function NavBar() {
                     <ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"
-                        qtd={1}
-                        price={5.2}
+                        qtdProduct={1}
+                        priceProduct={5.2}
                         image={iPhoneProduct}
                         shadow=" "
                     />
-                   <div className="overflow-hidden">
-<div className={styles.divisorbuyphone}></div>
-</div>
-<ProductCart
+                    <div className="overflow-hidden">
+                        <div className={styles.divisorbuyphone}></div>
+                    </div>
+                    <ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"
-                        qtd={1}
-                        price={5.2}
+                        qtdProduct={1}
+                        priceProduct={5.2}
                         image={iPhoneProduct}
                         shadow=" "
                     />
-                   <div className="overflow-hidden">
-<div className={styles.divisorbuyphone}></div>
-</div>
+                    <div className="overflow-hidden">
+                        <div className={styles.divisorbuyphone}></div>
+                    </div>
                 </div>
 
                 <div className="flex justify-center">
-                    <Link href={'/shipping'}>
+                    <Link href={'/shipping'} passHref>
                         <button
                             onClick={() => toast.dismiss(t.id)}
                             className="bg-[#00A944] py-4 my-3 w-full rounded-lg text-PrimaryText"
@@ -88,7 +98,6 @@ export default function NavBar() {
                         </button>
                     </Link>
                 </div>
-
             </div>
         ))
     }
@@ -154,8 +163,8 @@ export default function NavBar() {
                                 </div>
                             </label>
                         </div>
-                        <li>
-                            <Link href="/">
+                        <Link href={'/'}>
+                            <li>
                                 <div className="flex py-8">
                                     <HomeIcon className="h-5 w-5 text-PrimaryText" />
 
@@ -163,8 +172,8 @@ export default function NavBar() {
                                         Página inicial
                                     </a>
                                 </div>
-                            </Link>
-                        </li>
+                            </li>
+                        </Link>
 
                         <li className="flex">
                             <div
@@ -178,14 +187,22 @@ export default function NavBar() {
                                         Produtos
                                     </a>
                                 </div>
-                                <div className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
-                                    <p>iPhone XR</p>
-                                    <p>iPhone 11</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                </div>
+                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
+                                    {dataCategory.data.length > 0 ? (
+                                        dataCategory.data.map((category) => {
+                                            return (
+                                                <li key={category.id}>
+                                                    {category.name}
+                                                </li>
+                                            )
+                                        })
+                                    ) : (
+                                        <span>
+                                            Categoria de produtos não
+                                            disponíveis.
+                                        </span>
+                                    )}
+                                </ul>
                             </div>
                         </li>
                         <li>
@@ -203,7 +220,6 @@ export default function NavBar() {
                     </ul>
                 </div>
             </div>
-
 
             <div className="w-full">
                 <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
@@ -230,11 +246,13 @@ export default function NavBar() {
                         {/* FIM */}
                     </div>
                     <Link href={'/'}>
-                        <Image
-                            src={Logo}
-                            className="cursor-pointer"
-                            layout="fixed"
-                        />
+                        <a>
+                            <Image
+                                src={Logo}
+                                className="cursor-pointer"
+                                layout="fixed"
+                            />
+                        </a>
                     </Link>
                     <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
                     <div className="hidden md:block w-full">
@@ -250,14 +268,15 @@ export default function NavBar() {
                     </div>
 
                     <div className="md:flex justify-end gap-5 w-full hidden">
-                    <Link href={'/login'}>
-                        <div className="flex justify-end flex-col items-center cursor-pointer">
-                            {/* <UserCircleIcon className="h-8 w-8 text-PrimaryText" />
-                            <FontAwesomeIcon icon={UserCircleIcon} className='w-8 h-8 text-PrimaryText' /> */}
-                            <FontAwesomeIcon icon={faCircleUser} className='w-7 h-7 text-PrimaryText' />
-                        </div>
+                        <Link href={'/login'} passHref>
+                            <div className="flex justify-end flex-col items-center cursor-pointer">
+                                <FontAwesomeIcon
+                                    icon={faCircleUser}
+                                    className="w-7 h-7 text-PrimaryText"
+                                />
+                            </div>
                         </Link>
-                        <Link href={'/cart'}>
+                        <Link href={'/cart'} passHref>
                             <div className="flex justify-end flex-col items-center cursor-pointer md:hidden">
                                 <ShoppingCartIcon className="h-7 w-7 text-PrimaryText" />
                             </div>
@@ -266,42 +285,47 @@ export default function NavBar() {
                         {show == false ? (
                             <div
                                 className="hidden justify-end flex-col items-center cursor-pointer md:flex relative"
-                                onClick={cart}
+                                onClick={() => {
+                                    handleCart()
+                                }}
                             >
                                 <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
-                                <div className='absolute'>
-                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-</span>
-</div>
+                                <div className="absolute">
+                                    <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                    </span>
+                                </div>
                             </div>
                         ) : (
                             ''
                         )}
                     </div>
                 </div>
-                <div className='border-border max-w-7xl mx-auto border-t-[1px] opacity-50'></div>
-                <div className="w-full mb-2">
-              
-                    <div className="tabs text-PrimaryText w-full flex justify-center">
-                   <ul className='flex gap-3 w-full p-4 max-w-7xl'>
-                    <li>Todos</li>
-                    <li>iPhone 11</li>
-                    <li>iPhone 12</li>
-                    <li>iPhone 13</li>
-                    <li>iPhone 13 pro max</li>
-                   </ul>
+                <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
+                <div className="w-full mb-2 ">
+                    <div className="tabs text-PrimaryText w-full hidden justify-center md:flex">
+                        <ul className="flex justify-start gap-3 w-full p-4 max-w-7xl">
+                            {dataCategory.data.length > 0 ? (
+                                dataCategory.data.map((category) => {
+                                    return (
+                                        <li key={category.id}>
+                                            {category.name}
+                                        </li>
+                                    )
+                                })
+                            ) : (
+                                <span>
+                                    Categoria de produtos não disponíveis.
+                                </span>
+                            )}
+                        </ul>
                     </div>
                     <div className="overflow-hidden">
-<div className={styles.divisorbuyphone}></div>
-</div>
+                        <div className={styles.divisorbuyphone}></div>
+                    </div>
                 </div>
             </div>
-
-            
-
-            
         </nav>
     )
 }

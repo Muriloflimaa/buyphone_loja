@@ -7,7 +7,7 @@ export default function credit() {
             <ShippingCard />
             <div className="flex flex-col gap-4 max-w-4xl mx-auto my-6">
                 <h3 className="font-medium flex items-center gap-2">
-                    <Link href={'/shipping/payment'}>
+                    <Link href={'/shipping/payment'} passHref>
                         <a className="flex items-center gap-2 normal-case lg:gap-3 my-2">
                             <svg
                                 className="h-6 w-6 fill-current md:h-8 md:w-8 rotate-180"
@@ -41,7 +41,7 @@ export default function credit() {
                         </svg>
                     </div>
                     <div className="divider">Informações de Pagamento</div>
-                    <Link href={'/shipping/payment'}>
+                    <Link href={'/shipping/payment'} passHref>
                         <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start">
                             <i className="fa fa-lightbulb mr-2"></i>
                             <div className="flex flex-col items-start text-xs">
@@ -198,7 +198,7 @@ export default function credit() {
                             </div>
                         </form>
                         <div className="container mx-auto">
-                            <Link href={'/shipping/payment'}>
+                            <Link href={'/shipping/payment'} passHref>
                                 <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start hidden">
                                     <i className="fa fa-lightbulb mr-2"></i>
                                     <div className="flex flex-col items-start text-xs">
