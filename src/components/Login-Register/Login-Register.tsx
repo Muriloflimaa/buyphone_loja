@@ -1,10 +1,10 @@
+import { ArrowLeftIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from './styles.module.scss'
-import LogoSvg from '../../assets/images/LogoPurple.svg'
-import { ReactElement, useEffect, useState } from 'react'
-import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
+import { ReactElement, useEffect, useState } from 'react'
+import LogoSvg from '../../assets/images/LogoPurple.svg'
+import styles from './styles.module.scss'
 
 interface Homeprops {
     children: ReactElement
@@ -50,6 +50,7 @@ const LoginRegister = ({ children, width }: Homeprops) => {
                                 <Link
                                     href={'/login'}
                                     className="cursor-pointer"
+                                    passHref
                                 >
                                     <div className="w-56 h-auto cursor-pointer">
                                         <Image

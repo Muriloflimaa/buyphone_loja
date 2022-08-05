@@ -23,7 +23,7 @@ export default function Shipping() {
                 </div>
 
                 <div className="flex justify-end text-PrimaryText">
-                    <Link href={'/shipping/address'}>
+                    <Link href={'/shipping/address'} passHref>
                         <a className="link ">Avançar</a>
                     </Link>
                 </div>

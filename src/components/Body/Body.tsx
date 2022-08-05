@@ -2,7 +2,7 @@ import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { MailIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import MyBottomNavigation from '../MyBottomNavigation/MyBottomNavigation'
 import NavBar from '../NavBar/NavBar'
 
@@ -46,12 +46,12 @@ const Body = ({ children }: Homeprops) => {
                                 </h1>
                                 <ul className="text-PrimaryText gap-1 opacity-50">
                                     <li>informações de entrega</li>
-                                    <Link href={'/politics'}>
+                                    <Link href={'/politics'} passHref>
                                         <li className="link cursor-pointer">
                                             Política de privacidade
                                         </li>
                                     </Link>
-                                    <Link href={'/terms'}>
+                                    <Link href={'/terms'} passHref>
                                         <li className="link cursor-pointer">
                                             Termos e condições
                                         </li>
