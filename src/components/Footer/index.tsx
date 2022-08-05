@@ -2,6 +2,14 @@ import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { MailIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
+import Image from 'next/image'
+import VisaSvg from '../../assets/images/visa.svg'
+import McSvg from '../../assets/images/mc.svg'
+import EloSvg from '../../assets/images/elo.svg'
+import AESvg from '../../assets/images/americanexpress.svg'
+import Parc1Svg from '../../assets/images/Group115.svg'
+import Parc2Svg from '../../assets/images/image28.svg'
+import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
 
 interface FooterProps {
@@ -18,10 +26,10 @@ export default function Footer({ dataCategory }: FooterProps) {
                     <div className="h-[1px] w-full bg-white max-w-7xl mx-auto"></div>
                 </div>
 
-                <div className="gap-6 px-6 grid grid-cols-1 md:grid-cols-4">
+                <div className="gap-8 px-6 grid grid-cols-1 lg:grid-cols-5">
                     <div>
-                        <div className="mx-auto">
-                            <h1 className="text-3xl text-PrimaryText">
+                        <div className="mx-auto w-full">
+                            <h1 className="text-lg text-PrimaryText">
                                 Departamentos
                             </h1>
                             <ul className="text-PrimaryText gap-1 opacity-50">
@@ -44,7 +52,7 @@ export default function Footer({ dataCategory }: FooterProps) {
 
                     <div>
                         <div className="mx-auto">
-                            <h1 className="text-3xl text-PrimaryText">
+                            <h1 className="text-lg text-PrimaryText">
                                 Mais informaçoes
                             </h1>
                             <ul className="text-PrimaryText gap-1 opacity-50">
@@ -65,7 +73,7 @@ export default function Footer({ dataCategory }: FooterProps) {
 
                     <div>
                         <div className="mx-auto">
-                            <h1 className="text-3xl text-PrimaryText">
+                            <h1 className="text-lg text-PrimaryText">
                                 Contatos
                             </h1>
                             <ul className="text-sm block leading-6">
@@ -104,6 +112,57 @@ export default function Footer({ dataCategory }: FooterProps) {
                                         buyphone.match
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="mx-auto">
+                            <h1 className="text-lg text-PrimaryText">
+                                Métodos de pagamento
+                            </h1>
+                            <ul className="text-sm flex flex-col gap-3">
+                                <li>
+                                    <Image src={VisaSvg} layout="fixed"></Image>
+                                </li>
+                                <li>
+                                    <Image src={EloSvg} layout="fixed"></Image>
+                                </li>
+                                <li>
+                                    <Image src={AESvg} layout="fixed"></Image>
+                                </li>
+                                <li>
+                                    <Image src={McSvg} layout="fixed"></Image>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="mx-auto">
+                            <h1 className="text-lg text-PrimaryText">
+                                Parcerias
+                            </h1>
+                            <ul className="text-sm flex flex-col gap-3">
+                                <li>
+                                    <Image
+                                        src={Parc1Svg}
+                                        layout="fixed"
+                                    ></Image>
+                                </li>
+                                <li>
+                                    <Image
+                                        src={Parc2Svg}
+                                        layout="fixed"
+                                    ></Image>
+                                </li>
+                                <li>
+                                    <Image
+                                        src={Parc3Svg}
+                                        layout="fixed"
+                                    ></Image>
+                                </li>
+                                <li></li>
                             </ul>
                         </div>
                     </div>
