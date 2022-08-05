@@ -1,3 +1,7 @@
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FastForwardIcon } from '@heroicons/react/solid'
 import { GetServerSideProps, GetStaticProps, NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import iPhoneProduct from '../assets/images/product.svg'
@@ -89,6 +93,16 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         }
                     ></a>
                 </div>
+                <div className="alert alert-success bg-green-600 justify-center my-6 text-sm md:text-md max-w-7xl mx-auto">
+                    <FontAwesomeIcon
+                        icon={faTruckFast}
+                        className="w-7 h-7 text-PrimaryText"
+                    />
+                    <span className="text-PrimaryText">
+                        Todos os nossos produtos com frete grátis. Prazo: 10 a
+                        15 dias úteis
+                    </span>
+                </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-3 max-w-7xl">
                     <ProductCard
                         name="iPhone X"
@@ -126,6 +140,18 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         image={iPhoneProduct}
                     />
                 </div>
+                <a
+                    href="https://api.whatsapp.com/send?phone=5518997188537"
+                    target="_blank"
+                    className="alert alert-success justify-center my-6 text-sm md:text-md max-w-7xl mx-auto text-PrimaryText bg-green-600"
+                >
+                    <FontAwesomeIcon
+                        icon={faWhatsapp}
+                        className="w-7 h-7 text-PrimaryText"
+                    />
+                    Não encontrou o que procura? Clique aqui para falar com o
+                    nosso consultor.
+                </a>
                 {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}
             </div>
             <Footer dataCategory={data} />
