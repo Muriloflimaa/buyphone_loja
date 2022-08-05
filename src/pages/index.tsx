@@ -2,14 +2,14 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import 'tw-elements'
 import iPhoneProduct from '../assets/images/product.svg'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
-import { ICategory, IProduct } from '../types'
-import 'tw-elements'
+import { ICategory } from '../types'
 
 interface DataProps {
     data: {
@@ -19,11 +19,6 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
-
-    useEffect(() => {
-        const produtos = data.data
-        console.log(produtos)
-    }, [])
 
     return (
         <>
