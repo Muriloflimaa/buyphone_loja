@@ -37,22 +37,35 @@ const ProductCard = ({
                 <Image src={image} layout="fixed" />
             </figure>
             <div className="card-body items-center p-4 text-center text-PrimaryText">
-                <div className="flex items-center gap-2">
-                    <div
-                        className={
-                            'w-3 h-3 rounded-full border border-white ' + color
-                        }
-                    ></div>
-                    {colorPhone}
-                </div>
                 <h1 className="text-2xl font-bold">{name}</h1>
-                <h2 className="text-base font-light">Preço comercializado</h2>
-                <div className="relative">
-                    <h3 className="font-light text-base">{priceOld}</h3>
-                    <div className="bg-red-500 w-20 absolute -mt-3 -ml-[10px] h-[1px]"></div>
+
+                <div className="flex gap-2 justify-center">
+                    <div className="badge badge-outline text-xs h-auto">
+                        <div
+                            className={
+                                'h-2 w-2 rounded-full mr-2 border-white' + color
+                            }
+                        ></div>
+                        <span className="w-max">{colorPhone}</span>
+                    </div>
+                    <span className="badge badge-outline text-xs">64Gb</span>
                 </div>
-                <h4 className="text-2xl font-light">Preço BuyPhone</h4>
-                <h5 className="text-2xl font-normal text-green-600">{price}</h5>
+
+                <div>
+                    Preço Comum:{' '}
+                    <span className="opacity-40 line-through decoration-red-600">
+                        {priceOld}
+                    </span>
+                    <br />
+                </div>
+
+                <div className="text-lg">
+                    Nosso Preço:{' '}
+                    <span className="text-success font-semibold text-xl">
+                        {price}
+                    </span>
+                </div>
+
                 <div className="card-actions">
                     <button className="btn btn-primary">Adicionar</button>
                 </div>

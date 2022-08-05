@@ -104,13 +104,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
 
     return (
         <div className="fixed z-20 w-full">
-            <nav className="relative md:-mt-[20px] mt-0 w-full bg-Primary">
+            <nav className="relative  mt-0 w-full bg-Primary">
                 {/* MENU */}
 
                 <div
                     className={
                         'drawer absolute transition-all duration-500 h-[100vh] ' +
-                        (isOn == false ? '-z-10 -ml-[2000px]' : 'z-50 block')
+                        (isOn == false ? '-z-10 -ml-[200vw]' : 'z-50 block')
                     }
                 >
                     <input
@@ -319,11 +319,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 {dataCategory.data.length > 0 ? (
                                     dataCategory.data.map((category) => {
                                         return (
-                                            <li>
-                                                <a
-                                                    className="w-max"
-                                                    key={category.id}
-                                                >
+                                            <li key={category.id}>
+                                                <a className="w-max">
                                                     {category.name}
                                                 </a>
                                             </li>

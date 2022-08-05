@@ -1,15 +1,14 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { FastForwardIcon } from '@heroicons/react/solid'
-import { GetServerSideProps, GetStaticProps, NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import iPhoneProduct from '../assets/images/product.svg'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
-import { ICategory } from '../types'
+import { ICategory, IProduct } from '../types'
 
 interface DataProps {
     data: {
@@ -21,13 +20,14 @@ const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
 
     useEffect(() => {
-        console.log(data)
-    }, [data])
+        const produtos = data.data
+        console.log(produtos)
+    }, [])
 
     return (
         <>
             <NavBar dataCategory={data} />
-            <div className="py-16"></div>
+            <div className="py-20"></div>
             <div className="h-auto">
                 <div className="carousel mx-auto w-7xl max-w-7xl rounded-2xl mt-2 hidden md:flex">
                     <div id="item1" className="carousel-item w-full">
@@ -105,41 +105,22 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-                    <ProductCard
-                        name="iPhone X"
-                        colorPhone="Preto"
-                        priceOld="5.123,00"
-                        price="4.659,00"
-                        image={iPhoneProduct}
-                    />
-                    <ProductCard
-                        name="iPhone X"
-                        colorPhone="Branco"
-                        priceOld="5.123,00"
-                        price="4.659,00"
-                        image={iPhoneProduct}
-                    />
-                    <ProductCard
-                        name="iPhone X"
-                        colorPhone="Vermelho"
-                        priceOld="5.123,00"
-                        price="4.659,00"
-                        image={iPhoneProduct}
-                    />
-                    <ProductCard
-                        name="iPhone X"
-                        colorPhone="Preto"
-                        priceOld="5.123,00"
-                        price="4.659,00"
-                        image={iPhoneProduct}
-                    />
-                    <ProductCard
-                        name="iPhone X"
-                        colorPhone="Preto"
-                        priceOld="5.123,00"
-                        price="4.659,00"
-                        image={iPhoneProduct}
-                    />
+                    {data.data.length > 0 ? (
+                        data.data.map((category) => {
+                            return (
+                                <ProductCard
+                                    key={category.id}
+                                    name={category.name}
+                                    colorPhone={category.name}
+                                    priceOld={category.name}
+                                    price={category.name}
+                                    image={iPhoneProduct}
+                                />
+                            )
+                        })
+                    ) : (
+                        <span>Categoria de produtos não disponíveis.</span>
+                    )}
                 </div>
                 <a
                     href="https://api.whatsapp.com/send?phone=5518997188537"

@@ -40,7 +40,8 @@ const ProductCart = ({
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
-            router.asPath == '/shipping/payment/pix'
+            router.asPath == '/shipping/payment/pix' ||
+            router.asPath == '/cart'
         ) {
             setPadding(true)
         } else {

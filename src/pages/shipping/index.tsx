@@ -1,6 +1,7 @@
 import { ChevronRightIcon, MapIcon } from '@heroicons/react/solid'
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
+import Footer from '../../components/Footer'
 import NavBar from '../../components/NavBar/NavBar'
 import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
 import { apiPedidos } from '../../services/apiClient'
@@ -16,6 +17,7 @@ export default function Shipping({ data }: DataProps) {
     return (
         <>
             <NavBar dataCategory={data} />
+            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
                 <ShippingCard />
                 <div className="max-w-2xl w-full mx-auto grid gap-3">
@@ -61,6 +63,7 @@ export default function Shipping({ data }: DataProps) {
                     </button>
                 </div>
             </div>
+            <Footer dataCategory={data} />
         </>
     )
 }

@@ -1,4 +1,6 @@
-import { ChevronDownIcon, SearchIcon, StarIcon } from '@heroicons/react/solid'
+import { faMagnifyingGlassPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -25,7 +27,7 @@ export default function description({ data }: DataProps) {
         <>
             <NavBar dataCategory={data} />
             <div className="py-16"></div>
-            <div className="max-w-4xl mx-auto px-4 w-full">
+            <div className="max-w-4xl mx-auto p-4 md:my-4 w-full">
                 <h1 className="font-medium flex items-start gap-2">
                     <Link href={'/'} passHref>
                         <a className="flex items-center gap-2 normal-case lg:gap-3 my-2">
@@ -77,7 +79,10 @@ export default function description({ data }: DataProps) {
                         >
                             <div className="w-40 md:w-72 h-auto relative">
                                 <div className="flex justify-end w-full absolute ml-3 -mt-2 z-10">
-                                    <SearchIcon className="w-4 h-4" />
+                                    <FontAwesomeIcon
+                                        icon={faMagnifyingGlassPlus}
+                                        className="w-4 h-4"
+                                    />
                                 </div>
                                 <Image
                                     src={iPhoneProduct}

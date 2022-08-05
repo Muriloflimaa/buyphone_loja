@@ -45,7 +45,7 @@ const MyBottomNavigation = () => {
                 style={{ transform: 'translateX(-50%)', left: `${move}` }}
             >
                 <span
-                    className="block bg-[#7959FD] rounded-[50%] h-[66px] w-[66px] transition-all ease-in-out duration-500"
+                    className="block rounded-[50%] h-[66px] w-[66px] transition-all ease-in-out duration-500"
                     style={{ backgroundColor: `${color}` }}
                 />
             </div>
