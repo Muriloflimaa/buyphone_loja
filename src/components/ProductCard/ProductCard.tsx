@@ -10,7 +10,13 @@ interface ProductCardProps {
     image: HTMLImageElement
 }
 
-const ProductCard = ({ name, colorPhone, priceOld, price, image }: ProductCardProps) => {
+const ProductCard = ({
+    name,
+    colorPhone,
+    priceOld,
+    price,
+    image,
+}: ProductCardProps) => {
     const [color, setColor] = useState('')
 
     useEffect(() => {
@@ -46,9 +52,7 @@ const ProductCard = ({ name, colorPhone, priceOld, price, image }: ProductCardPr
                     <div className="bg-red-500 w-20 absolute -mt-3 -ml-[10px] h-[1px]"></div>
                 </div>
                 <h4 className="text-2xl font-light">Preço BuyPhone</h4>
-                <h5 className="text-2xl font-normal text-green-600">
-                    {price}
-                </h5>
+                <h5 className="text-2xl font-normal text-green-600">{price}</h5>
                 <div className="card-actions">
                     <button className="btn btn-primary">Adicionar</button>
                 </div>

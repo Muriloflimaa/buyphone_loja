@@ -12,7 +12,14 @@ interface ProductCartProps {
     shadow: string
 }
 
-const ProductCart = ({ name, id, qtdProduct, priceProduct, image, shadow }: ProductCartProps) => {
+const ProductCart = ({
+    name,
+    id,
+    qtdProduct,
+    priceProduct,
+    image,
+    shadow,
+}: ProductCartProps) => {
     const router = useRouter()
 
     const [qtd, setQtd] = useState(qtdProduct)
@@ -95,7 +102,12 @@ const ProductCart = ({ name, id, qtdProduct, priceProduct, image, shadow }: Prod
                     </div>
                 </div>
                 <div className="flex flex-col justify-between items-end">
-                    <h1 className="text-sm">{price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</h1>
+                    <h1 className="text-sm">
+                        {price.toLocaleString('pt-br', {
+                            style: 'currency',
+                            currency: 'BRL',
+                        })}
+                    </h1>
                     <TrashIcon className="h-4 w-4 text-PrimaryText" />
                 </div>
             </div>

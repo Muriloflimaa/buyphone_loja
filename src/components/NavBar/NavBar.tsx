@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Logo from '../../assets/images/logo.svg'
 import styles from './styles.module.scss'
-
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -11,7 +10,7 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon
+    UserIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -54,8 +53,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const handleCart = () => {
         toast.custom((t) => (
             <div
-                className={`${t.visible ? 'animate-enter' : 'animate-leave'
-                    } max-w-sm w-full bg-colorCard shadow-lg rounded-xl p-5`}
+                className={`${
+                    t.visible ? 'animate-enter' : 'animate-leave'
+                } max-w-sm w-full bg-colorCard shadow-lg rounded-xl p-5`}
             >
                 <div className="flex justify-between items-center">
                     <h1 className="text-PrimaryText text-xl uppercase">
@@ -163,8 +163,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 </div>
                             </label>
                         </div>
-                        <li>
-                            <Link href="/" passHref>
+                        <Link href={'/'}>
+                            <li>
                                 <div className="flex py-8">
                                     <HomeIcon className="h-5 w-5 text-PrimaryText" />
 
@@ -172,8 +172,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         Página inicial
                                     </a>
                                 </div>
-                            </Link>
-                        </li>
+                            </li>
+                        </Link>
 
                         <li className="flex">
                             <div
@@ -187,14 +187,22 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         Produtos
                                     </a>
                                 </div>
-                                <div className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
-                                    <p>iPhone XR</p>
-                                    <p>iPhone 11</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                    <p>iPhone 12</p>
-                                </div>
+                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
+                                    {dataCategory.data.length > 0 ? (
+                                        dataCategory.data.map((category) => {
+                                            return (
+                                                <li key={category.id}>
+                                                    {category.name}
+                                                </li>
+                                            )
+                                        })
+                                    ) : (
+                                        <span>
+                                            Categoria de produtos não
+                                            disponíveis.
+                                        </span>
+                                    )}
+                                </ul>
                             </div>
                         </li>
                         <li>
@@ -237,7 +245,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         </label>
                         {/* FIM */}
                     </div>
-                    <Link href={'/'} passHref>
+                    <Link href={'/'}>
                         <a>
                             <Image
                                 src={Logo}
@@ -262,8 +270,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     <div className="md:flex justify-end gap-5 w-full hidden">
                         <Link href={'/login'} passHref>
                             <div className="flex justify-end flex-col items-center cursor-pointer">
-                                {/* <UserCircleIcon className="h-8 w-8 text-PrimaryText" />
-                            <FontAwesomeIcon icon={UserCircleIcon} className='w-8 h-8 text-PrimaryText' /> */}
                                 <FontAwesomeIcon
                                     icon={faCircleUser}
                                     className="w-7 h-7 text-PrimaryText"
@@ -297,14 +303,22 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     </div>
                 </div>
                 <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
-                <div className="w-full mb-2">
-                    <div className="tabs text-PrimaryText w-full flex justify-center">
-                        <ul className="flex justify-center gap-3 w-full p-4 max-w-7xl">
-                            {dataCategory.data.map((category) => {
-                                return (
-                                    <li key={category.id}>{category.name}</li>
-                                )
-                            })}
+                <div className="w-full mb-2 ">
+                    <div className="tabs text-PrimaryText w-full hidden justify-center md:flex">
+                        <ul className="flex justify-start gap-3 w-full p-4 max-w-7xl">
+                            {dataCategory.data.length > 0 ? (
+                                dataCategory.data.map((category) => {
+                                    return (
+                                        <li key={category.id}>
+                                            {category.name}
+                                        </li>
+                                    )
+                                })
+                            ) : (
+                                <span>
+                                    Categoria de produtos não disponíveis.
+                                </span>
+                            )}
                         </ul>
                     </div>
                     <div className="overflow-hidden">

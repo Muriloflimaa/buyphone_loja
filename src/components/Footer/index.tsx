@@ -1,9 +1,16 @@
-import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MailIcon } from "@heroicons/react/solid";
-import Link from "next/link";
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { MailIcon } from '@heroicons/react/solid'
+import Link from 'next/link'
+import { ICategory } from '../../types'
 
-export default function Footer() {
+interface FooterProps {
+    dataCategory: {
+        data: Array<ICategory>
+    }
+}
+
+export default function Footer({ dataCategory }: FooterProps) {
     return (
         <footer className="bg-colorCard w-full py-6 pb-32 p-4 md:pb-6">
             <div className="mx-auto max-w-7xl">
@@ -18,13 +25,19 @@ export default function Footer() {
                                 Departamentos
                             </h1>
                             <ul className="text-PrimaryText gap-1 opacity-50">
-                                <li>iPhone XR</li>
-                                <li>iPhone 11</li>
-                                <li>iPhone 12</li>
-                                <li>iPhone 12 Pro Max</li>
-                                <li>iPhone 13</li>
-                                <li>iPhone 13 Pro</li>
-                                <li>iPhone 13 Pro Max</li>
+                                {dataCategory.data.length > 0 ? (
+                                    dataCategory.data.map((category) => {
+                                        return (
+                                            <li key={category.id}>
+                                                {category.name}
+                                            </li>
+                                        )
+                                    })
+                                ) : (
+                                    <span>
+                                        Categoria de produtos não disponíveis.
+                                    </span>
+                                )}
                             </ul>
                         </div>
                     </div>

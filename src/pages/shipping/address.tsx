@@ -64,7 +64,7 @@ export default function adress() {
                     <ProductCart
                         name="iPhone 12 pro MAX"
                         id="Azul / 256GB"
-                        qtd={1}
+                        qtd={100}
                         price={5.2}
                         image={iPhoneProduct}
                         shadow="shadow-md"

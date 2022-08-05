@@ -1,6 +1,7 @@
-import { GetServerSideProps, NextPage } from 'next'
-import { useState } from 'react'
+import { GetServerSideProps, GetStaticProps, NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import iPhoneProduct from '../assets/images/product.svg'
+import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
@@ -14,6 +15,10 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
+
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
     return (
         <>
@@ -123,24 +128,26 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 </div>
                 {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}
             </div>
+            <Footer dataCategory={data} />
         </>
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     const getVisitorData = async () => {
         try {
             const { data } = await apiPedidos.get(`categories/`)
             return {
                 props: {
-                    data
+                    data,
                 },
+                revalidate: 60 * 60 * 6,
             }
         } catch (error) {
             return {
                 props: {
-                    data: null
-                }
+                    data: null,
+                },
             }
         }
     }
