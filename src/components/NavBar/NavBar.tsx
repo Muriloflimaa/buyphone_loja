@@ -18,9 +18,16 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import iPhoneProduct from '../../assets/images/product.svg'
+import { ICategory } from '../../types'
 import ProductCart from '../ProductCart/ProductCart'
 
-export default function NavBar() {
+interface NavBarProps {
+    dataCategory: {
+        data: Array<ICategory>
+    }
+}
+
+export default function NavBar({ dataCategory }: NavBarProps) {
     const router = useRouter()
     const [isOn, setIsOn] = useState(false)
     const [show, setShow] = useState(false)
@@ -292,12 +299,12 @@ export default function NavBar() {
                 <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
                 <div className="w-full mb-2">
                     <div className="tabs text-PrimaryText w-full flex justify-center">
-                        <ul className="flex gap-3 w-full p-4 max-w-7xl">
-                            <li>Todos</li>
-                            <li>iPhone 11</li>
-                            <li>iPhone 12</li>
-                            <li>iPhone 13</li>
-                            <li>iPhone 13 pro max</li>
+                        <ul className="flex justify-center gap-3 w-full p-4 max-w-7xl">
+                            {dataCategory.data.map((category) => {
+                                return (
+                                    <li>{category.name}</li>
+                                )
+                            })}
                         </ul>
                     </div>
                     <div className="overflow-hidden">
