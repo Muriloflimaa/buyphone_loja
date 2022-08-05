@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import iPhoneProduct from '../assets/images/imgcel.svg'
 import { ChevronDownIcon, SearchIcon, StarIcon } from '@heroicons/react/solid'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
+import iPhoneProduct from '../assets/images/imgcel.svg'
 
 export default function description(this: any) {
     const [qtd, setQtd] = useState(0)
@@ -13,7 +13,7 @@ export default function description(this: any) {
     return (
         <div className="max-w-4xl mx-auto px-4 w-full">
             <h1 className="font-medium flex items-start gap-2">
-                <Link href={'/'}>
+                <Link href={'/'} passHref>
                     <a className="flex items-center gap-2 normal-case lg:gap-3 my-2">
                         <svg
                             className="h-6 w-6 fill-current md:h-8 md:w-8 rotate-180"

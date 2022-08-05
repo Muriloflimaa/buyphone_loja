@@ -1,10 +1,6 @@
-import styles from '../../styles/styles.module.scss'
-import Image from 'next/image'
-import LogoSvg from '../assets/images/LogoPurple.svg'
-import { useState } from 'react'
-import { EyeIcon } from '@heroicons/react/solid'
-import { EyeOffIcon } from '@heroicons/react/solid'
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function login() {
     const [show, setShow] = useState(true)
@@ -48,7 +44,7 @@ export default function login() {
                     </div>
                 </div>
                 <div className="flex justify-end w-full my-2">
-                    <Link href={'/forgout-password'}>
+                    <Link href={'/forgout-password'} passHref>
                         <a className="text-xs  text-blue-600 link cursor-pointer">
                             Esqueceu sua senha?
                         </a>
@@ -62,7 +58,7 @@ export default function login() {
                 </button>
                 <div className="text-default mt-4">
                     Deseja criar uma conta?{' '}
-                    <Link href={'/register'}>
+                    <Link href={'/register'} passHref>
                         <a className="link text-blue-600 cursor-pointer">
                             Cadastre-se
                         </a>
