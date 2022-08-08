@@ -123,6 +123,6 @@ export interface ICategory {
     id: number
     is_available: boolean
     name: string
-    products: IProduct
+    products: Array<IProduct>
     updated_at: string
 }
