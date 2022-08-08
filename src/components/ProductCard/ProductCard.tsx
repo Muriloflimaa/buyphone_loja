@@ -1,9 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useCart } from '../../hooks/useCart'
 import { moneyMask } from '../../utils/masks'
 
 interface ProductCardProps {
+    id: number
     name: string
     colorPhone: string
     averagePrice: number
@@ -13,6 +15,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({
+    id,
     name,
     colorPhone,
     averagePrice,
@@ -61,6 +64,14 @@ const ProductCard = ({
         }
     })
 
+    const [click, setClick] = useState(false)
+
+    const { addProduct, cart } = useCart()
+
+    function handleAddProduct(id: number) {
+        addProduct(id)
+    }
+
     return (
         <div className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300">
             <figure className="px-4 pt-4">
@@ -95,7 +106,13 @@ const ProductCard = ({
                 </div>
 
                 <div className="card-actions">
-                    <button className="btn btn-primary">Adicionar</button>
+                    <button
+                        className="btn btn-primary"
+                        data-testid="add-product-button"
+                        onClick={() => handleAddProduct(id)}
+                    >
+                        Adicionar
+                    </button>
                 </div>
                 <Link href={'/description'} passHref>
                     <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">

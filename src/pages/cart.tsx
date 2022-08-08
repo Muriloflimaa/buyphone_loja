@@ -1,11 +1,11 @@
 import ProductCart from '../components/ProductCart/ProductCart'
 import iPhoneProduct from '../assets/images/product.svg'
-
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetStaticProps } from 'next'
+import { useCart } from '../hooks/useCart'
 
 interface DataProps {
     data: {
@@ -14,6 +14,8 @@ interface DataProps {
 }
 
 export default function Cart({ data }: DataProps) {
+    const { cart } = useCart()
+    const cartSize = cart.length
     return (
         <>
             <NavBar dataCategory={data} />
@@ -24,26 +26,17 @@ export default function Cart({ data }: DataProps) {
                         Meu carrinho
                     </h1>
                     <span className="text-xs font-light text-PrimaryText">
-                        2 itens
+                        {cartSize > 1 ? (
+                            cartSize + 'itens'
+                        ) : cartSize == 1 ? (
+                            cartSize + 'item'
+                        ) : (
+                            <h1>Carrinho está vazio</h1>
+                        )}
                     </span>
                 </div>
                 <div className="flex flex-col gap-3 p-4">
-                    <ProductCart
-                        name="iPhone 12 pro MAX"
-                        id="Azul / 256GB"
-                        qtdProduct={1}
-                        priceProduct={5.2}
-                        image={iPhoneProduct}
-                        shadow="shadow-md"
-                    />
-                    <ProductCart
-                        name="iPhone 12 pro MAX"
-                        id="Azul / 256GB"
-                        qtdProduct={1}
-                        priceProduct={5.2}
-                        image={iPhoneProduct}
-                        shadow="shadow-md"
-                    />
+                    {cartSize > 0 ? <ProductCart /> : <h1>Carrinho vazio</h1>}
                 </div>
             </div>
             <Footer dataCategory={data} />

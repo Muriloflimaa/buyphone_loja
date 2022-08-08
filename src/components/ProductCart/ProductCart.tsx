@@ -2,28 +2,20 @@ import { TrashIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useCart } from '../../hooks/useCart'
+import { formatPrice } from '../../services/format'
 
-interface ProductCartProps {
-    name: string
-    id: string
-    qtdProduct: number
-    priceProduct: number
-    image: HTMLImageElement
-    shadow: string
+interface Product {
+    id: number
+    title: string
+    price: number
+    image: string
+    amount: number
 }
 
-const ProductCart = ({
-    name,
-    id,
-    qtdProduct,
-    priceProduct,
-    image,
-    shadow,
-}: ProductCartProps) => {
+const ProductCart = () => {
     const router = useRouter()
 
-    const [qtd, setQtd] = useState(qtdProduct)
-    const [price, setPrice] = useState(priceProduct)
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
 
@@ -48,70 +40,122 @@ const ProductCart = ({
             setPadding(false)
         }
     })
+    // cartteste
+    const { cart, removeProduct, updateProductAmount } = useCart()
+
+    const cartFormatted = cart.map((product) => ({
+        ...product,
+        priceFormated: formatPrice(product.price),
+        subTotal: formatPrice(product.price * product.amount),
+    }))
+    const total = formatPrice(
+        cart.reduce((sumTotal, product) => {
+            return sumTotal + product.price * product.amount
+        }, 0)
+    )
+
+    function handleProductIncrement(product: Product) {
+        updateProductAmount({
+            productId: product.id,
+            amount: product.amount + 1,
+        })
+    }
+
+    function handleProductDecrement(product: Product) {
+        updateProductAmount({
+            productId: product.id,
+            amount: product.amount - 1,
+        })
+    }
+
+    function handleRemoveProduct(productId: number) {
+        removeProduct(productId)
+    }
 
     return (
-        <div
-            className={
-                'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
-                shadow +
-                (padding == true ? ' p-4' : ' p-0')
-            }
-        >
-            <div className="flex justify-between w-full">
-                <div className="flex">
-                    <div className="w-20 h-full">
-                        <Image src={image} layout="responsive"></Image>
-                    </div>
-                    <div className="flex flex-col items-start justify-between h-full w-full">
-                        <div>
-                            <h1>{name}</h1>
-                            <h2>{id}</h2>
-                        </div>
-                        <div className="flex items-end w-full justify-between">
-                            <h3>Quantidade: {qtd}</h3>
-                            <div className="flex flex-col">
-                                {show == false ? (
-                                    <div className="btn-group w-14">
-                                        <button
-                                            className="btn text-xs h-auto p-2 min-h-0 w-1/2"
-                                            onClick={() => {
-                                                setQtd(qtd - 1)
-                                                setPrice(price - priceProduct)
-                                                if (price < priceProduct) {
-                                                    setPrice(0)
-                                                    setQtd(0)
-                                                }
-                                            }}
-                                        >
-                                            -
-                                        </button>
-                                        <button
-                                            className="btn text-xs h-auto p-2 min-h-0 w-1/2"
-                                            onClick={() => {
-                                                setQtd(qtd + 1)
-                                                setPrice(price + priceProduct)
-                                            }}
-                                        >
-                                            +
-                                        </button>
+        <div className="flex flex-col gap-4">
+            {cartFormatted.map((product) => {
+                return (
+                    <div
+                        className={
+                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
+                            (padding == true ? ' p-4' : ' p-0')
+                        }
+                    >
+                        <div
+                            className="flex justify-between w-full"
+                            key={product.id}
+                            data-testid="product"
+                        >
+                            <div className="flex gap-3">
+                                <div className="w-20 h-full">
+                                    <img
+                                        src={product.image}
+                                        alt={product.title}
+                                    />
+                                </div>
+
+                                <div className="flex flex-col justify-between">
+                                    <div className="flex flex-col">
+                                        <strong>{product.title}</strong>
+                                        <span>id: exemplo</span>
                                     </div>
-                                ) : (
-                                    ' '
-                                )}
+                                    <span>Quantidade: {product.amount}</span>
+                                </div>
+                            </div>
+                            <div className="flex items-end w-full justify-between">
+                                <div className="flex">
+                                    {show == false ? (
+                                        <div className="btn-group w-14">
+                                            <button
+                                                className="btn text-xs h-auto p-2 min-h-0 w-1/2"
+                                                type="button"
+                                                data-testid="decrement-product"
+                                                disabled={product.amount <= 1}
+                                                onClick={() =>
+                                                    handleProductDecrement(
+                                                        product
+                                                    )
+                                                }
+                                            >
+                                                -
+                                            </button>
+
+                                            <button
+                                                className="btn text-xs h-auto p-2 min-h-0 w-1/2"
+                                                type="button"
+                                                data-testid="increment-product"
+                                                onClick={() =>
+                                                    handleProductIncrement(
+                                                        product
+                                                    )
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        ' '
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col items-end">
+                                <strong>{product.subTotal}</strong>
+                                <button
+                                    type="button"
+                                    data-testid="remove-product"
+                                    onClick={() =>
+                                        handleRemoveProduct(product.id)
+                                    }
+                                >
+                                    <TrashIcon className="h-4 w-4 text-PrimaryText" />
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="flex flex-col justify-between items-end">
-                    <h1 className="text-sm">
-                        {price.toLocaleString('pt-br', {
-                            style: 'currency',
-                            currency: 'BRL',
-                        })}
-                    </h1>
-                    <TrashIcon className="h-4 w-4 text-PrimaryText" />
-                </div>
-            </div>
+                )
+            })}
         </div>
     )
 }
