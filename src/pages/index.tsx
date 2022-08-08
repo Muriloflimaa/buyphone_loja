@@ -110,18 +110,20 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
-                        data.data.map((category) => {
-                            return (
+                        data.data.map((category) => (
+                            category.products.map((products) => (
                                 <ProductCard
-                                    key={category.id}
-                                    name={category.name}
-                                    colorPhone={category.name}
-                                    priceOld={category.name}
-                                    price={category.name}
+                                    key={products.id}
+                                    name={products.name}
+                                    colorPhone={products.color}
+                                    averagePrice={category.name}
+                                    price={products.price}
                                     image={iPhoneProduct}
+                                    memory={products.memory}
                                 />
                             )
-                        })
+                            )
+                        ))
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}

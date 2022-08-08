@@ -1,21 +1,24 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { moneyMask } from '../../utils/masks'
 
 interface ProductCardProps {
     name: string
     colorPhone: string
-    priceOld: string
-    price: string
+    averagePrice: string
+    price: number
+    memory: string
     image: HTMLImageElement
 }
 
 const ProductCard = ({
     name,
     colorPhone,
-    priceOld,
+    averagePrice,
     price,
     image,
+    memory
 }: ProductCardProps) => {
     const [color, setColor] = useState('')
 
@@ -28,6 +31,12 @@ const ProductCard = ({
         }
         if (colorPhone == 'Vermelho') {
             setColor('bg-red-700')
+        }
+        if (colorPhone == 'Meia-noite') {
+            setColor('bg-red-700')
+        }
+        if (colorPhone == 'Azul') {
+            setColor('bg-blue-700')
         }
     })
 
@@ -42,19 +51,17 @@ const ProductCard = ({
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
-                            className={
-                                'h-2 w-2 rounded-full mr-2 border-white' + color
-                            }
+                            className={`h-2 w-2 rounded-full mr-2 border-white' ${color}`}
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
-                    <span className="badge badge-outline text-xs">64Gb</span>
+                    <span className="badge badge-outline text-xs">{memory}</span>
                 </div>
 
                 <div>
                     Preço Comum:{' '}
                     <span className="opacity-40 line-through decoration-red-600">
-                        {priceOld}
+                        {moneyMask(price.toString())}
                     </span>
                     <br />
                 </div>
@@ -62,7 +69,7 @@ const ProductCard = ({
                 <div className="text-lg">
                     Nosso Preço:{' '}
                     <span className="text-success font-semibold text-xl">
-                        {price}
+                        {averagePrice}
                     </span>
                 </div>
 
