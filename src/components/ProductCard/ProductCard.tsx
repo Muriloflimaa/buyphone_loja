@@ -6,10 +6,10 @@ import { moneyMask } from '../../utils/masks'
 interface ProductCardProps {
     name: string
     colorPhone: string
-    averagePrice: string
+    averagePrice: number
     price: number
     memory: string
-    image: HTMLImageElement
+    image: string
 }
 
 const ProductCard = ({
@@ -33,17 +33,38 @@ const ProductCard = ({
             setColor('bg-red-700')
         }
         if (colorPhone == 'Meia-noite') {
-            setColor('bg-red-700')
+            setColor('bg-gray-900')
         }
         if (colorPhone == 'Azul') {
-            setColor('bg-blue-700')
+            setColor('bg-sky-700')
+        }
+        if (colorPhone == 'Azul-Sierra') {
+            setColor('bg-sky-200')
+        }
+        if (colorPhone == 'Azul-Pacífico' || colorPhone == 'Azul Pacífico' || colorPhone == 'Azul pacífico') {
+            setColor('bg-cyan-900')
+        }
+        if (colorPhone == 'Verde' || colorPhone == 'Verde-Alpino') {
+            setColor('bg-emerald-200')
+        }
+        if (colorPhone == 'Grafite') {
+            setColor('bg-zinc-500')
+        }
+        if (colorPhone == 'Prateado' || colorPhone == 'Estelar') {
+            setColor('bg-gray-50')
+        }
+        if (colorPhone == 'Dourado') {
+            setColor('bg-amber-100')
+        }
+        if (colorPhone == 'Rosa') {
+            setColor('bg-pink-200')
         }
     })
 
     return (
         <div className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300">
             <figure className="px-4 pt-4">
-                <Image src={image} layout="fixed" />
+                <Image src={image} layout="fixed" width="200" height="230" />
             </figure>
             <div className="card-body items-center p-4 text-center text-PrimaryText">
                 <h1 className="text-2xl font-bold">{name}</h1>
