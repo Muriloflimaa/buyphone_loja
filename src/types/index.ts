@@ -28,7 +28,7 @@ export interface IProduct {
     id: number
     magalu_price: number
     magalu_sku: string
-    media: Array<{}>
+    media: Array<IMedia>
     memory: string
     name: string
     ponto_price: number
@@ -36,6 +36,29 @@ export interface IProduct {
     price: number
     stock: null
     updated_at: string
+}
+
+export interface IMedia {
+    collection_name: string
+    conversions_disk: string
+    created_at: string
+    custom_properties: []
+    disk: string
+    file_name: string
+    generated_conversions: []
+    id: number
+    manipulations: []
+    mime_type: string
+    model_id: number
+    model_type: string
+    name: string
+    order_column: number
+    original_url: string
+    preview_url: string
+    responsive_images: []
+    size: number
+    updated_at: string
+    uuid: string
 }
 export interface IOrder {
     id: number
