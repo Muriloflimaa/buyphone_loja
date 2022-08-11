@@ -2,22 +2,63 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'tw-elements'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { formatPrice } from '../services/format'
+import { apiTeste } from '../services/apiTeste'
+import { useCart } from '../hooks/useCart'
 
 interface DataProps {
     data: {
         data: Array<ICategory>
     }
 }
+interface ProductCardProps {
+    id: number
+    title: string
+    colorPhone: string
+    priceOld: string
+    price: number
+    image: string
+}
+
+interface ProductFormatted extends ProductCardProps {
+    priceFormatted: string
+}
+interface CartItemsAmount {
+    [key: number]: number
+}
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
+
+    // CARRINHO TESTE
+
+    const [products, setProducts] = useState<ProductFormatted[]>([])
+    const { addProduct, cart } = useCart()
+    // Calculando itens por produto disponível no carrinho (anterior, atual)
+    cart.reduce((sumAmount, product) => {
+        const newSumAmount = { ...sumAmount }
+        newSumAmount[product.id] = product.amount
+        return newSumAmount
+    }, {} as CartItemsAmount)
+
+    useEffect(() => {
+        async function loadProducts() {
+            const response = await apiTeste.get<ProductCardProps[]>('products')
+            const data = response.data.map((product) => ({
+                ...product,
+                priceFormatted: formatPrice(product.price),
+            }))
+            setProducts(data)
+        }
+        loadProducts()
+    }, [])
 
     return (
         <>

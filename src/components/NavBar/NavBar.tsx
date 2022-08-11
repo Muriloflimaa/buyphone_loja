@@ -19,6 +19,7 @@ import toast from 'react-hot-toast'
 import iPhoneProduct from '../../assets/images/product.svg'
 import { ICategory } from '../../types'
 import ProductCart from '../ProductCart/ProductCart'
+import { useCart } from '../../hooks/useCart'
 
 interface NavBarProps {
     dataCategory: {
@@ -27,6 +28,9 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dataCategory }: NavBarProps) {
+    const { cart } = useCart()
+    const cartSize = cart.length
+
     const router = useRouter()
     const [isOn, setIsOn] = useState(false)
     const [show, setShow] = useState(false)
@@ -61,7 +65,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     <h1 className="text-PrimaryText text-xl uppercase">
                         Meu carrinho
                     </h1>
-                    <h2 className="text-PrimaryText text-xs">2 itens</h2>
+                    <span data-testid="cart-size">
+                        {cartSize === 1
+                            ? `${cartSize} item`
+                            : `${cartSize} itens`}
+                    </span>
                 </div>
                 <div className="flex flex-col gap-9 my-4 mt-8">
                     <ProductCart
@@ -301,12 +309,16 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         }}
                                     >
                                         <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
-                                        <div className="absolute">
-                                            <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                            </span>
-                                        </div>
+                                        {cartSize > 0 ? (
+                                            <div className="absolute">
+                                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
                                     </div>
                                 ) : (
                                     ''
