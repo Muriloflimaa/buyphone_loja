@@ -10,14 +10,31 @@ import Footer from '../../components/Footer'
 import NavBar from '../../components/NavBar/NavBar'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
-import { formatColor } from '../../services/formatColor'
+import {
+    removeDuplicatesColors,
+    removeDuplicatesImage,
+    removeDuplicatesMemory,
+} from '../../services/formatColor'
 
 export default function Description({ data }) {
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
     const products = data.data.products
-    const text =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sesollicitudin lacus, ut interdum tellus elit sed risus.Maecenas eget condimentum velit, sit amet feugiat lectus.Class aptent taciti sociosqu ad litora torquent per conubinostra, per inceptos himenaeos. Praesent auctor purus luctuenim egestas, ac scelerisque ante pulvinar. Donec ut rhoncuex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabituvel bibendum lorem. Morbi convallis convallis diam sit ame'
+    const [description, setDescription] = useState('')
+
+    useEffect(() => {
+        const descriptionProduct = products.map((products) => {
+            return products.description
+        })
+
+        setDescription(
+            descriptionProduct[0] ?? 'Descrição do produto não está disponível '
+        )
+    }, [])
+
+    var uniqueColor = removeDuplicatesColors(products)
+    var uniqueMemory = removeDuplicatesMemory(products)
+    var uniqueImage = removeDuplicatesImage(products)
 
     return (
         <>
@@ -44,30 +61,27 @@ export default function Description({ data }) {
 
                 <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
-                        <div className="w-16 h-auto">
-                            <Image
-                                src={iPhoneProduct}
-                                layout="responsive"
-                            ></Image>
-                        </div>
-                        <div className="w-16 h-auto">
-                            <Image
-                                src={iPhoneProduct}
-                                layout="intrinsic"
-                            ></Image>
-                        </div>
-                        <div className="w-16 h-auto">
-                            <Image
-                                src={iPhoneProduct}
-                                layout="intrinsic"
-                            ></Image>
-                        </div>
-                        <div className="w-16 h-auto">
-                            <Image
-                                src={iPhoneProduct}
-                                layout="intrinsic"
-                            ></Image>
-                        </div>
+                        {uniqueImage.length > 0 ? (
+                            uniqueImage.map((products) => {
+                                return (
+                                    <>
+                                        <img
+                                            src={products}
+                                            className="w-16 h-auto"
+                                            alt=""
+                                        />
+                                    </>
+                                )
+                            })
+                        ) : (
+                            <div className="w-16 h-auto">
+                                <Image
+                                    src={iPhoneProduct}
+                                    layout="intrinsic"
+                                ></Image>
+                            </div>
+                        )}
+
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
                     <div className="w-full h-full flex justify-center md:block md:w-[60%]">
@@ -136,9 +150,19 @@ export default function Description({ data }) {
                         <div className="flex flex-col">
                             <h1 className="text-2xl">Memória</h1>
                             <div className="flex gap-3">
-                                <p className="badge badge-info">64gb</p>
-                                <p className="badge badge-info">64gb</p>
-                                <p className="badge badge-info">64gb</p>
+                                {uniqueMemory.length > 0 ? (
+                                    uniqueMemory.map((products) => {
+                                        return (
+                                            <>
+                                                <span className="badge badge-info">
+                                                    {products}
+                                                </span>
+                                            </>
+                                        )
+                                    })
+                                ) : (
+                                    <span>Memórias indisponíveis</span>
+                                )}
                             </div>
                         </div>
 
@@ -146,45 +170,50 @@ export default function Description({ data }) {
                             <h1 className="text-2xl">Cores</h1>
 
                             <div className="flex gap-3">
-                                {products.length > 0 ? (
-                                    products.map((products) => {
-                                        return (
-                                            <>
-                                                <ul>
-                                                    <li>
-                                                        {formatColor(
-                                                            products.color
-                                                        )}
-                                                    </li>
-                                                </ul>
-                                            </>
-                                        )
-                                    })
-                                ) : (
-                                    <span>Cores indisponíveis</span>
-                                )}
-                                {/* {products.length > 0 ? (
-                                    products.map(() => {
+                                {uniqueColor.length > 0 ? (
+                                    uniqueColor.map((products) => {
                                         return (
                                             <>
                                                 <div
                                                     className={
                                                         'w-5 h-5  rounded-full border border-white ' +
-                                                        (products.color ==
-                                                        'preto'
+                                                        (products == 'preto'
                                                             ? 'bg-black'
-                                                            : products.color ==
+                                                            : products ==
                                                               'branco'
                                                             ? 'bg-white'
-                                                            : products.color ==
+                                                            : products ==
                                                               'vermelho'
                                                             ? 'bg-red-500'
-                                                            : products.color ==
-                                                              'verde'
-                                                            ? 'bg-green-500'
-                                                            : products.color ==
-                                                              'azul'
+                                                            : products ==
+                                                                  'verdealpino' ??
+                                                              'verdealpino'
+                                                            ? 'bg-lime-900'
+                                                            : products == 'azul'
                                                             ? 'bg-blue-500'
+                                                            : products ==
+                                                              'meianoite'
+                                                            ? 'bg-gray-900'
+                                                            : products ==
+                                                              'azulsierra'
+                                                            ? 'bg-slate-400'
+                                                            : products ==
+                                                              'azulpacifico'
+                                                            ? 'bg-cyan-900'
+                                                            : products ==
+                                                              'grafite'
+                                                            ? 'bg-gray-700'
+                                                            : products ==
+                                                              'prateado'
+                                                            ? 'bg-gray-400'
+                                                            : products ==
+                                                              'estelar'
+                                                            ? 'bg-white'
+                                                            : products ==
+                                                              'dourado'
+                                                            ? 'bg-amber-100'
+                                                            : products == 'pink'
+                                                            ? 'bg-pink-200'
                                                             : '')
                                                     }
                                                 />
@@ -193,7 +222,7 @@ export default function Description({ data }) {
                                     })
                                 ) : (
                                     <span>Cores indisponíveis</span>
-                                )} */}
+                                )}
                             </div>
                         </div>
 
@@ -210,6 +239,8 @@ export default function Description({ data }) {
                             <div className="btn-group w-36 flex items-center">
                                 <button
                                     className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md"
+                                    disabled={qtd <= 1}
+                                    type="button"
                                     onClick={() => {
                                         setQtd(qtd - 1)
                                     }}
@@ -239,6 +270,8 @@ export default function Description({ data }) {
                                 <div className="btn-group w-36 flex items-center md:hidden">
                                     <button
                                         className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md bg-transparent"
+                                        disabled={qtd <= 1}
+                                        type="button"
                                         onClick={() => {
                                             setQtd(qtd - 1)
                                         }}
@@ -264,8 +297,9 @@ export default function Description({ data }) {
                                 <h1 className="text-xl">Descrição</h1>
                                 <p className="transition-all duration-500 delay-500">
                                     {showMore
-                                        ? text
-                                        : `${text.substring(0, 250)}` + '...'}
+                                        ? description
+                                        : `${description.substring(0, 250)}` +
+                                          '...'}
                                 </p>
                                 <div className="border-PrimaryText border-t-[1px]"></div>
 
@@ -280,32 +314,11 @@ export default function Description({ data }) {
                     </div>
                 </div>
                 <div className="flex flex-col my-10 gap-3 text-PrimaryText">
-                    <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex">
-                        <h1>Descrição</h1>
-                    </div>
-                    <div className="hidden md:block">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Etiam eu turpis molestie, dictum est a, mattis tellus.
-                        Sed dignissim, metus nec fringilla accumsan, risus sem
-                        sollicitudin lacus, ut interdum tellus elit sed risus.
-                        Maecenas eget condimentum velit, sit amet feugiat
-                        lectus. Class aptent taciti sociosqu ad litora torquent
-                        per conubia nostra, per inceptos himenaeos. Praesent
-                        auctor purus luctus enim egestas, ac scelerisque ante
-                        pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus
-                        nisl, eu tempor urna. Curabitur vel bibendum lorem.
-                        Morbi convallis convallis diam sit amet lacinia. Aliquam
-                        in elementum tellus. Curabitur tempor quis eros tempus
-                        lacinia. Nam bibendum pellentesque quam a convallis. Sed
-                        ut vulputate nisi. Integer in felis sed leo vestibulum
-                        venenatis. Suspendisse quis arcu sem. Aenean feugiat ex
-                        eu vestibulum vestibulum. Morbi a eleifend magna. Nam
-                        metus lacus, porttitor eu mauris a, blandit ultrices
-                        nibh. Mauris sit amet magna non ligula vestibulum
-                        eleifend. Nulla varius volutpat turpis sed lacinia. Nam
-                        eget mi in purus lobortis eleifend. Sed nec ante dictum
-                        sem condimentum ullamcorper quis venenatis nisi. Proin
-                        vitae facilisis nisi, ac posuere leo.
+                    <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
+                        <h1 className="text-2xl">Descrição</h1>
+                        {description.split('\n').map((it, i) => (
+                            <div key={'x' + i}>{it}</div>
+                        ))}
                     </div>
                 </div>
             </div>
