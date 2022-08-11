@@ -97,8 +97,10 @@ export default function Description({ data }) {
                                     />
                                 </div>
                                 <Image
-                                    src={iPhoneProduct}
-                                    layout="responsive"
+                                    src={uniqueImage[1]}
+                                    layout="fixed"
+                                    width="200"
+                                    height="230"
                                 ></Image>
                             </div>
                         </label>
@@ -123,12 +125,12 @@ export default function Description({ data }) {
                             >
                                 ✕
                             </label>
-                            <div className="w-64 h-auto scale-150 ">
-                                <Image
-                                    src={iPhoneProduct}
-                                    layout="responsive"
-                                ></Image>
-                            </div>
+                            <Image
+                                src={uniqueImage[0]}
+                                layout="fixed"
+                                width="200"
+                                height="230"
+                            ></Image>
                         </label>
                     </label>
 
@@ -316,10 +318,12 @@ export default function Description({ data }) {
                 <div className="flex flex-col my-10 gap-3 text-PrimaryText">
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
+                    </div>
+                    <p className="text-sm px-3">
                         {description.split('\n').map((it, i) => (
                             <div key={'x' + i}>{it}</div>
                         ))}
-                    </div>
+                    </p>
                 </div>
             </div>
             <Footer dataCategory={data} />
