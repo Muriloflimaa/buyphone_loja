@@ -3,7 +3,6 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import 'tw-elements'
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
@@ -12,6 +11,10 @@ import { ICategory } from '../types'
 import { formatPrice } from '../services/format'
 import { apiTeste } from '../services/apiTeste'
 import { useCart } from '../hooks/useCart'
+
+import dynamic from 'next/dynamic'
+
+dynamic(() => require('tw-elements'), { ssr: false })
 
 interface DataProps {
     data: {
@@ -150,24 +153,24 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
-                        data.data.map((category) => (
+                        data.data.map((category) =>
                             category.products.map((products) => {
                                 return (
                                     <>
                                         <ProductCard
-                                            key={products.id}
+                                            id={products.id}
                                             name={products.name}
                                             colorPhone={products.color}
                                             averagePrice={products.price}
                                             price={products.price}
-                                            image={products.media[0].original_url}
+                                            image={
+                                                products.media[0].original_url
+                                            }
                                             memory={products.memory}
                                         />
                                     </>
                                 )
-                            }
-                            )
-                        )
+                            })
                         )
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
