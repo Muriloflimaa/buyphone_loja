@@ -5,11 +5,11 @@ import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import iPhoneProduct from '../assets/images/imgcel.svg'
-import Footer from '../components/Footer'
-import NavBar from '../components/NavBar/NavBar'
-import { apiPedidos } from '../services/apiClient'
-import { ICategory } from '../types'
+import iPhoneProduct from '../../assets/images/imgcel.svg'
+import Footer from '../../components/Footer'
+import NavBar from '../../components/NavBar/NavBar'
+import { apiPedidos } from '../../services/apiClient'
+import { ICategory } from '../../types'
 
 interface DataProps {
     data: {
@@ -182,7 +182,7 @@ export default function description({ data }: DataProps) {
                                     +
                                 </button>
                             </div>
-                            <button className="btn btn-primary">Comprar</button>
+                            <button className="btn btn-Primary">Comprar</button>
                         </div>
                         <div className="w-full rounded-lg bg-colorCard flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
                             <div className="flex items-center md:items-center">
@@ -211,7 +211,7 @@ export default function description({ data }: DataProps) {
                                         +
                                     </button>
                                 </div>
-                                <button className="btn btn-primary block md:hidden">
+                                <button className="btn btn-Primary block md:hidden">
                                     Comprar
                                 </button>
                             </div>
