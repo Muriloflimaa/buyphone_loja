@@ -33,3 +33,36 @@ export const removeDuplicatesImage = (products) => {
     })
     return [...new Set(image)]
 }
+
+export const formatNameProducts = (nome) => {
+    const nome2 = nome
+        .normalize('NFD')
+        .replace(/[^a-zA-Z\s]/g, '')
+        .toLowerCase()
+
+    return nome2
+}
+
+export const removeDuplicatesColorsProducts = (products) => {
+    const colors = []
+
+    colors.push(formatName(products.color))
+
+    return [...new Set(colors)]
+}
+
+export const removeDuplicatesMemoryProducts = (products) => {
+    const memory = []
+
+    memory.push(products.memory)
+
+    return [...new Set(memory)]
+}
+
+export const removeDuplicatesImageProducts = (products) => {
+    const image = []
+
+    image.push(products.media[0].original_url)
+
+    return [...new Set(image)]
+}

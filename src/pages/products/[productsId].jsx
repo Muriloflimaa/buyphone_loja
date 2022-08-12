@@ -11,30 +11,29 @@ import NavBar from '../../components/NavBar/NavBar'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
 import {
-    removeDuplicatesColors,
-    removeDuplicatesImage,
-    removeDuplicatesMemory,
+    removeDuplicatesColorsProducts,
+    removeDuplicatesImageProducts,
+    removeDuplicatesMemoryProducts,
 } from '../../services/formatColor'
 
-export default function Description({ data }) {
+export default function Products({ data }) {
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
-    const products = data.data.products
+    const products = data.data
     const [description, setDescription] = useState('')
 
     useEffect(() => {
-        const descriptionProduct = products.map((products) => {
-            return products.description
-        })
-
+        const descriptionProduct = data.description
         setDescription(
-            descriptionProduct[0] ?? 'Descrição do produto não está disponível '
+            descriptionProduct ?? 'Descrição do produto não está disponível '
         )
     }, [])
 
-    var uniqueColor = removeDuplicatesColors(products)
-    var uniqueMemory = removeDuplicatesMemory(products)
-    var uniqueImage = removeDuplicatesImage(products)
+    var uniqueColor = removeDuplicatesColorsProducts(products)
+    var uniqueMemory = removeDuplicatesMemoryProducts(products)
+    var uniqueImage = removeDuplicatesImageProducts(products)
+
+    console.log(products)
 
     return (
         <>
@@ -61,26 +60,11 @@ export default function Description({ data }) {
 
                 <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
-                        {uniqueImage.length > 0 ? (
-                            uniqueImage.map((products) => {
-                                return (
-                                    <>
-                                        <img
-                                            src={products}
-                                            className="w-16 h-auto"
-                                            alt=""
-                                        />
-                                    </>
-                                )
-                            })
-                        ) : (
-                            <div className="w-16 h-auto">
-                                <Image
-                                    src={iPhoneProduct}
-                                    layout="intrinsic"
-                                ></Image>
-                            </div>
-                        )}
+                        <img
+                            src={products.media[0].original_url}
+                            className="w-16 h-auto"
+                            alt=""
+                        />
 
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
@@ -97,7 +81,7 @@ export default function Description({ data }) {
                                     />
                                 </div>
                                 <Image
-                                    src={uniqueImage[1]}
+                                    src={products.media[0].original_url}
                                     layout="fixed"
                                     width="200"
                                     height="230"
@@ -125,12 +109,12 @@ export default function Description({ data }) {
                             >
                                 ✕
                             </label>
-                            <Image
+                            {/* <Image
                                 src={uniqueImage[0]}
                                 layout="fixed"
                                 width="200"
                                 height="230"
-                            ></Image>
+                            ></Image> */}
                         </label>
                     </label>
 
@@ -336,7 +320,7 @@ export const getStaticProps = async (context) => {
         try {
             const { params } = context
             const { data } = await apiPedidos.get(
-                `categories/${params.descriptionId}`
+                `products/${params.productsId}`
             )
             return {
                 props: {
@@ -355,12 +339,12 @@ export const getStaticProps = async (context) => {
 }
 
 export async function getStaticPaths() {
-    const { data } = await apiPedidos.get(`categories/`)
+    const { data } = await apiPedidos.get(`products/`)
 
     const paths = data.data.map((description) => {
         return {
             params: {
-                descriptionId: `${description.id}`,
+                productsId: `${description.id}`,
             },
         }
     })
