@@ -194,24 +194,22 @@ const Home: NextPage<DataProps> = ({ data }) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 6,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-            }
+    try {
+        const { data } = await apiPedidos.get(`categories/`)
+        return {
+            props: {
+                data,
+            },
+            revalidate: 60 * 60 * 6,
+        }
+    } catch (error) {
+        return {
+            props: {
+                data: null,
+            },
+            revalidate: 60 * 60 * 6,
         }
     }
-    return getVisitorData()
 }
 
 export default Home

@@ -27,6 +27,8 @@ const ProductCard = ({
 }: ProductCardProps) => {
     const [color, setColor] = useState('')
 
+    const newName = name.replace(' ', '-')
+
     useEffect(() => {
         if (colorPhone == 'Preto') {
             setColor('bg-black')
@@ -122,7 +124,7 @@ const ProductCard = ({
                         Adicionar
                     </button>
                 </div>
-                <Link href={`/products/${id}`}>
+                <Link href={`/products/${id}`} passHref>
                     <a>
                         <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
                             Saiba mais

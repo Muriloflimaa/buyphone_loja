@@ -22,7 +22,7 @@ export default function Products({ data }) {
 
     return (
         <>
-            <NavBar dataCategory={data} />
+            {/* <NavBar dataCategory={data} /> */}
             <div className="py-20"></div>
             <div className="h-auto">
                 {/* começo */}
@@ -109,7 +109,7 @@ export default function Products({ data }) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-                    {data.data.products.length > 0 ? (
+                    {/* {data.data.products.length > 0 ? (
                         data.data.products.map((products) => (
                             <ProductCard
                                 id={products.id}
@@ -123,7 +123,7 @@ export default function Products({ data }) {
                         ))
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
-                    )}
+                    )} */}
                 </div>
                 <a
                     href="https://api.whatsapp.com/send?phone=5518997188537"
@@ -139,32 +139,28 @@ export default function Products({ data }) {
                 </a>
                 {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}
             </div>
-            <Footer dataCategory={data} />
+            {/* <Footer dataCategory={data} /> */}
         </>
     )
 }
 
 export const getStaticProps = async (context) => {
-    const getVisitorData = async () => {
-        try {
-            const { params } = context
-            const { data } = await apiPedidos.get(
-                `categories/${params.category}`
-            )
-            return {
-                props: {
-                    data,
-                },
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-            }
+    try {
+        const { params } = context
+
+        const { data } = await apiPedidos.get(`categories/${params.category}`)
+        return {
+            props: {
+                data,
+            },
+        }
+    } catch (error) {
+        return {
+            props: {
+                data: null,
+            },
         }
     }
-    return getVisitorData()
 }
 
 export async function getStaticPaths() {
@@ -173,7 +169,7 @@ export async function getStaticPaths() {
     const paths = data.data.map((category) => {
         return {
             params: {
-                category: `${category.id}`,
+                category: `${category.name.toLowerCase().replace(/ /g, '-')}`,
             },
         }
     })

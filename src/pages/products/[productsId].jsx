@@ -5,7 +5,6 @@ import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import iPhoneProduct from '../../assets/images/imgcel.svg'
 import Footer from '../../components/Footer'
 import NavBar from '../../components/NavBar/NavBar'
 import { apiPedidos } from '../../services/apiClient'
@@ -32,8 +31,6 @@ export default function Products({ data }) {
     var uniqueColor = removeDuplicatesColorsProducts(products)
     var uniqueMemory = removeDuplicatesMemoryProducts(products)
     var uniqueImage = removeDuplicatesImageProducts(products)
-
-    console.log(products)
 
     return (
         <>
@@ -341,10 +338,10 @@ export const getStaticProps = async (context) => {
 export async function getStaticPaths() {
     const { data } = await apiPedidos.get(`products/`)
 
-    const paths = data.data.map((description) => {
+    const paths = data.data.map((products) => {
         return {
             params: {
-                productsId: `${description.id}`,
+                productsId: `${products.id}`,
             },
         }
     })

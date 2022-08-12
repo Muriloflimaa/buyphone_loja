@@ -83,7 +83,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </label>
                                     {/* FIM */}
                                 </div>
-                                <Link href={'/'}>
+                                <Link href={'/'} passHref>
                                     <a>
                                         <Image
                                             src={Logo}
@@ -189,8 +189,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             dataCategory.data.map(
                                                 (category) => {
                                                     return (
-                                                        <Link
-                                                            href={`${category.id}`}
+                                                        <a
+                                                            href={`${category.name
+                                                                .toLowerCase()
+                                                                .replace(
+                                                                    / /g,
+                                                                    '-'
+                                                                )}`}
                                                         >
                                                             <li
                                                                 key={
@@ -203,7 +208,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                                     }
                                                                 </a>
                                                             </li>
-                                                        </Link>
+                                                        </a>
                                                     )
                                                 }
                                             )
