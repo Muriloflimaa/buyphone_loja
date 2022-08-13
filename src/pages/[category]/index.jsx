@@ -147,7 +147,7 @@ export default function Products({ data }) {
 export const getStaticProps = async (context) => {
     try {
         const { params } = context
-
+        console.log(params)
         const { data } = await apiPedidos.get(`categories/${params.category}`)
         return {
             props: {

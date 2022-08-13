@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast'
 import { apiTeste } from '../services/apiTeste'
 import { Product } from '../types'
 import { useLocalStorage } from '../services/useLocalStorage'
+import { apiPedidos } from '../services/apiClient'
 
 interface CartProviderProps {
     children: ReactNode
@@ -73,31 +74,24 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             const productExists = updatedCart.find(
                 (product) => product.id === productId
             )
-            // Consultando a API (estoque)
-            const stock = await apiTeste.get(`stock/${productId}`)
-            // Obtendo a quantidade em estoque
-            const stockAmount = stock.data.amount
+
             // Verificando a quantidade inserida no carrinho
             const currentAmount = productExists ? productExists.amount : 0
             // Adicionando mais um item
             const newAmount = currentAmount + 1
-            // Verificar se o solicitado é maior que o estoque
-            //Caso a quantidade solicitada seja returnar um erro
-
-            if (newAmount > stockAmount) {
-                toast.error('Quantidade solicitada fora de estoque')
-                return
-            }
 
             //verificando se o produto existe no carrinho
             if (productExists) {
                 // se sim incrementa a quantidade
                 productExists.amount = newAmount
             } else {
-                //Se não, obtem o produto da apiTeste e add ao carrinho com o valor de 1
-                const addProduct = await apiTeste.get(`products/${productId}`)
-                const newProduct = { ...addProduct.data, amount: 1 }
+                //Se não, obtem o produto da api e add ao carrinho com o valor de 1
+                const addProduct = await apiPedidos.get(`products/${productId}`)
+                const products = addProduct.data.data.id
+                //abaixo precisa typar o produto
+                const newProduct = { id: products, amount: 1 }
                 updatedCart.push(newProduct)
+                console.log(newProduct)
             }
             //Atualizando o Carrinho
             setCart(updatedCart)
@@ -143,14 +137,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             if (amount <= 0) {
                 return
             }
-            // Consultando a apiTeste (estoque)
-            const stock = await apiTeste.get(`stock/${productId}`)
-            // Obtendo a quantidade em estoque
-            const stockAmount = stock.data.amount
-            if (amount > stockAmount) {
-                toast.error('Quantidade solicitada fora de estoque')
-                return
-            }
+
             const updatedCart = [...cart]
             const productExists = updatedCart.find(
                 (product) => product.id === productId

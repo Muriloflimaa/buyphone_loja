@@ -19,7 +19,6 @@ import toast from 'react-hot-toast'
 import { ICategory } from '../../types'
 import ProductCart from '../ProductCart/ProductCart'
 import { useCart } from '../../hooks/useCart'
-import ProductCard from '../ProductCard/ProductCard'
 import { formatPrice } from '../../services/format'
 interface NavBarProps {
     dataCategory: {
@@ -54,6 +53,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const handleClick = () => {
         setIsOn(!isOn)
     }
+
     return (
         <>
             <div className="fixed z-20 w-full">
@@ -189,26 +189,30 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             dataCategory.data.map(
                                                 (category) => {
                                                     return (
-                                                        <a
+                                                        <Link
                                                             href={`${category.name
                                                                 .toLowerCase()
                                                                 .replace(
                                                                     / /g,
                                                                     '-'
                                                                 )}`}
+                                                            passHref
                                                         >
-                                                            <li
-                                                                key={
-                                                                    category.id
-                                                                }
-                                                            >
-                                                                <a className="w-max">
-                                                                    {
-                                                                        category.name
+                                                            <a>
+                                                                <li
+                                                                    className="w-max"
+                                                                    key={
+                                                                        category.id
                                                                     }
-                                                                </a>
-                                                            </li>
-                                                        </a>
+                                                                >
+                                                                    <a className="w-max">
+                                                                        {
+                                                                            category.name
+                                                                        }
+                                                                    </a>
+                                                                </li>
+                                                            </a>
+                                                        </Link>
                                                     )
                                                 }
                                             )

@@ -22,7 +22,8 @@ export default function Products({ data }) {
     const [description, setDescription] = useState('')
 
     useEffect(() => {
-        const descriptionProduct = data.description
+        const descriptionProduct = products.description
+
         setDescription(
             descriptionProduct ?? 'Descrição do produto não está disponível '
         )
@@ -31,6 +32,8 @@ export default function Products({ data }) {
     var uniqueColor = removeDuplicatesColorsProducts(products)
     var uniqueMemory = removeDuplicatesMemoryProducts(products)
     var uniqueImage = removeDuplicatesImageProducts(products)
+
+    console.log(products)
 
     return (
         <>
@@ -281,6 +284,10 @@ export default function Products({ data }) {
                                 <p className="transition-all duration-500 delay-500">
                                     {showMore
                                         ? description
+                                              .split('\n')
+                                              .map((it, i) => (
+                                                  <div key={'x' + i}>{it}</div>
+                                              ))
                                         : `${description.substring(0, 250)}` +
                                           '...'}
                                 </p>
@@ -296,7 +303,7 @@ export default function Products({ data }) {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col my-10 gap-3 text-PrimaryText">
+                <div className="flex-col my-10 gap-3 text-PrimaryText hidden md:flex">
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
                     </div>
@@ -313,26 +320,21 @@ export default function Products({ data }) {
 }
 
 export const getStaticProps = async (context) => {
-    const getVisitorData = async () => {
-        try {
-            const { params } = context
-            const { data } = await apiPedidos.get(
-                `products/${params.productsId}`
-            )
-            return {
-                props: {
-                    data,
-                },
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-            }
+    try {
+        const { params } = context
+        const { data } = await apiPedidos.get(`products/${params.productsId}`)
+        return {
+            props: {
+                data,
+            },
+        }
+    } catch (error) {
+        return {
+            props: {
+                data: null,
+            },
         }
     }
-    return getVisitorData()
 }
 
 export async function getStaticPaths() {
