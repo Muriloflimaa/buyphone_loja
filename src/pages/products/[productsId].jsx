@@ -1,19 +1,18 @@
 import { faMagnifyingGlassPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
-import { GetStaticProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Footer from '../../components/Footer'
 import NavBar from '../../components/NavBar/NavBar'
 import { apiPedidos } from '../../services/apiClient'
-import { ICategory } from '../../types'
 import {
     removeDuplicatesColorsProducts,
     removeDuplicatesImageProducts,
     removeDuplicatesMemoryProducts,
-} from '../../services/formatColor'
+} from '../../utils/formatColor'
+import { refact } from '../../utils/RefctDescript'
 
 export default function Products({ data }) {
     const [qtd, setQtd] = useState(0)
@@ -32,8 +31,6 @@ export default function Products({ data }) {
     var uniqueColor = removeDuplicatesColorsProducts(products)
     var uniqueMemory = removeDuplicatesMemoryProducts(products)
     var uniqueImage = removeDuplicatesImageProducts(products)
-
-    console.log(products)
 
     return (
         <>
@@ -283,11 +280,7 @@ export default function Products({ data }) {
                                 <h1 className="text-xl">Descrição</h1>
                                 <p className="transition-all duration-500 delay-500">
                                     {showMore
-                                        ? description
-                                              .split('\n')
-                                              .map((it, i) => (
-                                                  <div key={'x' + i}>{it}</div>
-                                              ))
+                                        ? refact(description)
                                         : `${description.substring(0, 250)}` +
                                           '...'}
                                 </p>
@@ -307,11 +300,7 @@ export default function Products({ data }) {
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3">
-                        {description.split('\n').map((it, i) => (
-                            <div key={'x' + i}>{it}</div>
-                        ))}
-                    </p>
+                    <p className="text-sm px-3">{refact(description)}</p>
                 </div>
             </div>
             <Footer dataCategory={data} />
