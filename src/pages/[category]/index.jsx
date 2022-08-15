@@ -1,15 +1,8 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetStaticProps, NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import Footer from '../../components/Footer'
-import NavBar from '../../components/NavBar/NavBar'
-import ProductCard from '../../components/ProductCard/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
-import { ICategory } from '../../types'
-import { formatPrice } from '../../utils/format'
-import { useCart } from '../../hooks/useCart'
 
 import dynamic from 'next/dynamic'
 
@@ -108,7 +101,7 @@ export default function Products({ data }) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-                    {data.data.products.length > 0 ? (
+                    {/* {data.data.products.length > 0 ? (
                         data.data.products.map((products) => (
                             <ProductCard
                                 id={products.id}
@@ -122,7 +115,7 @@ export default function Products({ data }) {
                         ))
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
-                    )}
+                    )} */}
                 </div>
                 <a
                     href="https://api.whatsapp.com/send?phone=5518997188537"
@@ -136,9 +129,7 @@ export default function Products({ data }) {
                     Não encontrou o que procura? Clique aqui para falar com o
                     nosso consultor.
                 </a>
-                {/* DAR UM MAP COM O ARRAY DOS PRODUTOS */}
             </div>
-            {/* <Footer dataCategory={data} /> */}
         </>
     )
 }

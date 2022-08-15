@@ -13,6 +13,8 @@ interface ProductCardProps {
     memory: string
     image: string
     idCategory: number
+    slug: string
+    slugCategory: string
 }
 
 const ProductCard = ({
@@ -23,6 +25,8 @@ const ProductCard = ({
     idCategory,
     price,
     image,
+    slug,
+    slugCategory,
     memory,
 }: ProductCardProps) => {
     const [color, setColor] = useState('')
@@ -120,7 +124,7 @@ const ProductCard = ({
                         Adicionar
                     </button>
                 </div>
-                <Link href={`/products/${id}`} passHref>
+                <Link href={`/${slugCategory}/${slug}`} passHref>
                     <a>
                         <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
                             Saiba mais

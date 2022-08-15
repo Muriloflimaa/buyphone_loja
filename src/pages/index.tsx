@@ -3,15 +3,15 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import Footer from '../components/Footer'
+import Footer from '../components/Footer/'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { formatPrice } from '../utils/format'
-import { apiTeste } from '../services/apiTeste'
 import { useCart } from '../hooks/useCart'
 import dynamic from 'next/dynamic'
+import axios from 'axios'
 dynamic(() => require('tw-elements'), { ssr: false })
 
 interface DataProps {
@@ -41,7 +41,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     // CARRINHO TESTE
 
     const [products, setProducts] = useState<ProductFormatted[]>([])
-    const { addProduct, cart } = useCart()
+    const { cart } = useCart()
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
         const newSumAmount = { ...sumAmount }
@@ -49,16 +49,30 @@ const Home: NextPage<DataProps> = ({ data }) => {
         return newSumAmount
     }, {} as CartItemsAmount)
 
+    // useEffect(() => {
+    //     async function loadProducts() {
+    //         const response = await apiTeste.get<ProductCardProps[]>('products')
+    //         const data = response.data.map((product) => ({
+    //             ...product,
+    //             priceFormatted: formatPrice(product.price),
+    //         }))
+    //         setProducts(data)
+    //     }
+    //     loadProducts()
+    // }, [])
+
     useEffect(() => {
-        async function loadProducts() {
-            const response = await apiTeste.get<ProductCardProps[]>('products')
-            const data = response.data.map((product) => ({
-                ...product,
-                priceFormatted: formatPrice(product.price),
-            }))
-            setProducts(data)
-        }
-        loadProducts()
+        axios
+            .get('https://pedidos.buyphone.com.br/api/categories', {
+                headers: { token: 'ef7223f0-55b4-49a7-9eed-f4b4ef14b2f1' },
+            })
+            .then((response) => {
+                // If request is good...
+                console.log(response.data)
+            })
+            .catch((error) => {
+                console.log('error ' + error)
+            })
     }, [])
 
     return (
@@ -162,6 +176,8 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                             colorPhone={products.color}
                                             averagePrice={products.price}
                                             price={products.price}
+                                            slug={products.slug}
+                                            slugCategory={category.slug}
                                             image={
                                                 products.media[0].original_url
                                             }
@@ -200,14 +216,12 @@ export const getStaticProps: GetStaticProps = async () => {
             props: {
                 data,
             },
-            revalidate: 60 * 60 * 6,
         }
     } catch (error) {
         return {
             props: {
                 data: null,
             },
-            revalidate: 60 * 60 * 6,
         }
     }
 }

@@ -36,6 +36,7 @@ export interface IProduct {
     price: number
     stock: null
     updated_at: string
+    slug: string
 }
 
 export interface IMedia {
@@ -149,6 +150,7 @@ export interface ICategory {
     name: string
     products: Array<IProduct>
     updated_at: string
+    slug: string
 }
 
 export interface Product {

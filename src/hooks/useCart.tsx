@@ -7,7 +7,6 @@ import {
     useState,
 } from 'react'
 import { toast } from 'react-hot-toast'
-import { apiTeste } from '../services/apiTeste'
 import { Product } from '../types'
 import { useLocalStorage } from '../services/useLocalStorage'
 import { apiPedidos } from '../services/apiClient'

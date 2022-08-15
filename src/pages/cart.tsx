@@ -44,22 +44,18 @@ export default function Cart({ data }: DataProps) {
     )
 }
 export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 6,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-            }
+    try {
+        const { data } = await apiPedidos.get(`categories/`)
+        return {
+            props: {
+                data,
+            },
+        }
+    } catch (error) {
+        return {
+            props: {
+                data: null,
+            },
         }
     }
-    return getVisitorData()
 }

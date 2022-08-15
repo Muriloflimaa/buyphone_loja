@@ -193,7 +193,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 (category) => {
                                                     return (
                                                         <Link
-                                                            href={`${category.id}`}
+                                                            href={`/${category.slug}`}
                                                             passHref
                                                         >
                                                             <a>
@@ -315,7 +315,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     {dataCategory.data.length > 0 ? (
                                         dataCategory.data.map((category) => {
                                             return (
-                                                <Link href={`${category.id}`}>
+                                                <Link href={`${category.slug}`}>
                                                     <li key={category.id}>
                                                         {category.name}
                                                     </li>

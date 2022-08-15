@@ -4,15 +4,15 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Footer from '../../components/Footer'
-import NavBar from '../../components/NavBar/NavBar'
-import { apiPedidos } from '../../services/apiClient'
+import Footer from '../../../components/Footer'
+import NavBar from '../../../components/NavBar/NavBar'
+import { apiPedidos } from '../../../services/apiClient'
 import {
     removeDuplicatesColorsProducts,
     removeDuplicatesImageProducts,
     removeDuplicatesMemoryProducts,
-} from '../../utils/formatColor'
-import { refact } from '../../utils/RefctDescript'
+} from '../../../utils/formatColor'
+import { refact } from '../../../utils/RefctDescript'
 
 export default function Products({ data }) {
     const [qtd, setQtd] = useState(0)
@@ -31,6 +31,8 @@ export default function Products({ data }) {
     var uniqueColor = removeDuplicatesColorsProducts(products)
     var uniqueMemory = removeDuplicatesMemoryProducts(products)
     var uniqueImage = removeDuplicatesImageProducts(products)
+
+    console.log(products)
 
     return (
         <>
@@ -305,7 +307,7 @@ export default function Products({ data }) {
 export const getStaticProps = async (context) => {
     try {
         const { params } = context
-        const { data } = await apiPedidos.get(`products/${params.productsId}`)
+        const { data } = await apiPedidos.get(`products/${params.product}`)
         return {
             props: {
                 data,
@@ -321,14 +323,16 @@ export const getStaticProps = async (context) => {
 }
 
 export async function getStaticPaths() {
-    const { data } = await apiPedidos.get(`products/`)
+    const { data } = await apiPedidos.get(`categories/`)
 
-    const paths = data.data.map((products) => {
-        return {
-            params: {
-                productsId: `${products.id}`,
-            },
-        }
+    const paths = data.data.map((category) => {
+        data.data.map((products) => {
+            return {
+                params: {
+                    product: `${category.slug} ${products.slug}`,
+                },
+            }
+        })
     })
 
     return { paths, fallback: false }
