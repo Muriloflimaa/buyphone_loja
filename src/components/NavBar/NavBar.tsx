@@ -20,17 +20,20 @@ import { ICategory } from '../../types'
 import ProductCart from '../ProductCart/ProductCart'
 import { useCart } from '../../hooks/useCart'
 import { formatPrice } from '../../services/format'
+
 interface NavBarProps {
     dataCategory: {
         data: Array<ICategory>
     }
 }
+
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { cart } = useCart()
     const cartSize = cart.length
     const router = useRouter()
     const [isOn, setIsOn] = useState(false)
     const [show, setShow] = useState(false)
+
     const total = formatPrice(
         cart.reduce((sumTotal, product) => {
             return sumTotal + product.price * product.amount

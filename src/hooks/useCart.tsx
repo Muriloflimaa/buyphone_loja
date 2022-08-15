@@ -37,7 +37,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         if (storagedCart) {
             //Se existir configurar o setCart
-
             return storagedCart
         }
         return []
@@ -87,11 +86,19 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             } else {
                 //Se não, obtem o produto da api e add ao carrinho com o valor de 1
                 const addProduct = await apiPedidos.get(`products/${productId}`)
-                const products = addProduct.data.data.id
+                const products = addProduct.data.data
+
                 //abaixo precisa typar o produto
-                const newProduct = { id: products, amount: 1 }
+                const newProduct = {
+                    id: products.id,
+                    amount: 1,
+                    title: products.name,
+                    color: products.color,
+                    price: products.price,
+                    image: products.media[0].original_url,
+                    memory: products.memory,
+                }
                 updatedCart.push(newProduct)
-                console.log(newProduct)
             }
             //Atualizando o Carrinho
             setCart(updatedCart)

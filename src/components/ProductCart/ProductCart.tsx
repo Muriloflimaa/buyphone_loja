@@ -4,14 +4,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../hooks/useCart'
 import { formatPrice } from '../../services/format'
-
-interface Product {
-    id: number
-    title: string
-    price: number
-    image: string
-    amount: number
-}
+import { Product } from '../../types'
 
 const ProductCart = () => {
     const router = useRouter()
@@ -98,7 +91,9 @@ const ProductCart = () => {
                                 <div className="flex flex-col justify-between">
                                     <div className="flex flex-col">
                                         <strong>{product.title}</strong>
-                                        <span>id: exemplo</span>
+                                        <span>
+                                            {product.color} / {product.memory}
+                                        </span>
                                     </div>
                                     <span>Quantidade: {product.amount}</span>
                                 </div>
