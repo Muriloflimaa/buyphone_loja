@@ -106,12 +106,6 @@ export default function Products({ data }) {
                             >
                                 ✕
                             </label>
-                            {/* <Image
-                                src={uniqueImage[0]}
-                                layout="fixed"
-                                width="200"
-                                height="230"
-                            ></Image> */}
                         </label>
                     </label>
 

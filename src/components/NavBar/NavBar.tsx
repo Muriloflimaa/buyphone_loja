@@ -19,7 +19,7 @@ import toast from 'react-hot-toast'
 import { ICategory } from '../../types'
 import ProductCart from '../ProductCart/ProductCart'
 import { useCart } from '../../hooks/useCart'
-import { formatPrice } from '../../services/format'
+import { formatPrice } from '../../utils/format'
 
 interface NavBarProps {
     dataCategory: {
@@ -193,12 +193,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 (category) => {
                                                     return (
                                                         <Link
-                                                            href={`${category.name
-                                                                .toLowerCase()
-                                                                .replace(
-                                                                    / /g,
-                                                                    '-'
-                                                                )}`}
+                                                            href={`${category.id}`}
                                                             passHref
                                                         >
                                                             <a>

@@ -9,7 +9,6 @@ import ProductCard from '../../components/ProductCard/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
 import { formatPrice } from '../../utils/format'
-import { apiTeste } from '../../services/apiTeste'
 import { useCart } from '../../hooks/useCart'
 
 import dynamic from 'next/dynamic'
@@ -109,7 +108,7 @@ export default function Products({ data }) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-                    {/* {data.data.products.length > 0 ? (
+                    {data.data.products.length > 0 ? (
                         data.data.products.map((products) => (
                             <ProductCard
                                 id={products.id}
@@ -123,7 +122,7 @@ export default function Products({ data }) {
                         ))
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
-                    )} */}
+                    )}
                 </div>
                 <a
                     href="https://api.whatsapp.com/send?phone=5518997188537"
@@ -147,7 +146,6 @@ export default function Products({ data }) {
 export const getStaticProps = async (context) => {
     try {
         const { params } = context
-        console.log(params)
         const { data } = await apiPedidos.get(`categories/${params.category}`)
         return {
             props: {
@@ -169,7 +167,7 @@ export async function getStaticPaths() {
     const paths = data.data.map((category) => {
         return {
             params: {
-                category: `${category.name.toLowerCase().replace(/ /g, '-')}`,
+                category: `${category.id}`,
             },
         }
     })

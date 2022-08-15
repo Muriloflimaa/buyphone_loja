@@ -1,9 +1,8 @@
 import { TrashIcon } from '@heroicons/react/solid'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../hooks/useCart'
-import { formatPrice } from '../../services/format'
+import { formatPrice } from '../../utils/format'
 import { Product } from '../../types'
 
 const ProductCart = () => {

@@ -27,8 +27,6 @@ const ProductCard = ({
 }: ProductCardProps) => {
     const [color, setColor] = useState('')
 
-    const newName = name.replace(' ', '-')
-
     useEffect(() => {
         if (colorPhone == 'Preto') {
             setColor('bg-black')
@@ -72,9 +70,7 @@ const ProductCard = ({
         }
     })
 
-    const [click, setClick] = useState(false)
-
-    const { addProduct, cart } = useCart()
+    const { addProduct } = useCart()
 
     function handleAddProduct(id: number) {
         addProduct(id)
@@ -111,7 +107,7 @@ const ProductCard = ({
                 <div className="text-lg">
                     Nosso Preço:{' '}
                     <span className="text-success font-semibold text-xl">
-                        {averagePrice}
+                        {moneyMask(averagePrice.toString())}
                     </span>
                 </div>
 
