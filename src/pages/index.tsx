@@ -8,10 +8,8 @@ import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
-import { formatPrice } from '../utils/format'
 import { useCart } from '../hooks/useCart'
 import dynamic from 'next/dynamic'
-import axios from 'axios'
 dynamic(() => require('tw-elements'), { ssr: false })
 
 interface DataProps {
@@ -19,18 +17,7 @@ interface DataProps {
         data: Array<ICategory>
     }
 }
-interface ProductCardProps {
-    id: number
-    title: string
-    colorPhone: string
-    priceOld: string
-    price: number
-    image: string
-}
 
-interface ProductFormatted extends ProductCardProps {
-    priceFormatted: string
-}
 interface CartItemsAmount {
     [key: number]: number
 }
@@ -38,9 +25,6 @@ interface CartItemsAmount {
 const Home: NextPage<DataProps> = ({ data }) => {
     const [click, setClick] = useState(false)
 
-    // CARRINHO TESTE
-
-    const [products, setProducts] = useState<ProductFormatted[]>([])
     const { cart } = useCart()
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
@@ -48,32 +32,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
-
-    // useEffect(() => {
-    //     async function loadProducts() {
-    //         const response = await apiTeste.get<ProductCardProps[]>('products')
-    //         const data = response.data.map((product) => ({
-    //             ...product,
-    //             priceFormatted: formatPrice(product.price),
-    //         }))
-    //         setProducts(data)
-    //     }
-    //     loadProducts()
-    // }, [])
-
-    useEffect(() => {
-        axios
-            .get('https://pedidos.buyphone.com.br/api/categories', {
-                headers: { token: 'ef7223f0-55b4-49a7-9eed-f4b4ef14b2f1' },
-            })
-            .then((response) => {
-                // If request is good...
-                console.log(response.data)
-            })
-            .catch((error) => {
-                console.log('error ' + error)
-            })
-    }, [])
 
     return (
         <>

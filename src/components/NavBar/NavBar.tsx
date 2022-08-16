@@ -174,7 +174,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                         {total}
                                                     </span>
                                                 </div>
-                                                <div className="card-actions justify-center"></div>
                                             </div>
                                         </div>
                                     </div>

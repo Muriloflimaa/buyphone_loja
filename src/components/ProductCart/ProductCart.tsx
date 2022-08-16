@@ -73,6 +73,7 @@ const ProductCart = () => {
                             'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
                             (padding == true ? ' p-4' : ' p-0')
                         }
+                        key={product.id}
                     >
                         <div
                             className="flex justify-between w-full"

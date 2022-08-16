@@ -36,7 +36,7 @@ export default function Products({ data }) {
 
     return (
         <>
-            <NavBar dataCategory={data} />
+            {/* <NavBar dataCategory={data} /> */}
             <div className="py-16"></div>
 
             <div className="max-w-4xl mx-auto p-4 md:my-4 w-full">
@@ -299,7 +299,7 @@ export default function Products({ data }) {
                     <p className="text-sm px-3">{refact(description)}</p>
                 </div>
             </div>
-            <Footer dataCategory={data} />
+            {/* <Footer dataCategory={data} /> */}
         </>
     )
 }
@@ -307,7 +307,9 @@ export default function Products({ data }) {
 export const getStaticProps = async (context) => {
     try {
         const { params } = context
-        const { data } = await apiPedidos.get(`products/${params.product}`)
+        const { data } = await apiPedidos.get(
+            `categories/${params.category}/${params.product}`
+        )
         return {
             props: {
                 data,
@@ -329,7 +331,8 @@ export async function getStaticPaths() {
         data.data.map((products) => {
             return {
                 params: {
-                    product: `${category.slug} ${products.slug}`,
+                    product: `${products.slug}`,
+                    category: `${category.slug} `,
                 },
             }
         })

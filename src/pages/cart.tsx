@@ -6,6 +6,7 @@ import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetStaticProps } from 'next'
 import { useCart } from '../hooks/useCart'
+import { formatPrice } from '../utils/format'
 
 interface DataProps {
     data: {
@@ -16,6 +17,11 @@ interface DataProps {
 export default function Cart({ data }: DataProps) {
     const { cart } = useCart()
     const cartSize = cart.length
+    const total = formatPrice(
+        cart.reduce((sumTotal, product) => {
+            return sumTotal + product.price * product.amount
+        }, 0)
+    )
     return (
         <>
             <NavBar dataCategory={data} />
@@ -37,6 +43,12 @@ export default function Cart({ data }: DataProps) {
                 </div>
                 <div className="flex flex-col gap-3 p-4">
                     {cartSize > 0 ? <ProductCart /> : <h1>Carrinho vazio</h1>}
+                </div>
+            </div>
+            <div className="card-body bg-base-200">
+                <div className="flex justify-between py-4">
+                    <span className="text-gray-500 text-lg">Valor Total:</span>
+                    <span className="font-semibold text-lg">{total}</span>
                 </div>
             </div>
             <Footer dataCategory={data} />
