@@ -76,7 +76,7 @@ export default function adress({ data }: DataProps) {
                         </div>
                     </div>
                     <div className="flex flex-col gap-3">
-                        <ProductCart
+                        {/* <ProductCart
                             name="iPhone 12 pro MAX"
                             id="Azul / 256GB"
                             qtdProduct={1}
@@ -107,7 +107,7 @@ export default function adress({ data }: DataProps) {
                             priceProduct={5.2}
                             image={iPhoneProduct}
                             shadow="shadow-md"
-                        />
+                        /> */}
                     </div>
                 </div>
             </div>

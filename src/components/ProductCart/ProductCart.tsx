@@ -1,17 +1,9 @@
 import { TrashIcon } from '@heroicons/react/solid'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../hooks/useCart'
-import { formatPrice } from '../../services/format'
-
-interface Product {
-    id: number
-    title: string
-    price: number
-    image: string
-    amount: number
-}
+import { formatPrice } from '../../utils/format'
+import { Product } from '../../types'
 
 const ProductCart = () => {
     const router = useRouter()
@@ -81,6 +73,7 @@ const ProductCart = () => {
                             'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
                             (padding == true ? ' p-4' : ' p-0')
                         }
+                        key={product.id}
                     >
                         <div
                             className="flex justify-between w-full"
@@ -98,7 +91,9 @@ const ProductCart = () => {
                                 <div className="flex flex-col justify-between">
                                     <div className="flex flex-col">
                                         <strong>{product.title}</strong>
-                                        <span>id: exemplo</span>
+                                        <span>
+                                            {product.color} / {product.memory}
+                                        </span>
                                     </div>
                                     <span>Quantidade: {product.amount}</span>
                                 </div>

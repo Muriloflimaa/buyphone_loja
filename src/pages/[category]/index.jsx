@@ -1,44 +1,24 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetStaticProps, NextPage } from 'next'
+import { useEffect, useState } from 'react'
+import { apiPedidos } from '../../services/apiClient'
+import ProductCard from '../../components/ProductCard/ProductCard'
+
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
-import Footer from '../components/Footer/'
-import NavBar from '../components/NavBar/NavBar'
-import ProductCard from '../components/ProductCard/ProductCard'
-import { useCart } from '../hooks/useCart'
-import { apiPedidos } from '../services/apiClient'
-import { ICategory } from '../types'
+
 dynamic(() => require('tw-elements'), { ssr: false })
-
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
-}
-
-interface CartItemsAmount {
-    [key: number]: number
-}
-
-const Home: NextPage<DataProps> = ({ data }) => {
+//a
+export default function Products({ data }) {
     const [click, setClick] = useState(false)
-
-    const { cart } = useCart()
-    // Calculando itens por produto disponível no carrinho (anterior, atual)
-    cart.reduce((sumAmount, product) => {
-        const newSumAmount = { ...sumAmount }
-        newSumAmount[product.id] = product.amount
-        return newSumAmount
-    }, {} as CartItemsAmount)
+    console.log(data)
 
     return (
         <>
-            <NavBar dataCategory={data} />
+            {/* <NavBar dataCategory={data} /> */}
             <div className="py-20"></div>
             <div className="h-auto">
-                {/* começo carrousel */}
+                {/* começo */}
                 <div
                     id="carouselExampleControls"
                     className="carousel slide relative max-w-7xl mx-auto rounded-xl hidden md:block"
@@ -122,27 +102,20 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-                    {data.data.length > 0 ? (
-                        data.data.map((category) =>
-                            category.products.map((products) => (
-                                <ProductCard
-                                    key={products.id}
-                                    id={products.id}
-                                    name={products.name}
-                                    idCategory={category.id}
-                                    colorPhone={products.color}
-                                    averagePrice={products.price}
-                                    price={products.price}
-                                    slug={products.slug}
-                                    slugCategory={category.slug}
-                                    image={
-                                        products.media[0].original_url
-                                    }
-                                    memory={products.memory}
-                                />
-                            )
-                            )
-                        )
+                    {data.data.products.length > 0 ? (
+                        data.data.products.map((products) => (
+                            <ProductCard
+                                id={products.id}
+                                name={products.name}
+                                colorPhone={products.color}
+                                averagePrice={products.price}
+                                price={products.price}
+                                image={products.media[0].original_url}
+                                memory={products.memory}
+                                slug={products.slug}
+                                slugCategory={data.data.slug}
+                            />
+                        ))
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}
@@ -160,14 +133,14 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     nosso consultor.
                 </a>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps = async (context) => {
     try {
-        const { data } = await apiPedidos.get(`categories/`)
+        const { params } = context
+        const { data } = await apiPedidos.get(`categories/${params.category}`)
         return {
             props: {
                 data,
@@ -182,4 +155,16 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 }
 
-export default Home
+export async function getStaticPaths() {
+    const { data } = await apiPedidos.get(`categories/`)
+
+    const paths = data.data.map((category) => {
+        return {
+            params: {
+                category: `${category.slug}`,
+            },
+        }
+    })
+
+    return { paths, fallback: false }
+}

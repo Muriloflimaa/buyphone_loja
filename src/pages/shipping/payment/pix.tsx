@@ -24,14 +24,14 @@ export default function pix({ data }: DataProps) {
                     </h2>
                     <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 pt-6 border-t border-base-300">
                         <h3 className="text-2xl font-medium">Aparelho(s)</h3>
-                        <ProductCart
+                        {/* <ProductCart
                             name="iPhone 12 pro MAX"
                             id="Azul / 256GB"
                             qtdProduct={1}
                             priceProduct={5.2}
                             image={iPhoneProduct}
                             shadow=" "
-                        />
+                        /> */}
                     </div>
                     <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 pt-6 border-t border-base-300">
                         <h3 className="text-2xl font-medium">Enviar para</h3>

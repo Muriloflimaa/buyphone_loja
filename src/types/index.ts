@@ -36,6 +36,7 @@ export interface IProduct {
     price: number
     stock: null
     updated_at: string
+    slug: string
 }
 
 export interface IMedia {
@@ -125,6 +126,7 @@ export interface IUserOrder {
     note: null
     profile_photo_path: null
     updated_at: string
+    
 }
 
 export interface IInvoice {
@@ -148,13 +150,16 @@ export interface ICategory {
     name: string
     products: Array<IProduct>
     updated_at: string
+    slug: string
 }
 
 export interface Product {
-    id: number;
-    title: string;
-    price: number;
-    image: string;
-    amount: number;
+    id: number
+    title: string
+    price: number
+    image: string
+    amount: number
+    color: string
+    memory: string
   }
   

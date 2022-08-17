@@ -12,6 +12,9 @@ interface ProductCardProps {
     price: number
     memory: string
     image: string
+    idCategory: number
+    slug: string
+    slugCategory: string
 }
 
 const ProductCard = ({
@@ -19,9 +22,12 @@ const ProductCard = ({
     name,
     colorPhone,
     averagePrice,
+    idCategory,
     price,
     image,
-    memory
+    slug,
+    slugCategory,
+    memory,
 }: ProductCardProps) => {
     const [color, setColor] = useState('')
 
@@ -44,7 +50,11 @@ const ProductCard = ({
         if (colorPhone == 'Azul-Sierra') {
             setColor('bg-sky-200')
         }
-        if (colorPhone == 'Azul-Pacífico' || colorPhone == 'Azul Pacífico' || colorPhone == 'Azul pacífico') {
+        if (
+            colorPhone == 'Azul-Pacífico' ||
+            colorPhone == 'Azul Pacífico' ||
+            colorPhone == 'Azul pacífico'
+        ) {
             setColor('bg-cyan-900')
         }
         if (colorPhone == 'Verde' || colorPhone == 'Verde-Alpino') {
@@ -64,9 +74,7 @@ const ProductCard = ({
         }
     })
 
-    const [click, setClick] = useState(false)
-
-    const { addProduct, cart } = useCart()
+    const { addProduct } = useCart()
 
     function handleAddProduct(id: number) {
         addProduct(id)
@@ -87,7 +95,9 @@ const ProductCard = ({
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
-                    <span className="badge badge-outline text-xs">{memory}</span>
+                    <span className="badge badge-outline text-xs">
+                        {memory}
+                    </span>
                 </div>
 
                 <div>
@@ -101,7 +111,7 @@ const ProductCard = ({
                 <div className="text-lg">
                     Nosso Preço:{' '}
                     <span className="text-success font-semibold text-xl">
-                        {averagePrice}
+                        {moneyMask(averagePrice.toString())}
                     </span>
                 </div>
 
@@ -114,10 +124,12 @@ const ProductCard = ({
                         Adicionar
                     </button>
                 </div>
-                <Link href={'/description'} passHref>
-                    <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
-                        Saiba mais
-                    </button>
+                <Link href={`/${slugCategory}/${slug}`} passHref>
+                    <a>
+                        <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
+                            Saiba mais
+                        </button>
+                    </a>
                 </Link>
             </div>
         </div>
