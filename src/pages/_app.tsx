@@ -1,13 +1,25 @@
-import { AppProps } from 'next/app'
+import { NextComponentType, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
+import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation/MyBottomNavigation'
+import NavBar from '../components/NavBar/NavBar'
 import { CartProvider } from '../hooks/useCart'
+import { apiPedidos } from '../services/apiClient'
+import { ICategory } from '../types'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+interface AppProps {
+    data: {
+        data: Array<ICategory>
+    }
+    Component: NextComponentType<NextPageContext, any, {}>
+    pageProps: any
+}
+
+export default function MyApp({ Component, pageProps, data }: AppProps) {
     const router = useRouter()
     const [width, setWidth] = useState('')
 
@@ -33,11 +45,22 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <>
                     <Toaster position="top-right" reverseOrder={false} />
                     <CartProvider>
+                        <NavBar dataCategory={data} />
+                        <div className="py-20"></div>
                         <Component {...pageProps} />
+                        <Footer dataCategory={data} />
                     </CartProvider>
                     <MyBottomNavigation />
                 </>
             )}
         </>
     )
+}
+
+MyApp.getInitialProps = async () => {
+    const { data } = await apiPedidos.get(`categories/`)
+
+    return {
+        data: data,
+    }
 }

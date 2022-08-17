@@ -22,7 +22,6 @@ const ProductCard = ({
     name,
     colorPhone,
     averagePrice,
-    idCategory,
     price,
     image,
     slug,
@@ -81,7 +80,10 @@ const ProductCard = ({
     }
 
     return (
-        <div className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300">
+        <div
+            className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300"
+            key={id}
+        >
             <figure className="px-4 pt-4">
                 <Image src={image} layout="fixed" width="200" height="230" />
             </figure>

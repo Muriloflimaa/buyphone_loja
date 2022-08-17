@@ -1,20 +1,8 @@
 import ProductCart from '../components/ProductCart/ProductCart'
-import iPhoneProduct from '../assets/images/product.svg'
-import Footer from '../components/Footer'
-import NavBar from '../components/NavBar/NavBar'
-import { apiPedidos } from '../services/apiClient'
-import { ICategory } from '../types'
-import { GetStaticProps } from 'next'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../utils/format'
 
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
-}
-
-export default function Cart({ data }: DataProps) {
+export default function Cart() {
     const { cart } = useCart()
     const cartSize = cart.length
     const total = formatPrice(
@@ -24,8 +12,6 @@ export default function Cart({ data }: DataProps) {
     )
     return (
         <>
-            <NavBar dataCategory={data} />
-            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto">
                 <div className="w-full flex justify-between p-4 items-center">
                     <h1 className="uppercase text-xl font-light text-PrimaryText">
@@ -51,23 +37,6 @@ export default function Cart({ data }: DataProps) {
                     <span className="font-semibold text-lg">{total}</span>
                 </div>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
-}
-export const getStaticProps: GetStaticProps = async () => {
-    try {
-        const { data } = await apiPedidos.get(`categories/`)
-        return {
-            props: {
-                data,
-            },
-        }
-    } catch (error) {
-        return {
-            props: {
-                data: null,
-            },
-        }
-    }
 }
