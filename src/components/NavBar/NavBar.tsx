@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import Logo from '../../assets/images/logo.svg'
-import styles from './styles.module.scss'
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -10,16 +7,18 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon,
+    UserIcon
 } from '@heroicons/react/solid'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { ICategory } from '../../types'
-import ProductCart from '../ProductCart/ProductCart'
+import Logo from '../../assets/images/logo.svg'
 import { useCart } from '../../hooks/useCart'
+import { ICategory } from '../../types'
 import { formatPrice } from '../../utils/format'
+import ProductCart from '../ProductCart/ProductCart'
+import styles from './styles.module.scss'
 
 interface NavBarProps {
     dataCategory: {
@@ -186,30 +185,20 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         <li>
                                             <a href="/">Todos</a>
                                         </li>
-                                        <li></li>
                                         {dataCategory.data.length > 0 ? (
                                             dataCategory.data.map(
                                                 (category) => {
                                                     return (
-                                                        <Link
-                                                            href={`/${category.slug}`}
-                                                            passHref
-                                                        >
-                                                            <a>
-                                                                <li
-                                                                    className="w-max"
-                                                                    key={
-                                                                        category.id
-                                                                    }
-                                                                >
-                                                                    <a className="w-max">
-                                                                        {
-                                                                            category.name
-                                                                        }
-                                                                    </a>
-                                                                </li>
-                                                            </a>
-                                                        </Link>
+                                                        <li key={category.id}>
+                                                            <Link
+                                                                href={`/categoria/${category.slug}?id=${category.id}`}
+                                                                passHref
+                                                            >
+                                                                <a className="w-max">
+                                                                    {category.name}
+                                                                </a>
+                                                            </Link>
+                                                        </li>
                                                     )
                                                 }
                                             )
@@ -314,11 +303,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     {dataCategory.data.length > 0 ? (
                                         dataCategory.data.map((category) => {
                                             return (
-                                                <Link href={`${category.slug}`}>
-                                                    <li key={category.id}>
-                                                        {category.name}
-                                                    </li>
-                                                </Link>
+                                                <li key={category.id}>
+                                                    <Link key={category.id} href={`/${category.slug}`}>
+                                                        <a className="w-max">
+                                                            {category.name}
+                                                        </a>
+                                                    </Link>
+                                                </li>
                                             )
                                         })
                                     ) : (

@@ -2,14 +2,14 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import Footer from '../components/Footer/'
 import NavBar from '../components/NavBar/NavBar'
 import ProductCard from '../components/ProductCard/ProductCard'
+import { useCart } from '../hooks/useCart'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
-import { useCart } from '../hooks/useCart'
-import dynamic from 'next/dynamic'
 dynamic(() => require('tw-elements'), { ssr: false })
 
 interface DataProps {
@@ -124,26 +124,24 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
-                            category.products.map((products) => {
-                                return (
-                                    <>
-                                        <ProductCard
-                                            id={products.id}
-                                            name={products.name}
-                                            idCategory={category.id}
-                                            colorPhone={products.color}
-                                            averagePrice={products.price}
-                                            price={products.price}
-                                            slug={products.slug}
-                                            slugCategory={category.slug}
-                                            image={
-                                                products.media[0].original_url
-                                            }
-                                            memory={products.memory}
-                                        />
-                                    </>
-                                )
-                            })
+                            category.products.map((products) => (
+                                <ProductCard
+                                    key={products.id}
+                                    id={products.id}
+                                    name={products.name}
+                                    idCategory={category.id}
+                                    colorPhone={products.color}
+                                    averagePrice={products.price}
+                                    price={products.price}
+                                    slug={products.slug}
+                                    slugCategory={category.slug}
+                                    image={
+                                        products.media[0].original_url
+                                    }
+                                    memory={products.memory}
+                                />
+                            )
+                            )
                         )
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
