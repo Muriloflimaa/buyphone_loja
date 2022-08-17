@@ -7,7 +7,7 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon
+    UserIcon,
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -191,11 +191,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                     return (
                                                         <li key={category.id}>
                                                             <Link
-                                                                href={`/categoria/${category.slug}?id=${category.id}`}
+                                                                href={`/${category.slug}`}
                                                                 passHref
                                                             >
                                                                 <a className="w-max">
-                                                                    {category.name}
+                                                                    {
+                                                                        category.name
+                                                                    }
                                                                 </a>
                                                             </Link>
                                                         </li>
@@ -304,7 +306,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         dataCategory.data.map((category) => {
                                             return (
                                                 <li key={category.id}>
-                                                    <Link key={category.id} href={`/${category.slug}`}>
+                                                    <Link
+                                                        key={category.id}
+                                                        href={`/${category.slug}`}
+                                                    >
                                                         <a className="w-max">
                                                             {category.name}
                                                         </a>

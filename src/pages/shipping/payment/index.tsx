@@ -62,22 +62,20 @@ export default function payment({ data }: DataProps) {
                             </span>
                         </div>
                         <div>
-                            <a
-                                href="https://loja.buyphone.com.br/payment/custom"
-                                target="_blank"
-                                className="btn btn-outline w-full justify-between"
-                            >
-                                <span>Personalizado</span>
-                                <svg
-                                    className="h-6 w-6 fill-current md:h-8 md:w-8"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
-                                </svg>
-                            </a>
+                            <Link href={'/shipping/payment/custom'}>
+                                <a className="btn btn-outline w-full justify-between">
+                                    <span>Personalizado</span>
+                                    <svg
+                                        className="h-6 w-6 fill-current md:h-8 md:w-8"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+                                    </svg>
+                                </a>
+                            </Link>
                             <span className=" mt-2 block text-xs font-normal">
                                 * Nesta forma de pagamento você poderá dar uma
                                 entrada no Pix e parcelar o restante. Assim você
