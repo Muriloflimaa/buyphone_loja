@@ -1,16 +1,11 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useState } from 'react'
 import { apiPedidos } from '../../services/apiClient'
 import ProductCard from '../../components/ProductCard/ProductCard'
-import { useCategory } from '../../hooks/useCategory'
-import { NavBar } from '../../components/NavBar/NavBar'
-
 import dynamic from 'next/dynamic'
-
 dynamic(() => require('tw-elements'), { ssr: false })
-//a
+
 export default function Products({ data }) {
     return (
         <>

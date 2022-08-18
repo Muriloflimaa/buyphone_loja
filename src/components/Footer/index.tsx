@@ -36,17 +36,17 @@ export default function Footer({ dataCategory }: FooterProps) {
                                 {dataCategory.data.length > 0 ? (
                                     dataCategory.data.map((category) => {
                                         return (
-                                            <Link
-                                                href={`/${category.slug}`}
-                                                passHref
+                                            <li
+                                                className="link"
                                                 key={category.id}
                                             >
-                                                <a>
-                                                    <li className="link">
-                                                        {category.name}
-                                                    </li>
-                                                </a>
-                                            </Link>
+                                                <Link
+                                                    href={`/${category.slug}`}
+                                                    passHref
+                                                >
+                                                    <a>{category.name}</a>
+                                                </Link>
+                                            </li>
                                         )
                                     })
                                 ) : (
