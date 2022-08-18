@@ -39,12 +39,10 @@ export default function Footer({ dataCategory }: FooterProps) {
                                             <Link
                                                 href={`/${category.slug}`}
                                                 passHref
+                                                key={category.id}
                                             >
                                                 <a>
-                                                    <li
-                                                        className="link"
-                                                        key={category.id}
-                                                    >
+                                                    <li className="link">
                                                         {category.name}
                                                     </li>
                                                 </a>
