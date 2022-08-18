@@ -17,7 +17,6 @@ interface DataProps {
         data: Array<ICategory>
     }
 }
-
 interface CartItemsAmount {
     [key: number]: number
 }
@@ -35,8 +34,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
     return (
         <>
-            <NavBar dataCategory={data} />
-            <div className="py-20"></div>
             <div className="h-auto">
                 {/* começo carrousel */}
                 <div
@@ -135,13 +132,10 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                     price={products.price}
                                     slug={products.slug}
                                     slugCategory={category.slug}
-                                    image={
-                                        products.media[0].original_url
-                                    }
+                                    image={products.media[0].original_url}
                                     memory={products.memory}
                                 />
-                            )
-                            )
+                            ))
                         )
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
@@ -160,7 +154,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     nosso consultor.
                 </a>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
 }

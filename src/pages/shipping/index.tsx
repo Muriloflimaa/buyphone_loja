@@ -1,22 +1,10 @@
 import { ChevronRightIcon, MapIcon } from '@heroicons/react/solid'
-import { GetStaticProps } from 'next'
 import Link from 'next/link'
-import Footer from '../../components/Footer'
-import NavBar from '../../components/NavBar/NavBar'
 import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
-import { apiPedidos } from '../../services/apiClient'
-import { ICategory } from '../../types'
 
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
-}
-
-export default function Shipping({ data }: DataProps) {
+export default function Shipping() {
     return (
         <>
-            <NavBar dataCategory={data} />
             <div className="py-16"></div>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
                 <ShippingCard />
@@ -63,29 +51,6 @@ export default function Shipping({ data }: DataProps) {
                     </button>
                 </div>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        }
-    }
-    return getVisitorData()
 }

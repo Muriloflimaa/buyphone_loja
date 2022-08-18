@@ -1,24 +1,12 @@
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
 import iPhoneProduct from '../../assets/images/product.svg'
-import Footer from '../../components/Footer'
-import NavBar from '../../components/NavBar/NavBar'
 import ProductCart from '../../components/ProductCart/ProductCart'
 import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
-import { apiPedidos } from '../../services/apiClient'
-import { ICategory } from '../../types'
 
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
-}
-
-export default function adress({ data }: DataProps) {
+export default function adress() {
     return (
         <>
-            <NavBar dataCategory={data} />
-            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
                 <ShippingCard />
                 <p>Preencha os campos abaixo</p>
@@ -111,29 +99,6 @@ export default function adress({ data }: DataProps) {
                     </div>
                 </div>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        }
-    }
-    return getVisitorData()
 }

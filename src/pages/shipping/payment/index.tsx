@@ -1,23 +1,9 @@
 import Link from 'next/link'
 import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 
-import { ICategory } from '../../../types'
-import { GetStaticProps } from 'next'
-import { apiPedidos } from '../../../services/apiClient'
-import NavBar from '../../../components/NavBar/NavBar'
-import Footer from '../../../components/Footer'
-
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
-}
-
-export default function payment({ data }: DataProps) {
+export default function payment() {
     return (
         <>
-            <NavBar dataCategory={data} />
-            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
                 <ShippingCard />
                 <div className="flex flex-col justify-center items-center gap-4 max-w-sm mx-auto my-6 text-PrimaryText">
@@ -85,28 +71,6 @@ export default function payment({ data }: DataProps) {
                     </div>
                 </div>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
-}
-export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        }
-    }
-    return getVisitorData()
 }
