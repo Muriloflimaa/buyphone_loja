@@ -82,7 +82,7 @@ export default function credit({ data }: DataProps) {
                                 <input
                                     type="hidden"
                                     name="_token"
-                                    value="IYdhPDwfF3hWViQ0fiwr404G3qhuDJNzqdIIjUTT"
+                                    defaultValue={''}
                                 />
                                 <div className="field-container">
                                     <label htmlFor="name" className="label">
@@ -92,7 +92,7 @@ export default function credit({ data }: DataProps) {
                                         className="input input-bordered w-full"
                                         id="name"
                                         name="card_holder_name"
-                                        value=""
+                                        defaultValue={''}
                                         maxLength={20}
                                         type="text"
                                     />
@@ -110,7 +110,7 @@ export default function credit({ data }: DataProps) {
                                         name="card_number"
                                         type="tel"
                                         inputMode="numeric"
-                                        value=""
+                                        defaultValue={''}
                                     />
                                     <svg
                                         id="ccicon"
@@ -135,7 +135,7 @@ export default function credit({ data }: DataProps) {
                                             name="expiration_date"
                                             type="tel"
                                             inputMode="numeric"
-                                            value=""
+                                            defaultValue={''}
                                         />
                                     </div>
                                     <div className="field-container w-full">
@@ -152,7 +152,7 @@ export default function credit({ data }: DataProps) {
                                             type="text"
                                             pattern="[0-9]*"
                                             inputMode="numeric"
-                                            value=""
+                                            defaultValue={''}
                                         />
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@ export default function credit({ data }: DataProps) {
                                         name="document"
                                         maxLength={20}
                                         type="text"
-                                        value=""
+                                        defaultValue={''}
                                     />
                                 </div>
                                 <div className="field-container">
@@ -183,41 +183,42 @@ export default function credit({ data }: DataProps) {
                                         name="installments"
                                         id="installments"
                                         className="select select-bordered w-full"
+                                        defaultValue={2}
                                     >
-                                        <option value="1">
+                                        <option value={1}>
                                             1x de R$0,00 (sem juros)
                                         </option>
-                                        <option value="2">
+                                        <option value={2}>
                                             2x de R$0,50 (com juros)
                                         </option>
-                                        <option value="3">
+                                        <option value={3}>
                                             3x de R$0,33 (com juros)
                                         </option>
-                                        <option value="4">
+                                        <option value={4}>
                                             4x de R$0,25 (com juros)
                                         </option>
-                                        <option value="5">
+                                        <option value={5}>
                                             5x de R$0,20 (com juros)
                                         </option>
-                                        <option value="6">
+                                        <option value={6}>
                                             6x de R$0,17 (com juros)
                                         </option>
-                                        <option value="7">
+                                        <option value={7}>
                                             7x de R$0,14 (com juros)
                                         </option>
-                                        <option value="8">
+                                        <option value={8}>
                                             8x de R$0,12 (com juros)
                                         </option>
-                                        <option value="9">
+                                        <option value={9}>
                                             9x de R$0,11 (com juros)
                                         </option>
-                                        <option value="10">
+                                        <option value={10}>
                                             10x de R$0,10 (com juros)
                                         </option>
-                                        <option value="11">
+                                        <option value={11}>
                                             11x de R$0,09 (com juros)
                                         </option>
-                                        <option value="12">
+                                        <option value={12}>
                                             12x de R$0,08 (com juros)
                                         </option>
                                     </select>
