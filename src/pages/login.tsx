@@ -1,15 +1,32 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
+import { AuthContext } from '../hooks/AuthContext'
 
 export default function login() {
     const [show, setShow] = useState(true)
+
+    const { signIn } = useContext(AuthContext)
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    async function handleSubmit(event: FormEvent) {
+        event.preventDefault()
+        const data = {
+            email,
+            password,
+        }
+        await signIn(data)
+    }
+
     return (
         <>
             <h1 className="text-2xl flex justify-center pt-4 text-default font-medium">
                 Faça login ou cadastre-se
             </h1>
-            <div className="w-full">
+            <form onSubmit={handleSubmit} className="w-full">
+                {/* começo login */}
                 <div className="form-control w-full">
                     <div>
                         <label className="label">
@@ -17,6 +34,8 @@ export default function login() {
                         </label>
                         <label className="input-group">
                             <input
+                                defaultValue={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 type="text"
                                 placeholder="BuyPhone@gmail.com"
                                 className="input input-bordered rounded-md !important w-full text-PrimaryText"
@@ -29,6 +48,8 @@ export default function login() {
                         </label>
                         <label className="input-group">
                             <input
+                                defaultValue={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 type={show ? 'password' : 'text'}
                                 placeholder="●●●●●●●"
                                 className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
@@ -43,6 +64,7 @@ export default function login() {
                         </label>
                     </div>
                 </div>
+                {/* fim login */}
                 <div className="flex justify-end w-full my-2">
                     <Link href={'/forgout-password'} passHref>
                         <a className="text-xs  text-blue-600 link cursor-pointer">
@@ -64,7 +86,7 @@ export default function login() {
                         </a>
                     </Link>
                 </div>
-            </div>
+            </form>
         </>
     )
 }

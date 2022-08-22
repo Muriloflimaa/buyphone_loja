@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation/MyBottomNavigation'
 import NavBar from '../components/NavBar/NavBar'
+import { AuthProvider } from '../hooks/AuthContext'
 import { CartProvider } from '../hooks/useCart'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
@@ -32,7 +33,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
     })
 
     return (
-        <>
+        <AuthProvider>
             {router.route === `/login` ||
             router.route === `/register` ||
             router.route === `/terms` ||
@@ -53,7 +54,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
                     <MyBottomNavigation />
                 </>
             )}
-        </>
+        </AuthProvider>
     )
 }
 
