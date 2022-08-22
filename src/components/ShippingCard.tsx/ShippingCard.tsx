@@ -14,7 +14,7 @@ const ShippingCard = (props: any) => {
         } else if (router.asPath == '/shipping/payment/pix') {
             setMensage('Pagamento via pix')
         } else if (router.asPath == '/shipping/payment/custom') {
-            setMensage('Pagamento Customizado')
+            setMensage('Pagamento personalizado')
         } else {
             setMensage('Informações para entrega')
         }
@@ -35,8 +35,8 @@ const ShippingCard = (props: any) => {
                         ? 'Pagamento via cartão de crédito'
                         : mensage == 'Pagamento via pix'
                         ? 'Pagamento via pix'
-                        : mensage == 'Pagamento Customizado'
-                        ? 'Pagamento Customizado'
+                        : mensage == 'Pagamento personalizado'
+                        ? 'Pagamento personalizado'
                         : 'Informações para a entrega'}
                 </h1>
             </div>

@@ -183,7 +183,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                                     <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                                         <li>
-                                            <a href="/">Todos</a>
+                                            <Link href={'/'}>
+                                                <a>Todos</a>
+                                            </Link>
                                         </li>
                                         {dataCategory.data.length > 0 ? (
                                             dataCategory.data.map(
