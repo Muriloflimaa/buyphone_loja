@@ -88,7 +88,7 @@ const ProductCard = ({
                 <Image src={image} layout="fixed" width="200" height="230" />
             </figure>
             <div className="card-body items-center p-4 text-center text-PrimaryText">
-                <h1 className="text-2xl font-bold">{name}</h1>
+                <h1 className="text-2xl font-light">{name}</h1>
 
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
@@ -101,20 +101,20 @@ const ProductCard = ({
                         {memory}
                     </span>
                 </div>
+                <div className="flex-col flex mb-3 w-full my-6 gap-2 ">
+                    <div className="flex justify-between w-full">
+                        Preço Comum:{' '}
+                        <span className="opacity-40 line-through decoration-red-600">
+                            {moneyMask(price.toString())}
+                        </span>
+                    </div>
 
-                <div>
-                    Preço Comum:{' '}
-                    <span className="opacity-40 line-through decoration-red-600">
-                        {moneyMask(price.toString())}
-                    </span>
-                    <br />
-                </div>
-
-                <div className="text-lg">
-                    Nosso Preço:{' '}
-                    <span className="text-success font-semibold text-xl">
-                        {moneyMask(averagePrice.toString())}
-                    </span>
+                    <div className="text-lg flex justify-between w-full">
+                        <span>Nosso Preço:</span>
+                        <span className="text-success font-semibold text-xl">
+                            {moneyMask(averagePrice.toString())}
+                        </span>
+                    </div>
                 </div>
 
                 <div className="card-actions">
@@ -128,7 +128,7 @@ const ProductCard = ({
                 </div>
                 <Link href={`/${slugCategory}/${slug}`} passHref>
                     <a>
-                        <button className="btn btn-primary text-PrimaryText bg-transparent border-transparent link">
+                        <button className="btn btn-primary font-light text-PrimaryText bg-transparent border-transparent link">
                             Saiba mais
                         </button>
                     </a>
