@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useState } from 'react'
-import CarouselComponent from '../components/carousel'
+import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { useCart } from '../hooks/useCart'
 import { apiPedidos } from '../services/apiClient'
@@ -20,8 +20,6 @@ interface CartItemsAmount {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-    const [click, setClick] = useState(false)
-
     const { cart } = useCart()
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {

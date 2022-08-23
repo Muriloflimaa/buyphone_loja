@@ -1,7 +1,7 @@
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 
-export default function CarouselComponent() {
+const CarouselComponent = () => {
     return (
         <div className="carousel-wrapper max-w-7xl mx-auto hidden md:block rounded-xl">
             <Carousel
@@ -20,7 +20,7 @@ export default function CarouselComponent() {
                         aria-hidden="true"
                     />
                 </div>
-                
+
                 <div className="rounded-xl">
                     <img
                         src="https://loja.buyphone.com.br/img/banner2.webp"
@@ -33,3 +33,4 @@ export default function CarouselComponent() {
         </div>
     )
 }
+export default CarouselComponent
