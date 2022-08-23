@@ -5,7 +5,6 @@ import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
 export default function Shipping() {
     return (
         <>
-            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
                 <ShippingCard />
                 <div className="max-w-2xl w-full mx-auto grid gap-3">
