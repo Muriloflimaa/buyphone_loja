@@ -20,7 +20,6 @@ const ShippingCard = (props: any) => {
         }
     })
 
-    useEffect
     return (
         <>
             <div className="flex justify-between p-2">
