@@ -27,17 +27,7 @@ const ShippingCard = (props: any) => {
             </div>
             <div className="w-full px-2 bg-border h-[1px]"></div>
             <div className="flex flex-col items-center">
-                <h1 className="text-3xl text-PrimaryText">
-                    {message == 'Qual a forma de pagamento?'
-                        ? 'Qual a forma de pagamento?'
-                        : message == 'Pagamento via cartão de crédito'
-                        ? 'Pagamento via cartão de crédito'
-                        : message == 'Pagamento via pix'
-                        ? 'Pagamento via pix'
-                        : message == 'Pagamento personalizado'
-                        ? 'Pagamento personalizado'
-                        : 'Informações para a entrega'}
-                </h1>
+                <h1 className="text-3xl text-PrimaryText">{message}</h1>
             </div>
             <div className="w-full px-2 bg-border h-[1px]"></div>
         </>
