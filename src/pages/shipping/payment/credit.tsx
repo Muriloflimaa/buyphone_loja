@@ -3,8 +3,28 @@ import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 import { GetStaticProps } from 'next'
 import { apiPedidos } from '../../../services/apiClient'
 import Card from '../../../components/Card/index'
+import { useEffect, useState } from 'react'
+import InputMask from 'react-input-mask'
 
 export default function credit() {
+    const [name, setName] = useState('José Antonio')
+    const [card, setCard] = useState(0)
+    const [expiration_date, setExpiration_date] = useState('')
+    const [unMask, setUnMask] = useState()
+
+    const handleChangeName = (event: any) => {
+        setName(event.target.value)
+    }
+
+    const handleChangeCard = (event: any) => {
+        setCard(event.target.value)
+    }
+
+    const handleChangeValid = (event: any) => {
+        setExpiration_date(event.target.value)
+        setUnMask(expiration_date.replace(/[^\d]/g, ''))
+    }
+
     return (
         <>
             <div className="max-w-7xl mx-auto grid gap-3 my-10">
@@ -62,11 +82,7 @@ export default function credit() {
                             </a>
                         </Link>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <form
-                                id="form"
-                                method="POST"
-                                action="https://loja.buyphone.com.br/payment/credit"
-                            >
+                            <form id="form">
                                 <input
                                     type="hidden"
                                     name="_token"
@@ -79,8 +95,9 @@ export default function credit() {
                                     <input
                                         className="input input-bordered w-full"
                                         id="name"
-                                        name="card_holder_name"
-                                        defaultValue={''}
+                                        name="name"
+                                        onChange={handleChangeName}
+                                        placeholder={name}
                                         maxLength={20}
                                         type="text"
                                     />
@@ -94,11 +111,12 @@ export default function credit() {
                                     </label>
                                     <input
                                         className="input input-bordered w-full"
-                                        id="cardnumber"
-                                        name="card_number"
+                                        id="card"
+                                        name="card"
+                                        placeholder="1234 1234 1234 1234"
+                                        onChange={handleChangeCard}
                                         type="tel"
                                         inputMode="numeric"
-                                        defaultValue={''}
                                     />
                                 </div>
                                 <div className="flex gap-2 w-full">
@@ -109,14 +127,25 @@ export default function credit() {
                                         >
                                             MM/AA
                                         </label>
-                                        <input
-                                            className="input input-bordered w-full"
-                                            id="expirationdate"
+                                        <InputMask
+                                            mask={'99/99'}
+                                            id="expiration_date"
                                             name="expiration_date"
                                             type="tel"
                                             inputMode="numeric"
-                                            defaultValue={''}
-                                        />
+                                            onChange={handleChangeValid}
+                                        >
+                                            {() => (
+                                                <input
+                                                    className="input input-bordered w-full"
+                                                    id="expiration_date"
+                                                    name="expiration_date"
+                                                    type="tel"
+                                                    inputMode="numeric"
+                                                    defaultValue={''}
+                                                />
+                                            )}
+                                        </InputMask>
                                     </div>
                                     <div className="field-container w-full">
                                         <label
@@ -223,7 +252,11 @@ export default function credit() {
                                         </div>
                                     </a>
                                 </Link>
-                                <Card />
+                                <Card
+                                    name={name}
+                                    card={card}
+                                    expiration_date={unMask}
+                                />
                             </div>
                         </div>
                         <button
