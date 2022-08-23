@@ -4,19 +4,19 @@ import { useEffect, useState } from 'react'
 const ShippingCard = (props: any) => {
     const router = useRouter()
     const [show, setShow] = useState(false)
-    const [mensage, setMensage] = useState('')
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
         if (router.asPath == '/shipping/payment') {
-            setMensage('Qual a forma de pagamento?')
+            setMessage('Qual a forma de pagamento?')
         } else if (router.asPath == '/shipping/payment/credit') {
-            setMensage('Pagamento via cartão de crédito')
+            setMessage('Pagamento via cartão de crédito')
         } else if (router.asPath == '/shipping/payment/pix') {
-            setMensage('Pagamento via pix')
+            setMessage('Pagamento via pix')
         } else if (router.asPath == '/shipping/payment/custom') {
-            setMensage('Pagamento personalizado')
+            setMessage('Pagamento personalizado')
         } else {
-            setMensage('Informações para entrega')
+            setMessage('Informações para entrega')
         }
     })
 
@@ -28,13 +28,13 @@ const ShippingCard = (props: any) => {
             <div className="w-full px-2 bg-border h-[1px]"></div>
             <div className="flex flex-col items-center">
                 <h1 className="text-3xl text-PrimaryText">
-                    {mensage == 'Qual a forma de pagamento?'
+                    {message == 'Qual a forma de pagamento?'
                         ? 'Qual a forma de pagamento?'
-                        : mensage == 'Pagamento via cartão de crédito'
+                        : message == 'Pagamento via cartão de crédito'
                         ? 'Pagamento via cartão de crédito'
-                        : mensage == 'Pagamento via pix'
+                        : message == 'Pagamento via pix'
                         ? 'Pagamento via pix'
-                        : mensage == 'Pagamento personalizado'
+                        : message == 'Pagamento personalizado'
                         ? 'Pagamento personalizado'
                         : 'Informações para a entrega'}
                 </h1>
