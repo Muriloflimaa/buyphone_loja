@@ -128,24 +128,12 @@ export default function credit() {
                                             MM/AA
                                         </label>
                                         <InputMask
-                                            mask={'99/99'}
-                                            id="expiration_date"
-                                            name="expiration_date"
+                                            className="input input-bordered w-full"
                                             type="tel"
-                                            inputMode="numeric"
+                                            mask={'99/99'}
+                                            placeholder="99/99"
                                             onChange={handleChangeValid}
-                                        >
-                                            {() => (
-                                                <input
-                                                    className="input input-bordered w-full"
-                                                    id="expiration_date"
-                                                    name="expiration_date"
-                                                    type="tel"
-                                                    inputMode="numeric"
-                                                    defaultValue={''}
-                                                />
-                                            )}
-                                        </InputMask>
+                                        />
                                     </div>
                                     <div className="field-container w-full">
                                         <label
