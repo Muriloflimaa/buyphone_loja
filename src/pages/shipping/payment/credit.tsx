@@ -2,6 +2,7 @@ import Link from 'next/link'
 import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 import { GetStaticProps } from 'next'
 import { apiPedidos } from '../../../services/apiClient'
+import Card from '../../../components/Card/index'
 
 export default function credit() {
     return (
@@ -203,7 +204,7 @@ export default function credit() {
                                     </select>
                                 </div>
                             </form>
-                            <div className="container mx-auto">
+                            <div className="mx-auto flex flex-col">
                                 <Link href={'/shipping/payment/pix'} passHref>
                                     <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start hidden">
                                         <i className="fa fa-lightbulb mr-2"></i>
@@ -222,7 +223,7 @@ export default function credit() {
                                         </div>
                                     </a>
                                 </Link>
-                                {/* cartao aqui */}
+                                <Card />
                             </div>
                         </div>
                         <button
