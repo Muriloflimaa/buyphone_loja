@@ -20,7 +20,7 @@ export default function CarouselComponent() {
                         aria-hidden="true"
                     />
                 </div>
-
+                
                 <div className="rounded-xl">
                     <img
                         src="https://loja.buyphone.com.br/img/banner2.webp"
