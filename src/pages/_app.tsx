@@ -59,9 +59,14 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
 }
 
 MyApp.getInitialProps = async () => {
-    const { data } = await apiPedidos.get(`categories/`)
-
-    return {
-        data: data,
+    try {
+        const { data } = await apiPedidos.get(`categories/`)
+        return {
+            data: data,
+        }
+    } catch (error) {
+        return {
+            data: null,
+        }
     }
 }
