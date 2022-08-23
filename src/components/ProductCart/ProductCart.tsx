@@ -32,7 +32,7 @@ const ProductCart = () => {
             setPadding(false)
         }
     })
-    // cartteste
+    // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
 
     const cartFormatted = cart.map((product) => ({
