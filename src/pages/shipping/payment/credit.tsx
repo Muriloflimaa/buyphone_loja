@@ -44,7 +44,7 @@ export default function credit() {
                             </svg>
                         </div>
                         <div className="divider">Informações de Pagamento</div>
-                        <Link href={'/shipping/payment'} passHref>
+                        <Link href={'/shipping/payment/pix'} passHref>
                             <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start">
                                 <i className="fa fa-lightbulb mr-2"></i>
                                 <div className="flex flex-col items-start text-xs">
@@ -212,7 +212,7 @@ export default function credit() {
                                 </div>
                             </form>
                             <div className="container mx-auto">
-                                <Link href={'/shipping/payment'} passHref>
+                                <Link href={'/shipping/payment/pix'} passHref>
                                     <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start hidden">
                                         <i className="fa fa-lightbulb mr-2"></i>
                                         <div className="flex flex-col items-start text-xs">

@@ -1,22 +1,22 @@
-import ProductCart from '../../../components/ProductCart/ProductCart'
-import iPhoneProduct from '../../../assets/images/product.svg'
-import { ICategory } from '../../../types'
-import { GetStaticProps } from 'next'
-import { apiPedidos } from '../../../services/apiClient'
-import NavBar from '../../../components/NavBar/NavBar'
-import Footer from '../../../components/Footer'
-
-interface DataProps {
-    data: {
-        data: Array<ICategory>
-    }
+interface PixProps {
+    name: string
+    street: string
+    city: string
+    address: string
+    email: string
+    price: number
 }
 
-export default function pix({ data }: DataProps) {
+export default function pix({
+    name,
+    street,
+    city,
+    address,
+    email,
+    price,
+}: PixProps) {
     return (
         <>
-            <NavBar dataCategory={data} />
-            <div className="py-16"></div>
             <div className="max-w-7xl mx-auto px-4 grid">
                 <div className="relative w-full">
                     <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
@@ -38,21 +38,17 @@ export default function pix({ data }: DataProps) {
                         <div className="flex justify-between gap-4 w-full">
                             <div className="flex flex-col">
                                 <strong>Endereço:</strong>
-                                <span>
-                                    Gilberto Trivelato - lado ímpar, 502
-                                </span>
+                                <span>{address}</span>
                                 <span></span>
-                                <span>
-                                    Conjunto Habitacional Hilda Mandarino
-                                </span>
+                                <span>{street}</span>
                                 <span></span>
-                                <span>Araçatuba, SP</span>
+                                <span>{city}</span>
                                 <span></span>
                             </div>
                             <div className="flex flex-col">
                                 <strong>Comprador:</strong>
-                                <span>murilo fernandes de lima</span>
-                                <span>muriloflimaa@gmail.com</span>
+                                <span>{name}</span>
+                                <span>{email}</span>
                             </div>
                         </div>
                     </div>
@@ -77,7 +73,7 @@ export default function pix({ data }: DataProps) {
                                 <strong>Frete</strong>
                             </div>
                             <div className="flex flex-col">
-                                <span>3.087,69</span>
+                                <span>{price}</span>
                                 <span>Grátis</span>
                             </div>
                         </div>
@@ -86,7 +82,7 @@ export default function pix({ data }: DataProps) {
                         <div className="card-body">
                             <div className="flex justify-between gap-4 w-full text-xl">
                                 <span>Total</span>
-                                <span>R$ 3.087,69</span>
+                                <span>{price}</span>
                             </div>
                             <a
                                 href="https://loja.buyphone.com.br/payment/pix"
@@ -98,28 +94,6 @@ export default function pix({ data }: DataProps) {
                     </div>
                 </div>
             </div>
-            <Footer dataCategory={data} />
         </>
     )
-}
-export const getStaticProps: GetStaticProps = async () => {
-    const getVisitorData = async () => {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-            return {
-                props: {
-                    data,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        } catch (error) {
-            return {
-                props: {
-                    data: null,
-                },
-                revalidate: 60 * 60 * 24 * 30,
-            }
-        }
-    }
-    return getVisitorData()
 }
