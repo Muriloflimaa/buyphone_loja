@@ -36,8 +36,9 @@ export default function login() {
                             <input
                                 defaultValue={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                type="text"
+                                type="email"
                                 placeholder="BuyPhone@gmail.com"
+                                required
                                 className="input input-bordered rounded-md !important w-full text-PrimaryText"
                             />
                         </label>
@@ -52,6 +53,7 @@ export default function login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 type={show ? 'password' : 'text'}
                                 placeholder="●●●●●●●"
+                                required
                                 className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
                             />
                             <span onClick={() => setShow(!show)}>
@@ -78,8 +80,8 @@ export default function login() {
                 >
                     Entrar
                 </button>
-                <div className="text-default mt-4">
-                    Deseja criar uma conta?{' '}
+                <div className="text-default mt-4 flex gap-1 justify-center">
+                    Deseja criar uma conta?
                     <Link href={'/register'} passHref>
                         <a className="link text-blue-600 cursor-pointer">
                             Cadastre-se

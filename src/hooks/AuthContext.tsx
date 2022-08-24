@@ -1,4 +1,6 @@
+import axios from 'axios'
 import { createContext, ReactNode } from 'react'
+import { api } from '../services/apiClient'
 
 type SignInCredentials = {
     email: string
@@ -20,11 +22,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const isAuthenticated = false
 
     async function signIn({ email, password }: SignInCredentials) {
-        console.log({ email, password })
-
-        // const response = await api.post('rota', {
-        //   email, password
-        // })
+        try {
+            const response = await axios.post(
+                'https://loja.buyphone.com.br/api/login',
+                {
+                    email,
+                    password,
+                }
+            )
+            return console.log(response)
+        } catch (error) {
+            return console.log('Erro na chamada API')
+        }
     }
 
     return (
