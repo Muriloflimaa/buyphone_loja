@@ -2,17 +2,19 @@
   perspective: 700px;
   z-index: 1;
 }
+
 .card {
   transition: all 1s ease;
   transform-style: preserve-3d;
-  width: 300px;
-  height: 188px;
+  width: 100%;
+  max-width: 400px;
   position: relative;
   font-weight: bold;
   color: white;
   font-size: 60px;
 }
-.card:hover {
+
+.cardHover {
   transform: rotateY(180deg);
 }
 
@@ -36,13 +38,8 @@
   transform: rotateY(180deg);
 }
 
-/* .number {
-  font-family: "Alegreya Sans", sans-serif;
-  
-} */
 .spanTest {
   text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.5);
-  width: 100%;
   color: #7a1a86;
   font-weight: 200;
 }

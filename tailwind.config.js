@@ -1,4 +1,23 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
+
+const rotateY = plugin(function ({ addUtilities }) {
+    addUtilities({
+        '.rotate-Y-20': {
+            transform: 'rotateX(20deg)',
+        },
+        '.rotate-Y-40': {
+            transform: 'rotateX(40deg)',
+        },
+        '.rotate-Y-60': {
+            transform: 'rotateX(60deg)',
+        },
+        '.rotate-Y-180': {
+            transform: 'rotateY(180deg)',
+        },
+    })
+})
+
 module.exports = {
     important: true,
     content: [
@@ -20,5 +39,5 @@ module.exports = {
             },
         },
     },
-    plugins: [require('daisyui'), require('tw-elements/dist/plugin')],
+    plugins: [require('daisyui'), require('tw-elements/dist/plugin'), rotateY],
 }

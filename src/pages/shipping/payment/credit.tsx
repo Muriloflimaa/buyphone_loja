@@ -3,14 +3,16 @@ import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
 import { GetStaticProps } from 'next'
 import { apiPedidos } from '../../../services/apiClient'
 import Card from '../../../components/Card/index'
-import { useEffect, useState } from 'react'
-import InputMask from 'react-input-mask'
+import { useCallback, useEffect, useState } from 'react'
+import InputMask, { Props as InputProps } from 'react-input-mask'
 
 export default function credit() {
     const [name, setName] = useState('José Antonio')
-    const [card, setCard] = useState(0)
+    const [card, setCard] = useState(1234123412341234)
     const [expiration_date, setExpiration_date] = useState('')
+    const [code, setCode] = useState('')
     const [unMask, setUnMask] = useState()
+    const [focus, setFocus] = useState(false)
 
     const handleChangeName = (event: any) => {
         setName(event.target.value)
@@ -22,7 +24,20 @@ export default function credit() {
 
     const handleChangeValid = (event: any) => {
         setExpiration_date(event.target.value)
-        setUnMask(expiration_date.replace(/[^\d]/g, ''))
+    }
+
+    const handleChangeCode = (event: any) => {
+        setCode(event.target.value)
+    }
+
+    function inputFocus() {
+        setFocus(!focus)
+        // return console.log('elemento focado', focus)
+    }
+
+    function inputNoFocus() {
+        setFocus(!focus)
+        // return console.log('elemento nao focado', focus)
     }
 
     return (
@@ -83,11 +98,6 @@ export default function credit() {
                         </Link>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <form id="form">
-                                <input
-                                    type="hidden"
-                                    name="_token"
-                                    defaultValue={''}
-                                />
                                 <div className="field-container">
                                     <label htmlFor="name" className="label">
                                         Nome impresso no cartão
@@ -127,10 +137,9 @@ export default function credit() {
                                         >
                                             MM/AA
                                         </label>
-                                        <InputMask
+                                        <input
                                             className="input input-bordered w-full"
                                             type="tel"
-                                            mask={'99/99'}
                                             placeholder="99/99"
                                             onChange={handleChangeValid}
                                         />
@@ -150,6 +159,9 @@ export default function credit() {
                                             pattern="[0-9]*"
                                             inputMode="numeric"
                                             defaultValue={''}
+                                            onChange={handleChangeCode}
+                                            onFocus={inputFocus}
+                                            onBlur={inputNoFocus}
                                         />
                                     </div>
                                 </div>
@@ -221,7 +233,7 @@ export default function credit() {
                                     </select>
                                 </div>
                             </form>
-                            <div className="mx-auto flex flex-col">
+                            <div className="flex flex-col">
                                 <Link href={'/shipping/payment/pix'} passHref>
                                     <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start hidden">
                                         <i className="fa fa-lightbulb mr-2"></i>
@@ -243,7 +255,9 @@ export default function credit() {
                                 <Card
                                     name={name}
                                     card={card}
-                                    expiration_date={unMask}
+                                    expiration_date={expiration_date}
+                                    foc={focus}
+                                    code={code}
                                 />
                             </div>
                         </div>
