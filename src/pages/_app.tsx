@@ -1,6 +1,6 @@
 import { NextComponentType, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
 import Footer from '../components/Footer'

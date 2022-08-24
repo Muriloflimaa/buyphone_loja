@@ -3,25 +3,25 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import CarouselComponent from '../components/carousel'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { useCart } from '../hooks/useCart'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { AuthContext } from '../hooks/AuthContext'
 
 interface DataProps {
     data: {
         data: Array<ICategory>
     }
 }
+
 interface CartItemsAmount {
     [key: number]: number
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-    const [click, setClick] = useState(false)
-
     const { cart } = useCart()
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
