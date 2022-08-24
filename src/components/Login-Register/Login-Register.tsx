@@ -40,7 +40,7 @@ const LoginRegister = ({ children, width }: Homeprops) => {
             <div className="px-4 min-h-screen flex justify-center items-center mx-auto">
                 <div
                     className={
-                        'card bg-white mb-10 z-50 w-full flex flex-col shadow-lg ' +
+                        'card bg-white z-50 w-full flex flex-col shadow-lg ' +
                         width
                     }
                 >
