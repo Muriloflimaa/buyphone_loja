@@ -148,7 +148,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 <span className="normal-case text-white">
                                                     Olá, {UniqueName(user.name)}
                                                 </span>
-                                                <i className="fa fa-2x fa-user-circle"></i>
+                                                <FontAwesomeIcon
+                                                    icon={faCircleUser}
+                                                    className="w-6 h-6 mr-1 text-PrimaryText"
+                                                />
                                             </label>
                                             <ul
                                                 tabIndex={0}

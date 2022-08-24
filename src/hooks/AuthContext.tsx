@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Router from 'next/router'
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
+import { useLocalStorage } from '../services/useLocalStorage'
+import { parseCookies, setCookie } from 'nookies'
 
 type SignInCredentials = {
     email: string
@@ -33,9 +35,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User>()
     const isAuthenticated = !!user
 
-    function HandleSetUsers(data: any) {
-        setUser(data)
-    }
+    useEffect(() => {
+        const { '@BuyPhone_Token': token } = parseCookies()
+
+        if (token) {
+            axios
+                .post('https://loja.buyphone.com.br/api/refresh', {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                .then((response) => {
+                    // If request is good...
+                    console.log(response.data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+    }, [])
 
     async function signIn({ email, password }: SignInCredentials) {
         try {
@@ -54,7 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const mobile_phone = response.data.user.mobile_phone
             const profile_pic = response.data.user.profile_photo_url
 
-            HandleSetUsers({
+            setUser({
                 email,
                 type,
                 birthdate,
@@ -63,9 +81,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 mobile_phone,
                 profile_pic,
             })
-            Router.push('/')
+            const token = response.data.authorization.token
+
+            setCookie(undefined, '@BuyPhone_Token', token, {
+                // maxAge: 60 * 60 * 24 * 30, // 30 dias
+                path: '/',
+            })
+
+            // Router.push('/')
         } catch (error) {
-            return console.log('Erro na chamada API')
+            return console.log('Erro na chamada API', error)
         }
     }
 
