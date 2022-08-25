@@ -84,10 +84,16 @@ const ProductCard = ({
             className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300"
             key={id}
         >
-            <figure className="px-4 pt-4">
-                <Image src={image} layout="fixed" width="200" height="230" />
-            </figure>
             <div className="card-body items-center p-4 text-center text-PrimaryText">
+                <figure className="w-40 h-56 block mx-auto">
+                    <Image
+                        src={image}
+                        layout="responsive"
+                        width={350}
+                        height={450}
+                    />
+                </figure>
+
                 <h1 className="text-2xl font-light">{name}</h1>
 
                 <div className="flex gap-2 justify-center">
@@ -102,14 +108,14 @@ const ProductCard = ({
                     </span>
                 </div>
                 <div className="flex-col flex mb-3 w-full my-6 gap-2 ">
-                    <div className="flex justify-between w-full">
+                    <div className="flex flex-col md:flex-row justify-between w-full">
                         Preço Comum:{' '}
                         <span className="opacity-40 line-through decoration-red-600">
                             {moneyMask(price.toString())}
                         </span>
                     </div>
 
-                    <div className="text-lg flex justify-between w-full">
+                    <div className="text-lg flex flex-col md:flex-row justify-between w-full">
                         <span>Nosso Preço:</span>
                         <span className="text-success font-semibold text-xl">
                             {moneyMask(averagePrice.toString())}

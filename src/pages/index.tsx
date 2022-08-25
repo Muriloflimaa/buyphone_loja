@@ -20,8 +20,6 @@ interface CartItemsAmount {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-    const [click, setClick] = useState(false)
-
     const { cart } = useCart()
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
@@ -34,15 +32,22 @@ const Home: NextPage<DataProps> = ({ data }) => {
         <>
             <div className="h-auto">
                 <CarouselComponent />
-                <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm md:text-md max-w-7xl mx-auto">
-                    <FontAwesomeIcon
-                        icon={faTruckFast}
-                        className="w-7 h-7 text-PrimaryText"
-                    />
-                    <span className="text-PrimaryText">
-                        Todos os nossos produtos com frete grátis. Prazo: 10 a
-                        15 dias úteis
-                    </span>
+                <img
+                    className="md:hidden max-h-full"
+                    src="https://loja.buyphone.com.br/img/banner-full1.webp"
+                    alt=""
+                ></img>
+                <div className="flex justify-center mx-5">
+                    <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm text-center md:text-md w-full max-w-7xl">
+                        <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-7 h-7 text-PrimaryText hidden md:flex"
+                        />
+                        <span className="text-PrimaryText">
+                            Todos os nossos produtos com frete grátis. Prazo: 10
+                            a 15 dias úteis
+                        </span>
+                    </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (

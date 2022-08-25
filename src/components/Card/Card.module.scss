@@ -1,0 +1,50 @@
+.card_container {
+  perspective: 700px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  transition: all 1s ease;
+    transform-style: preserve-3d;
+    width: 100%;
+    height: 252px;
+    justify-content: center;
+    max-width: 400px;
+    position: relative;
+    font-weight: bold;
+    color: white;
+    font-size: 60px;
+}
+
+.cardHover {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 10%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.success {
+  transform: rotateY(180deg);
+}
+
+.spanTest {
+  text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.5);
+  color: #7a1a86;
+  font-weight: 200;
+}
+

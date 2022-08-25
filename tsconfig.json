@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/index.jsx", "src/pages/index.jsx", "src/components/NavBar/NavBar.jsx", "src/components/Body/Body.jsx", "src/utils/formatColor.js", "src/utils/formatColor.js", "src/pages/[category]/index.jsxsxId].jsx", "src/hooks/apiContext.jsx", "src/utils/RefctDes", "src/hooks/useCategory.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/index.jsx", "src/pages/index.jsx", "src/components/NavBar/NavBar.jsx", "src/components/Body/Body.jsx", "src/utils/formatColor.js", "src/utils/formatColor.js", "src/pages/[category]/index.jsxsxId].jsx", "src/hooks/apiContext.jsx", "src/utils/RefctDes", "src/hooks/useCategory.jsx", "src/components/Card/index.jsx"],
   "exclude": ["node_modules"]
 }
