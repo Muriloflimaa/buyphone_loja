@@ -8,7 +8,6 @@ import {
 } from 'react'
 import { toast } from 'react-hot-toast'
 import { Product } from '../types'
-// import { useLocalStorage } from '../services/useLocalStorage'
 import { apiPedidos } from '../services/apiClient'
 import { useLocalStorage } from '../services/useLocalStorage'
 

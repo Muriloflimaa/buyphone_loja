@@ -23,7 +23,6 @@ module.exports = {
     content: [
         './src/pages/**/*.{js,ts,jsx,tsx}',
         './src/components/**/*.{js,ts,jsx,tsx}',
-        './node_modules/tw-elements/dist/js/**/*.js',
     ],
     theme: {
         extend: {
@@ -39,5 +38,5 @@ module.exports = {
             },
         },
     },
-    plugins: [require('daisyui'), require('tw-elements/dist/plugin'), rotateY],
+    plugins: [require('daisyui'), rotateY],
 }

@@ -21,16 +21,8 @@ import { formatPrice } from '../../utils/format'
 import ProductCart from '../ProductCart/ProductCart'
 import styles from './styles.module.scss'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
-
-type User = {
-    email: string
-    type: number
-    birthdate: Date
-    document: number
-    name: string
-    mobile_phone: string
-    profile_pic: string
-}
+import { parseCookies } from 'nookies'
+import { useLocalStorage } from '../../services/UseLocalAuth'
 
 interface NavBarProps {
     dataCategory: {
@@ -69,15 +61,14 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         setIsOn(!isOn)
     }
 
-    const { user } = useContext(AuthContext)
-
+    const { user, isAuthenticated } = useContext(AuthContext)
     useEffect(() => {
-        if (user == undefined) {
+        if (isAuthenticated == false) {
             setIsUser(false)
         } else {
             setIsUser(true)
         }
-    })
+    }, [isAuthenticated])
 
     return (
         <>
@@ -146,7 +137,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
                                             >
                                                 <span className="normal-case text-white">
-                                                    Olá, {UniqueName(user.name)}
+                                                    Olá, {UniqueName(user.nome)}
                                                 </span>
                                                 <FontAwesomeIcon
                                                     icon={faCircleUser}
@@ -330,7 +321,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         <UserCircleIcon className="w-10 h-10" />
                                     ) : (
                                         <img
-                                            src={user.profile_pic}
+                                            src={user.photo}
                                             alt="Foto do Usuário"
                                             width={40}
                                             height={40}
@@ -338,20 +329,26 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         />
                                     )}
                                 </div>
-                                <div className="flex flex-col pl-6">
-                                    <h1 className="text-xl font-semibold text-PrimaryText">
-                                        {isUser == false
-                                            ? 'Não Logado'
-                                            : FirstAllUpper(user.name)}
-                                    </h1>
-                                    <h2 className="text-PrimaryText">
-                                        {isUser == false
-                                            ? 'Não Logado'
-                                            : user.type == 0
-                                            ? 'Revendedor'
-                                            : 'Comprador'}
-                                    </h2>
-                                </div>
+                                {isUser == true ? (
+                                    <div className="flex flex-col pl-6">
+                                        <h1 className="text-xl font-semibold text-PrimaryText">
+                                            {FirstAllUpper(user.nome)}
+                                        </h1>
+                                        <h2 className="text-PrimaryText">
+                                            {user.type == 0
+                                                ? 'Revendedor'
+                                                : 'Comprador'}
+                                        </h2>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-center items-center w-full p-4">
+                                        <Link href={'/login'} passHref>
+                                            <a className="link text-PrimaryText">
+                                                Realizar login
+                                            </a>
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                             <label
                                 htmlFor="my-drawer"

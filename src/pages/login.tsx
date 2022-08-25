@@ -1,13 +1,16 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { FormEvent, useContext, useState } from 'react'
+import { useRouter } from 'next/router'
+import { FormEvent, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../hooks/AuthContext'
+import { apiLogin } from '../services/apiLogin'
+import { parseCookies } from 'nookies'
+import jwt_decode from 'jwt-decode'
 
 export default function login() {
     const [show, setShow] = useState(true)
-
     const { signIn } = useContext(AuthContext)
-
+    const { isAuthenticated } = useContext(AuthContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -19,6 +22,33 @@ export default function login() {
         }
         await signIn(data)
     }
+
+    console.log(isAuthenticated)
+    const router = useRouter()
+
+    useEffect(() => {
+        const { '@BuyPhone_Token': token } = parseCookies()
+
+        if (token) {
+            const decoded = jwt_decode(token) //decodifica o token
+
+            const timeElapsed = Date.now() // pega a data de agora
+            const today = new Date(timeElapsed)
+
+            const d = new Date(0)
+            d.setUTCSeconds(decoded.exp) // pega a data do token e transforma ela em tempo
+
+            const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
+            const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
+
+            //se faltar 10 minutos para o token expirar chama o refresh e seta tudo no cookies novamente
+            if (days < 10) {
+                return
+            } else {
+                router.push('/')
+            }
+        }
+    }, [])
 
     return (
         <>

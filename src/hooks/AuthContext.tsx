@@ -1,8 +1,11 @@
 import axios from 'axios'
 import Router from 'next/router'
-import { createContext, ReactNode, useEffect, useState } from 'react'
-import { useLocalStorage } from '../services/useLocalStorage'
+import { createContext, ReactNode, useEffect, useRef, useState } from 'react'
 import { parseCookies, setCookie } from 'nookies'
+import { apiLogin } from '../services/apiLogin'
+import jwt_decode from 'jwt-decode'
+import toast from 'react-hot-toast'
+import { set, useLocalStorage } from '../services/UseLocalAuth'
 
 type SignInCredentials = {
     email: string
@@ -10,13 +13,10 @@ type SignInCredentials = {
 }
 
 type User = {
-    email: string
     type: number
-    birthdate: Date
-    document: number
-    name: string
-    mobile_phone: string
-    profile_pic: string
+    id: number
+    nome: string
+    photo: string
 }
 
 type AuthContextData = {
@@ -32,30 +32,20 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<User>()
-    const isAuthenticated = !!user
+    const [user] = useLocalStorage('@BuyPhone:User', '')
+    const [onTrue, setOnTrue] = useState(false)
+    const isAuthenticated = onTrue
 
-    useEffect(() => {
-        const { '@BuyPhone_Token': token } = parseCookies()
-
-        if (token) {
-            axios
-                .post('https://loja.buyphone.com.br/api/refresh', {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                    },
-                })
-                .then((response) => {
-                    // If request is good...
-                    console.log(response.data)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+    setTimeout(() => {
+        if (user) {
+            setOnTrue(true)
+        } else {
+            return false
         }
-    }, [])
+    }, 1000)
 
     async function signIn({ email, password }: SignInCredentials) {
+        //acima faz verificação se existe um token e se ele é válido se não for chama abaixo
         try {
             const response = await axios.post(
                 'https://loja.buyphone.com.br/api/login',
@@ -64,33 +54,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     password,
                 }
             )
+            const { type, name, id, profile_photo_url } = response.data.user
 
-            const type = response.data.user.type
-            const birthdate = response.data.user.birthdate
-            const document = response.data.user.document
-            const name = response.data.user.name
-            const mobile_phone = response.data.user.mobile_phone
-            const profile_pic = response.data.user.profile_photo_url
+            const User = {
+                nome: name,
+                ident: id,
+                tipo: type,
+                photo: profile_photo_url,
+            }
 
-            setUser({
-                email,
-                type,
-                birthdate,
-                document,
-                name,
-                mobile_phone,
-                profile_pic,
-            })
+            set('@BuyPhone:User', User)
+
             const token = response.data.authorization.token
 
             setCookie(undefined, '@BuyPhone_Token', token, {
-                // maxAge: 60 * 60 * 24 * 30, // 30 dias
+                maxAge: 60 * 60 * 24 * 30, // 30 dias
                 path: '/',
             })
 
-            // Router.push('/')
+            Router.push('/')
         } catch (error) {
-            return console.log('Erro na chamada API', error)
+            toast.error('Não foi possível fazer o login')
         }
     }
 

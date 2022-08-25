@@ -10,7 +10,6 @@ import { useCart } from '../hooks/useCart'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { AuthContext } from '../hooks/AuthContext'
-import { useLocalStorage } from '../services/useLocalStorage'
 
 interface DataProps {
     data: {
