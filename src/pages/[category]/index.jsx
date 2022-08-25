@@ -3,8 +3,6 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { apiPedidos } from '../../services/apiClient'
 import ProductCard from '../../components/ProductCard/ProductCard'
-import dynamic from 'next/dynamic'
-dynamic(() => require('tw-elements'), { ssr: false })
 
 export default function Products({ data }) {
     return (

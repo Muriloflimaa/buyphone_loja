@@ -47,7 +47,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
                     <Toaster position="top-right" reverseOrder={false} />
                     <CartProvider>
                         <NavBar dataCategory={data} />
-                        <div className="py-20"></div>
+                        <div className="py-12 md:py-20"></div>
                         <Component {...pageProps} />
                         <Footer dataCategory={data} />
                     </CartProvider>
