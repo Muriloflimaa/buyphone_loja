@@ -21,8 +21,6 @@ import { formatPrice } from '../../utils/format'
 import ProductCart from '../ProductCart/ProductCart'
 import styles from './styles.module.scss'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
-import { parseCookies } from 'nookies'
-import { useLocalStorage } from '../../services/UseLocalAuth'
 
 interface NavBarProps {
     dataCategory: {
@@ -61,7 +59,17 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         setIsOn(!isOn)
     }
 
-    const { user, isAuthenticated } = useContext(AuthContext)
+    const { user, isAuthenticated, signOut } = useContext(AuthContext)
+
+    const [UserJson, setUserJson] = useState()
+
+    useEffect(() => {
+        if (user == undefined) {
+            return
+        }
+        setUserJson(JSON.parse(user))
+    }, [])
+
     useEffect(() => {
         if (isAuthenticated == false) {
             setIsUser(false)
@@ -137,7 +145,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
                                             >
                                                 <span className="normal-case text-white">
-                                                    Olá, {UniqueName(user.nome)}
+                                                    Olá,{' '}
+                                                    {UniqueName(UserJson.name)}
                                                 </span>
                                                 <FontAwesomeIcon
                                                     icon={faCircleUser}
@@ -159,22 +168,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <form
-                                                        method="POST"
-                                                        action="https://loja.buyphone.com.br/logout"
+                                                    <button
+                                                        className="text-left w-full"
+                                                        type="submit"
+                                                        onClick={signOut}
                                                     >
-                                                        <input
-                                                            type="hidden"
-                                                            name="_token"
-                                                            value="EaEa8VlEWHk5yyfVydFVW58RBfwIrjRgor65El3Z"
-                                                        />{' '}
-                                                        <button
-                                                            className="text-left w-full"
-                                                            type="submit"
-                                                        >
-                                                            Sair
-                                                        </button>
-                                                    </form>
+                                                        Sair
+                                                    </button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -321,7 +321,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         <UserCircleIcon className="w-10 h-10" />
                                     ) : (
                                         <img
-                                            src={user.photo}
+                                            src={UserJson.profile_photo_url}
                                             alt="Foto do Usuário"
                                             width={40}
                                             height={40}
@@ -332,10 +332,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 {isUser == true ? (
                                     <div className="flex flex-col pl-6">
                                         <h1 className="text-xl font-semibold text-PrimaryText">
-                                            {FirstAllUpper(user.nome)}
+                                            {FirstAllUpper(UserJson.name)}
                                         </h1>
                                         <h2 className="text-PrimaryText">
-                                            {user.type == 0
+                                            {UserJson.type == 0
                                                 ? 'Revendedor'
                                                 : 'Comprador'}
                                         </h2>

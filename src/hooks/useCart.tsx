@@ -9,7 +9,7 @@ import {
 import { toast } from 'react-hot-toast'
 import { Product } from '../types'
 import { apiPedidos } from '../services/apiClient'
-import { useLocalStorage } from '../services/useLocalStorage'
+import { useLocalStorage } from '../utils/useLocalStorage'
 
 interface CartProviderProps {
     children: ReactNode

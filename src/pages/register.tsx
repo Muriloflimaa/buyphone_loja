@@ -1,6 +1,7 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useState } from 'react'
+import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function register() {
     const [show, setShow] = useState(true)
@@ -113,3 +114,9 @@ export default function register() {
         </div>
     )
 }
+
+export const getServerSideProps = WithSSRGuest(async (ctx) => {
+    return {
+        props: {},
+    }
+})
