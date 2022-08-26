@@ -68,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     async function signOut() {
         try {
-            await apiLogin('/logout')
+            await apiLogin.post('/logout')
             destroyCookie(undefined, '@BuyPhone:User')
             destroyCookie(undefined, '@BuyPhone:Token')
             Router.push('/')
