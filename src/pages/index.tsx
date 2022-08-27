@@ -3,13 +3,11 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
-import CarouselComponent from '../components/carousel'
-import ProductCard from '../components/ProductCard/ProductCard'
-import { useCart } from '../hooks/useCart'
+import CarouselComponent from '../components/Carousel'
+import ProductCard from '../components/ProductCard'
+import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
-import { AuthContext } from '../hooks/AuthContext'
 
 interface DataProps {
     data: {

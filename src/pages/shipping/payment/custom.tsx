@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
+import ShippingCard from '../../../components/ShippingCard.tsx'
 
 export default function custom() {
     return (

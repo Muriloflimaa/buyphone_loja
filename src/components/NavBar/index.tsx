@@ -14,12 +14,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
-import { AuthContext } from '../../hooks/AuthContext'
-import { useCart } from '../../hooks/useCart'
+import { AuthContext } from '../../context/AuthContext'
+import { useCart } from '../../context/UseCartContext'
 import { ICategory, IUser } from '../../types'
 import { formatPrice } from '../../utils/format'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
-import ProductCart from '../ProductCart/ProductCart'
+import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 interface NavBarProps {
@@ -31,7 +31,6 @@ interface NavBarProps {
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { user, isAuthenticated, signOut } = useContext(AuthContext)
     const [userJson, setuserJson] = useState<IUser | undefined>()
-    console.log(userJson)
     const { cart } = useCart()
     const cartSize = cart.length
     const router = useRouter()
@@ -44,6 +43,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             return sumTotal + product.price * product.amount
         }, 0)
     )
+
+    const handleClick = () => {
+        setIsOn(!isOn)
+    }
+
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
@@ -57,17 +61,14 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         } else {
             setShow(false)
         }
-    })
-    const handleClick = () => {
-        setIsOn(!isOn)
-    }
+    }, [])
 
     useEffect(() => {
         if (user == undefined) {
             return
         }
         setuserJson(JSON.parse(user))
-    }, [])
+    }, [user])
 
     useEffect(() => {
         if (isAuthenticated == false) {

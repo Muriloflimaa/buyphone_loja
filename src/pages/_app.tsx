@@ -1,18 +1,16 @@
 import { NextComponentType, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
 import Footer from '../components/Footer'
-import LoginRegister from '../components/Login-Register/Login-Register'
-import MyBottomNavigation from '../components/MyBottomNavigation/MyBottomNavigation'
-import NavBar from '../components/NavBar/NavBar'
-import { AuthContext, AuthProvider } from '../hooks/AuthContext'
-import { CartProvider } from '../hooks/useCart'
+import LoginRegister from '../components/Login-Register'
+import MyBottomNavigation from '../components/MyBottomNavigation'
+import NavBar from '../components/NavBar'
+import { AuthProvider } from '../context/AuthContext'
+import { CartProvider } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
-import { parseCookies } from 'nookies'
-import jwt_decode from 'jwt-decode'
 
 interface AppProps {
     data: {
@@ -37,10 +35,10 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
     return (
         <AuthProvider>
             {router.route === `/login` ||
-            router.route === `/register` ||
-            router.route === `/terms` ||
-            router.route === `/politics` ||
-            router.route === `/forgout-password` ? (
+                router.route === `/register` ||
+                router.route === `/terms` ||
+                router.route === `/politics` ||
+                router.route === `/forgout-password` ? (
                 <LoginRegister width={width}>
                     <Component {...pageProps} />
                 </LoginRegister>

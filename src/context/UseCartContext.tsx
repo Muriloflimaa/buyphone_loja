@@ -4,11 +4,11 @@ import {
     useContext,
     useEffect,
     useRef,
-    useState,
+    useState
 } from 'react'
 import { toast } from 'react-hot-toast'
-import { Product } from '../types'
 import { apiPedidos } from '../services/apiClient'
+import { Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
 
 interface CartProviderProps {

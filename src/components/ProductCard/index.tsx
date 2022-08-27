@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useCart } from '../../hooks/useCart'
+import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 
 interface ProductCardProps {

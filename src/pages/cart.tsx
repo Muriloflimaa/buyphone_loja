@@ -1,5 +1,5 @@
-import ProductCart from '../components/ProductCart/ProductCart'
-import { useCart } from '../hooks/useCart'
+import ProductCart from '../components/ProductCart'
+import { useCart } from '../context/UseCartContext'
 import { formatPrice } from '../utils/format'
 
 export default function Cart() {
