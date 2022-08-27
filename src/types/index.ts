@@ -92,18 +92,8 @@ export interface IAddress {
 export interface IUser {
     id: number
     name: string
-    email: string
-    email_verified_at: string
-    two_factor_confirmed_at: string
-    current_team_id: string
-    profile_photo_path: string
-    created_at: string
-    updated_at: string
-    document: string
-    external_id: string
-    birthdate: string
-    mobile_phone: string
     profile_photo_url: string
+    type: number
 }
 
 export interface IUserOrder {
@@ -126,7 +116,6 @@ export interface IUserOrder {
     note: null
     profile_photo_path: null
     updated_at: string
-    
 }
 
 export interface IInvoice {
@@ -161,5 +150,4 @@ export interface Product {
     amount: number
     color: string
     memory: string
-  }
-  
+}
