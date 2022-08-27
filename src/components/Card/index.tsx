@@ -1,9 +1,8 @@
 import styles from './Card.module.scss'
-import { useRef, useState } from 'react'
 
 interface CardProps {
     name: string
-    card: number
+    card: string
     expiration_date: any
     foc: boolean
     code: string
