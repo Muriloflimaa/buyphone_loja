@@ -7,7 +7,7 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon,
+    UserIcon
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,11 +16,11 @@ import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../hooks/AuthContext'
 import { useCart } from '../../hooks/useCart'
-import { ICategory } from '../../types'
+import { ICategory, IUser } from '../../types'
 import { formatPrice } from '../../utils/format'
+import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart/ProductCart'
 import styles from './styles.module.scss'
-import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 
 interface NavBarProps {
     dataCategory: {
@@ -29,6 +29,9 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dataCategory }: NavBarProps) {
+    const { user, isAuthenticated, signOut } = useContext(AuthContext)
+    const [userJson, setuserJson] = useState<IUser | undefined>()
+    console.log(userJson)
     const { cart } = useCart()
     const cartSize = cart.length
     const router = useRouter()
@@ -59,15 +62,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         setIsOn(!isOn)
     }
 
-    const { user, isAuthenticated, signOut } = useContext(AuthContext)
-
-    const [UserJson, setUserJson] = useState()
-
     useEffect(() => {
         if (user == undefined) {
             return
         }
-        setUserJson(JSON.parse(user))
+        setuserJson(JSON.parse(user))
     }, [])
 
     useEffect(() => {
@@ -146,7 +145,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             >
                                                 <span className="normal-case text-white">
                                                     Olá,{' '}
-                                                    {UniqueName(UserJson.name)}
+                                                    {UniqueName(userJson?.name)}
                                                 </span>
                                                 <FontAwesomeIcon
                                                     icon={faCircleUser}
@@ -321,7 +320,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         <UserCircleIcon className="w-10 h-10" />
                                     ) : (
                                         <img
-                                            src={UserJson.profile_photo_url}
+                                            src={userJson?.profile_photo_url}
                                             alt="Foto do Usuário"
                                             width={40}
                                             height={40}
@@ -332,10 +331,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 {isUser == true ? (
                                     <div className="flex flex-col pl-6">
                                         <h1 className="text-xl font-semibold text-PrimaryText">
-                                            {FirstAllUpper(UserJson.name)}
+                                            {FirstAllUpper(userJson?.name)}
                                         </h1>
                                         <h2 className="text-PrimaryText">
-                                            {UserJson.type == 0
+                                            {userJson?.type == 0
                                                 ? 'Revendedor'
                                                 : 'Comprador'}
                                         </h2>
