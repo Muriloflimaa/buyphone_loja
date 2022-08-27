@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Router, useRouter } from 'next/router'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import ReactInputMask from 'react-input-mask'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function register() {
@@ -54,22 +55,30 @@ export default function register() {
                 if (password != confirmPass) {
                     alert('senhas não conferem')
                 } else {
-                    try {
-                        await axios.post(
-                            'https://loja.buyphone.com.br/api/register',
-                            {
-                                email,
-                                document,
-                                name,
-                                mobile_phone,
-                                birthdate,
-                                password,
-                            }
-                        )
-                        //se for sucesso exibir mensagem ou redirecionar
-                    } catch (error) {
-                        alert(`Não foi possível fazer o login ${error}`)
-                    }
+                    // {
+                    //     "email": "muriloflimaa@gmail.com",
+                    //     "password": "manoel1507",
+                    //     "name" : "murilo fernandes de lima",
+                    //     "document" : "500.996.138-59",
+                    //     "mobile_phone" : "+55(11)99664-5956",
+                    //     "birthdate" : "2002-05-21"
+                    // } Formato do json que precisa ser enviado para a api
+
+                    // try {
+                    await axios
+                        .post('https://loja.buyphone.com.br/api/register', {
+                            email,
+                            document,
+                            name,
+                            mobile_phone,
+                            birthdate,
+                            password,
+                        })
+                        .then((response) => console.log(response))
+                    //se for sucesso exibir mensagem ou redirecionar para o login
+                    // } catch (error) {
+                    //     alert(`Não foi possível fazer o login ${error}`)
+                    // }
                 }
             } else {
                 alert('você precisa aceitar os termos')
@@ -114,7 +123,8 @@ export default function register() {
                     <span className="label-text">CPF</span>
                 </label>
                 <label className="input-group">
-                    <input
+                    <ReactInputMask
+                        mask="999.999.999-99"
                         id="document"
                         name="document"
                         onChange={handleChangeDocument}
@@ -128,7 +138,8 @@ export default function register() {
                     <span className="label-text">Telefone </span>
                 </label>
                 <label className="input-group">
-                    <input
+                    <ReactInputMask
+                        mask="+55 (99) 99999-9999"
                         id="phone"
                         name="phone"
                         onChange={handleChangePhone}
