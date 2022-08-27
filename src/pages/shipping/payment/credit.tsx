@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import ReactInputMask from 'react-input-mask'
 import Card from '../../../components/Card/index'
 import ShippingCard from '../../../components/ShippingCard.tsx'
 
 export default function credit() {
     const [name, setName] = useState('José Antonio')
-    const [card, setCard] = useState(1234123412341234)
+    const [card, setCard] = useState('')
     const [expiration_date, setExpiration_date] = useState('')
     const [code, setCode] = useState('')
     const [unMask, setUnMask] = useState()
@@ -29,12 +30,10 @@ export default function credit() {
 
     function inputFocus() {
         setFocus(!focus)
-        // return console.log('elemento focado', focus)
     }
 
     function inputNoFocus() {
         setFocus(!focus)
-        // return console.log('elemento nao focado', focus)
     }
 
     return (
@@ -111,52 +110,48 @@ export default function credit() {
                                 </div>
                                 <div className="field-container">
                                     <label
-                                        htmlFor="cardnumber"
                                         className="label"
                                     >
                                         Número do Cartão
                                     </label>
-                                    <input
-                                        className="input input-bordered w-full"
+                                    <ReactInputMask
+                                        mask="9999 9999 9999 9999"
                                         id="card"
                                         name="card"
-                                        placeholder="1234 1234 1234 1234"
                                         onChange={handleChangeCard}
-                                        type="tel"
-                                        inputMode="numeric"
+                                        type="text"
+                                        className="input input-bordered w-full"
                                     />
                                 </div>
                                 <div className="flex gap-2 w-full">
                                     <div className="field-container">
                                         <label
-                                            htmlFor="expirationdate"
                                             className="label"
                                         >
                                             MM/AA
                                         </label>
-                                        <input
-                                            className="input input-bordered w-full"
-                                            type="tel"
-                                            placeholder="99/99"
+                                        <ReactInputMask
+                                            mask="99/99"
+                                            id="card-expiration"
+                                            name="card-expiration"
                                             onChange={handleChangeValid}
+                                            type="text"
+                                            className="input input-bordered w-full"
                                         />
                                     </div>
                                     <div className="field-container w-full">
                                         <label
-                                            htmlFor="securitycode"
                                             className="label"
                                         >
                                             Código de Segurança
                                         </label>
-                                        <input
-                                            className="input input-bordered w-full"
+                                        <ReactInputMask
+                                            mask="999"
                                             id="securitycode"
                                             name="card_cvv"
-                                            type="text"
-                                            pattern="[0-9]*"
-                                            inputMode="numeric"
-                                            defaultValue={''}
                                             onChange={handleChangeCode}
+                                            type="text"
+                                            className="input input-bordered w-full"
                                             onFocus={inputFocus}
                                             onBlur={inputNoFocus}
                                         />
