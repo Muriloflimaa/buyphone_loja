@@ -1,8 +1,5 @@
-import { GetStaticProps } from 'next'
 import Link from 'next/link'
-import iPhoneProduct from '../../assets/images/product.svg'
-import ProductCart from '../../components/ProductCart/ProductCart'
-import ShippingCard from '../../components/ShippingCard.tsx/ShippingCard'
+import ShippingCard from '../../components/ShippingCard.tsx'
 
 export default function adress() {
     return (

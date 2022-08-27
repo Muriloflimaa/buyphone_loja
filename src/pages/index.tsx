@@ -3,10 +3,9 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useState } from 'react'
-import CarouselComponent from '../components/carousel'
-import ProductCard from '../components/ProductCard/ProductCard'
-import { useCart } from '../hooks/useCart'
+import CarouselComponent from '../components/Carousel'
+import ProductCard from '../components/ProductCard'
+import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 
@@ -15,6 +14,7 @@ interface DataProps {
         data: Array<ICategory>
     }
 }
+
 interface CartItemsAmount {
     [key: number]: number
 }

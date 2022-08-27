@@ -1,9 +1,9 @@
 import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useCart } from '../../hooks/useCart'
-import { formatPrice } from '../../utils/format'
+import { useCart } from '../../context/UseCartContext'
 import { Product } from '../../types'
+import { formatPrice } from '../../utils/format'
 
 const ProductCart = () => {
     const router = useRouter()

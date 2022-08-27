@@ -4,12 +4,12 @@ import {
     useContext,
     useEffect,
     useRef,
-    useState,
+    useState
 } from 'react'
 import { toast } from 'react-hot-toast'
-import { Product } from '../types'
-import { useLocalStorage } from '../services/useLocalStorage'
 import { apiPedidos } from '../services/apiClient'
+import { Product } from '../types'
+import { useLocalStorage } from '../utils/useLocalStorage'
 
 interface CartProviderProps {
     children: ReactNode
@@ -31,6 +31,7 @@ const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
     const [storagedCart] = useLocalStorage('@BuyPhone:cart', '')
+
     const [cart, setCart] = useState<Product[]>(() => {
         // Verificando se existe no localstorage o carrinho
 

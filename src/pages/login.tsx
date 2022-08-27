@@ -1,15 +1,31 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
+import { AuthContext } from '../context/AuthContext'
+import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function login() {
     const [show, setShow] = useState(true)
+    const { signIn } = useContext(AuthContext)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    async function handleSubmit(event: FormEvent) {
+        event.preventDefault()
+        const data = {
+            email,
+            password,
+        }
+        await signIn(data)
+    }
+
     return (
         <>
             <h1 className="text-2xl flex justify-center pt-4 text-default font-medium">
                 Faça login ou cadastre-se
             </h1>
-            <div className="w-full">
+            <form onSubmit={handleSubmit} className="w-full">
+                {/* começo login */}
                 <div className="form-control w-full">
                     <div>
                         <label className="label">
@@ -17,8 +33,11 @@ export default function login() {
                         </label>
                         <label className="input-group">
                             <input
-                                type="text"
+                                defaultValue={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type="email"
                                 placeholder="BuyPhone@gmail.com"
+                                required
                                 className="input input-bordered rounded-md !important w-full text-PrimaryText"
                             />
                         </label>
@@ -29,8 +48,11 @@ export default function login() {
                         </label>
                         <label className="input-group">
                             <input
+                                defaultValue={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 type={show ? 'password' : 'text'}
                                 placeholder="●●●●●●●"
+                                required
                                 className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
                             />
                             <span onClick={() => setShow(!show)}>
@@ -43,6 +65,7 @@ export default function login() {
                         </label>
                     </div>
                 </div>
+                {/* fim login */}
                 <div className="flex justify-end w-full my-2">
                     <Link href={'/forgout-password'} passHref>
                         <a className="text-xs  text-blue-600 link cursor-pointer">
@@ -56,15 +79,21 @@ export default function login() {
                 >
                     Entrar
                 </button>
-                <div className="text-default mt-4">
-                    Deseja criar uma conta?{' '}
+                <div className="text-default mt-4 flex gap-1 justify-center">
+                    Deseja criar uma conta?
                     <Link href={'/register'} passHref>
                         <a className="link text-blue-600 cursor-pointer">
                             Cadastre-se
                         </a>
                     </Link>
                 </div>
-            </div>
+            </form>
         </>
     )
 }
+
+export const getServerSideProps = WithSSRGuest(async (ctx) => {
+    return {
+        props: {},
+    }
+})

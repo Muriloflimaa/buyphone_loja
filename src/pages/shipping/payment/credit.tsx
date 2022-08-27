@@ -1,10 +1,7 @@
 import Link from 'next/link'
-import ShippingCard from '../../../components/ShippingCard.tsx/ShippingCard'
-import { GetStaticProps } from 'next'
-import { apiPedidos } from '../../../services/apiClient'
+import { useState } from 'react'
 import Card from '../../../components/Card/index'
-import { useCallback, useEffect, useState } from 'react'
-import InputMask, { Props as InputProps } from 'react-input-mask'
+import ShippingCard from '../../../components/ShippingCard.tsx'
 
 export default function credit() {
     const [name, setName] = useState('José Antonio')

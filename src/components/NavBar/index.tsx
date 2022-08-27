@@ -7,17 +7,19 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon,
+    UserIcon
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
-import { useCart } from '../../hooks/useCart'
-import { ICategory } from '../../types'
+import { AuthContext } from '../../context/AuthContext'
+import { useCart } from '../../context/UseCartContext'
+import { ICategory, IUser } from '../../types'
 import { formatPrice } from '../../utils/format'
-import ProductCart from '../ProductCart/ProductCart'
+import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 interface NavBarProps {
@@ -27,17 +29,25 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dataCategory }: NavBarProps) {
+    const { user, isAuthenticated, signOut } = useContext(AuthContext)
+    const [userJson, setuserJson] = useState<IUser | undefined>()
     const { cart } = useCart()
     const cartSize = cart.length
     const router = useRouter()
     const [isOn, setIsOn] = useState(false)
     const [show, setShow] = useState(false)
+    const [isUser, setIsUser] = useState(false)
 
     const total = formatPrice(
         cart.reduce((sumTotal, product) => {
             return sumTotal + product.price * product.amount
         }, 0)
     )
+
+    const handleClick = () => {
+        setIsOn(!isOn)
+    }
+
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
@@ -51,10 +61,22 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         } else {
             setShow(false)
         }
-    })
-    const handleClick = () => {
-        setIsOn(!isOn)
-    }
+    }, [])
+
+    useEffect(() => {
+        if (user == undefined) {
+            return
+        }
+        setuserJson(JSON.parse(user))
+    }, [user])
+
+    useEffect(() => {
+        if (isAuthenticated == false) {
+            setIsUser(false)
+        } else {
+            setIsUser(true)
+        }
+    }, [isAuthenticated])
 
     return (
         <>
@@ -107,14 +129,57 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </div>
                                 </div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
-                                    <Link href={'/login'} passHref>
-                                        <div className="flex justify-end flex-col items-center cursor-pointer">
-                                            <FontAwesomeIcon
-                                                icon={faCircleUser}
-                                                className="w-7 h-7 text-PrimaryText"
-                                            />
+                                    {isUser == false ? (
+                                        <Link href={'/login'} passHref>
+                                            <div className="flex justify-end flex-col items-center cursor-pointer">
+                                                <FontAwesomeIcon
+                                                    icon={faCircleUser}
+                                                    className="w-7 h-7 text-PrimaryText"
+                                                />
+                                            </div>
+                                        </Link>
+                                    ) : (
+                                        <div className="hidden sm:inline-block dropdown dropdown-end">
+                                            <label
+                                                tabIndex={0}
+                                                className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
+                                            >
+                                                <span className="normal-case text-white">
+                                                    Olá,{' '}
+                                                    {UniqueName(userJson?.name)}
+                                                </span>
+                                                <FontAwesomeIcon
+                                                    icon={faCircleUser}
+                                                    className="w-6 h-6 mr-1 text-PrimaryText"
+                                                />
+                                            </label>
+                                            <ul
+                                                tabIndex={0}
+                                                className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
+                                            >
+                                                <li>
+                                                    <a href="https://loja.buyphone.com.br/user/profile">
+                                                        Meus Dados
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://loja.buyphone.com.br/minhas-compras">
+                                                        Minhas Compras
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        className="text-left w-full"
+                                                        type="submit"
+                                                        onClick={signOut}
+                                                    >
+                                                        Sair
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         </div>
-                                    </Link>
+                                    )}
+
                                     <div className="dropdown dropdown-end">
                                         <label tabIndex={0} className=" m-1">
                                             <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
@@ -252,16 +317,38 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>
-                                    <UserCircleIcon className="h-12 w-12 text-PrimaryText" />
+                                    {isUser == false ? (
+                                        <UserCircleIcon className="w-10 h-10" />
+                                    ) : (
+                                        <img
+                                            src={userJson?.profile_photo_url}
+                                            alt="Foto do Usuário"
+                                            width={40}
+                                            height={40}
+                                            className="rounded-full"
+                                        />
+                                    )}
                                 </div>
-                                <div className="flex flex-col pl-6">
-                                    <h1 className="text-xl font-semibold text-PrimaryText">
-                                        João Pizzini
-                                    </h1>
-                                    <h2 className="text-PrimaryText">
-                                        Revendedor
-                                    </h2>
-                                </div>
+                                {isUser == true ? (
+                                    <div className="flex flex-col pl-6">
+                                        <h1 className="text-xl font-semibold text-PrimaryText">
+                                            {FirstAllUpper(userJson?.name)}
+                                        </h1>
+                                        <h2 className="text-PrimaryText">
+                                            {userJson?.type == 0
+                                                ? 'Revendedor'
+                                                : 'Comprador'}
+                                        </h2>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-center items-center w-full p-4">
+                                        <Link href={'/login'} passHref>
+                                            <a className="link text-PrimaryText">
+                                                Realizar login
+                                            </a>
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                             <label
                                 htmlFor="my-drawer"
