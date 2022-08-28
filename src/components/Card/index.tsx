@@ -1,3 +1,8 @@
+import Image from 'next/image'
+import logoAmericanExpress from '../../assets/images/americanexpress.svg'
+import logoElo from '../../assets/images/elo.svg'
+import logoMastercard from '../../assets/images/mc.svg'
+import logoVisa from '../../assets/images/visa.svg'
 import styles from './Card.module.scss'
 
 interface CardProps {
@@ -6,9 +11,10 @@ interface CardProps {
     expiration_date: any
     foc: boolean
     code: string
+    flags: string
 }
 
-const Card = ({ name, card, expiration_date, foc, code }: CardProps) => {
+const Card = ({ name, card, expiration_date, foc, code, flags }: CardProps) => {
     return (
         <>
             <div
@@ -27,9 +33,9 @@ const Card = ({ name, card, expiration_date, foc, code }: CardProps) => {
                         }
                     >
                         <div className="flex justify-end">
-                            <img
+                            <Image
                                 className="w-10 h-6"
-                                src="https://logosmarcas.net/wp-content/uploads/2020/05/Visa-Logo.png"
+                                src={flags == '0' ? logoVisa : flags === '1' ? logoMastercard : flags === '2' ? logoAmericanExpress : flags === '3' && logoElo}
                                 alt=""
                             />
                         </div>
@@ -52,10 +58,6 @@ const Card = ({ name, card, expiration_date, foc, code }: CardProps) => {
                                     Expira em:{' '}
                                 </p>
                                 <div className="flex gap-1 mx-2 text-xs">
-                                    <span className={styles.spanTest}>
-                                        {expiration_date}
-                                    </span>
-                                    <span className={styles.spanTest}>/</span>
                                     <span className={styles.spanTest}>
                                         {expiration_date}
                                     </span>
