@@ -33,11 +33,13 @@ const Card = ({ name, card, expiration_date, foc, code, flags }: CardProps) => {
                         }
                     >
                         <div className="flex justify-end">
-                            <Image
-                                className="w-10 h-6"
-                                src={flags == '0' ? logoVisa : flags === '1' ? logoMastercard : flags === '2' ? logoAmericanExpress : flags === '3' && logoElo}
-                                alt=""
-                            />
+                            {flags &&
+                                <Image
+                                    className="w-10 h-6"
+                                    src={flags === '0' ? logoVisa : flags === '1' ? logoMastercard : flags === '2' ? logoAmericanExpress : flags === '3' && logoElo}
+                                    alt="Imagem bandeira"
+                                />
+                            }
                         </div>
                         <div className="text-2xl w-full text-center mt-24">
                             <span className={styles.spanTest}>{card}</span>
