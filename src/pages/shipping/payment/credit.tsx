@@ -9,24 +9,9 @@ export default function credit() {
     const [card, setCard] = useState('')
     const [expiration_date, setExpiration_date] = useState('')
     const [code, setCode] = useState('')
+    const [document, setDocument] = useState('')
     const [unMask, setUnMask] = useState()
     const [focus, setFocus] = useState(false)
-
-    const handleChangeName = (event: any) => {
-        setName(event.target.value)
-    }
-
-    const handleChangeCard = (event: any) => {
-        setCard(event.target.value)
-    }
-
-    const handleChangeValid = (event: any) => {
-        setExpiration_date(event.target.value)
-    }
-
-    const handleChangeCode = (event: any) => {
-        setCode(event.target.value)
-    }
 
     function inputFocus() {
         setFocus(!focus)
@@ -102,7 +87,7 @@ export default function credit() {
                                         className="input input-bordered w-full"
                                         id="name"
                                         name="name"
-                                        onChange={handleChangeName}
+                                        onChange={(event) => setName(event.target.value)}
                                         placeholder={name}
                                         maxLength={20}
                                         type="text"
@@ -110,6 +95,7 @@ export default function credit() {
                                 </div>
                                 <div className="field-container">
                                     <label
+                                        htmlFor="card"
                                         className="label"
                                     >
                                         Número do Cartão
@@ -118,7 +104,7 @@ export default function credit() {
                                         mask="9999 9999 9999 9999"
                                         id="card"
                                         name="card"
-                                        onChange={handleChangeCard}
+                                        onChange={(event) => setCard(event.target.value)}
                                         type="text"
                                         className="input input-bordered w-full"
                                     />
@@ -126,6 +112,7 @@ export default function credit() {
                                 <div className="flex gap-2 w-full">
                                     <div className="field-container">
                                         <label
+                                            htmlFor="card-expiration"
                                             className="label"
                                         >
                                             MM/AA
@@ -134,13 +121,14 @@ export default function credit() {
                                             mask="99/99"
                                             id="card-expiration"
                                             name="card-expiration"
-                                            onChange={handleChangeValid}
+                                            onChange={(event) => setExpiration_date(event.target.value)}
                                             type="text"
                                             className="input input-bordered w-full"
                                         />
                                     </div>
                                     <div className="field-container w-full">
                                         <label
+                                            htmlFor="securitycode"
                                             className="label"
                                         >
                                             Código de Segurança
@@ -149,7 +137,7 @@ export default function credit() {
                                             mask="999"
                                             id="securitycode"
                                             name="card_cvv"
-                                            onChange={handleChangeCode}
+                                            onChange={(event) => setCode(event.target.value)}
                                             type="text"
                                             className="input input-bordered w-full"
                                             onFocus={inputFocus}
@@ -164,13 +152,13 @@ export default function credit() {
                                     >
                                         CPF / CNPJ
                                     </label>
-                                    <input
-                                        className="input input-bordered w-full"
+                                    <ReactInputMask
+                                        mask="999.999.999-99"
                                         id="carddocument"
                                         name="document"
-                                        maxLength={20}
+                                        onChange={(event) => setDocument(event.target.value)}
                                         type="text"
-                                        defaultValue={''}
+                                        className="input input-bordered w-full"
                                     />
                                 </div>
                                 <div className="field-container">
@@ -254,7 +242,7 @@ export default function credit() {
                             </div>
                         </div>
                         <button
-                            type="button"
+                            type="submit"
                             className="btn btn-info mt-8 mb-0"
                             id="refresh"
                         >
