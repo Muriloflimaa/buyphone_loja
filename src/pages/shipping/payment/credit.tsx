@@ -1,40 +1,45 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import ReactInputMask from 'react-input-mask'
 import Card from '../../../components/Card/index'
 import ShippingCard from '../../../components/ShippingCard.tsx'
 
 export default function credit() {
     const [name, setName] = useState('José Antonio')
-    const [card, setCard] = useState(1234123412341234)
+    const [card, setCard] = useState('')
     const [expiration_date, setExpiration_date] = useState('')
     const [code, setCode] = useState('')
+    const [flag, setFlag] = useState('')
+    const [document, setDocument] = useState('')
     const [unMask, setUnMask] = useState()
     const [focus, setFocus] = useState(false)
 
-    const handleChangeName = (event: any) => {
-        setName(event.target.value)
-    }
-
-    const handleChangeCard = (event: any) => {
-        setCard(event.target.value)
-    }
-
-    const handleChangeValid = (event: any) => {
-        setExpiration_date(event.target.value)
-    }
-
-    const handleChangeCode = (event: any) => {
-        setCode(event.target.value)
-    }
-
     function inputFocus() {
         setFocus(!focus)
-        // return console.log('elemento focado', focus)
     }
 
     function inputNoFocus() {
         setFocus(!focus)
-        // return console.log('elemento nao focado', focus)
+    }
+
+    const checksFlag = (card: string) => {
+        const cardnumber = card.replace(/[^0-9]+/g, '')
+        const visa = /^4[0-9]{12}(?:[0-9]{3})/
+        const mastercard = /^5[1-5][0-9]{14}/
+        const amex = /^3[47][0-9]{13}/
+        const elo = /^((((636368)|(438935)|(504175)|(451416)|(636297))\d{0,10})|((5067)|(4576)|(4011))\d{0,12})/
+
+        const cards = [
+            visa,
+            mastercard,
+            amex,
+            elo,
+        ]
+        for (let flag in cards) {
+            if (cards[flag].test(cardnumber)) {
+                setFlag(flag)
+            }
+        }
     }
 
     return (
@@ -103,7 +108,7 @@ export default function credit() {
                                         className="input input-bordered w-full"
                                         id="name"
                                         name="name"
-                                        onChange={handleChangeName}
+                                        onChange={(event) => setName(event.target.value)}
                                         placeholder={name}
                                         maxLength={20}
                                         type="text"
@@ -111,34 +116,38 @@ export default function credit() {
                                 </div>
                                 <div className="field-container">
                                     <label
-                                        htmlFor="cardnumber"
+                                        htmlFor="card"
                                         className="label"
                                     >
                                         Número do Cartão
                                     </label>
-                                    <input
-                                        className="input input-bordered w-full"
+                                    <ReactInputMask
+                                        mask="9999 9999 9999 9999"
                                         id="card"
                                         name="card"
-                                        placeholder="1234 1234 1234 1234"
-                                        onChange={handleChangeCard}
+                                        onChange={(event) => (
+                                            setCard(event.target.value),
+                                            checksFlag(event.target.value)
+                                        )}
                                         type="tel"
-                                        inputMode="numeric"
+                                        className="input input-bordered w-full"
                                     />
                                 </div>
                                 <div className="flex gap-2 w-full">
                                     <div className="field-container">
                                         <label
-                                            htmlFor="expirationdate"
+                                            htmlFor="card-expiration"
                                             className="label"
                                         >
                                             MM/AA
                                         </label>
-                                        <input
-                                            className="input input-bordered w-full"
+                                        <ReactInputMask
+                                            mask="99/99"
+                                            id="card-expiration"
+                                            name="card-expiration"
+                                            onChange={(event) => setExpiration_date(event.target.value)}
                                             type="tel"
-                                            placeholder="99/99"
-                                            onChange={handleChangeValid}
+                                            className="input input-bordered w-full"
                                         />
                                     </div>
                                     <div className="field-container w-full">
@@ -148,15 +157,13 @@ export default function credit() {
                                         >
                                             Código de Segurança
                                         </label>
-                                        <input
-                                            className="input input-bordered w-full"
+                                        <ReactInputMask
+                                            mask="999"
                                             id="securitycode"
                                             name="card_cvv"
-                                            type="text"
-                                            pattern="[0-9]*"
-                                            inputMode="numeric"
-                                            defaultValue={''}
-                                            onChange={handleChangeCode}
+                                            onChange={(event) => setCode(event.target.value)}
+                                            type="tel"
+                                            className="input input-bordered w-full"
                                             onFocus={inputFocus}
                                             onBlur={inputNoFocus}
                                         />
@@ -169,13 +176,13 @@ export default function credit() {
                                     >
                                         CPF / CNPJ
                                     </label>
-                                    <input
-                                        className="input input-bordered w-full"
+                                    <ReactInputMask
+                                        mask="999.999.999-99"
                                         id="carddocument"
                                         name="document"
-                                        maxLength={20}
-                                        type="text"
-                                        defaultValue={''}
+                                        onChange={(event) => setDocument(event.target.value)}
+                                        type="tel"
+                                        className="input input-bordered w-full"
                                     />
                                 </div>
                                 <div className="field-container">
@@ -255,11 +262,12 @@ export default function credit() {
                                     expiration_date={expiration_date}
                                     foc={focus}
                                     code={code}
+                                    flags={flag}
                                 />
                             </div>
                         </div>
                         <button
-                            type="button"
+                            type="submit"
                             className="btn btn-info mt-8 mb-0"
                             id="refresh"
                         >

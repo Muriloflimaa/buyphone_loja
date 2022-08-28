@@ -1,8 +1,8 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ProductCard from '../../components/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
-import ProductCard from '../../components/ProductCard/ProductCard'
 
 export default function Products({ data }) {
     return (
