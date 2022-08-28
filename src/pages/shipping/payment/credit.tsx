@@ -9,6 +9,7 @@ export default function credit() {
     const [card, setCard] = useState('')
     const [expiration_date, setExpiration_date] = useState('')
     const [code, setCode] = useState('')
+    const [flag, setFlag] = useState('')
     const [document, setDocument] = useState('')
     const [unMask, setUnMask] = useState()
     const [focus, setFocus] = useState(false)
@@ -19,6 +20,26 @@ export default function credit() {
 
     function inputNoFocus() {
         setFocus(!focus)
+    }
+
+    const checksFlag = (card: string) => {
+        const cardnumber = card.replace(/[^0-9]+/g, '')
+        const visa = /^4[0-9]{12}(?:[0-9]{3})/
+        const mastercard = /^5[1-5][0-9]{14}/
+        const amex = /^3[47][0-9]{13}/
+        const elo = /^((((636368)|(438935)|(504175)|(451416)|(636297))\d{0,10})|((5067)|(4576)|(4011))\d{0,12})/
+
+        const cards = [
+            visa,
+            mastercard,
+            amex,
+            elo,
+        ]
+        for (let flag in cards) {
+            if (cards[flag].test(cardnumber)) {
+                setFlag(flag)
+            }
+        }
     }
 
     return (
@@ -104,8 +125,11 @@ export default function credit() {
                                         mask="9999 9999 9999 9999"
                                         id="card"
                                         name="card"
-                                        onChange={(event) => setCard(event.target.value)}
-                                        type="text"
+                                        onChange={(event) => (
+                                            setCard(event.target.value),
+                                            checksFlag(event.target.value)
+                                        )}
+                                        type="tel"
                                         className="input input-bordered w-full"
                                     />
                                 </div>
@@ -122,7 +146,7 @@ export default function credit() {
                                             id="card-expiration"
                                             name="card-expiration"
                                             onChange={(event) => setExpiration_date(event.target.value)}
-                                            type="text"
+                                            type="tel"
                                             className="input input-bordered w-full"
                                         />
                                     </div>
@@ -138,7 +162,7 @@ export default function credit() {
                                             id="securitycode"
                                             name="card_cvv"
                                             onChange={(event) => setCode(event.target.value)}
-                                            type="text"
+                                            type="tel"
                                             className="input input-bordered w-full"
                                             onFocus={inputFocus}
                                             onBlur={inputNoFocus}
@@ -157,7 +181,7 @@ export default function credit() {
                                         id="carddocument"
                                         name="document"
                                         onChange={(event) => setDocument(event.target.value)}
-                                        type="text"
+                                        type="tel"
                                         className="input input-bordered w-full"
                                     />
                                 </div>
@@ -238,6 +262,7 @@ export default function credit() {
                                     expiration_date={expiration_date}
                                     foc={focus}
                                     code={code}
+                                    flags={flag}
                                 />
                             </div>
                         </div>
