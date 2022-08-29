@@ -1,7 +1,7 @@
 .GradientBuyPhone {
   -webkit-animation: slide 5s linear infinite;
   animation: slide 5s linear infinite;
-  background: url('https://loja.buyphone.com.br/img/degrade-seamless.png') repeat;
+  background: url(../../assets/images/gradient.png) repeat;
   height: 100%;
   width: 200%;
   left: 0;
@@ -13,6 +13,6 @@
       transform: translate3d(0, 0, 0);
   }
   100% {
-      transform: translate3d(-90%, 0, 0);
+      transform: translate3d(-76%, 0, 0);
   }
 }

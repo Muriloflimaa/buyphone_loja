@@ -81,15 +81,14 @@ const ProductCard = ({
     }
 
     return (
-        <div className="relative flex items-center justify-center overflow-hidden">
+        <div className="relative flex items-center justify-center overflow-hidden rounded-lg">
             <div
                 className={
-                    'w-[400%] h-full absolute rounded-lg ' +
-                    styles.GradientBuyPhone
+                    'w-[390%] h-full absolute ' + styles.GradientBuyPhone
                 }
             ></div>
             <div
-                className="card card-compact w-[98%] h-[98%] sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
+                className="card card-compact w-[98%] h-[99%] sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
                 key={id}
             >
                 <div className="card-body text-center ">
