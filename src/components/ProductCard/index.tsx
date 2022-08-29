@@ -81,21 +81,20 @@ const ProductCard = ({
 
     return (
         <div
-            className="card w-full mx-auto shadow-xl bg-colorCard hover:scale-100 md:hover:scale-105 hover:shadow-2xl ease-in-out duration-300"
+            className="card card-compact sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
             key={id}
         >
-            <div className="card-body items-center p-4 text-center text-PrimaryText">
-                <figure className="w-40 h-56 block mx-auto">
-                    <Image
-                        src={image}
-                        layout="responsive"
-                        width={350}
-                        height={450}
-                    />
-                </figure>
-
-                <h1 className="text-2xl font-light">{name}</h1>
-
+            <div className="card-body text-center ">
+                <div className="w-[80%] mx-auto">
+                    <figure className="mb-6">
+                        <Image
+                            src={image}
+                            width={350}
+                            height={450}
+                        />
+                    </figure>
+                </div>
+                <h2 className="card-title justify-center flex-col font-medium">{name}</h2>
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
@@ -107,36 +106,42 @@ const ProductCard = ({
                         {memory}
                     </span>
                 </div>
-                <div className="flex-col flex mb-3 w-full my-6 gap-2 ">
-                    <div className="flex flex-col md:flex-row justify-between w-full">
+                <div className="flex-col mb-3 text-sm text-left my-6 gap-2 hidden lg:flex">
+                    <div className="flex justify-between">
                         Preço Comum:{' '}
                         <span className="opacity-40 line-through decoration-red-600">
                             {moneyMask(averagePrice.toString())}
                         </span>
                     </div>
-
-                    <div className="text-lg flex flex-col md:flex-row justify-between w-full">
+                    <div className="flex justify-between">
                         <span>Nosso Preço:</span>
-                        <span className="text-success font-semibold text-xl">
+                        <span className="text-success font-semibold text-lg">
                             {moneyMask(price.toString())}
                         </span>
                     </div>
                 </div>
+                <div className="my-6 block lg:hidden">
+                    <div>
+                        Preço comum: <span className="opacity-40 line-through decoration-red-600">{moneyMask(averagePrice.toString())}</span><br />
+                    </div>
+                    <div className="text-lg">
+                        Nosso preço: <span className="text-success font-semibold text-xl">{moneyMask(price.toString())}</span>
+                    </div>
+                </div>
 
-                <div className="card-actions">
+                <div className="card-actions flex-col items-center">
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-sm btn-primary rounded-full text-xs md:text-md py-0
+                        "
                         data-testid="add-product-button"
                         onClick={() => handleAddProduct(id)}
                     >
-                        Adicionar
+                        Comprar
                     </button>
                 </div>
                 <Link href={`/${slugCategory}/${slug}`} passHref>
-                    <a>
-                        <button className="btn btn-primary font-light text-PrimaryText bg-transparent border-transparent link">
-                            Saiba mais
-                        </button>
+                    <a className="text-xs link">
+                        Saiba mais
                     </a>
                 </Link>
             </div>

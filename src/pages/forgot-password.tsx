@@ -1,4 +1,4 @@
-export default function ForgoutPassword() {
+export default function ForgotPassword() {
     return (
         <div className="grid gap-3 pt-3">
             <h1>
