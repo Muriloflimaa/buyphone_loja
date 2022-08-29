@@ -1,10 +1,8 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
-import axios from 'axios'
 import Link from 'next/link'
-import { Router, useRouter } from 'next/router'
 import { useState } from 'react'
-import toast from 'react-hot-toast'
 import ReactInputMask from 'react-input-mask'
+import { api } from '../services/apiClient'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function register() {
@@ -19,73 +17,60 @@ export default function register() {
     const [confirmPass, setConfirmPass] = useState('')
     const [acceptTerms, setAcceptTerms] = useState(false)
 
-    const handleChangeName = (event: any) => {
-        setName(event.target.value)
-    }
-    const handleChangeEmail = (event: any) => {
-        setEmail(event.target.value)
-    }
-    const handleChangeDocument = (event: any) => {
-        setDocument(event.target.value)
-    }
-    const handleChangePhone = (event: any) => {
-        setMobilePhone(event.target.value)
-    }
-    const handleChangeBirth = (event: any) => {
-        setBirthDate(event.target.value)
-    }
-    const handleChangePassword = (event: any) => {
-        setPassword(event.target.value)
-    }
-    const handleChangeConfirmPass = (event: any) => {
-        setConfirmPass(event.target.value)
-    }
-
     const Register = async () => {
-        if (
-            name &&
-            email &&
-            document &&
-            mobile_phone &&
-            birthdate &&
-            password &&
-            confirmPass
-        ) {
-            if (acceptTerms == true) {
-                if (password != confirmPass) {
-                    alert('senhas não conferem')
-                } else {
-                    // {
-                    //     "email": "muriloflimaa@gmail.com",
-                    //     "password": "manoel1507",
-                    //     "name" : "murilo fernandes de lima",
-                    //     "document" : "500.996.138-59",
-                    //     "mobile_phone" : "+55(11)99664-5956",
-                    //     "birthdate" : "2002-05-21"
-                    // } Formato do json que precisa ser enviado para a api
+        api
+            .post('/register', {
+                email,
+                document,
+                name,
+                mobile_phone,
+                birthdate,
+                password,
+            })
+        // if (
+        //     name &&
+        //     email &&
+        //     document &&
+        //     mobile_phone &&
+        //     birthdate &&
+        //     password &&
+        //     confirmPass
+        // ) {
+        //     if (acceptTerms == true) {
+        //         if (password != confirmPass) {
+        //             alert('senhas não conferem')
+        //         } else {
+        //             // {
+        //             //     "email": "muriloflimaa@gmail.com",
+        //             //     "password": "manoel1507",
+        //             //     "name" : "murilo fernandes de lima",
+        //             //     "document" : "500.996.138-59",
+        //             //     "mobile_phone" : "+55(11)99664-5956",
+        //             //     "birthdate" : "2002-05-21"
+        //             // } Formato do json que precisa ser enviado para a api
 
-                    // try {
-                    await axios
-                        .post('https://loja.buyphone.com.br/api/register', {
-                            email,
-                            document,
-                            name,
-                            mobile_phone,
-                            birthdate,
-                            password,
-                        })
-                        .then((response) => console.log(response))
-                    //se for sucesso exibir mensagem ou redirecionar para o login
-                    // } catch (error) {
-                    //     alert(`Não foi possível fazer o login ${error}`)
-                    // }
-                }
-            } else {
-                alert('você precisa aceitar os termos')
-            }
-        } else {
-            alert('Preencha todos os campos')
-        }
+        //             // try {
+        //             await axios
+        //                 .post('https://loja.buyphone.com.br/api/register', {
+        //                     email,
+        //                     document,
+        //                     name,
+        //                     mobile_phone,
+        //                     birthdate,
+        //                     password,
+        //                 })
+        //                 .then((response) => console.log(response))
+        //             //se for sucesso exibir mensagem ou redirecionar para o login
+        //             // } catch (error) {
+        //             //     alert(`Não foi possível fazer o login ${error}`)
+        //             // }
+        //         }
+        //     } else {
+        //         alert('você precisa aceitar os termos')
+        //     }
+        // } else {
+        //     alert('Preencha todos os campos')
+        // }
     }
 
     return (
@@ -98,7 +83,7 @@ export default function register() {
                     <input
                         id="name"
                         name="name"
-                        onChange={handleChangeName}
+                        onChange={(event) => setName(event.target.value)}
                         type="text"
                         className="input input-bordered rounded-md !important w-full text-PrimaryText"
                     />
@@ -112,7 +97,7 @@ export default function register() {
                     <input
                         id="email"
                         name="email"
-                        onChange={handleChangeEmail}
+                        onChange={(event) => setEmail(event.target.value)}
                         type="text"
                         className="input input-bordered rounded-md !important w-full text-PrimaryText"
                     />
@@ -127,7 +112,7 @@ export default function register() {
                         mask="999.999.999-99"
                         id="document"
                         name="document"
-                        onChange={handleChangeDocument}
+                        onChange={(event) => setDocument(event.target.value)}
                         type="text"
                         className="input input-bordered rounded-md !important w-full text-PrimaryText"
                     />
@@ -142,7 +127,7 @@ export default function register() {
                         mask="+55 (99) 99999-9999"
                         id="phone"
                         name="phone"
-                        onChange={handleChangePhone}
+                        onChange={(event) => setMobilePhone(event.target.value)}
                         type="tel"
                         className="input input-bordered rounded-md !important w-full text-PrimaryText"
                     />
@@ -156,7 +141,7 @@ export default function register() {
                     <input
                         id="date"
                         name="date"
-                        onChange={handleChangeBirth}
+                        onChange={(event) => setBirthDate(event.target.value)}
                         type="date"
                         className="input input-bordered rounded-md !important w-full text-PrimaryText"
                     />
@@ -170,7 +155,7 @@ export default function register() {
                     <input
                         id="password"
                         name="password"
-                        onChange={handleChangePassword}
+                        onChange={(event) => setPassword(event.target.value)}
                         type={show ? 'password' : 'text'}
                         placeholder="●●●●●●●"
                         className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
@@ -192,7 +177,7 @@ export default function register() {
                     <input
                         id="confirmPassword"
                         name="confirmPassword"
-                        onChange={handleChangeConfirmPass}
+                        onChange={(event) => setConfirmPass(event.target.value)}
                         type={show ? 'password' : 'text'}
                         placeholder="●●●●●●●"
                         className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
