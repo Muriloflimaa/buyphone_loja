@@ -23,15 +23,15 @@ interface CartItemsAmount {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const { cart } = useCart()
-    const { user } = useContext(AuthContext)
+    const { userData } = useContext(AuthContext)
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
         const newSumAmount = { ...sumAmount }
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
-
-    // const discount = user.type === 1 ? 12.5 : 7
+    console.log(userData)
+    const discount = userData?.type === 1 ? 12.5 : 7
 
     return (
         <>
@@ -58,34 +58,38 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
                             category.products.map((products) => {
-                                const prices = [
+                                const itens = [
+                                    products.price,
+                                    products.magalu_price,
                                     products.americanas_price,
                                     products.casasbahia_price,
-                                    products.magalu_price,
-                                    products.ponto_price,
-                                    products.price
+                                    products.ponto_price
                                 ]
-                                const pricesFilter = Math.min(...prices)
-                                console.log(pricesFilter)
-                                return (
+                                const filteredItens = itens.filter((item) => item)
+                                const averagePrice = filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+                                const discountPrice = Math.round(averagePrice * (discount / 100))
+                                const ourPrice = averagePrice - discountPrice
+
+                                return ourPrice ? (
                                     <ProductCard
                                         key={products.id}
                                         id={products.id}
                                         name={products.name}
                                         idCategory={category.id}
                                         colorPhone={products.color}
-                                        averagePrice={products.price}
-                                        price={products.price}
+                                        price={ourPrice}
+                                        averagePrice={averagePrice}
                                         slug={products.slug}
                                         slugCategory={category.slug}
                                         image={products.media[0].original_url}
                                         memory={products.memory}
                                     />
                                 )
+                                    :
+                                    <></>
                             }
                             )
-                        )
-                    ) : (
+                        )) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}
                 </div>
