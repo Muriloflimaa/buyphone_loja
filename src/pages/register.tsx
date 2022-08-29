@@ -1,9 +1,12 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useState } from 'react'
+import toast, { ToastBar } from 'react-hot-toast'
 import ReactInputMask from 'react-input-mask'
 import { api } from '../services/apiClient'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
+import ErrorImg from '../assets/images/error.webp'
+import Image from 'next/image'
 
 export default function register() {
     const [show, setShow] = useState(true)
@@ -18,6 +21,19 @@ export default function register() {
     const [acceptTerms, setAcceptTerms] = useState(false)
 
     const Register = async () => {
+        // if (
+        //     name &&
+        //     email &&
+        //     document &&
+        //     mobile_phone &&
+        //     birthdate &&
+        //     password &&
+        //     confirmPass
+        // ) {
+        //     if (acceptTerms == true) {
+        //         if (password != confirmPass) {
+        //             alert('senhas não conferem')
+        //         } else {
         await api
             .post('/register', {
                 email,
@@ -26,14 +42,60 @@ export default function register() {
                 mobile_phone,
                 birthdate,
                 password,
-                type: 0
+                type: 0,
             })
             .then((response) => {
                 console.log(response)
             })
             .catch((error) => {
-                console.log(error)
+                const resposta = error.response.data.errors
+                var MessageErrorArray = Object.keys(resposta).map(function (
+                    key
+                ) {
+                    return [resposta[key]]
+                })
+
+                toast.custom(
+                    (t) => (
+                        <div
+                            className={`${
+                                t.visible ? 'animate-enter' : 'animate-leave'
+                            } w-full lg:w-1/4 bg-[#FECACA] text-[#484752] h-auto items-center shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                        >
+                            <div className="flex-1 w-0 p-4">
+                                <div className="flex items-center">
+                                    <div className="flex-shrink-0 pt-0.5">
+                                        <Image
+                                            src={ErrorImg}
+                                            layout="fixed"
+                                            width={40}
+                                            height={50}
+                                        ></Image>
+                                    </div>
+                                    <div className="ml-3 flex-1">
+                                        <p className="text-xs font-medium text-gray-900">
+                                            Verifique o alerta abaixo e corrija:
+                                        </p>
+                                        <p className="mt-1 text-[11px] text-gray-900 opacity-70">
+                                            {MessageErrorArray}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ),
+                    {
+                        duration: 8000,
+                    }
+                )
             })
+        //         }
+        //     } else {
+        //         toast.error('você precisa aceitar os termos')
+        //     }
+        // } else {
+        //     toast.error('preencha todos os campos')
+        // }
     }
 
     return (
