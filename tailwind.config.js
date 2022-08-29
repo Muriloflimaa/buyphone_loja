@@ -38,5 +38,35 @@ module.exports = {
             },
         },
     },
+    daisyui: {
+        themes: [
+            {
+                light: {
+                    ...require('daisyui/src/colors/themes')[
+                        '[data-theme=light]'
+                    ],
+                    primary: '#06002A',
+                    info: '#0E9AFF',
+                    success: '#00A944',
+                    error: '#E26C6C',
+                    'info-content': '#FFFFFF',
+                    '--glass-blur': '20px',
+                },
+                dark: {
+                    ...require('daisyui/src/colors/themes')[
+                        '[data-theme=dark]'
+                    ],
+                    'base-100': '#161C24',
+                    'base-content': '#FFFFFF',
+                    primary: '#0E9AFF',
+                    info: '#0E9AFF',
+                    success: '#00A944',
+                    error: '#E26C6C',
+                    'info-content': '#FFFFFF',
+                    '--glass-blur': '20px',
+                },
+            },
+        ],
+    },
     plugins: [require('daisyui'), rotateY],
 }

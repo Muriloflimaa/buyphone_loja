@@ -18,7 +18,7 @@ export default function register() {
     const [acceptTerms, setAcceptTerms] = useState(false)
 
     const Register = async () => {
-        api
+        await api
             .post('/register', {
                 email,
                 document,
@@ -26,51 +26,14 @@ export default function register() {
                 mobile_phone,
                 birthdate,
                 password,
+                type: 0
             })
-        // if (
-        //     name &&
-        //     email &&
-        //     document &&
-        //     mobile_phone &&
-        //     birthdate &&
-        //     password &&
-        //     confirmPass
-        // ) {
-        //     if (acceptTerms == true) {
-        //         if (password != confirmPass) {
-        //             alert('senhas não conferem')
-        //         } else {
-        //             // {
-        //             //     "email": "muriloflimaa@gmail.com",
-        //             //     "password": "manoel1507",
-        //             //     "name" : "murilo fernandes de lima",
-        //             //     "document" : "500.996.138-59",
-        //             //     "mobile_phone" : "+55(11)99664-5956",
-        //             //     "birthdate" : "2002-05-21"
-        //             // } Formato do json que precisa ser enviado para a api
-
-        //             // try {
-        //             await axios
-        //                 .post('https://loja.buyphone.com.br/api/register', {
-        //                     email,
-        //                     document,
-        //                     name,
-        //                     mobile_phone,
-        //                     birthdate,
-        //                     password,
-        //                 })
-        //                 .then((response) => console.log(response))
-        //             //se for sucesso exibir mensagem ou redirecionar para o login
-        //             // } catch (error) {
-        //             //     alert(`Não foi possível fazer o login ${error}`)
-        //             // }
-        //         }
-        //     } else {
-        //         alert('você precisa aceitar os termos')
-        //     }
-        // } else {
-        //     alert('Preencha todos os campos')
-        // }
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (
