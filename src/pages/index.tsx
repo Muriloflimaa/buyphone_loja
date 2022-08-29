@@ -3,6 +3,7 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
@@ -31,6 +32,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     }, {} as CartItemsAmount)
 
     const userData = GetUseType()
+
     const discount = userData?.type === 1 ? 12.5 : 7
 
     return (

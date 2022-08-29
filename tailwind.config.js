@@ -58,7 +58,7 @@ module.exports = {
                     ],
                     'base-100': '#161C24',
                     'base-content': '#FFFFFF',
-                    primary: '#0E9AFF',
+                    primary: '#161C24',
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',
