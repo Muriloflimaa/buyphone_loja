@@ -111,14 +111,14 @@ const ProductCard = ({
                     <div className="flex flex-col md:flex-row justify-between w-full">
                         Preço Comum:{' '}
                         <span className="opacity-40 line-through decoration-red-600">
-                            {moneyMask(price.toString())}
+                            {moneyMask(averagePrice.toString())}
                         </span>
                     </div>
 
                     <div className="text-lg flex flex-col md:flex-row justify-between w-full">
                         <span>Nosso Preço:</span>
                         <span className="text-success font-semibold text-xl">
-                            {moneyMask(averagePrice.toString())}
+                            {moneyMask(price.toString())}
                         </span>
                     </div>
                 </div>

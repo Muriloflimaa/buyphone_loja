@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Router from 'next/router'
-import { createContext, ReactNode } from 'react'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { createContext, ReactNode, useState } from 'react'
 import toast from 'react-hot-toast'
 import { apiLogin } from '../services/apiLogin'
 
@@ -10,11 +10,16 @@ type SignInCredentials = {
     password: string
 }
 
+type UserDataType = {
+    type: number
+}
+
 type AuthContextData = {
     signIn(credentials: SignInCredentials): Promise<void>
     signOut: any
     user: any
     isAuthenticated: boolean
+    userData: UserDataType | undefined
 }
 
 type AuthProviderProps = {
@@ -35,6 +40,7 @@ export const setCookies = (key: any, value: any) => {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const { '@BuyPhone:User': user } = parseCookies()
+    const [userData, setUserData] = useState<UserDataType | undefined>()
 
     const isAuthenticated = !!user
 
@@ -56,6 +62,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 profile_photo_url: profile_photo_url,
             }
             const token = response.data.authorization.token
+
+            setUserData(UserObject)
 
             setCookies('@BuyPhone:User', UserObject) //chama a função setCookies para gravar os dados
             setCookies('@BuyPhone:Token', token)
@@ -80,7 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     return (
         <AuthContext.Provider
-            value={{ signIn, signOut, isAuthenticated, user }}
+            value={{ signIn, signOut, isAuthenticated, user, userData }}
         >
             {children}
         </AuthContext.Provider>

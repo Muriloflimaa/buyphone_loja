@@ -3,8 +3,10 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { useContext } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
+import { AuthContext } from '../context/AuthContext'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
@@ -21,12 +23,15 @@ interface CartItemsAmount {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const { cart } = useCart()
+    const { userData } = useContext(AuthContext)
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
         const newSumAmount = { ...sumAmount }
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
+    console.log(userData)
+    const discount = userData?.type === 1 ? 12.5 : 7
 
     return (
         <>
@@ -52,23 +57,39 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
-                            category.products.map((products) => (
-                                <ProductCard
-                                    key={products.id}
-                                    id={products.id}
-                                    name={products.name}
-                                    idCategory={category.id}
-                                    colorPhone={products.color}
-                                    averagePrice={products.price}
-                                    price={products.price}
-                                    slug={products.slug}
-                                    slugCategory={category.slug}
-                                    image={products.media[0].original_url}
-                                    memory={products.memory}
-                                />
-                            ))
-                        )
-                    ) : (
+                            category.products.map((products) => {
+                                const itens = [
+                                    products.price,
+                                    products.magalu_price,
+                                    products.americanas_price,
+                                    products.casasbahia_price,
+                                    products.ponto_price
+                                ]
+                                const filteredItens = itens.filter((item) => item)
+                                const averagePrice = filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+                                const discountPrice = Math.round(averagePrice * (discount / 100))
+                                const ourPrice = averagePrice - discountPrice
+
+                                return ourPrice ? (
+                                    <ProductCard
+                                        key={products.id}
+                                        id={products.id}
+                                        name={products.name}
+                                        idCategory={category.id}
+                                        colorPhone={products.color}
+                                        price={ourPrice}
+                                        averagePrice={averagePrice}
+                                        slug={products.slug}
+                                        slugCategory={category.slug}
+                                        image={products.media[0].original_url}
+                                        memory={products.memory}
+                                    />
+                                )
+                                    :
+                                    <></>
+                            }
+                            )
+                        )) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}
                 </div>
