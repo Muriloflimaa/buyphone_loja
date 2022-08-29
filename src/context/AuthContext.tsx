@@ -68,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setCookies('@BuyPhone:User', UserObject) //chama a função setCookies para gravar os dados
             setCookies('@BuyPhone:Token', token)
 
-            Router.push('/')
+            window.location.href = '/'
         } catch (error) {
             toast.error('Não foi possível fazer o login')
         }
@@ -79,10 +79,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             await apiLogin.post('/logout')
             destroyCookie(undefined, '@BuyPhone:User')
             destroyCookie(undefined, '@BuyPhone:Token')
-            Router.push('/')
-            toast.success('usuario deslogado')
+            window.location.href = '/'
         } catch (error) {
-            toast.error('Não foi possível fazer deslogar')
+            toast.error('Não foi possível deslogar')
         }
     }
 

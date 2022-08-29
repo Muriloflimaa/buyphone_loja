@@ -63,11 +63,18 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                     products.magalu_price,
                                     products.americanas_price,
                                     products.casasbahia_price,
-                                    products.ponto_price
+                                    products.ponto_price,
                                 ]
-                                const filteredItens = itens.filter((item) => item)
-                                const averagePrice = filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-                                const discountPrice = Math.round(averagePrice * (discount / 100))
+                                const filteredItens = itens.filter(
+                                    (item) => item
+                                )
+                                const averagePrice =
+                                    filteredItens.length > 0
+                                        ? Math.min(...filteredItens)
+                                        : 0
+                                const discountPrice = Math.round(
+                                    averagePrice * (discount / 100)
+                                )
                                 const ourPrice = averagePrice - discountPrice
 
                                 return ourPrice ? (
@@ -84,12 +91,12 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                         image={products.media[0].original_url}
                                         memory={products.memory}
                                     />
-                                )
-                                    :
+                                ) : (
                                     <></>
-                            }
-                            )
-                        )) : (
+                                )
+                            })
+                        )
+                    ) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}
                 </div>

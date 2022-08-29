@@ -35,12 +35,12 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
     })
 
     return (
-        <AuthProvider data-theme={`${userData?.type ? 'dark' : 'light'}`} >
+        <AuthProvider data-theme={`${userData?.type ? 'dark' : 'light'}`}>
             {router.route === `/login` ||
-                router.route === `/register` ||
-                router.route === `/terms` ||
-                router.route === `/politics` ||
-                router.route === `/forgot-password` ? (
+            router.route === `/register` ||
+            router.route === `/terms` ||
+            router.route === `/politics` ||
+            router.route === `/forgot-password` ? (
                 <LoginRegister width={width}>
                     <Component {...pageProps} />
                 </LoginRegister>
