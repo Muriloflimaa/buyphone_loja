@@ -8,15 +8,17 @@ export default function Products({ data }) {
     return (
         <>
             <div className="h-auto">
-                <div className="alert alert-success bg-[#00a843] justify-center my-6 text-sm md:text-md max-w-7xl mx-auto">
-                    <FontAwesomeIcon
-                        icon={faTruckFast}
-                        className="w-7 h-7 text-PrimaryText"
-                    />
-                    <span className="text-PrimaryText">
-                        Todos os nossos produtos com frete grátis. Prazo: 10 a
-                        15 dias úteis
-                    </span>
+                <div className="flex justify-center mx-5">
+                    <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm text-center md:text-md w-full max-w-7xl">
+                        <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-7 h-7 text-PrimaryText hidden md:flex"
+                        />
+                        <span className="text-PrimaryText">
+                            Todos os nossos produtos com frete grátis. Prazo: 10
+                            a 15 dias úteis
+                        </span>
+                    </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.products.length > 0 ? (

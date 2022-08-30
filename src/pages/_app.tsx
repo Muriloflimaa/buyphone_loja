@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
         } else {
             setWidth('max-w-md')
         }
-    }, [])
+    })
 
     const userData = GetUseType()
 
