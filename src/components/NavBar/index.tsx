@@ -7,7 +7,7 @@ import {
     ShoppingBagIcon,
     ShoppingCartIcon,
     UserCircleIcon,
-    UserIcon
+    UserIcon,
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -58,11 +58,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         <>
             <div className="fixed z-20 w-full">
                 <div className="glass">
-                    <nav
-                        className={`relative mt-0 w-full ${
-                            user?.type ? 'bg-base-100' : 'bg-primary'
-                        }`}
-                    >
+                    <nav className="relative mt-0 w-full bg-primary opacity-90">
                         <div className="w-full">
                             <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
                                 <div className="block md:hidden">
