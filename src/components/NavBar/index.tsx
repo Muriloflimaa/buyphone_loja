@@ -65,7 +65,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     {/* CHAMA O MENU */}
                                     <label
                                         htmlFor="my-drawer"
-                                        className="btn btn-circle swap swap-rotate transition-none absolute -mt-[20px]"
+                                        className="btn btn-circle bg-transparent border-none swap swap-rotate transition-none absolute -mt-[20px]"
                                         onClick={handleClick}
                                     >
                                         <input type="checkbox" />
@@ -89,6 +89,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             src={Logo}
                                             className="cursor-pointer"
                                             layout="fixed"
+                                            alt="Logo BuyPhone"
                                         />
                                     </a>
                                 </Link>
@@ -307,10 +308,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 </div>
                                 {isUser ? (
                                     <div className="flex flex-col pl-6">
-                                        <h1 className="text-xl font-semibold text-PrimaryText">
+                                        <h1 className="text-xl font-semibold text-info-content">
                                             {FirstAllUpper(user?.name)}
                                         </h1>
-                                        <h2 className="text-PrimaryText">
+                                        <h2 className="text-info-content">
                                             {user?.type == 1
                                                 ? 'Revendedor'
                                                 : 'Consumidor'}
@@ -319,7 +320,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 ) : (
                                     <div className="flex justify-center items-center w-full p-4">
                                         <Link href={'/login'} passHref>
-                                            <a className="link text-PrimaryText">
+                                            <a className="link text-info-content">
                                                 Realizar login
                                             </a>
                                         </Link>
@@ -334,7 +335,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 <input type="checkbox" />
                                 <div>
                                     <svg
-                                        className="swap-off fill-current text-PrimaryText z-20"
+                                        className="swap-off fill-current text-info-content z-20"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="32"
                                         height="32"
@@ -348,8 +349,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <Link href={'/'}>
                             <li>
                                 <div className="flex py-8">
-                                    <HomeIcon className="h-5 w-5 text-PrimaryText" />
-                                    <a className="text-PrimaryText">
+                                    <HomeIcon className="h-5 w-5 text-info-content" />
+                                    <a className="text-info-content">
                                         Página inicial
                                     </a>
                                 </div>
@@ -361,12 +362,12 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 className="collapse collapse-arrow flex flex-col px-4 py-3 gap-0 h-auto p-0 items-start"
                             >
                                 <div className="collapse-title min-h-0 text-xl font-medium flex items-center p-0 relative">
-                                    <ShoppingBagIcon className="h-5 w-5 text-PrimaryText" />
-                                    <a className="text-PrimaryText font-normal text-base collapse-title">
+                                    <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                                    <a className="text-info-content font-normal text-base collapse-title">
                                         Produtos
                                     </a>
                                 </div>
-                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
+                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
                                     {dataCategory.data.length > 0 ? (
                                         dataCategory.data.map((category) => {
                                             return (
@@ -392,15 +393,15 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         </li>
                         <li>
                             <div className="flex py-8">
-                                <UserIcon className="h-5 w-5 text-PrimaryText" />
-                                <a className="text-PrimaryText">Minha conta</a>
+                                <UserIcon className="h-5 w-5 text-info-content" />
+                                <a className="text-info-content">Minha conta</a>
                             </div>
                         </li>
                         <li>
                             <div className="flex py-8">
-                                <LogoutIcon className="h-5 w-5 text-PrimaryText" />
+                                <LogoutIcon className="h-5 w-5 text-info-content" />
                                 <a
-                                    className="text-PrimaryText"
+                                    className="text-info-content"
                                     onClick={signOut}
                                 >
                                     Sair
