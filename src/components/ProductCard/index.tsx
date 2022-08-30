@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
+import styles from './styles.module.scss'
 
 interface ProductCardProps {
     id: number
@@ -80,20 +81,25 @@ const ProductCard = ({
     }
 
     return (
+        // <div className="relative flex items-center justify-center overflow-hidden rounded-lg">
+        //     <div
+        //         className={
+        //             'w-[390%] h-full absolute ' + styles.GradientBuyPhone
+        //         }
+        //     ></div>
         <div
-            className="card card-compact sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
+            className="card card-compact w-full h-full shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
+            key={id}
         >
             <div className="card-body text-center ">
                 <div className="w-[80%] mx-auto">
                     <figure className="mb-6">
-                        <Image
-                            src={image}
-                            width={350}
-                            height={450}
-                        />
+                        <Image src={image} width={350} height={450} />
                     </figure>
                 </div>
-                <h2 className="card-title justify-center flex-col font-medium">{name}</h2>
+                <h2 className="card-title justify-center flex-col font-medium">
+                    {name}
+                </h2>
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
@@ -121,10 +127,17 @@ const ProductCard = ({
                 </div>
                 <div className="my-6 block lg:hidden">
                     <div>
-                        Preço comum: <span className="opacity-40 line-through decoration-red-600">{moneyMask(averagePrice.toString())}</span><br />
+                        Preço comum:{' '}
+                        <span className="opacity-40 line-through decoration-red-600">
+                            {moneyMask(averagePrice.toString())}
+                        </span>
+                        <br />
                     </div>
                     <div className="text-lg">
-                        Nosso preço: <span className="text-success font-semibold text-xl">{moneyMask(price.toString())}</span>
+                        Nosso preço:{' '}
+                        <span className="text-success font-semibold text-xl">
+                            {moneyMask(price.toString())}
+                        </span>
                     </div>
                 </div>
 
@@ -139,12 +152,11 @@ const ProductCard = ({
                     </button>
                 </div>
                 <Link href={`/${slugCategory}/${slug}`} passHref>
-                    <a className="text-xs link">
-                        Saiba mais
-                    </a>
+                    <a className="text-xs link">Saiba mais</a>
                 </Link>
             </div>
         </div>
+        // </div>
     )
 }
 export default ProductCard
