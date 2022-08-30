@@ -58,7 +58,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         <>
             <div className="fixed z-20 w-full">
                 <div className="glass">
-                    <nav className="relative mt-0 w-full bg-primary opacity-90">
+                    <nav className="relative mt-0 w-full bg-primary">
                         <div className="w-full">
                             <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
                                 <div className="block md:hidden">
