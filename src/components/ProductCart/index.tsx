@@ -77,7 +77,6 @@ const ProductCart = () => {
                     >
                         <div
                             className="flex justify-between w-full"
-                            key={product.id}
                             data-testid="product"
                         >
                             <div className="flex gap-3">

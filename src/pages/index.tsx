@@ -77,7 +77,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                 )
                                 const ourPrice = averagePrice - discountPrice
 
-                                return ourPrice ? (
+                                return ourPrice && (
                                     <ProductCard
                                         key={products.id}
                                         id={products.id}
@@ -91,8 +91,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                         image={products.media[0].original_url}
                                         memory={products.memory}
                                     />
-                                ) : (
-                                    <></>
                                 )
                             })
                         )

@@ -82,7 +82,6 @@ const ProductCard = ({
     return (
         <div
             className="card card-compact sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
-            key={id}
         >
             <div className="card-body text-center ">
                 <div className="w-[80%] mx-auto">
