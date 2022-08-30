@@ -11,13 +11,13 @@ import {
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
-import { ICategory, IUser } from '../../types'
+import { ICategory } from '../../types'
 import { formatPrice } from '../../utils/format'
+import { GetUseType } from '../../utils/getUserType'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -29,13 +29,10 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dataCategory }: NavBarProps) {
-    const { user, isAuthenticated, signOut, userData } = useContext(AuthContext)
-    const [userJson, setUserJson] = useState<IUser | undefined>()
+    const { isAuthenticated, signOut } = useContext(AuthContext)
     const { cart } = useCart()
     const cartSize = cart.length
-    const router = useRouter()
     const [isOn, setIsOn] = useState(false)
-    const [show, setShow] = useState(false)
     const [isUser, setIsUser] = useState(false)
     const total = formatPrice(
         cart.reduce((sumTotal, product) => {
@@ -48,28 +45,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     }
 
     useEffect(() => {
-        if (
-            router.asPath == '/shipping/address' ||
-            router.asPath == '/cart' ||
-            router.asPath == '/shipping' ||
-            router.asPath == '/shipping/payment' ||
-            router.asPath == '/shipping/payment/credit' ||
-            router.asPath == '/shipping/payment/pix'
-        ) {
-            setShow(true)
-        } else {
-            setShow(false)
-        }
-    }, [router])
-
-    useEffect(() => {
-        if (!user) {
-            return
-        }
-        setUserJson(JSON.parse(user))
-    }, [user])
-
-    useEffect(() => {
         if (!isAuthenticated) {
             setIsUser(false)
         } else {
@@ -77,13 +52,16 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         }
     }, [isAuthenticated])
 
+    const user = GetUseType()
+
     return (
         <>
             <div className="fixed z-20 w-full">
                 <div className="glass">
                     <nav
-                        className={`relative mt-0 w-full ${userData?.type ? 'bg-base-100' : 'bg-primary'
-                            }`}
+                        className={`relative mt-0 w-full ${
+                            user?.type ? 'bg-base-100' : 'bg-primary'
+                        }`}
                     >
                         <div className="w-full">
                             <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
@@ -131,7 +109,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </div>
                                 </div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
-                                    {isUser == false ? (
+                                    {!isUser ? (
                                         <Link href={'/login'} passHref>
                                             <div className="flex justify-end flex-col items-center cursor-pointer">
                                                 <FontAwesomeIcon
@@ -148,7 +126,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             >
                                                 <span className="normal-case text-white">
                                                     Olá,{' '}
-                                                    {UniqueName(userJson?.name)}
+                                                    {UniqueName(user?.name)}
                                                 </span>
                                                 <FontAwesomeIcon
                                                     icon={faCircleUser}
@@ -295,7 +273,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             <div
                 className={
                     'drawer absolute transition-all duration-500 h-[100vh] ' +
-                    (isOn == false ? '-z-10 -ml-[200vw]' : 'z-50 block')
+                    (!isOn ? '-z-10 -ml-[200vw]' : 'z-50 block')
                 }
             >
                 <input
@@ -306,7 +284,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                 <div
                     className={
                         'drawer-content transition-all duration-500 delay-500 ' +
-                        (isOn == true ? 'hidden -z-10' : 'block z-50')
+                        (isOn ? 'hidden -z-10' : 'block z-50')
                     }
                 ></div>
                 <div className="drawer-side">
@@ -319,11 +297,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>
-                                    {isUser == false ? (
+                                    {!isUser ? (
                                         <UserCircleIcon className="w-10 h-10" />
                                     ) : (
                                         <img
-                                            src={userJson?.profile_photo_url}
+                                            src={user?.profile_photo_url}
                                             alt="Foto do Usuário"
                                             width={40}
                                             height={40}
@@ -331,15 +309,15 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         />
                                     )}
                                 </div>
-                                {isUser == true ? (
+                                {isUser ? (
                                     <div className="flex flex-col pl-6">
                                         <h1 className="text-xl font-semibold text-PrimaryText">
-                                            {FirstAllUpper(userJson?.name)}
+                                            {FirstAllUpper(user?.name)}
                                         </h1>
                                         <h2 className="text-PrimaryText">
-                                            {userJson?.type == 0
+                                            {user?.type == 1
                                                 ? 'Revendedor'
-                                                : 'Comprador'}
+                                                : 'Consumidor'}
                                         </h2>
                                     </div>
                                 ) : (
@@ -425,7 +403,12 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <li>
                             <div className="flex py-8">
                                 <LogoutIcon className="h-5 w-5 text-PrimaryText" />
-                                <a className="text-PrimaryText">Sair</a>
+                                <a
+                                    className="text-PrimaryText"
+                                    onClick={signOut}
+                                >
+                                    Sair
+                                </a>
                             </div>
                         </li>
                     </ul>

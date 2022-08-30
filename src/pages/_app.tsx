@@ -1,16 +1,17 @@
 import { NextComponentType, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
 import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
 import NavBar from '../components/NavBar'
-import { AuthContext, AuthProvider } from '../context/AuthContext'
+import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { GetUseType } from '../utils/getUserType'
 
 interface AppProps {
     data: {
@@ -22,17 +23,17 @@ interface AppProps {
 
 export default function MyApp({ Component, pageProps, data }: AppProps) {
     const router = useRouter()
-    const { userData } = useContext(AuthContext)
     const [width, setWidth] = useState('')
 
     useEffect(() => {
-        console.log(userData)
         if (router.asPath == '/terms' || router.asPath == '/politics') {
             setWidth('max-w-2xl')
         } else {
             setWidth('max-w-md')
         }
     })
+
+    const userData = GetUseType()
 
     return (
         <AuthProvider data-theme={`${userData?.type ? 'dark' : 'light'}`}>
