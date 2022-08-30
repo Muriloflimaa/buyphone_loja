@@ -18,7 +18,7 @@ const ShippingCard = (props: any) => {
         } else {
             setMessage('Informações para entrega')
         }
-    })
+    }, [])
 
     return (
         <>

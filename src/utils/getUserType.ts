@@ -11,6 +11,6 @@ export const GetUseType = () => {
             return
         }
         setUserJson(JSON.parse(user))
-    })
+    }, [user])
     return userJson
 }

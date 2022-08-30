@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
-import styles from './styles.module.scss'
 
 interface ProductCardProps {
     id: number
@@ -72,7 +71,7 @@ const ProductCard = ({
         if (colorPhone == 'Rosa') {
             setColor('bg-pink-200')
         }
-    })
+    }, [])
 
     const { addProduct } = useCart()
 
