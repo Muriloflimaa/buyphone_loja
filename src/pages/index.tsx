@@ -3,7 +3,6 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useEffect } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
@@ -79,7 +78,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                 )
                                 const ourPrice = averagePrice - discountPrice
 
-                                return ourPrice && (
+                                return ourPrice > 0 && (
                                     <ProductCard
                                         key={products.id}
                                         id={products.id}
