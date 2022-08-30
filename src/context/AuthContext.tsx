@@ -59,7 +59,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const UserObject = {
                 name: name,
                 id: id,
-                type: 1,
+                type: type,
                 profile_photo_url: profile_photo_url,
             }
             const token = response.data.authorization.token
