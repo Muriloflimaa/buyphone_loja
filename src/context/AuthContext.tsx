@@ -81,7 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             await apiLogin.post('/logout')
             destroyCookie(undefined, '@BuyPhone:User')
             destroyCookie(undefined, '@BuyPhone:Token')
-            window.location.href = '/'
+            Router.push('/')
         } catch (error) {
             toast.error('Não foi possível deslogar')
         }
