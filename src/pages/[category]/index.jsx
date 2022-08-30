@@ -1,10 +1,14 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useContext } from 'react'
 import ProductCard from '../../components/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Products({ data }) {
+    const { userData } = useContext(AuthContext)
+    const discount = userData?.type === 1 ? 12.5 : 7
     return (
         <>
             <div className="h-auto">
@@ -20,19 +24,42 @@ export default function Products({ data }) {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.products.length > 0 ? (
-                        data.data.products.map((products) => (
-                            <ProductCard
-                                id={products.id}
-                                name={products.name}
-                                colorPhone={products.color}
-                                averagePrice={products.price}
-                                price={products.price}
-                                image={products.media[0].original_url}
-                                memory={products.memory}
-                                slug={products.slug}
-                                slugCategory={data.data.slug}
-                            />
-                        ))
+                        data.data.products.map((products) => {
+                            const itens = [
+                                products.price,
+                                products.magalu_price,
+                                products.americanas_price,
+                                products.casasbahia_price,
+                                products.ponto_price,
+                            ]
+                            const filteredItens = itens.filter((item) => item)
+                            const averagePrice =
+                                filteredItens.length > 0
+                                    ? Math.min(...filteredItens)
+                                    : 0
+                            const discountPrice = Math.round(
+                                averagePrice * (discount / 100)
+                            )
+                            const ourPrice = averagePrice - discountPrice
+
+                            return ourPrice ? (
+                                <ProductCard
+                                    key={products.id}
+                                    id={products.id}
+                                    name={products.name}
+                                    // idCategory={category.id}
+                                    colorPhone={products.color}
+                                    price={ourPrice}
+                                    averagePrice={averagePrice}
+                                    slug={products.slug}
+                                    // slugCategory={category.slug}
+                                    image={products.media[0].original_url}
+                                    memory={products.memory}
+                                />
+                            ) : (
+                                <></>
+                            )
+                        })
                     ) : (
                         <span>Categoria de produtos não disponíveis.</span>
                     )}
