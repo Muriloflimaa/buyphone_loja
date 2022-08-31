@@ -4,13 +4,14 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { apiPedidos } from '../../../services/apiClient'
+import { apiPedidos } from '../../services/apiClient'
 import {
     removeDuplicatesColorsProducts,
     removeDuplicatesImageProducts,
     removeDuplicatesMemoryProducts,
-} from '../../../utils/formatColor'
-import { refact } from '../../../utils/RefctDescript'
+} from '../../utils/formatColor'
+import { refact } from '../../utils/RefctDescript'
+import { apiBeta } from '../../services/apibeta'
 
 export default function Products({ data }) {
     const [qtd, setQtd] = useState(0)
@@ -296,39 +297,30 @@ export default function Products({ data }) {
     )
 }
 
-export const getStaticProps = async (context) => {
-    try {
-        const { params } = context
-        const { data } = await apiPedidos.get(
-            `categories/${params.category}/${params.product}`
-        )
-        return {
-            props: {
-                data,
-            },
-        }
-    } catch (error) {
-        return {
-            props: {
-                data: null,
-            },
-        }
-    }
-}
-
 export async function getStaticPaths() {
     const { data } = await apiPedidos.get(`categories/`)
 
-    const paths = data.data.map((category) => {
-        data.data.map((products) => {
+    const paths = data.data.map((category) =>
+        category.products.map((products) => {
             return {
-                params: {
-                    product: `${products.slug}`,
-                    category: `${category.slug} `,
-                },
+                params: { products: `${category.slug}/${products.slug}` },
             }
         })
-    })
+    )
 
-    return { paths, fallback: false }
+    return {
+        paths,
+        fallback: true,
+    }
+}
+
+export async function getStaticProps({ params }) {
+    const { products } = params
+    const { data } = await apiBeta.get(`products/${products}`)
+    return {
+        props: {
+            data,
+        },
+        revalidate: 60,
+    }
 }
