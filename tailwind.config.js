@@ -49,7 +49,7 @@ module.exports = {
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',
-                    'info-content': '#FFFFFF',
+                    'info-content': '#201942',
                     '--glass-blur': '20px',
                 },
                 dark: {
