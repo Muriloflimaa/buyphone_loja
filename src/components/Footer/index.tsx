@@ -12,7 +12,6 @@ import Parc2Svg from '../../assets/images/image28.svg'
 import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
 
-
 interface FooterProps {
     dataCategory: {
         data: Array<ICategory>
@@ -24,7 +23,9 @@ export default function Footer({ dataCategory }: FooterProps) {
         <footer className="bg-secondary w-full py-6 pb-32 p-4 md:pb-6">
             <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between gap-y-12 md:gap-y-0 gap-x-6">
                 <div>
-                    <h3 className="font-bold text-lg mb-3 text-info-content">Categorias</h3>
+                    <h3 className="font-bold text-lg mb-3 text-info-content">
+                        Categorias
+                    </h3>
                     <ul className="text-info-content gap-1 opacity-90">
                         {dataCategory.data.length > 0 ? (
                             dataCategory.data.map((category) => {
@@ -45,7 +46,9 @@ export default function Footer({ dataCategory }: FooterProps) {
                     </ul>
                 </div>
                 <div>
-                    <h3 className="font-bold text-lg mb-3 text-info-content">Mais informaçoes</h3>
+                    <h3 className="font-bold text-lg mb-3 text-info-content">
+                        Mais informaçoes
+                    </h3>
                     <ul className="gap-1 opacity-90 text-info-content">
                         <Link href={'/politics'} passHref>
                             <li className="link cursor-pointer">
@@ -60,36 +63,50 @@ export default function Footer({ dataCategory }: FooterProps) {
                     </ul>
                 </div>
                 <div>
-                    <h3 className="font-bold text-lg mb-3 text-info-content">Contatos</h3>
+                    <h3 className="font-bold text-lg mb-3 text-info-content">
+                        Contatos
+                    </h3>
                     <ul className="text-sm block leading-6 text-info-content">
                         <li>
-                            <a
-                                href="mailto:contatobuyphone@gmail.com"
-                                className="flex items-center"
-                            >
-                                <FontAwesomeIcon icon={faEnvelope} className='mr-2 text-info-content' />
-                                contatobuyphone@gmail.com
-                            </a>
+                            <Link href={'mailto:contatobuyphone@gmail.com'}>
+                                <a className="flex items-center">
+                                    <FontAwesomeIcon
+                                        icon={faEnvelope}
+                                        className="mr-2 text-info-content"
+                                    />
+                                    contatobuyphone@gmail.com
+                                </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="https://www.facebook.com/Buyphone.match"
-                                target="_blank"
-                                className="flex items-center"
+                            <Link
+                                href={'https://www.facebook.com/Buyphone.match'}
                             >
-                                   <FontAwesomeIcon icon={faFacebook} className='mr-2 text-info-content' />
-                                BuyPhone
-                            </a>
+                                <a
+                                    target="_blank"
+                                    className="flex items-center"
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faFacebook}
+                                        className="mr-2 text-info-content"
+                                    />
+                                    BuyPhone
+                                </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="https://instagram.com/buyphone.match"
-                                target="_blank"
-                                className="flex items-center text-info-content"
-                            >
-                                <FontAwesomeIcon icon={faInstagram} className='mr-2 text-info-content' />
-                                buyphone.match
-                            </a>
+                            <Link href={'https://instagram.com/buyphone.match'}>
+                                <a
+                                    target="_blank"
+                                    className="flex items-center text-info-content"
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faInstagram}
+                                        className="mr-2 text-info-content"
+                                    />
+                                    buyphone.match
+                                </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
