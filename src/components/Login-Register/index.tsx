@@ -20,7 +20,7 @@ const LoginRegister = ({ children, width }: Homeprops) => {
         } else {
             setWidth(false)
         }
-    })
+    }, [])
     return (
         <>
             <div className="glass z-10 fixed left-0 w-full h-full"></div>

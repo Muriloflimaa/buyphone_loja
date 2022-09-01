@@ -45,11 +45,11 @@ module.exports = {
                     ...require('daisyui/src/colors/themes')[
                         '[data-theme=light]'
                     ],
-                    primary: '#201942',
+                    primary: '#06002A',
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',
-                    'info-content': '#FFFFFF',
+                    'info-content': '#201942',
                     '--glass-blur': '20px',
                 },
                 dark: {
@@ -58,7 +58,7 @@ module.exports = {
                     ],
                     'base-100': '#161C24',
                     'base-content': '#FFFFFF',
-                    primary: '#0E9AFF',
+                    primary: '#161C24',
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',

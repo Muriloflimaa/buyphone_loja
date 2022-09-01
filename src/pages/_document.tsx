@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
                         rel="stylesheet"
                     />
                 </Head>
-                <body className="bg-base-200">
+                <body>
                     <Main />
                     <NextScript />
                 </body>

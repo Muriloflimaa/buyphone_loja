@@ -3,13 +3,12 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { useContext } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
-import { AuthContext } from '../context/AuthContext'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { GetUseType } from '../utils/getUserType'
 
 interface DataProps {
     data: {
@@ -23,14 +22,16 @@ interface CartItemsAmount {
 
 const Home: NextPage<DataProps> = ({ data }) => {
     const { cart } = useCart()
-    const { userData } = useContext(AuthContext)
+    // const { userData } = useContext(AuthContext)
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
         const newSumAmount = { ...sumAmount }
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
-    console.log(userData)
+
+    const userData = GetUseType()
+
     const discount = userData?.type === 1 ? 12.5 : 7
 
     return (
@@ -77,7 +78,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                 )
                                 const ourPrice = averagePrice - discountPrice
 
-                                return ourPrice ? (
+                                return ourPrice > 0 && (
                                     <ProductCard
                                         key={products.id}
                                         id={products.id}
@@ -91,8 +92,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                         image={products.media[0].original_url}
                                         memory={products.memory}
                                     />
-                                ) : (
-                                    <></>
                                 )
                             })
                         )

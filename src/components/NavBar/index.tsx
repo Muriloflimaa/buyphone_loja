@@ -11,13 +11,13 @@ import {
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
-import { ICategory, IUser } from '../../types'
+import { ICategory } from '../../types'
 import { formatPrice } from '../../utils/format'
+import { GetUseType } from '../../utils/getUserType'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -29,13 +29,10 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dataCategory }: NavBarProps) {
-    const { user, isAuthenticated, signOut, userData } = useContext(AuthContext)
-    const [userJson, setUserJson] = useState<IUser | undefined>()
+    const { isAuthenticated, signOut } = useContext(AuthContext)
     const { cart } = useCart()
     const cartSize = cart.length
-    const router = useRouter()
     const [isOn, setIsOn] = useState(false)
-    const [show, setShow] = useState(false)
     const [isUser, setIsUser] = useState(false)
     const total = formatPrice(
         cart.reduce((sumTotal, product) => {
@@ -48,28 +45,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     }
 
     useEffect(() => {
-        if (
-            router.asPath == '/shipping/address' ||
-            router.asPath == '/cart' ||
-            router.asPath == '/shipping' ||
-            router.asPath == '/shipping/payment' ||
-            router.asPath == '/shipping/payment/credit' ||
-            router.asPath == '/shipping/payment/pix'
-        ) {
-            setShow(true)
-        } else {
-            setShow(false)
-        }
-    }, [router])
-
-    useEffect(() => {
-        if (!user) {
-            return
-        }
-        setUserJson(JSON.parse(user))
-    }, [user])
-
-    useEffect(() => {
         if (!isAuthenticated) {
             setIsUser(false)
         } else {
@@ -77,22 +52,20 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         }
     }, [isAuthenticated])
 
+    const user = GetUseType()
+
     return (
         <>
             <div className="fixed z-20 w-full">
                 <div className="glass">
-                    <nav
-                        className={`relative mt-0 w-full ${
-                            userData?.type ? 'bg-base-100' : 'bg-primary'
-                        }`}
-                    >
+                    <nav className="relative mt-0 w-full bg-primary">
                         <div className="w-full">
                             <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
                                 <div className="block md:hidden">
                                     {/* CHAMA O MENU */}
                                     <label
                                         htmlFor="my-drawer"
-                                        className="btn btn-circle swap swap-rotate transition-none absolute -mt-[20px]"
+                                        className="btn btn-circle bg-transparent border-none swap swap-rotate transition-none absolute -mt-[20px]"
                                         onClick={handleClick}
                                     >
                                         <input type="checkbox" />
@@ -116,6 +89,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             src={Logo}
                                             className="cursor-pointer"
                                             layout="fixed"
+                                            alt="Logo BuyPhone"
                                         />
                                     </a>
                                 </Link>
@@ -132,7 +106,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </div>
                                 </div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
-                                    {isUser == false ? (
+                                    {!isUser ? (
                                         <Link href={'/login'} passHref>
                                             <div className="flex justify-end flex-col items-center cursor-pointer">
                                                 <FontAwesomeIcon
@@ -149,7 +123,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             >
                                                 <span className="normal-case text-white">
                                                     Olá,{' '}
-                                                    {UniqueName(userJson?.name)}
+                                                    {UniqueName(user?.name)}
                                                 </span>
                                                 <FontAwesomeIcon
                                                     icon={faCircleUser}
@@ -296,7 +270,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             <div
                 className={
                     'drawer absolute transition-all duration-500 h-[100vh] ' +
-                    (isOn == false ? '-z-10 -ml-[200vw]' : 'z-50 block')
+                    (!isOn ? '-z-10 -ml-[200vw]' : 'z-50 block')
                 }
             >
                 <input
@@ -307,7 +281,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                 <div
                     className={
                         'drawer-content transition-all duration-500 delay-500 ' +
-                        (isOn == true ? 'hidden -z-10' : 'block z-50')
+                        (isOn ? 'hidden -z-10' : 'block z-50')
                     }
                 ></div>
                 <div className="drawer-side">
@@ -320,11 +294,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
                             <div className="flex justify-between items-center p-6">
                                 <div>
-                                    {isUser == false ? (
+                                    {!isUser ? (
                                         <UserCircleIcon className="w-10 h-10" />
                                     ) : (
                                         <img
-                                            src={userJson?.profile_photo_url}
+                                            src={user?.profile_photo_url}
                                             alt="Foto do Usuário"
                                             width={40}
                                             height={40}
@@ -332,21 +306,21 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         />
                                     )}
                                 </div>
-                                {isUser == true ? (
+                                {isUser ? (
                                     <div className="flex flex-col pl-6">
-                                        <h1 className="text-xl font-semibold text-PrimaryText">
-                                            {FirstAllUpper(userJson?.name)}
+                                        <h1 className="text-xl font-semibold text-info-content">
+                                            {FirstAllUpper(user?.name)}
                                         </h1>
-                                        <h2 className="text-PrimaryText">
-                                            {userJson?.type == 0
+                                        <h2 className="text-info-content">
+                                            {user?.type == 1
                                                 ? 'Revendedor'
-                                                : 'Comprador'}
+                                                : 'Consumidor'}
                                         </h2>
                                     </div>
                                 ) : (
                                     <div className="flex justify-center items-center w-full p-4">
                                         <Link href={'/login'} passHref>
-                                            <a className="link text-PrimaryText">
+                                            <a className="link text-info-content">
                                                 Realizar login
                                             </a>
                                         </Link>
@@ -361,7 +335,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 <input type="checkbox" />
                                 <div>
                                     <svg
-                                        className="swap-off fill-current text-PrimaryText z-20"
+                                        className="swap-off fill-current text-info-content z-20"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="32"
                                         height="32"
@@ -375,8 +349,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         <Link href={'/'}>
                             <li>
                                 <div className="flex py-8">
-                                    <HomeIcon className="h-5 w-5 text-PrimaryText" />
-                                    <a className="text-PrimaryText">
+                                    <HomeIcon className="h-5 w-5 text-info-content" />
+                                    <a className="text-info-content">
                                         Página inicial
                                     </a>
                                 </div>
@@ -388,18 +362,17 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                 className="collapse collapse-arrow flex flex-col px-4 py-3 gap-0 h-auto p-0 items-start"
                             >
                                 <div className="collapse-title min-h-0 text-xl font-medium flex items-center p-0 relative">
-                                    <ShoppingBagIcon className="h-5 w-5 text-PrimaryText" />
-                                    <a className="text-PrimaryText font-normal text-base collapse-title">
+                                    <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                                    <a className="text-info-content font-normal text-base collapse-title">
                                         Produtos
                                     </a>
                                 </div>
-                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-PrimaryText font-normal text-base">
+                                <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
                                     {dataCategory.data.length > 0 ? (
                                         dataCategory.data.map((category) => {
                                             return (
                                                 <li key={category.id}>
                                                     <Link
-                                                        key={category.id}
                                                         href={`/${category.slug}`}
                                                     >
                                                         <a className="w-max">
@@ -420,14 +393,19 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         </li>
                         <li>
                             <div className="flex py-8">
-                                <UserIcon className="h-5 w-5 text-PrimaryText" />
-                                <a className="text-PrimaryText">Minha conta</a>
+                                <UserIcon className="h-5 w-5 text-info-content" />
+                                <a className="text-info-content">Minha conta</a>
                             </div>
                         </li>
                         <li>
                             <div className="flex py-8">
-                                <LogoutIcon className="h-5 w-5 text-PrimaryText" />
-                                <a className="text-PrimaryText">Sair</a>
+                                <LogoutIcon className="h-5 w-5 text-info-content" />
+                                <a
+                                    className="text-info-content"
+                                    onClick={signOut}
+                                >
+                                    Sair
+                                </a>
                             </div>
                         </li>
                     </ul>

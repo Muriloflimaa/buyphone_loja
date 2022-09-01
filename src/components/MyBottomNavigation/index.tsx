@@ -18,7 +18,6 @@ const MyBottomNavigation = () => {
     const colors = ['#FFE85B', '#EE466B', '#7959FD', '#3E9EFB', '#4CF0DE']
 
     const handleSlide = (where: number) => {
-        console.log()
         setMove(positions[where] + '%')
         setColor(colors[where])
         setPos(positions[where].toString())

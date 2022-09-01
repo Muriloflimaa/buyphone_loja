@@ -40,6 +40,7 @@ export const setCookies = (key: any, value: any) => {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const { '@BuyPhone:User': user } = parseCookies()
+
     const [userData, setUserData] = useState<UserDataType | undefined>()
 
     const isAuthenticated = !!user
@@ -69,6 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setCookies('@BuyPhone:Token', token)
 
             window.location.href = '/'
+            Router.push('/')
         } catch (error) {
             toast.error('Não foi possível fazer o login')
         }
@@ -79,7 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             await apiLogin.post('/logout')
             destroyCookie(undefined, '@BuyPhone:User')
             destroyCookie(undefined, '@BuyPhone:Token')
-            window.location.href = '/'
+            Router.push('/')
         } catch (error) {
             toast.error('Não foi possível deslogar')
         }

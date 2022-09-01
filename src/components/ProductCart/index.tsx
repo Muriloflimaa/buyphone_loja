@@ -20,7 +20,7 @@ const ProductCart = () => {
         } else {
             setShow(false)
         }
-    })
+    }, [])
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
@@ -31,7 +31,7 @@ const ProductCart = () => {
         } else {
             setPadding(false)
         }
-    })
+    }, [])
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
 
@@ -77,7 +77,6 @@ const ProductCart = () => {
                     >
                         <div
                             className="flex justify-between w-full"
-                            key={product.id}
                             data-testid="product"
                         >
                             <div className="flex gap-3">
