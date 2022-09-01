@@ -100,7 +100,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             <input
                                                 type="text"
                                                 placeholder="Pesquisa..."
-                                                className="input input-bordered rounded-md !important w-full text-PrimaryText"
+                                                className="input input-bordered rounded-md !important w-full text-info-content"
                                             />
                                         </label>
                                     </div>
