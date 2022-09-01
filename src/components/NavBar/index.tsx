@@ -176,7 +176,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
 
                                         <div
                                             tabIndex={0}
-                                            className="mt-3 card card-compact dropdown-content bg-colorCard w-80  shadow-2xl"
+                                            className="mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl"
                                         >
                                             <div className="card-body">
                                                 <div className="flex justify-between">
