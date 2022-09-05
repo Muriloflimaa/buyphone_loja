@@ -34,6 +34,7 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<P>) {
                     },
                 }
             }
+            //se o tempo for maior que 10 minutos, volta para  a home
             if (days > 10) {
                 return {
                     redirect: {
@@ -42,6 +43,7 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<P>) {
                     },
                 }
             }
+             //se o tempo for menor que 0 minutos ele entende que acabou o tempo de login e deixa o login ser refeito
         }
         return await fn(ctx)
     }
