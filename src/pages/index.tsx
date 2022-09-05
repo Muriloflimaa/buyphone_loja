@@ -3,12 +3,14 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { parseCookies } from 'nookies'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
+import jwt_decode from 'jwt-decode'
 
 interface DataProps {
     data: {
@@ -33,6 +35,30 @@ const Home: NextPage<DataProps> = ({ data }) => {
     const userData = GetUseType()
 
     const discount = userData?.type === 1 ? 12.5 : 7
+
+    const cookies = parseCookies(undefined)
+
+    if (cookies['@BuyPhone:Token']) {
+        const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
+        const timeElapsed = Date.now() // pega a data de agora
+        const today = new Date(timeElapsed)
+        const d = new Date(0)
+
+        d.setUTCSeconds(decodedToken.exp) // pega a data do token e transforma ela em tempo
+
+        const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
+        const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
+
+        console.log(days)
+        //se faltar 10 minutos para o token expirar chama o refresh e seta tudo no cookies novamente
+        if (days < 10 && days > 0) {
+            console.log('chama o refresh')
+        }
+        //se o tempo for maior que 10 minutos, volta para  a home
+        if (days > 10) {
+            console.log('tempo maior que 10 minutos')
+        }
+    }
 
     return (
         <>
