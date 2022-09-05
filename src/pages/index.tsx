@@ -1,16 +1,15 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
-import { apiBeta } from '../services/apibeta'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
     data: {
@@ -61,35 +60,35 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
                             category.products.map((products) => {
-                                const itens = [
-                                    products.price,
-                                    products.magalu_price,
-                                    products.americanas_price,
-                                    products.casasbahia_price,
-                                    products.ponto_price,
-                                ]
-                                const filteredItens = itens.filter(
-                                    (item) => item
-                                )
-                                const averagePrice =
-                                    filteredItens.length > 0
-                                        ? Math.min(...filteredItens)
-                                        : 0
-                                const discountPrice = Math.round(
-                                    averagePrice * (discount / 100)
-                                )
-                                const ourPrice = averagePrice - discountPrice
-
+                                const returnPrice = verificationPrice(products)
+                                // const itens = [
+                                //     products.price,
+                                //     products.magalu_price,
+                                //     products.americanas_price,
+                                //     products.casasbahia_price,
+                                //     products.ponto_price,
+                                // ]
+                                // const filteredItens = itens.filter(
+                                //     (item) => item
+                                // )
+                                // const averagePrice =
+                                //     filteredItens.length > 0
+                                //         ? Math.min(...filteredItens)
+                                //         : 0
+                                // const discountPrice = Math.round(
+                                //     averagePrice * (discount / 100)
+                                // )
+                                // const ourPrice = averagePrice - discountPrice
                                 return (
-                                    ourPrice > 0 && (
+                                    returnPrice.ourPrice > 0 && (
                                         <ProductCard
                                             key={products.id}
                                             id={products.id}
                                             name={products.name}
                                             idCategory={category.id}
                                             colorPhone={products.color}
-                                            price={ourPrice}
-                                            averagePrice={averagePrice}
+                                            price={returnPrice.ourPrice}
+                                            averagePrice={returnPrice.averagePrice}
                                             slug={products.slug}
                                             slugCategory={category.slug}
                                             image={
