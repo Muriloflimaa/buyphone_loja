@@ -58,7 +58,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         <>
             <div className="fixed z-20 w-full">
                 <div className="glass">
-                    <nav className="relative mt-0 w-full bg-primary">
+                    <nav className="relative mt-0 w-full bg-primary/[.9]">
                         <div className="w-full">
                             <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
                                 <div className="block md:hidden">
@@ -100,7 +100,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             <input
                                                 type="text"
                                                 placeholder="Pesquisa..."
-                                                className="input input-bordered rounded-md !important w-full text-PrimaryText"
+                                                className="input input-bordered rounded-md !important w-full text-info-content"
                                             />
                                         </label>
                                     </div>
@@ -178,7 +178,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
 
                                         <div
                                             tabIndex={0}
-                                            className="mt-3 card card-compact dropdown-content bg-colorCard w-80  shadow-2xl"
+                                            className="mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl"
                                         >
                                             <div className="card-body">
                                                 <div className="flex justify-between">
