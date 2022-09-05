@@ -41,7 +41,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
             dataTheme={`${userData?.type === 1 ? 'dark' : 'light'}`}
             className="bg-base-100"
         >
-             <Toaster position="top-right" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <AuthProvider>
                 {router.route === `/login` ||
                 router.route === `/register` ||
@@ -53,7 +53,6 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
                     </LoginRegister>
                 ) : (
                     <>
-                       
                         <CartProvider>
                             <NavBar dataCategory={data} />
                             <div className="py-12 md:py-20"></div>

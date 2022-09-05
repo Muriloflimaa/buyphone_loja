@@ -82,15 +82,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (cookies['@BuyPhone:Token']) {
             const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-            const timeElapsed = Date.now() // pega a data de agora
-            const today = new Date(timeElapsed)
+            const timeElapsed = Date.now() // pega o tempo de agora compativel com jwt exp
+            const today = new Date(timeElapsed) //transforma em uma data, tempo de agora
             const d = new Date(0)
 
-            d.setUTCSeconds(decodedToken.exp) // pega a data do token e transforma ela em tempo
+            d.setUTCSeconds(decodedToken.exp) // pega a data do token e transforma ela em tempo segundos
 
             const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
             const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
-
+            console.log(today)
             // Se existir um Token e ele tiver o tempo menor que 0 minutos ele nao vai chamar a api vai só limpar os tokens
             if (days < 0) {
                 destroyCookie(undefined, '@BuyPhone:User')
