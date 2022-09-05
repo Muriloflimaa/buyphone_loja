@@ -92,10 +92,8 @@ export default function login() {
     )
 }
 
-export const getServerSideProps = WithSSRGuest({
-    fn: async (ctx) => {
-        return {
-            props: {},
-        }
-    },
+export const getServerSideProps = WithSSRGuest(async (ctx) => {
+    return {
+        props: {},
+    }
 })

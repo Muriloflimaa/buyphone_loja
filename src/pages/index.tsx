@@ -11,6 +11,9 @@ import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import jwt_decode from 'jwt-decode'
+import { apiLogin } from '../services/apiLogin'
+import { setCookies } from '../context/AuthContext'
+import { PersistentLogin } from '../utils/PersistentLogin'
 
 interface DataProps {
     data: {
@@ -50,14 +53,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
         const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
 
         console.log(days)
-        //se faltar 10 minutos para o token expirar chama o refresh e seta tudo no cookies novamente
-        if (days < 10 && days > 0) {
-            console.log('chama o refresh')
-        }
-        //se o tempo for maior que 10 minutos, volta para  a home
-        if (days > 10) {
-            console.log('tempo maior que 10 minutos')
-        }
     }
 
     return (
@@ -150,7 +145,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps = PersistentLogin(async (ctx) => {
     try {
         const { data } = await apiPedidos.get(`categories/`)
         return {
@@ -165,6 +160,6 @@ export const getStaticProps: GetStaticProps = async () => {
             },
         }
     }
-}
+})
 
 export default Home
