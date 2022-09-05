@@ -90,12 +90,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
             const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
- 
+
             // Se existir um Token e ele tiver o tempo menor que 0 minutos ele nao vai chamar a api vai só limpar os tokens
-            if (days < 0){
-            destroyCookie(undefined, '@BuyPhone:User')
-            destroyCookie(undefined, '@BuyPhone:Token')
-            Router.push('/')
+            if (days < 0) {
+                destroyCookie(undefined, '@BuyPhone:User')
+                destroyCookie(undefined, '@BuyPhone:Token')
+                Router.push('/')
             }
             // se existir um token maior que os 10 minutos ele vai chamar a api de logout e destruir os tokens
             else {
@@ -108,10 +108,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     toast.error('Não foi possível deslogar')
                 }
             }
-        }else{
+        } else {
             toast.error('Você precisa estar logado')
         }
-        
     }
 
     return (

@@ -7,10 +7,10 @@ import { parseCookies } from 'nookies'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 
-export function WithSSRGuest<P>(fn: GetServerSideProps<P>) {
+export function WithSSRGuest({ fn }: { fn: GetServerSideProps<any> }) {
     return async (
         ctx: GetServerSidePropsContext
-    ): Promise<GetServerSidePropsResult<P>> => {
+    ): Promise<GetServerSidePropsResult<any>> => {
         const cookies = parseCookies(ctx)
 
         if (cookies['@BuyPhone:Token']) {
@@ -43,7 +43,7 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<P>) {
                     },
                 }
             }
-             //se o tempo for menor que 0 minutos ele entende que acabou o tempo de login e deixa o login ser refeito
+            //se o tempo for menor que 0 minutos ele entende que acabou o tempo de login e deixa o login ser refeito
         }
         return await fn(ctx)
     }
