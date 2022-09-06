@@ -60,9 +60,6 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
                 }
             }
             //se o tempo for maior que 10 minutos, não fazer nada
-            else if (days > 10) {
-                return await fn(ctx)
-            }
         }
         return await fn(ctx)
     }
