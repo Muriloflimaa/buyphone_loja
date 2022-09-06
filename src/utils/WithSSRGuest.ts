@@ -3,7 +3,7 @@ import {
     GetServerSidePropsContext,
     GetServerSidePropsResult,
 } from 'next'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 import { setCookies } from '../context/AuthContext'
@@ -25,9 +25,10 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
             const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
             const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
 
-            //se o token expirou deixar fazer o login
+            //se existir um token e estiver expirado, mandar para o login
             if (Date.now() >= decodedToken.exp * 1000) {
-                console.log('expirou, deixa ir pro login')
+                destroyCookie(ctx, '@BuyPhone:User')
+                destroyCookie(ctx, '@BuyPhone:Token')
             }
             //se estiver dentro de 10 minutos para expirar, fazer o refresh
             else if (days <= 10 && days >= 0) {

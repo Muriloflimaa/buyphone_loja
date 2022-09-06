@@ -39,22 +39,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
     const discount = userData?.type === 1 ? 12.5 : 7
 
-    const cookies = parseCookies(undefined)
-
-    if (cookies['@BuyPhone:Token']) {
-        const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-        const timeElapsed = Date.now() // pega a data de agora
-        const today = new Date(timeElapsed)
-        const d = new Date(0)
-
-        d.setUTCSeconds(decodedToken.exp) // pega a data do token e transforma ela em tempo
-
-        const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
-        const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
-
-        console.log(days)
-    }
-
     return (
         <>
             <div className="h-auto">

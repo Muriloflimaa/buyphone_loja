@@ -11,7 +11,7 @@ import { setCookies } from '../context/AuthContext'
 export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
     return async (
         ctx: GetServerSidePropsContext
-    ): Promise<GetServerSidePropsResult<void>> => {
+    ): Promise<GetServerSidePropsResult<P>> => {
         const cookies = parseCookies(ctx)
 
         if (cookies['@BuyPhone:Token']) {
@@ -27,8 +27,8 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
 
             //se existir um token e estiver expirado, mandar para o login
             if (Date.now() >= decodedToken.exp * 1000) {
-                destroyCookie(undefined, '@BuyPhone:User')
-                destroyCookie(undefined, '@BuyPhone:Token')
+                destroyCookie(ctx, '@BuyPhone:User')
+                destroyCookie(ctx, '@BuyPhone:Token')
                 return {
                     redirect: {
                         destination: '/login',
@@ -61,6 +61,7 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
             }
             //se o tempo for maior que 10 minutos, não fazer nada
             else if (days > 10) {
+                return await fn(ctx)
             }
         }
         return await fn(ctx)
