@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { apiLojaBeta } from '../services/apiBetaConfigs'
 import { GetUseType } from '../utils/getUserType'
 import ListProducts from '../components/ListProducts'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 function MyShopping() {
     const userData = GetUseType()
@@ -53,6 +54,22 @@ function MyShopping() {
             )}
         </div>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const cookies = parseCookies(ctx)
+
+    if (!cookies['@BuyPhone:User']) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: {},
+    }
 }
 
 export default MyShopping
