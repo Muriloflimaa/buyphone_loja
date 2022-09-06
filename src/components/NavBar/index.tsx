@@ -140,9 +140,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="https://loja.buyphone.com.br/minhas-compras">
-                                                        Minhas Compras
-                                                    </a>
+                                                    <Link href={'/myshopping'}>
+                                                        <a>Minhas Compras</a>
+                                                    </Link>
                                                 </li>
                                                 <li>
                                                     <button
