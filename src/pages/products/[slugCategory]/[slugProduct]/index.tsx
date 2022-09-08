@@ -175,10 +175,10 @@ export default function Products({ data }: DataProps) {
                                 data-testid="add-product-button"
                                 onClick={() => handleAddProduct(data.data.id)}
                             >
-                                Comprar
+                                Adicionar
                             </button>
                         </div>
-                        <div className="w-full rounded-lg text-info-content flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
+                        <div className="w-full rounded-lg text-info-content bg-accent flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
                             <div className="flex items-center md:items-center text-info-content">
                                 <h1>Frete: Grátis</h1>
                                 <h2 className="ml-2 text-xs text-gray-400">
@@ -186,8 +186,14 @@ export default function Products({ data }: DataProps) {
                                 </h2>
                             </div>
                             <div className="flex md:block gap-3 items-center">
-                                <button className="btn btn-Primary block md:hidden">
-                                    Comprar
+                                <button
+                                    className="btn btn-Primary block md:hidden"
+                                    data-testid="add-product-button"
+                                    onClick={() =>
+                                        handleAddProduct(data.data.id)
+                                    }
+                                >
+                                    Adicionar
                                 </button>
                             </div>
 
