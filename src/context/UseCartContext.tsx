@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast'
 import { apiPedidos } from '../services/apiClient'
 import { Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface CartProviderProps {
     children: ReactNode
@@ -87,8 +88,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
                 //Se não, obtem o produto da api e add ao carrinho com o valor de 1
                 const addProduct = await apiPedidos.get(`products/${productId}`)
                 const products = addProduct.data.data
+                // const returnPrice = verificationPrice(products)
+                // console.log(returnPrice)
 
-                //abaixo precisa typar o produto
                 const newProduct = {
                     id: products.id,
                     amount: 1,

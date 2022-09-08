@@ -70,7 +70,7 @@ const ProductCart = () => {
                 return (
                     <div
                         className={
-                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
+                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col ' +
                             (padding == true ? ' p-4' : ' p-0')
                         }
                         key={product.id}
@@ -143,7 +143,7 @@ const ProductCart = () => {
                                         handleRemoveProduct(product.id)
                                     }
                                 >
-                                    <TrashIcon className="h-4 w-4 text-PrimaryText" />
+                                    <TrashIcon className="h-4 w-4 " />
                                 </button>
                             </div>
                         </div>

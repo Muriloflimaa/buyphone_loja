@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../../../context/UseCartContext'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
-import { IProduct, Product } from '../../../../types'
+import { IProduct } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
 import { verificationColor } from '../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../utils/verificationPrice'
@@ -171,7 +171,7 @@ export default function Products({ data }: DataProps) {
                         </div>
                         <div className="hidden md:flex gap-3 items-center">
                             <button
-                                className="btn btn-Primary"
+                                className="btn btn-info text-white"
                                 data-testid="add-product-button"
                                 onClick={() => handleAddProduct(data.data.id)}
                             >
@@ -187,7 +187,7 @@ export default function Products({ data }: DataProps) {
                             </div>
                             <div className="flex md:block gap-3 items-center">
                                 <button
-                                    className="btn btn-Primary block md:hidden"
+                                    className="btn btn-info block md:hidden text-white"
                                     data-testid="add-product-button"
                                     onClick={() =>
                                         handleAddProduct(data.data.id)
@@ -198,7 +198,11 @@ export default function Products({ data }: DataProps) {
                             </div>
 
                             <div className="flex flex-col gap-3 md:hidden">
-                                <h1 className="text-xl">Descrição</h1>
+                                <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014]  items-center justify-start p-2 px-4 gap-1  md:items-start ">
+                                    <h1 className="text-base font-medium">
+                                        Descrição
+                                    </h1>
+                                </div>
                                 <p className="transition-all duration-500 delay-500">
                                     {description}
                                 </p>
