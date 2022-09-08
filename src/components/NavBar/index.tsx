@@ -15,7 +15,8 @@ import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
-import { ICategory } from '../../types'
+import { apiPedidos } from '../../services/apiClient'
+import { ICategory, Product } from '../../types'
 import { formatPrice } from '../../utils/format'
 import { GetUseType } from '../../utils/getUserType'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
@@ -30,6 +31,7 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { isAuthenticated, signOut } = useContext(AuthContext)
+    const [price, setPrice] = useState<any | undefined>()
     const { cart } = useCart()
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
@@ -51,6 +53,17 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             setIsUser(true)
         }
     }, [isAuthenticated])
+
+    useEffect(() => {
+        cart.map(async (data) => {
+            try {
+                const dat = await apiPedidos.get(`products/${data.id}`)
+                setPrice(dat)
+            } catch (error) {
+                console.log(error)
+            }
+        })
+    }, [])
 
     const user = GetUseType()
 

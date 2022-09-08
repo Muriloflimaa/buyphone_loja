@@ -3,6 +3,7 @@ import { GetUseType } from './getUserType'
 
 export const verificationPrice = (products: IProduct) => {
     const userData = GetUseType()
+
     const discount = userData?.type === 1 ? 12.5 : 7
     const itens = [
         products.price,

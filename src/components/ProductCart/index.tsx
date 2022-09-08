@@ -2,14 +2,28 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
+import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
 import { formatPrice } from '../../utils/format'
+import { verificationPrice } from '../../utils/verificationPrice'
 
 const ProductCart = () => {
     const router = useRouter()
-
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
+    const [price, setPrice] = useState<any | undefined>()
+
+    useEffect(() => {
+        cart.map(async (data) => {
+            try {
+                const dat = await apiPedidos.get(`products/${data.id}`)
+                setPrice(dat)
+                console.log(dat)
+            } catch (error) {
+                console.log(error)
+            }
+        })
+    }, [])
 
     useEffect(() => {
         if (
