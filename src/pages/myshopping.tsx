@@ -4,6 +4,7 @@ import { apiLojaBeta } from '../services/apiBetaConfigs'
 import { GetUseType } from '../utils/getUserType'
 import ListProducts from '../components/ListProducts'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { PersistentLogin } from '../utils/PersistentLogin'
 
 function MyShopping() {
     const userData = GetUseType()
@@ -56,20 +57,10 @@ function MyShopping() {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const cookies = parseCookies(ctx)
-
-    if (!cookies['@BuyPhone:User']) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false,
-            },
-        }
-    }
+export const getServerSideProps = PersistentLogin(async (ctx) => {
     return {
         props: {},
     }
-}
+})
 
 export default MyShopping

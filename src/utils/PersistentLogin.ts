@@ -4,10 +4,7 @@ import {
     GetServerSidePropsResult,
 } from 'next'
 import { destroyCookie, parseCookies } from 'nookies'
-import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
-import { setCookies } from '../context/AuthContext'
-import axios from 'axios'
 
 export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
     return async (
@@ -21,8 +18,8 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
 
             //se existir um token e estiver expirado, mandar para o login
             if (Date.now() >= decodedToken.exp * 1000) {
-                destroyCookie(undefined, '@BuyPhone:User')
-                destroyCookie(undefined, '@BuyPhone:Token')
+                destroyCookie(ctx, '@BuyPhone:User')
+                destroyCookie(ctx, '@BuyPhone:Token')
                 return {
                     redirect: {
                         destination: '/login',

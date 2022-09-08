@@ -19,6 +19,12 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
             if (Date.now() >= decodedToken.exp * 1000) {
                 destroyCookie(ctx, '@BuyPhone:User')
                 destroyCookie(ctx, '@BuyPhone:Token')
+                return {
+                    redirect: {
+                        destination: '/login',
+                        permanent: false,
+                    },
+                }
             }
             //se o token tiver válido mandar para a home
             else {
