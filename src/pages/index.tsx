@@ -8,6 +8,7 @@ import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { verificationColor } from '../utils/verificationColors'
 import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
