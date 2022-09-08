@@ -112,6 +112,7 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
             props: {
                 data,
             },
+            revalidate: 60 * 60 * 6,
         }
     } catch (error) {
         return {
