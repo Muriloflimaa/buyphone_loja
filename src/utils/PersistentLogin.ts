@@ -7,6 +7,7 @@ import { destroyCookie, parseCookies } from 'nookies'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 import { setCookies } from '../context/AuthContext'
+import axios from 'axios'
 
 export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
     return async (
@@ -37,8 +38,21 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
                 }
             }
             //se existir um token e se estiver dentro de 10 minutos para expirar, fazer o refresh e gravar os dados
-            else if (days <= 10 && days >= 0) {
-                const response = await apiLogin.post('/refresh')
+            if (days <= 10 && days >= 0) {
+                const config = {
+                    'Content-type': 'application/json',
+                    headers: {
+                        Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,
+                    },
+                }
+
+                const response = await axios.post(
+                    'https://loja.buyphone.com.br/api/refresh',
+                    null,
+                    config
+                )
+
+                // const response = await apiLogin.post('/refresh')
                 const { type, name, id, profile_photo_url } = response.data.user
 
                 const UserObject = {
@@ -58,9 +72,6 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
                         permanent: false,
                     },
                 }
-            }
-            //se o tempo for maior que 10 minutos, não fazer nada
-            else if (days > 10) {
             }
         }
         return await fn(ctx)

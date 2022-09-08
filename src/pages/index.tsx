@@ -3,7 +3,7 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
@@ -14,6 +14,7 @@ import jwt_decode from 'jwt-decode'
 import { apiLogin } from '../services/apiLogin'
 import { setCookies } from '../context/AuthContext'
 import { PersistentLogin } from '../utils/PersistentLogin'
+import axios from 'axios'
 
 interface DataProps {
     data: {

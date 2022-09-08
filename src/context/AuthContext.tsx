@@ -94,7 +94,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     destroyCookie(undefined, '@BuyPhone:Token')
                     Router.push('/')
                 } catch (error) {
-                    toast.error('Não foi possível deslogar')
+                    destroyCookie(undefined, '@BuyPhone:User')
+                    destroyCookie(undefined, '@BuyPhone:Token')
+                    Router.push('/')
                 }
             }
         } else {
