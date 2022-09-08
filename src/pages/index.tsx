@@ -78,20 +78,24 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                 )
                                 const ourPrice = averagePrice - discountPrice
 
-                                return ourPrice > 0 && (
-                                    <ProductCard
-                                        key={products.id}
-                                        id={products.id}
-                                        name={products.name}
-                                        idCategory={category.id}
-                                        colorPhone={products.color}
-                                        price={ourPrice}
-                                        averagePrice={averagePrice}
-                                        slug={products.slug}
-                                        slugCategory={category.slug}
-                                        image={products.media[0].original_url}
-                                        memory={products.memory}
-                                    />
+                                return (
+                                    ourPrice > 0 && (
+                                        <ProductCard
+                                            key={products.id}
+                                            id={products.id}
+                                            name={products.name}
+                                            idCategory={category.id}
+                                            colorPhone={products.color}
+                                            price={ourPrice}
+                                            averagePrice={averagePrice}
+                                            slug={products.slug}
+                                            slugCategory={category.slug}
+                                            image={
+                                                products.media[0].original_url
+                                            }
+                                            memory={products.memory}
+                                        />
+                                    )
                                 )
                             })
                         )
