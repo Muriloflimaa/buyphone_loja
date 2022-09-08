@@ -31,7 +31,6 @@ module.exports = {
                 PrimaryText: '#fff',
                 border: '#5F5F5F',
                 default: '#201942',
-                colorCard: '#212B36',
             },
             backgroundImage: {
                 curved: "url('../src/assets/images/download.svg')",
@@ -49,7 +48,9 @@ module.exports = {
                     secondary: '#FFFFFF',
                     info: '#0E9AFF',
                     success: '#00A944',
+                    accent: '#ffffff',
                     error: '#E26C6C',
+
                     'info-content': '#201942',
                     '--glass-blur': '20px',
                 },
@@ -61,6 +62,7 @@ module.exports = {
                     secondary: '#161C24',
                     'base-content': '#FFFFFF',
                     primary: '#161C24',
+                    accent: '#212B36',
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',

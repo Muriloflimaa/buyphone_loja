@@ -4,8 +4,9 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useCart } from '../../../../context/UseCartContext'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
-import { IProduct } from '../../../../types'
+import { IProduct, Product } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
 import { verificationColor } from '../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../utils/verificationPrice'
@@ -36,6 +37,12 @@ export default function Products({ data }: DataProps) {
             setDescrition(data.data.description)
         }
     }, [])
+
+    const { addProduct } = useCart()
+
+    function handleAddProduct(id: number) {
+        addProduct(id)
+    }
 
     return (
         <>
@@ -115,7 +122,7 @@ export default function Products({ data }: DataProps) {
                         </label>
                     </label>
 
-                    <div className="flex flex-col gap-5 text-black">
+                    <div className="flex flex-col gap-5 text-info-content">
                         <div>
                             <div className="flex gap-2 items-center">
                                 <h1 className="text-2xl">{data.data.name}</h1>
@@ -130,7 +137,7 @@ export default function Products({ data }: DataProps) {
                             </div>
                         </div>
 
-                        <div className="flex flex-col">
+                        <div className="flex flex-col text-info-content">
                             <h1 className="text-2xl">Memória</h1>
                             <div className="flex gap-3">
                                 <span className="badge badge-info">
@@ -139,7 +146,7 @@ export default function Products({ data }: DataProps) {
                             </div>
                         </div>
 
-                        <div className="flex flex-col">
+                        <div className="flex flex-col text-info-content">
                             <h1 className="text-2xl">Cor</h1>
 
                             <div className="flex gap-3">
@@ -163,58 +170,22 @@ export default function Products({ data }: DataProps) {
                             </h2>
                         </div>
                         <div className="hidden md:flex gap-3 items-center">
-                            <div className="btn-group w-36 flex items-center">
-                                <button
-                                    className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md"
-                                    disabled={qtd <= 1}
-                                    type="button"
-                                    onClick={() => {
-                                        setQtd(qtd - 1)
-                                    }}
-                                >
-                                    -
-                                </button>
-                                <h1 className="p-5">{qtd}</h1>
-                                <button
-                                    className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md"
-                                    onClick={() => {
-                                        setQtd(qtd + 1)
-                                    }}
-                                >
-                                    +
-                                </button>
-                            </div>
-                            <button className="btn btn-Primary">Comprar</button>
+                            <button
+                                className="btn btn-Primary"
+                                data-testid="add-product-button"
+                                onClick={() => handleAddProduct(data.data.id)}
+                            >
+                                Comprar
+                            </button>
                         </div>
-                        <div className="w-full rounded-lg bg-colorCard flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
-                            <div className="flex items-center md:items-center text-white">
+                        <div className="w-full rounded-lg text-info-content flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
+                            <div className="flex items-center md:items-center text-info-content">
                                 <h1>Frete: Grátis</h1>
                                 <h2 className="ml-2 text-xs text-gray-400">
                                     (10 a 15 dias úteis)
                                 </h2>
                             </div>
                             <div className="flex md:block gap-3 items-center">
-                                <div className="btn-group w-36 flex items-center md:hidden">
-                                    <button
-                                        className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md bg-transparent"
-                                        disabled={qtd <= 1}
-                                        type="button"
-                                        onClick={() => {
-                                            setQtd(qtd - 1)
-                                        }}
-                                    >
-                                        -
-                                    </button>
-                                    <h1 className="p-5">{qtd}</h1>
-                                    <button
-                                        className="btn text-xs h-auto p-4 min-h-0 border border-white rounded-md bg-transparent"
-                                        onClick={() => {
-                                            setQtd(qtd + 1)
-                                        }}
-                                    >
-                                        +
-                                    </button>
-                                </div>
                                 <button className="btn btn-Primary block md:hidden">
                                     Comprar
                                 </button>
@@ -237,11 +208,26 @@ export default function Products({ data }: DataProps) {
                         </div>
                     </div>
                 </div>
-                <div className="flex-col my-10 gap-3 text-info-content hidden md:flex">
-                    <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
-                        <h1 className="text-2xl">Descrição</h1>
+                <div className="flex-col my-5 gap-3 text-info-content hidden md:flex">
+                    <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014] hidden items-center justify-start p-2 px-4 gap-1 md:flex-col md:items-start md:flex">
+                        <h1 className="text-base font-medium">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3 text-primary">{description}</p>
+                    <p className="text-sm px-3 text-info-content">
+                        {description}
+                    </p>
+                </div>
+                <div className="flex-col my-5 gap-3 text-info-content hidden md:flex">
+                    <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014] hidden items-center justify-start p-2 px-4 gap-1 md:flex-col md:items-start md:flex">
+                        <h1 className="text-base font-medium">
+                            Avalaliação de clientes
+                            <span className="text-[10px] pl-1 font-normal">
+                                (300 avaliações)
+                            </span>
+                        </h1>
+                    </div>
+                    <p className="text-sm px-3 text-info-content">
+                        {description}
+                    </p>
                 </div>
             </div>
         </>

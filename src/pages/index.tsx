@@ -105,7 +105,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     )
 }
 
-export const getServerSideProps = PersistentLogin(async (ctx) => {
+export const getStaticProps = PersistentLogin(async (ctx) => {
     try {
         const { data } = await apiPedidos.get(`categories/`)
         return {

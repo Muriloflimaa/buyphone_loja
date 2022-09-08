@@ -26,6 +26,8 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
                         permanent: false,
                     },
                 }
+            } else {
+                return await fn(ctx)
             }
         }
         return await fn(ctx)
