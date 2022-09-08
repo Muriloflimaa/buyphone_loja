@@ -4,9 +4,7 @@ import {
     GetServerSidePropsResult,
 } from 'next'
 import { destroyCookie, parseCookies } from 'nookies'
-import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
-import { setCookies } from '../context/AuthContext'
 
 export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
     return async (
