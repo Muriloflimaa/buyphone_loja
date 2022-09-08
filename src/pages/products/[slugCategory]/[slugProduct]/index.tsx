@@ -4,7 +4,7 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { apiBeta } from '../../../../services/apibeta'
+import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { IProduct } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
 import { verificationColor } from '../../../../utils/verificationColors'
@@ -235,7 +235,7 @@ export default function Products({ data }: DataProps) {
 
 
 export const getStaticProps = async ({ params }: IParams) => {
-    const data = await apiBeta.get(`products/${params.slugCategory}/${params.slugProduct}`)
+    const data = await apiPedidosBeta.get(`products/${params.slugCategory}/${params.slugProduct}`)
     return {
         props: {
             data: data.data,
@@ -245,7 +245,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 }
 
 export const getStaticPaths = async () => {
-    const { data } = await apiBeta.get(`products/`)
+    const { data } = await apiPedidosBeta.get(`products/`)
 
     const paths = data.data.map((product: IProduct) => ({
         params: { slugCategory: product.name.toLowerCase().replace(" ", "-"), slugProduct: product.slug }
