@@ -52,7 +52,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     const prevCartRef = useRef<Product[]>()
     useEffect(() => {
         prevCartRef.current = cart
-    })
+    }, [cart])
     const cartPreviousValue = prevCartRef.current ?? cart
     useEffect(() => {
         if (cartPreviousValue !== cart) {
