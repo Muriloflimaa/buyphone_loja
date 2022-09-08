@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
+import { verificationColor } from '../../utils/verificationColors'
 
 interface ProductCardProps {
     id: number
@@ -31,46 +32,7 @@ const ProductCard = ({
     const [color, setColor] = useState('')
 
     useEffect(() => {
-        if (colorPhone == 'Preto') {
-            setColor('bg-black')
-        }
-        if (colorPhone == 'Branco') {
-            setColor('bg-white')
-        }
-        if (colorPhone == 'Vermelho') {
-            setColor('bg-red-700')
-        }
-        if (colorPhone == 'Meia-noite') {
-            setColor('bg-gray-900')
-        }
-        if (colorPhone == 'Azul') {
-            setColor('bg-sky-700')
-        }
-        if (colorPhone == 'Azul-Sierra') {
-            setColor('bg-sky-200')
-        }
-        if (
-            colorPhone == 'Azul-Pacífico' ||
-            colorPhone == 'Azul Pacífico' ||
-            colorPhone == 'Azul pacífico'
-        ) {
-            setColor('bg-cyan-900')
-        }
-        if (colorPhone == 'Verde' || colorPhone == 'Verde-Alpino') {
-            setColor('bg-emerald-200')
-        }
-        if (colorPhone == 'Grafite') {
-            setColor('bg-zinc-500')
-        }
-        if (colorPhone == 'Prateado' || colorPhone == 'Estelar') {
-            setColor('bg-gray-50')
-        }
-        if (colorPhone == 'Dourado') {
-            setColor('bg-amber-100')
-        }
-        if (colorPhone == 'Rosa') {
-            setColor('bg-pink-200')
-        }
+        verificationColor(colorPhone, setColor)
     }, [])
 
     const { addProduct } = useCart()
@@ -102,7 +64,7 @@ const ProductCard = ({
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
-                            className={`h-2 w-2 rounded-full mr-2 border-white' ${color}`}
+                            className={`h-2 w-2 rounded-full mr-2 border border-black' ${color}`}
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
@@ -150,7 +112,7 @@ const ProductCard = ({
                         Comprar
                     </button>
                 </div>
-                <Link href={`/${slugCategory}/${slug}`} passHref>
+                <Link href={`products/${slugCategory}/${slug}`} passHref>
                     <a className="text-xs link">Saiba mais</a>
                 </Link>
             </div>
