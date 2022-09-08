@@ -9,6 +9,7 @@ import { IProduct } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
 import { verificationColor } from '../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../utils/verificationPrice'
+import { refact } from '../../../../utils/RefctDescript'
 
 interface IParams {
     params: {
@@ -55,7 +56,13 @@ export default function Products({ data }: DataProps) {
 
                 <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
-                        <Image src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'} width={60} height={75} />
+                        <Image
+                            src={
+                                'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'
+                            }
+                            width={60}
+                            height={75}
+                        />
 
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
@@ -72,7 +79,9 @@ export default function Products({ data }: DataProps) {
                                     />
                                 </div>
                                 <Image
-                                    src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'}
+                                    src={
+                                        'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'
+                                    }
                                     layout="fixed"
                                     width="200"
                                     height="230"
@@ -140,11 +149,15 @@ export default function Products({ data }: DataProps) {
                         <div className="flex flex-col">
                             <div className="relative w-24 flex justify-center">
                                 <h1 className="font-semibold text-base leading-4">
-                                    {moneyMask(returnPrice.averagePrice.toString())}
+                                    {moneyMask(
+                                        returnPrice.averagePrice.toString()
+                                    )}
                                 </h1>
                                 <div className="bg-red-500 w-full mt-2 absolute h-[1px]"></div>
                             </div>
-                            <h2 className="text-2xl font-bold">{moneyMask(returnPrice.ourPrice.toString())}</h2>
+                            <h2 className="text-2xl font-bold">
+                                {moneyMask(returnPrice.ourPrice.toString())}
+                            </h2>
                         </div>
                         <div className="hidden md:flex gap-3 items-center">
                             <div className="btn-group w-36 flex items-center">
@@ -225,17 +238,19 @@ export default function Products({ data }: DataProps) {
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3 text-primary">{data.data.description}</p>
+                    <p className="text-sm px-3 text-primary">
+                        {refact(data.data.description)}
+                    </p>
                 </div>
             </div>
         </>
     )
 }
 
-
-
 export const getStaticProps = async ({ params }: IParams) => {
-    const data = await apiPedidosBeta.get(`products/${params.slugCategory}/${params.slugProduct}`)
+    const data = await apiPedidosBeta.get(
+        `products/${params.slugCategory}/${params.slugProduct}`
+    )
     return {
         props: {
             data: data.data,
@@ -248,7 +263,10 @@ export const getStaticPaths = async () => {
     const { data } = await apiPedidosBeta.get(`products/`)
 
     const paths = data.data.map((product: IProduct) => ({
-        params: { slugCategory: product.name.toLowerCase().replace(" ", "-"), slugProduct: product.slug }
+        params: {
+            slugCategory: product.name.toLowerCase().replace(' ', '-'),
+            slugProduct: product.slug,
+        },
     }))
 
     return {
