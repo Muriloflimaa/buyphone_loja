@@ -3,18 +3,13 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { destroyCookie, parseCookies } from 'nookies'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
-import { GetUseType } from '../utils/getUserType'
-import jwt_decode from 'jwt-decode'
-import { apiLogin } from '../services/apiLogin'
-import { setCookies } from '../context/AuthContext'
 import { PersistentLogin } from '../utils/PersistentLogin'
-import axios from 'axios'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
     data: {
@@ -35,10 +30,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
-
-    const userData = GetUseType()
-
-    const discount = userData?.type === 1 ? 12.5 : 7
 
     return (
         <>
@@ -65,35 +56,19 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
                             category.products.map((products) => {
-                                const itens = [
-                                    products.price,
-                                    products.magalu_price,
-                                    products.americanas_price,
-                                    products.casasbahia_price,
-                                    products.ponto_price,
-                                ]
-                                const filteredItens = itens.filter(
-                                    (item) => item
-                                )
-                                const averagePrice =
-                                    filteredItens.length > 0
-                                        ? Math.min(...filteredItens)
-                                        : 0
-                                const discountPrice = Math.round(
-                                    averagePrice * (discount / 100)
-                                )
-                                const ourPrice = averagePrice - discountPrice
-
+                                const returnPrice = verificationPrice(products)
                                 return (
-                                    ourPrice > 0 && (
+                                    returnPrice.ourPrice > 0 && (
                                         <ProductCard
                                             key={products.id}
                                             id={products.id}
                                             name={products.name}
                                             idCategory={category.id}
                                             colorPhone={products.color}
-                                            price={ourPrice}
-                                            averagePrice={averagePrice}
+                                            price={returnPrice.ourPrice}
+                                            averagePrice={
+                                                returnPrice.averagePrice
+                                            }
                                             slug={products.slug}
                                             slugCategory={category.slug}
                                             image={

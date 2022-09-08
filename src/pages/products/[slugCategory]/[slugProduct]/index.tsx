@@ -4,31 +4,34 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { apiPedidos } from '../../../services/apiClient'
-import {
-    removeDuplicatesColorsProducts,
-    removeDuplicatesImageProducts,
-    removeDuplicatesMemoryProducts,
-} from '../../../utils/formatColor'
-import { refact } from '../../../utils/RefctDescript'
+import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
+import { IProduct } from '../../../../types'
+import { moneyMask } from '../../../../utils/masks'
+import { verificationColor } from '../../../../utils/verificationColors'
+import { verificationPrice } from '../../../../utils/verificationPrice'
 
-export default function Products({ data }) {
+interface IParams {
+    params: {
+        slugCategory: string
+        slugProduct: string
+    }
+}
+
+interface DataProps {
+    data: {
+        data: IProduct
+    }
+}
+
+export default function Products({ data }: DataProps) {
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
-    const products = data.data
-    const [description, setDescription] = useState('')
+    const [color, setColor] = useState('')
+    const returnPrice = verificationPrice(data.data)
 
     useEffect(() => {
-        const descriptionProduct = products.description
-
-        setDescription(
-            descriptionProduct ?? 'Descrição do produto não está disponível '
-        )
+        verificationColor(data.data.color, setColor)
     }, [])
-
-    var uniqueColor = removeDuplicatesColorsProducts(products)
-    var uniqueMemory = removeDuplicatesMemoryProducts(products)
-    var uniqueImage = removeDuplicatesImageProducts(products)
 
     return (
         <>
@@ -52,11 +55,7 @@ export default function Products({ data }) {
 
                 <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
-                        <img
-                            src={products.media[0].original_url}
-                            className="w-16 h-auto"
-                            alt=""
-                        />
+                        <Image src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'} width={60} height={75} />
 
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
@@ -73,7 +72,7 @@ export default function Products({ data }) {
                                     />
                                 </div>
                                 <Image
-                                    src={products.media[0].original_url}
+                                    src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'}
                                     layout="fixed"
                                     width="200"
                                     height="230"
@@ -104,14 +103,14 @@ export default function Products({ data }) {
                         </label>
                     </label>
 
-                    <div className="flex flex-col gap-5 text-PrimaryText">
+                    <div className="flex flex-col gap-5 text-black">
                         <div>
                             <div className="flex gap-2 items-center">
                                 <h1 className="text-2xl">{data.data.name}</h1>
                             </div>
                             <div className="flex items-center">
                                 <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
-                                <p className="text-PrimaryText text-xs">4,9</p>
+                                <p className="text-xs">4,9</p>
 
                                 <p className="text-xs ml-2">
                                     (1234 comentários)
@@ -122,90 +121,30 @@ export default function Products({ data }) {
                         <div className="flex flex-col">
                             <h1 className="text-2xl">Memória</h1>
                             <div className="flex gap-3">
-                                {uniqueMemory.length > 0 ? (
-                                    uniqueMemory.map((products) => {
-                                        return (
-                                            <>
-                                                <span className="badge badge-info">
-                                                    {products}
-                                                </span>
-                                            </>
-                                        )
-                                    })
-                                ) : (
-                                    <span>Memórias indisponíveis</span>
-                                )}
+                                <span className="badge badge-info">
+                                    {data.data.memory}
+                                </span>
                             </div>
                         </div>
 
                         <div className="flex flex-col">
-                            <h1 className="text-2xl">Cores</h1>
+                            <h1 className="text-2xl">Cor</h1>
 
                             <div className="flex gap-3">
-                                {uniqueColor.length > 0 ? (
-                                    uniqueColor.map((products) => {
-                                        return (
-                                            <>
-                                                <div
-                                                    className={
-                                                        'w-5 h-5  rounded-full border border-white ' +
-                                                        (products == 'preto'
-                                                            ? 'bg-black'
-                                                            : products ==
-                                                              'branco'
-                                                            ? 'bg-white'
-                                                            : products ==
-                                                              'vermelho'
-                                                            ? 'bg-red-500'
-                                                            : products ==
-                                                                  'verdealpino' ??
-                                                              'verdealpino'
-                                                            ? 'bg-lime-900'
-                                                            : products == 'azul'
-                                                            ? 'bg-blue-500'
-                                                            : products ==
-                                                              'meianoite'
-                                                            ? 'bg-gray-900'
-                                                            : products ==
-                                                              'azulsierra'
-                                                            ? 'bg-slate-400'
-                                                            : products ==
-                                                              'azulpacifico'
-                                                            ? 'bg-cyan-900'
-                                                            : products ==
-                                                              'grafite'
-                                                            ? 'bg-gray-700'
-                                                            : products ==
-                                                              'prateado'
-                                                            ? 'bg-gray-400'
-                                                            : products ==
-                                                              'estelar'
-                                                            ? 'bg-white'
-                                                            : products ==
-                                                              'dourado'
-                                                            ? 'bg-amber-100'
-                                                            : products == 'pink'
-                                                            ? 'bg-pink-200'
-                                                            : '')
-                                                    }
-                                                />
-                                            </>
-                                        )
-                                    })
-                                ) : (
-                                    <span>Cores indisponíveis</span>
-                                )}
+                                <div
+                                    className={`w-5 h-5  rounded-full border border-black ${color}`}
+                                ></div>
                             </div>
                         </div>
 
                         <div className="flex flex-col">
                             <div className="relative w-24 flex justify-center">
                                 <h1 className="font-semibold text-base leading-4">
-                                    R$ 2.215,00
+                                    {moneyMask(returnPrice.averagePrice.toString())}
                                 </h1>
                                 <div className="bg-red-500 w-full mt-2 absolute h-[1px]"></div>
                             </div>
-                            <h2 className="text-2xl font-bold">R$ 2.000,00</h2>
+                            <h2 className="text-2xl font-bold">{moneyMask(returnPrice.ourPrice.toString())}</h2>
                         </div>
                         <div className="hidden md:flex gap-3 items-center">
                             <div className="btn-group w-36 flex items-center">
@@ -232,9 +171,9 @@ export default function Products({ data }) {
                             <button className="btn btn-Primary">Comprar</button>
                         </div>
                         <div className="w-full rounded-lg bg-colorCard flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
-                            <div className="flex items-center md:items-center">
+                            <div className="flex items-center md:items-center text-white">
                                 <h1>Frete: Grátis</h1>
-                                <h2 className="text-xs text-gray-400">
+                                <h2 className="ml-2 text-xs text-gray-400">
                                     (10 a 15 dias úteis)
                                 </h2>
                             </div>
@@ -268,10 +207,7 @@ export default function Products({ data }) {
                             <div className="flex flex-col gap-3 md:hidden">
                                 <h1 className="text-xl">Descrição</h1>
                                 <p className="transition-all duration-500 delay-500">
-                                    {showMore
-                                        ? refact(description)
-                                        : `${description.substring(0, 250)}` +
-                                          '...'}
+                                    {data.data.description}
                                 </p>
                                 <div className="border-PrimaryText border-t-[1px]"></div>
 
@@ -285,50 +221,38 @@ export default function Products({ data }) {
                         </div>
                     </div>
                 </div>
-                <div className="flex-col my-10 gap-3 text-PrimaryText hidden md:flex">
+                <div className="flex-col my-10 gap-3 text-info-content hidden md:flex">
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3">{refact(description)}</p>
+                    <p className="text-sm px-3 text-primary">{data.data.description}</p>
                 </div>
             </div>
         </>
     )
 }
 
-export const getStaticProps = async (context) => {
-    try {
-        const { params } = context
-        const { data } = await apiPedidos.get(
-            `categories/${params.category}/${params.product}`
-        )
-        return {
-            props: {
-                data,
-            },
-        }
-    } catch (error) {
-        return {
-            props: {
-                data: null,
-            },
-        }
+
+
+export const getStaticProps = async ({ params }: IParams) => {
+    const data = await apiPedidosBeta.get(`products/${params.slugCategory}/${params.slugProduct}`)
+    return {
+        props: {
+            data: data.data,
+        },
+        revalidate: 60,
     }
 }
 
-export async function getStaticPaths() {
-    const { data } = await apiPedidos.get(`categories/`)
+export const getStaticPaths = async () => {
+    const { data } = await apiPedidosBeta.get(`products/`)
 
-    const paths = data.data.map((category) => {
-        data.data.map((products) => {
-            return {
-                params: {
-                    product: `${products.slug}`,
-                    category: `${category.slug} `,
-                },
-            }
-        })
-    })
+    const paths = data.data.map((product: IProduct) => ({
+        params: { slugCategory: product.name.toLowerCase().replace(" ", "-"), slugProduct: product.slug }
+    }))
 
-    return { paths, fallback: false }
+    return {
+        paths,
+        fallback: false,
+    }
 }
