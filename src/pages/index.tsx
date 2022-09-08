@@ -8,6 +8,7 @@ import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { verificationColor } from '../utils/verificationColors'
 import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
@@ -65,7 +66,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
                                             idCategory={category.id}
                                             colorPhone={products.color}
                                             price={returnPrice.ourPrice}
-                                            averagePrice={returnPrice.averagePrice}
+                                            averagePrice={
+                                                returnPrice.averagePrice
+                                            }
                                             slug={products.slug}
                                             slugCategory={category.slug}
                                             image={
