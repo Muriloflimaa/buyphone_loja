@@ -46,10 +46,11 @@ module.exports = {
                         '[data-theme=light]'
                     ],
                     primary: '#06002A',
+                    secondary: '#FFFFFF',
                     info: '#0E9AFF',
                     success: '#00A944',
                     error: '#E26C6C',
-                    'info-content': '#FFFFFF',
+                    'info-content': '#201942',
                     '--glass-blur': '20px',
                 },
                 dark: {
@@ -57,6 +58,7 @@ module.exports = {
                         '[data-theme=dark]'
                     ],
                     'base-100': '#161C24',
+                    secondary: '#161C24',
                     'base-content': '#FFFFFF',
                     primary: '#161C24',
                     info: '#0E9AFF',
