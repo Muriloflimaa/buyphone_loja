@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { IProduct } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
+import { refact } from '../../../../utils/RefctDescript'
 import { verificationColor } from '../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../utils/verificationPrice'
 
@@ -24,13 +25,12 @@ interface DataProps {
 }
 
 export default function Products({ data }: DataProps) {
+    const [color, setColor] = useState<string | undefined>()
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
-    const [color, setColor] = useState('')
     const returnPrice = verificationPrice(data.data)
-
     useEffect(() => {
-        verificationColor(data.data.color, setColor)
+        setColor(verificationColor(data.data.color))
     }, [])
 
     return (
@@ -55,53 +55,26 @@ export default function Products({ data }: DataProps) {
 
                 <div className="flex flex-col md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
-                        <Image src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'} width={60} height={75} />
+                        <Image
+                            src={
+                                'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'
+                            }
+                            width={60}
+                            height={75}
+                        />
 
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
-                    <div className="w-full h-full flex justify-center md:block md:w-[60%]">
-                        <label
-                            htmlFor="my-modal-4"
-                            className="btn modal-button hover:bg-transparent hover:border-transparent bg-transparent border-transparent h-full"
-                        >
-                            <div className="w-40 md:w-72 h-auto relative">
-                                <div className="flex justify-end w-full absolute ml-3 -mt-2 z-10">
-                                    <FontAwesomeIcon
-                                        icon={faMagnifyingGlassPlus}
-                                        className="w-4 h-4"
-                                    />
-                                </div>
-                                <Image
-                                    src={'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'}
-                                    layout="fixed"
-                                    width="200"
-                                    height="230"
-                                ></Image>
-                            </div>
-                        </label>
+                    <div className="w-full h-full flex justify-center md:w-[60%]">
+                        <Image
+                            src={
+                                'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'
+                            }
+                            layout="fixed"
+                            width="200"
+                            height="230"
+                        ></Image>
                     </div>
-
-                    <input
-                        type="checkbox"
-                        id="my-modal-4"
-                        className="modal-toggle"
-                    />
-                    <label
-                        htmlFor="my-modal-4"
-                        className="modal cursor-pointer"
-                    >
-                        <label
-                            className="modal-box relative flex justify-around gap-4 items-center max-w-3xl h-[60vw]"
-                            htmlFor=""
-                        >
-                            <label
-                                htmlFor="my-modal-4"
-                                className="btn btn-sm p-2 btn-circle absolute right-4 top-4"
-                            >
-                                ✕
-                            </label>
-                        </label>
-                    </label>
 
                     <div className="flex flex-col gap-5 text-black">
                         <div>
@@ -110,11 +83,6 @@ export default function Products({ data }: DataProps) {
                             </div>
                             <div className="flex items-center">
                                 <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
-                                <p className="text-xs">4,9</p>
-
-                                <p className="text-xs ml-2">
-                                    (1234 comentários)
-                                </p>
                             </div>
                         </div>
 
@@ -140,11 +108,15 @@ export default function Products({ data }: DataProps) {
                         <div className="flex flex-col">
                             <div className="relative w-24 flex justify-center">
                                 <h1 className="font-semibold text-base leading-4">
-                                    {moneyMask(returnPrice.averagePrice.toString())}
+                                    {moneyMask(
+                                        returnPrice.averagePrice.toString()
+                                    )}
                                 </h1>
                                 <div className="bg-red-500 w-full mt-2 absolute h-[1px]"></div>
                             </div>
-                            <h2 className="text-2xl font-bold">{moneyMask(returnPrice.ourPrice.toString())}</h2>
+                            <h2 className="text-2xl font-bold">
+                                {moneyMask(returnPrice.ourPrice.toString())}
+                            </h2>
                         </div>
                         <div className="hidden md:flex gap-3 items-center">
                             <div className="btn-group w-36 flex items-center">
@@ -205,37 +177,42 @@ export default function Products({ data }: DataProps) {
                             </div>
 
                             <div className="flex flex-col gap-3 md:hidden">
-                                <h1 className="text-xl">Descrição</h1>
-                                <p className="transition-all duration-500 delay-500">
-                                    {data.data.description}
-                                </p>
+                                <h1 className="text-xl text-white">
+                                    Descrição
+                                </h1>
+                                <span className="transition-all duration-500 delay-500">
+                                    {data.data.description &&
+                                        refact(data.data.description)}
+                                </span>
                                 <div className="border-PrimaryText border-t-[1px]"></div>
 
-                                <p
+                                <span
                                     className="text-PrimaryText flex justify-center transition-all duration-500"
                                     onClick={() => setShowMore(!showMore)}
                                 >
                                     {showMore ? 'Ver menos' : 'Ver mais'}
-                                </p>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="flex-col my-10 gap-3 text-info-content hidden md:flex">
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
-                        <h1 className="text-2xl">Descrição</h1>
+                        <h1 className="text-2xl text-white">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3 text-primary">{data.data.description}</p>
+                    <span className="text-sm px-3 text-primary">
+                        {data.data.description && refact(data.data.description)}
+                    </span>
                 </div>
             </div>
         </>
     )
 }
 
-
-
 export const getStaticProps = async ({ params }: IParams) => {
-    const data = await apiPedidosBeta.get(`products/${params.slugCategory}/${params.slugProduct}`)
+    const data = await apiPedidosBeta.get(
+        `products/${params.slugCategory}/${params.slugProduct}`
+    )
     return {
         props: {
             data: data.data,
@@ -248,7 +225,10 @@ export const getStaticPaths = async () => {
     const { data } = await apiPedidosBeta.get(`products/`)
 
     const paths = data.data.map((product: IProduct) => ({
-        params: { slugCategory: product.name.toLowerCase().replace(" ", "-"), slugProduct: product.slug }
+        params: {
+            slugCategory: product.name.toLowerCase().replace(' ', '-'),
+            slugProduct: product.slug,
+        },
     }))
 
     return {

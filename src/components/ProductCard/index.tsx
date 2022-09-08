@@ -29,25 +29,18 @@ const ProductCard = ({
     slugCategory,
     memory,
 }: ProductCardProps) => {
-    const [color, setColor] = useState('')
-
-    useEffect(() => {
-        verificationColor(colorPhone, setColor)
-    }, [])
-
+    const [color, setColor] = useState<string | undefined>()
     const { addProduct } = useCart()
 
     function handleAddProduct(id: number) {
         addProduct(id)
     }
 
+    useEffect(() => {
+        setColor(verificationColor(colorPhone))
+    }, [])
+
     return (
-        // <div className="relative flex items-center justify-center overflow-hidden rounded-lg">
-        //     <div
-        //         className={
-        //             'w-[390%] h-full absolute ' + styles.GradientBuyPhone
-        //         }
-        //     ></div>
         <div
             className="card card-compact w-full h-full shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
             key={id}
@@ -64,7 +57,7 @@ const ProductCard = ({
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
-                            className={`h-2 w-2 rounded-full mr-2 border border-black' ${color}`}
+                            className={`h-2 w-2 rounded-full mr-2 border border-black ${color}`}
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
@@ -117,7 +110,6 @@ const ProductCard = ({
                 </Link>
             </div>
         </div>
-        // </div>
     )
 }
 export default ProductCard
