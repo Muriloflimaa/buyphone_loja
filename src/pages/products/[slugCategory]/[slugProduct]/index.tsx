@@ -28,9 +28,13 @@ export default function Products({ data }: DataProps) {
     const [showMore, setShowMore] = useState(false)
     const [color, setColor] = useState('')
     const returnPrice = verificationPrice(data.data)
+    const [description, setDescrition] = useState('')
 
     useEffect(() => {
         verificationColor(data.data.color, setColor)
+        if (data.data.description) {
+            setDescrition(data.data.description)
+        }
     }, [])
 
     return (
@@ -219,7 +223,7 @@ export default function Products({ data }: DataProps) {
                             <div className="flex flex-col gap-3 md:hidden">
                                 <h1 className="text-xl">Descrição</h1>
                                 <p className="transition-all duration-500 delay-500">
-                                    {data.data.description}
+                                    {description}
                                 </p>
                                 <div className="border-PrimaryText border-t-[1px]"></div>
 
@@ -237,9 +241,7 @@ export default function Products({ data }: DataProps) {
                     <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-2xl">Descrição</h1>
                     </div>
-                    <p className="text-sm px-3 text-primary">
-                        {data.data.description}
-                    </p>
+                    <p className="text-sm px-3 text-primary">{description}</p>
                 </div>
             </div>
         </>
