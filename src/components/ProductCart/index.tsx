@@ -4,21 +4,19 @@ import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
-import { formatPrice } from '../../utils/format'
-import { verificationPrice } from '../../utils/verificationPrice'
+import { moneyMask } from '../../utils/masks'
 
 const ProductCart = () => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
-    const [price, setPrice] = useState<any | undefined>()
+    const [price, setPrice] = useState<any>()
 
     useEffect(() => {
         cart.map(async (data) => {
             try {
                 const dat = await apiPedidos.get(`products/${data.id}`)
-                setPrice(dat)
-                console.log(dat)
+                setPrice(dat.data.data)
             } catch (error) {
                 console.log(error)
             }
@@ -51,14 +49,14 @@ const ProductCart = () => {
 
     const cartFormatted = cart.map((product) => ({
         ...product,
-        priceFormated: formatPrice(product.price),
-        subTotal: formatPrice(product.price * product.amount),
+        priceFormated: price?.price,
+        subTotal: price?.price * product.amount,
     }))
-    const total = formatPrice(
-        cart.reduce((sumTotal, product) => {
-            return sumTotal + product.price * product.amount
-        }, 0)
-    )
+    // const total = formatPrice(
+    //     cart.reduce((sumTotal, product) => {
+    //         return sumTotal + product.price * product.amount
+    //     }, 0)
+    // )
 
     function handleProductIncrement(product: Product) {
         updateProductAmount({
@@ -149,7 +147,9 @@ const ProductCart = () => {
                             </div>
 
                             <div className="flex flex-col items-end">
-                                <strong>{product.subTotal}</strong>
+                                <strong>
+                                    {moneyMask(product.subTotal.toString())}
+                                </strong>
                                 <button
                                     type="button"
                                     data-testid="remove-product"

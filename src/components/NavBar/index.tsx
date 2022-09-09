@@ -19,6 +19,7 @@ import { apiPedidos } from '../../services/apiClient'
 import { ICategory, Product } from '../../types'
 import { formatPrice } from '../../utils/format'
 import { GetUseType } from '../../utils/getUserType'
+import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -36,11 +37,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
-    const total = formatPrice(
-        cart.reduce((sumTotal, product) => {
-            return sumTotal + product.price * product.amount
-        }, 0)
-    )
+
+    const total = cart.reduce((sumTotal, product) => {
+        return sumTotal + price?.price * product.amount
+    }, 0)
 
     const handleClick = () => {
         setIsOn(!isOn)
@@ -58,7 +58,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         cart.map(async (data) => {
             try {
                 const dat = await apiPedidos.get(`products/${data.id}`)
-                setPrice(dat)
+                setPrice(dat.data.data)
             } catch (error) {
                 console.log(error)
             }
@@ -225,7 +225,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                         Valor Total:
                                                     </span>
                                                     <span className="font-semibold text-lg">
-                                                        {total}
+                                                        R${' '}
+                                                        {moneyMask(
+                                                            total.toString()
+                                                        )}
                                                     </span>
                                                 </div>
                                             </div>

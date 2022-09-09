@@ -42,12 +42,6 @@ const ProductCard = ({
     }
 
     return (
-        // <div className="relative flex items-center justify-center overflow-hidden rounded-lg">
-        //     <div
-        //         className={
-        //             'w-[390%] h-full absolute ' + styles.GradientBuyPhone
-        //         }
-        //     ></div>
         <div
             className="card card-compact w-full h-full shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
             key={id}

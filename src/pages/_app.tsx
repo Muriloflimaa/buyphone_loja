@@ -23,18 +23,8 @@ interface AppProps {
 }
 
 export default function MyApp({ Component, pageProps, data }: AppProps) {
-    const router = useRouter()
-    const [width, setWidth] = useState('')
-
-    useEffect(() => {
-        if (router.asPath == '/terms' || router.asPath == '/politics') {
-            setWidth('max-w-2xl')
-        } else {
-            setWidth('max-w-md')
-        }
-    })
-
     const userData = GetUseType()
+    const router = useRouter()
 
     return (
         <Theme
@@ -48,7 +38,7 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
                 router.route === `/terms` ||
                 router.route === `/politics` ||
                 router.route === `/forgot-password` ? (
-                    <LoginRegister width={width}>
+                    <LoginRegister>
                         <Component {...pageProps} />
                     </LoginRegister>
                 ) : (
