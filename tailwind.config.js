@@ -50,7 +50,6 @@ module.exports = {
                     success: '#00A944',
                     accent: '#ffffff',
                     error: '#E26C6C',
-
                     'info-content': '#201942',
                     '--glass-blur': '20px',
                 },
