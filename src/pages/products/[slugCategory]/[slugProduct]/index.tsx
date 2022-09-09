@@ -4,6 +4,7 @@ import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Rating from '../../../../components/Rating'
 import { useCart } from '../../../../context/UseCartContext'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { IProduct } from '../../../../types'
@@ -65,7 +66,7 @@ export default function Products({ data }: DataProps) {
                     </Link>
                 </h1>
 
-                <div className="flex  md:flex-row w-full mt-10 justify-between">
+                <div className="flex flex-col  md:flex-row w-full mt-10 justify-between">
                     <div className="flex-col items-center gap-3 w-[20%] hidden md:flex">
                         <Image
                             src={
@@ -119,6 +120,7 @@ export default function Products({ data }: DataProps) {
                                 </div>
                                 <div className="flex items-center">
                                     <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
+                                    <p>4.9 (1234) comentários</p>
                                 </div>
                             </div>
 
@@ -167,10 +169,13 @@ export default function Products({ data }: DataProps) {
                             </div>
                             <div className="w-full rounded-lg text-info-content bg-accent flex items-start justify-start p-4 gap-4 flex-col md:flex-row md:justify-center md:items-center md:gap-2">
                                 <div className="flex items-center md:items-center text-info-content">
-                                    <h1>Frete: Grátis</h1>
-                                    <h2 className="ml-2 text-xs text-gray-400">
-                                        (10 a 15 dias úteis)
-                                    </h2>
+                                    <p>
+                                        Frete: Grátis
+                                        <span className="text-xs">
+                                            {' '}
+                                            (10 a 15 dias úteis)
+                                        </span>
+                                    </p>
                                 </div>
                                 <div className="flex md:block gap-3 items-center">
                                     <button
@@ -185,13 +190,19 @@ export default function Products({ data }: DataProps) {
                                 </div>
 
                                 <div className="flex flex-col gap-3 md:hidden">
-                                    <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014]  items-center justify-start p-2 px-4 gap-1  md:items-start ">
-                                        <h1 className="text-base font-medium">
+                                    <div className="w-full rounded-lg justify-start gap-1">
+                                        <h1 className="text-xl font-light">
                                             Descrição
                                         </h1>
                                     </div>
-                                    <p className="transition-all duration-500 delay-500">
-                                        {description}
+
+                                    <p className="transition-all text-xs duration-500 delay-500">
+                                        {showMore
+                                            ? refact(description)
+                                            : `${description.substring(
+                                                  0,
+                                                  150
+                                              )}` + '...'}
                                     </p>
                                     <div className="border-PrimaryText border-t-[1px]"></div>
 
@@ -199,7 +210,7 @@ export default function Products({ data }: DataProps) {
                                         className="text-PrimaryText flex justify-center transition-all duration-500"
                                         onClick={() => setShowMore(!showMore)}
                                     >
-                                        {showMore ? 'Ver menos' : 'Ver mais'}
+                                        {showMore ? 'Ver menos' : 'Ver tudo'}
                                     </span>
                                 </div>
                             </div>
@@ -211,11 +222,11 @@ export default function Products({ data }: DataProps) {
                         <h1 className="text-base font-medium">Descrição</h1>
                     </div>
                     <p className="text-sm px-3 text-info-content">
-                        {description}
+                        {refact(description)}
                     </p>
                 </div>
-                <div className="flex-col my-5 gap-3 text-info-content hidden md:flex">
-                    <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014] hidden items-center justify-start p-2 px-4 gap-1 md:flex-col md:items-start md:flex">
+                <div className="flex-col my-5 gap-3 text-info-content flex">
+                    <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014] items-center justify-start p-2 px-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-base font-medium">
                             Avalaliação de clientes
                             <span className="text-[10px] pl-1 font-normal">
@@ -223,9 +234,7 @@ export default function Products({ data }: DataProps) {
                             </span>
                         </h1>
                     </div>
-                    <p className="text-sm px-3 text-info-content">
-                        {description}
-                    </p>
+                    <Rating />
                 </div>
             </div>
         </>
