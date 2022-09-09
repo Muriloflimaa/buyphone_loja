@@ -29,17 +29,16 @@ const ProductCard = ({
     slugCategory,
     memory,
 }: ProductCardProps) => {
-    const [color, setColor] = useState('')
-
-    useEffect(() => {
-        verificationColor(colorPhone, setColor)
-    }, [])
-
+    const [color, setColor] = useState<string | undefined>()
     const { addProduct } = useCart()
 
     function handleAddProduct(id: number) {
         addProduct(id)
     }
+
+    useEffect(() => {
+        setColor(verificationColor(colorPhone))
+    }, [])
 
     return (
         <div
@@ -58,7 +57,7 @@ const ProductCard = ({
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
-                            className={`h-2 w-2 rounded-full mr-2 border border-black' ${color}`}
+                            className={`h-2 w-2 rounded-full mr-2 border border-black ${color}`}
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
@@ -111,7 +110,6 @@ const ProductCard = ({
                 </Link>
             </div>
         </div>
-        // </div>
     )
 }
 export default ProductCard

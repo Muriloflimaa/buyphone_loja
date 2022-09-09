@@ -1,7 +1,7 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetStaticProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import Link from 'next/link'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'

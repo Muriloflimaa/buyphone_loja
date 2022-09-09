@@ -8,6 +8,7 @@ import { useCart } from '../../../../context/UseCartContext'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { IProduct } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
+import { refact } from '../../../../utils/RefctDescript'
 import { verificationColor } from '../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../utils/verificationPrice'
 
@@ -25,10 +26,11 @@ interface DataProps {
 }
 
 export default function Products({ data }: DataProps) {
+    const [color, setColor] = useState<string | undefined>()
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
-    const [color, setColor] = useState('')
     const returnPrice = verificationPrice(data.data)
+<<<<<<< HEAD
     const [description, setDescrition] = useState('')
 
     useEffect(() => {
@@ -36,6 +38,10 @@ export default function Products({ data }: DataProps) {
         if (data.data.description) {
             setDescrition(data.data.description)
         }
+=======
+    useEffect(() => {
+        setColor(verificationColor(data.data.color))
+>>>>>>> f19df69764f674057aae3c4a4a6ae4e7a35f57ec
     }, [])
 
     const { addProduct } = useCart()
@@ -76,6 +82,7 @@ export default function Products({ data }: DataProps) {
 
                         <ChevronDownIcon className="w-5 h-5 text-PrimaryText" />
                     </div>
+<<<<<<< HEAD
                     <div className="w-full h-full flex justify-center md:block md:w-[60%]">
                         <label
                             htmlFor="my-modal-4"
@@ -123,17 +130,26 @@ export default function Products({ data }: DataProps) {
                     </label>
 
                     <div className="flex flex-col gap-5 text-info-content">
+=======
+                    <div className="w-full h-full flex justify-center md:w-[60%]">
+                        <Image
+                            src={
+                                'https://pedidos.buyphone.com.br/media/2530/11-PRETO.webp'
+                            }
+                            layout="fixed"
+                            width="200"
+                            height="230"
+                        ></Image>
+                    </div>
+
+                    <div className="flex flex-col gap-5 text-black">
+>>>>>>> f19df69764f674057aae3c4a4a6ae4e7a35f57ec
                         <div>
                             <div className="flex gap-2 items-center">
                                 <h1 className="text-2xl">{data.data.name}</h1>
                             </div>
                             <div className="flex items-center">
                                 <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
-                                <p className="text-xs">4,9</p>
-
-                                <p className="text-xs ml-2">
-                                    (1234 comentários)
-                                </p>
                             </div>
                         </div>
 
@@ -198,6 +214,7 @@ export default function Products({ data }: DataProps) {
                             </div>
 
                             <div className="flex flex-col gap-3 md:hidden">
+<<<<<<< HEAD
                                 <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014]  items-center justify-start p-2 px-4 gap-1  md:items-start ">
                                     <h1 className="text-base font-medium">
                                         Descrição
@@ -206,18 +223,28 @@ export default function Products({ data }: DataProps) {
                                 <p className="transition-all duration-500 delay-500">
                                     {description}
                                 </p>
+=======
+                                <h1 className="text-xl text-white">
+                                    Descrição
+                                </h1>
+                                <span className="transition-all duration-500 delay-500">
+                                    {data.data.description &&
+                                        refact(data.data.description)}
+                                </span>
+>>>>>>> f19df69764f674057aae3c4a4a6ae4e7a35f57ec
                                 <div className="border-PrimaryText border-t-[1px]"></div>
 
-                                <p
+                                <span
                                     className="text-PrimaryText flex justify-center transition-all duration-500"
                                     onClick={() => setShowMore(!showMore)}
                                 >
                                     {showMore ? 'Ver menos' : 'Ver mais'}
-                                </p>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div className="flex-col my-5 gap-3 text-info-content hidden md:flex">
                     <div className="w-full rounded-lg bg-accent border-[1px] border-[#00000014] hidden items-center justify-start p-2 px-4 gap-1 md:flex-col md:items-start md:flex">
                         <h1 className="text-base font-medium">Descrição</h1>
@@ -238,6 +265,15 @@ export default function Products({ data }: DataProps) {
                     <p className="text-sm px-3 text-info-content">
                         {description}
                     </p>
+=======
+                <div className="flex-col my-10 gap-3 text-info-content hidden md:flex">
+                    <div className="w-full rounded-lg bg-colorCard hidden items-center justify-start p-4 gap-1 md:flex-col md:items-start md:flex">
+                        <h1 className="text-2xl text-white">Descrição</h1>
+                    </div>
+                    <span className="text-sm px-3 text-primary">
+                        {data.data.description && refact(data.data.description)}
+                    </span>
+>>>>>>> f19df69764f674057aae3c4a4a6ae4e7a35f57ec
                 </div>
             </div>
         </>
@@ -261,7 +297,11 @@ export const getStaticPaths = async () => {
 
     const paths = data.data.map((product: IProduct) => ({
         params: {
+<<<<<<< HEAD
             slugCategory: product.name.toLowerCase().replace(/ /g, '-'),
+=======
+            slugCategory: product.name.toLowerCase().replace(' ', '-'),
+>>>>>>> f19df69764f674057aae3c4a4a6ae4e7a35f57ec
             slugProduct: product.slug,
         },
     }))
