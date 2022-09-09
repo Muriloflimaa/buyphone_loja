@@ -20,6 +20,7 @@ import { ICategory } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
@@ -36,9 +37,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
+    const returnPrice = verificationPrice(price)
 
     const total = cart.reduce((sumTotal, product) => {
-        return sumTotal + price?.price * product.amount
+        return sumTotal + returnPrice.ourPrice * product.amount
     }, 0)
 
     const handleClick = () => {

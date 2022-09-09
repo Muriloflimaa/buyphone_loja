@@ -11,6 +11,9 @@ const ProductCart = ({ data }: any) => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
+    const returnPrice = verificationPrice(data)
+    // Cart
+    const { cart, removeProduct, updateProductAmount } = useCart()
 
     useEffect(() => {
         if (
@@ -34,13 +37,10 @@ const ProductCart = ({ data }: any) => {
         }
     }, [])
 
-    // Cart
-    const { cart, removeProduct, updateProductAmount } = useCart()
-
     const cartFormatted = cart.map((product) => ({
         ...product,
-        priceFormated: data?.price,
-        subTotal: data?.price * product.amount,
+        priceFormated: returnPrice.ourPrice,
+        subTotal: returnPrice.ourPrice * product.amount,
     }))
 
     function handleProductIncrement(product: Product) {

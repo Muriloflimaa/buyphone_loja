@@ -6,11 +6,11 @@ export const verificationPrice = (products: IProduct) => {
 
     const discount = userData?.type === 1 ? 12.5 : 7
     const itens = [
-        products.price,
-        products.magalu_price,
-        products.americanas_price,
-        products.casasbahia_price,
-        products.ponto_price,
+        products?.price,
+        products?.magalu_price,
+        products?.americanas_price,
+        products?.casasbahia_price,
+        products?.ponto_price,
     ]
     const filteredItens = itens.filter((item) => item)
     const averagePrice =
