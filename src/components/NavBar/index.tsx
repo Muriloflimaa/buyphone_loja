@@ -58,6 +58,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             try {
                 const dat = await apiPedidos.get(`products/${data.id}`)
                 setPrice(dat.data.data)
+                // console.log(dat.data.data.price)
             } catch (error) {
                 console.log(error)
             }
@@ -212,8 +213,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             <div className="card-body">
                                                 <div>
                                                     {cartSize > 0 ? (
-                                                        <ProductCart />
+                                                        <ProductCart
+                                                            data={price}
+                                                        />
                                                     ) : (
+                                                        // <Teste />
                                                         <h1>Carrinho vazio</h1>
                                                     )}
                                                 </div>

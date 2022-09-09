@@ -5,23 +5,12 @@ import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
 import { moneyMask } from '../../utils/masks'
+import { verificationPrice } from '../../utils/verificationPrice'
 
-const ProductCart = () => {
+const ProductCart = ({ data }: any) => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
-    const [price, setPrice] = useState<any>()
-
-    useEffect(() => {
-        cart.map(async (data) => {
-            try {
-                const dat = await apiPedidos.get(`products/${data.id}`)
-                setPrice(dat.data.data)
-            } catch (error) {
-                console.log(error)
-            }
-        })
-    }, [])
 
     useEffect(() => {
         if (
@@ -44,19 +33,15 @@ const ProductCart = () => {
             setPadding(false)
         }
     }, [])
+
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
 
     const cartFormatted = cart.map((product) => ({
         ...product,
-        priceFormated: price?.price,
-        subTotal: price?.price * product.amount,
+        priceFormated: data?.price,
+        subTotal: data?.price * product.amount,
     }))
-    // const total = formatPrice(
-    //     cart.reduce((sumTotal, product) => {
-    //         return sumTotal + product.price * product.amount
-    //     }, 0)
-    // )
 
     function handleProductIncrement(product: Product) {
         updateProductAmount({
