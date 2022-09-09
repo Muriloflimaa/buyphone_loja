@@ -12,6 +12,7 @@ const ProductCart = ({ data }: any) => {
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
     const returnPrice = verificationPrice(data)
+
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
 
@@ -25,6 +26,7 @@ const ProductCart = ({ data }: any) => {
             setShow(false)
         }
     }, [])
+
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||

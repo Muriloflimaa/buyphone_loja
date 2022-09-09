@@ -32,15 +32,15 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { isAuthenticated, signOut } = useContext(AuthContext)
-    const [price, setPrice] = useState<any | undefined>()
+    const [data, setData] = useState<any | undefined>()
     const { cart } = useCart()
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
-    const returnPrice = verificationPrice(price)
+    const returnPrice = verificationPrice(data)
 
     const total = cart.reduce((sumTotal, product) => {
-        return sumTotal + returnPrice.ourPrice * product.amount
+        return sumTotal + returnPrice?.ourPrice * product.amount
     }, 0)
 
     const handleClick = () => {
@@ -59,13 +59,12 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         cart.map(async (data) => {
             try {
                 const dat = await apiPedidos.get(`products/${data.id}`)
-                setPrice(dat.data.data)
-                // console.log(dat.data.data.price)
+                setData(dat.data.data)
             } catch (error) {
                 console.log(error)
             }
         })
-    }, [])
+    }, [cart])
 
     const user = GetUseType()
 
@@ -216,10 +215,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 <div>
                                                     {cartSize > 0 ? (
                                                         <ProductCart
-                                                            data={price}
+                                                            data={data}
                                                         />
                                                     ) : (
-                                                        // <Teste />
                                                         <h1>Carrinho vazio</h1>
                                                     )}
                                                 </div>
