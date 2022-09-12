@@ -32,7 +32,7 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { isAuthenticated, signOut } = useContext(AuthContext)
-    const [data, setData] = useState<any | undefined>()
+    const [data, setData] = useState<any>([])
     const { cart } = useCart()
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
@@ -56,9 +56,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     }, [isAuthenticated])
 
     useEffect(() => {
-        cart.map(async (data) => {
+        cart.map(async (item) => {
             try {
-                const dat = await apiPedidos.get(`products/${data.id}`)
+                const dat = await apiPedidos.get(`products/${item.id}`)
                 setData(dat.data.data)
             } catch (error) {
                 console.log(error)

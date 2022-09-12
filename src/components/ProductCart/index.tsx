@@ -5,6 +5,7 @@ import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
 import { moneyMask } from '../../utils/masks'
+import ReturnProduct from '../../utils/ReturnProduct'
 import { verificationPrice } from '../../utils/verificationPrice'
 
 const ProductCart = ({ data }: any) => {
@@ -66,6 +67,17 @@ const ProductCart = ({ data }: any) => {
     return (
         <div className="flex flex-col gap-4">
             {cartFormatted.map((product) => {
+                // const [teste, setTeste] = useState([])
+
+                // useEffect(() => {
+                //     async function Return() {
+                //         const data = await ReturnProduct(product.id)
+                //         setTeste(...data)
+                //     }
+                //     Return()
+                // }, [])
+                // console.log(teste)
+
                 return (
                     <div
                         className={

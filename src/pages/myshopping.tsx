@@ -1,5 +1,5 @@
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { apiLojaBeta } from '../services/apiBetaConfigs'
 import { GetUseType } from '../utils/getUserType'
 import ListProducts from '../components/ListProducts'
@@ -13,11 +13,12 @@ function MyShopping() {
     useEffect(() => {
         async function Teste() {
             const cookies = parseCookies(undefined)
-            const USER = JSON.parse(cookies['@BuyPhone:User'])
-            const data = await apiLojaBeta(`orders/customer/${USER?.id}`)
-            setData(data)
+            if (cookies['@BuyPhone:User']) {
+                const USER = JSON.parse(cookies['@BuyPhone:User'])
+                const data = await apiLojaBeta(`orders/customer/${USER?.id}`)
+                setData(data)
+            }
         }
-        console.log(data)
         Teste()
     }, [])
 
@@ -51,7 +52,7 @@ function MyShopping() {
                     )
                 })
             ) : (
-                <span className="flex justify-center">Nenhuma compra.</span>
+                <span className="flex justify-center">Nenhuma compra</span>
             )}
         </div>
     )
