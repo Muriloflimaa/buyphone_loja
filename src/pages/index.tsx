@@ -53,24 +53,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
     return (
         <>
-            <div className=" z-50 pb-4 fixed w-[300px] left-1/2 ml-[40%] -mt-[75px] md:-mt-32 block">
-                <div className="dropdown dropdown-left dropdown-end">
-                    <label tabIndex={0}>
-                        <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden" />
-                    </label>
-                    <ul
-                        tabIndex={0}
-                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[300px] mt-22"
-                    >
-                        <li>
-                            <a>Item 1</a>
-                        </li>
-                        <li>
-                            <a>Item 2</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <div className=" z-50 pb-4 fixed w-[300px] left-1/2 -ml-[150px] -mt-[87px] md:-mt-32 hidden md:block">
                 <input
                     type="search"
