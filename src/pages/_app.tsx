@@ -13,6 +13,7 @@ import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { Theme } from 'react-daisyui'
+import { SearchProvider } from '../context/SearchContext'
 
 interface AppProps {
     data: {
@@ -46,7 +47,9 @@ export default function MyApp({ Component, pageProps, data }: AppProps) {
                         <CartProvider>
                             <NavBar dataCategory={data} />
                             <div className="py-12 md:py-20"></div>
-                            <Component {...pageProps} />
+                            <SearchProvider>
+                                <Component {...pageProps} />
+                            </SearchProvider>
                             <Footer dataCategory={data} />
                         </CartProvider>
                         <MyBottomNavigation />

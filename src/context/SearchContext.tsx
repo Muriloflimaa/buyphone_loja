@@ -1,9 +1,9 @@
-import { ReactNode, useState } from 'react'
-import { createContext } from 'vm'
-import { apiPedidos } from '../services/apiClient'
+import { ReactNode, useEffect, useState } from 'react'
+import { createContext } from 'react'
 
 type SearchContextProps = {
-    Api: any
+    search: any
+    setInput: any
 }
 
 type SearchContextProps2 = {
@@ -12,24 +12,25 @@ type SearchContextProps2 = {
 
 export const SearchContext = createContext({} as SearchContextProps)
 
-export function AuthProvider({ children }: SearchContextProps2) {
-    const [items, setItems] = useState([])
-    const [inputSearch, setInputSearch] = useState('')
-    const [searchParam] = useState(['name'])
+export function SearchProvider({ children }: SearchContextProps2) {
+    const [input, setInput] = useState('')
+    const searchParam = ['name', 'memory', 'color']
 
-    async function Api() {
-        try {
-            const { data } = await apiPedidos.get(`categories/`)
-
-            setItems(data.data)
-        } catch (error) {
-            console.log(error)
-        }
+    function search(items: any) {
+        return items.filter((item: any) => {
+            return searchParam.some((newItem) => {
+                return (
+                    item[newItem]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) > -1
+                )
+            })
+        })
     }
-    Api()
 
     return (
-        <SearchContext.Provider value={{ items }}>
+        <SearchContext.Provider value={{ search, setInput }}>
             {children}
         </SearchContext.Provider>
     )

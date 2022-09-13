@@ -14,12 +14,14 @@ import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
+import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import { SearchConst } from '../../utils/Search'
 import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -37,7 +39,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
-    const returnPrice = verificationPrice(data)
+    const user = GetUseType()
+    const returnPrice = verificationPrice(data, user)
+    const { setInput } = useContext(SearchContext)
 
     const total = cart.reduce((sumTotal, product) => {
         return sumTotal + returnPrice?.ourPrice * product.amount
@@ -65,8 +69,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             }
         })
     }, [cart])
-
-    const user = GetUseType()
 
     return (
         <>
@@ -112,9 +114,15 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     <div>
                                         <label className="input-group">
                                             <input
-                                                type="text"
-                                                placeholder="Pesquisa..."
+                                                type="search"
+                                                name="search-form"
+                                                id="search-form"
                                                 className="input input-bordered rounded-md !important w-full text-info-content"
+                                                placeholder="Pesquisa..."
+                                                // value={inputSearch}
+                                                // onChange={(e) =>
+                                                //     input(e.target.value)
+                                                // }
                                             />
                                         </label>
                                     </div>

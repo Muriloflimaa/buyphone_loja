@@ -1,15 +1,20 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { NextPage } from 'next'
+import { GetServerSidePropsContext, NextPage } from 'next'
 import Link from 'next/link'
+import { destroyCookie, parseCookies } from 'nookies'
+import { useContext } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
+import { SearchContext } from '../context/SearchContext'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
+import { GetUseType } from '../utils/getUserType'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { verificationPrice } from '../utils/verificationPrice'
+import jwt_decode from 'jwt-decode'
 
 interface DataProps {
     data: {
@@ -22,11 +27,14 @@ interface CartItemsAmount {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
+    const user = GetUseType()
     const { cart } = useCart()
+    const { search } = useContext(SearchContext)
+
     // const { userData } = useContext(AuthContext)
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
-        const newSumAmount = { ...sumAmount }
+        const newSumAmount: any = { ...sumAmount }
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
@@ -56,8 +64,11 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
-                            category.products.map((products) => {
-                                const returnPrice = verificationPrice(products)
+                            search(category.products).map((products: any) => {
+                                const returnPrice = verificationPrice(
+                                    products,
+                                    user
+                                )
                                 return (
                                     returnPrice.ourPrice > 0 && (
                                         <ProductCard
@@ -106,14 +117,13 @@ const Home: NextPage<DataProps> = ({ data }) => {
     )
 }
 
-export const getStaticProps = PersistentLogin(async (ctx) => {
+export const getServerSideProps = PersistentLogin(async (ctx) => {
     try {
         const { data } = await apiPedidos.get(`categories/`)
         return {
             props: {
                 data,
             },
-            revalidate: 60 * 60 * 6,
         }
     } catch (error) {
         return {

@@ -1,16 +1,16 @@
-import { IProduct } from './../types/index'
+import { IProduct, IUser } from './../types/index'
 import { GetUseType } from './getUserType'
 
-export const verificationPrice = (products: IProduct) => {
-    const userData = GetUseType()
+export const verificationPrice = (products: IProduct, user: IUser) => {
+    // const userData = GetUseType()
 
-    const discount = userData?.type === 1 ? 12.5 : 7
+    const discount = user?.type === 1 ? 12.5 : 7
     const itens = [
-        products?.price,
-        products?.magalu_price,
-        products?.americanas_price,
-        products?.casasbahia_price,
-        products?.ponto_price,
+        products.price,
+        products.magalu_price,
+        products.americanas_price,
+        products.casasbahia_price,
+        products.ponto_price,
     ]
     const filteredItens = itens.filter((item) => item)
     const averagePrice =

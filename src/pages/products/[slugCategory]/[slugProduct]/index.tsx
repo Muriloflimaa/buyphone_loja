@@ -8,6 +8,7 @@ import Rating from '../../../../components/Rating'
 import { useCart } from '../../../../context/UseCartContext'
 import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { IProduct } from '../../../../types'
+import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
 import { refact } from '../../../../utils/RefctDescript'
 import { verificationColor } from '../../../../utils/verificationColors'
@@ -30,7 +31,8 @@ export default function Products({ data }: DataProps) {
     const [color, setColor] = useState<string | undefined>()
     const [qtd, setQtd] = useState(0)
     const [showMore, setShowMore] = useState(false)
-    const returnPrice = verificationPrice(data.data)
+    const user = GetUseType()
+    const returnPrice = verificationPrice(data.data, user)
     const [description, setDescrition] = useState('')
 
     useEffect(() => {
