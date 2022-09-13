@@ -10,7 +10,6 @@ export default function Products({ data }) {
     const { userData } = useContext(AuthContext)
     const discount = userData?.type === 1 ? 12.5 : 7
 
-    console.log(data)
     return (
         <>
             <div className="h-auto">

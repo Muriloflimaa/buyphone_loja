@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
@@ -41,7 +41,7 @@ export default function Teste({ data }: DataProps) {
                         id="search-form"
                         className="p-3"
                         placeholder="Search for..."
-                        // value={inputSearch}
+                        value={inputSearch}
                         onChange={(e) => setInputSearch(e.target.value)}
                     />
                     <span className="sr-only">Search countries here</span>

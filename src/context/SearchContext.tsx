@@ -3,7 +3,6 @@ import { createContext } from 'react'
 
 type SearchContextProps = {
     search: any
-    setInput: any
 }
 
 type SearchContextProps2 = {
@@ -13,8 +12,9 @@ type SearchContextProps2 = {
 export const SearchContext = createContext({} as SearchContextProps)
 
 export function SearchProvider({ children }: SearchContextProps2) {
-    const [input, setInput] = useState('')
     const searchParam = ['name', 'memory', 'color']
+
+    const value = 'iphone x'
 
     function search(items: any) {
         return items.filter((item: any) => {
@@ -23,14 +23,14 @@ export function SearchProvider({ children }: SearchContextProps2) {
                     item[newItem]
                         .toString()
                         .toLowerCase()
-                        .indexOf(input.toLowerCase()) > -1
+                        .indexOf(value.toLowerCase()) > -1
                 )
             })
         })
     }
 
     return (
-        <SearchContext.Provider value={{ search, setInput }}>
+        <SearchContext.Provider value={{ search }}>
             {children}
         </SearchContext.Provider>
     )

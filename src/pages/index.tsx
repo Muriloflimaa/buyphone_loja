@@ -1,20 +1,18 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetServerSidePropsContext, NextPage } from 'next'
+import { SearchIcon } from '@heroicons/react/solid'
+import { NextPage } from 'next'
 import Link from 'next/link'
-import { destroyCookie, parseCookies } from 'nookies'
-import { useContext } from 'react'
+import { useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
-import { SearchContext } from '../context/SearchContext'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { verificationPrice } from '../utils/verificationPrice'
-import jwt_decode from 'jwt-decode'
 
 interface DataProps {
     data: {
@@ -29,9 +27,7 @@ interface CartItemsAmount {
 const Home: NextPage<DataProps> = ({ data }) => {
     const user = GetUseType()
     const { cart } = useCart()
-    const { search } = useContext(SearchContext)
 
-    // const { userData } = useContext(AuthContext)
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
         const newSumAmount: any = { ...sumAmount }
@@ -39,8 +35,53 @@ const Home: NextPage<DataProps> = ({ data }) => {
         return newSumAmount
     }, {} as CartItemsAmount)
 
+    const [inputSearch, setInputSearch] = useState('')
+    const [searchParam] = useState(['name', 'memory', 'color'])
+
+    function search(items: any) {
+        return items.filter((item: any) => {
+            return searchParam.some((newItem) => {
+                return (
+                    item[newItem]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(inputSearch.toLowerCase()) > -1
+                )
+            })
+        })
+    }
+
     return (
         <>
+            <div className=" z-50 pb-4 fixed w-[300px] left-1/2 ml-[40%] -mt-[75px] md:-mt-32 block">
+                <div className="dropdown dropdown-left dropdown-end">
+                    <label tabIndex={0}>
+                        <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden" />
+                    </label>
+                    <ul
+                        tabIndex={0}
+                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-[300px] mt-22"
+                    >
+                        <li>
+                            <a>Item 1</a>
+                        </li>
+                        <li>
+                            <a>Item 2</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div className=" z-50 pb-4 fixed w-[300px] left-1/2 -ml-[150px] -mt-[87px] md:-mt-32 hidden md:block">
+                <input
+                    type="search"
+                    name="search-form"
+                    id="search-form"
+                    className="input input-bordered rounded-md !important w-full text-info-content"
+                    placeholder="Pesquisa..."
+                    value={inputSearch}
+                    onChange={(e) => setInputSearch(e.target.value)}
+                />
+            </div>
             <div className="h-auto">
                 <CarouselComponent />
                 <img

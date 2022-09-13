@@ -14,14 +14,12 @@ import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
-import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
-import { SearchConst } from '../../utils/Search'
 import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -41,7 +39,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const [isUser, setIsUser] = useState(false)
     const user = GetUseType()
     const returnPrice = verificationPrice(data, user)
-    const { setInput } = useContext(SearchContext)
 
     const total = cart.reduce((sumTotal, product) => {
         return sumTotal + returnPrice?.ourPrice * product.amount
@@ -109,9 +106,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         />
                                     </a>
                                 </Link>
-                                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
+                                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden opacity-0" />
                                 <div className="hidden md:block w-full">
-                                    <div>
+                                    {/* <div>
                                         <label className="input-group">
                                             <input
                                                 type="search"
@@ -119,13 +116,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 id="search-form"
                                                 className="input input-bordered rounded-md !important w-full text-info-content"
                                                 placeholder="Pesquisa..."
-                                                // value={inputSearch}
-                                                // onChange={(e) =>
-                                                //     input(e.target.value)
-                                                // }
                                             />
                                         </label>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
                                     {!isUser ? (

@@ -31,7 +31,7 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
-    const [storagedCart] = useLocalStorage('@BuyPhone:cart', '')
+    const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
 
     const [cart, setCart] = useState<Product[]>(() => {
         // Verificando se existe no localstorage o carrinho
@@ -99,7 +99,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
                     price: products.price,
                     image: products.media[0].original_url,
                     memory: products.memory,
-                }
+                } //pega os dados que vão ser gravados no carrinho
                 updatedCart.push(newProduct)
             }
             //Atualizando o Carrinho
