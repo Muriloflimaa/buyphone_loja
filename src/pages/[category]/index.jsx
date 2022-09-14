@@ -9,6 +9,7 @@ import { AuthContext } from '../../context/AuthContext'
 export default function Products({ data }) {
     const { userData } = useContext(AuthContext)
     const discount = userData?.type === 1 ? 12.5 : 7
+
     return (
         <>
             <div className="h-auto">
@@ -54,7 +55,7 @@ export default function Products({ data }) {
                                     price={ourPrice}
                                     averagePrice={averagePrice}
                                     slug={products.slug}
-                                    // slugCategory={category.slug}
+                                    slugCategory={data.data.slug}
                                     image={products.media[0].original_url}
                                     memory={products.memory}
                                 />
@@ -91,6 +92,7 @@ export const getStaticProps = async (context) => {
             props: {
                 data,
             },
+            revalidate: 60 * 60 * 6,
         }
     } catch (error) {
         return {

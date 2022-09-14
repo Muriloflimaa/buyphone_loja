@@ -6,13 +6,14 @@ import {
 import { destroyCookie, parseCookies } from 'nookies'
 import jwt_decode from 'jwt-decode'
 
-export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
+export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
     return async (
         ctx: GetServerSidePropsContext
-    ): Promise<GetServerSidePropsResult<P>> => {
+    ): Promise<GetServerSidePropsResult<void>> => {
         const cookies = parseCookies(ctx)
 
         if (cookies['@BuyPhone:Token']) {
+            //se existe um token entrar aqui!
             const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
 
             //se existir um token e estiver expirado, mandar para o login
@@ -25,15 +26,8 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
                         permanent: false,
                     },
                 }
-            }
-            //se o token tiver válido mandar para a home
-            else {
-                return {
-                    redirect: {
-                        destination: '/',
-                        permanent: false,
-                    },
-                }
+            } else {
+                return await fn(ctx)
             }
         }
         return await fn(ctx)

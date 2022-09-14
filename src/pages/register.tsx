@@ -1,9 +1,8 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useState } from 'react'
-import toast, { ToastBar } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import ReactInputMask from 'react-input-mask'
-import { api } from '../services/apiClient'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 import ErrorImg from '../assets/images/error.webp'
 import SuccessImg from '../assets/images/success.webp'
@@ -34,7 +33,7 @@ export default function register() {
             password &&
             confirmPass
         ) {
-            if (acceptTerms == true) {
+            if (acceptTerms) {
                 if (password != confirmPass) {
                     toast.error('senhas não conferem')
                 } else {
@@ -304,10 +303,8 @@ export default function register() {
     )
 }
 
-export const getServerSideProps = WithSSRGuest({
-    fn: async (ctx) => {
-        return {
-            props: {},
-        }
-    },
+export const getServerSideProps = WithSSRGuest(async (ctx) => {
+    return {
+        props: {},
+    }
 })

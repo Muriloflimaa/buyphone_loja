@@ -8,19 +8,22 @@ import styles from './styles.module.scss'
 
 interface Homeprops {
     children: ReactElement
-    width: string
 }
 
-const LoginRegister = ({ children, width }: Homeprops) => {
-    const [wid, setWidth] = useState(false)
+const LoginRegister = ({ children }: Homeprops) => {
+    const [width, setWidth] = useState('')
+    const [showBack, setShowBack] = useState(false)
     const router = useRouter()
     useEffect(() => {
         if (router.asPath == '/terms' || router.asPath == '/politics') {
-            setWidth(true)
+            setWidth('max-w-2xl')
+            setShowBack(true)
         } else {
-            setWidth(false)
+            setWidth('max-w-md')
+            setShowBack(false)
         }
-    }, [])
+    }, [router])
+
     return (
         <>
             <div className="glass z-10 fixed left-0 w-full h-full"></div>
@@ -61,7 +64,7 @@ const LoginRegister = ({ children, width }: Homeprops) => {
                                     </div>
                                 </Link>
                             </div>
-                            {wid == true ? (
+                            {showBack === true ? (
                                 <div className="flex justify-center pt-4">
                                     <button
                                         className="flex gap-2 font-bold text-lg justify-center items-center py-4 text-default"

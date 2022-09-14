@@ -82,34 +82,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (cookies['@BuyPhone:Token']) {
             const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-            const timeElapsed = Date.now() // pega a data de agora
-            const today = new Date(timeElapsed)
-            const d = new Date(0)
 
-            d.setUTCSeconds(decodedToken.exp) // pega a data do token e transforma ela em tempo
-
-            const diff = Math.abs(d.getTime() - today.getTime()) //divide o tempo do token pelo tempo atual
-            const days = Math.ceil(diff / (1000 * 60)) //divide o tempo atual e o tempo restante do token em Min - 60 = 1 Hora
-
-            // Se existir um Token e ele tiver o tempo menor que 0 minutos ele nao vai chamar a api vai só limpar os tokens
-            if (days < 0) {
+            if (Date.now() >= decodedToken.exp * 1000) {
                 destroyCookie(undefined, '@BuyPhone:User')
                 destroyCookie(undefined, '@BuyPhone:Token')
                 Router.push('/')
-            }
-            // se existir um token maior que os 10 minutos ele vai chamar a api de logout e destruir os tokens
-            else {
+            } else {
                 try {
                     await apiLogin.post('/logout')
                     destroyCookie(undefined, '@BuyPhone:User')
                     destroyCookie(undefined, '@BuyPhone:Token')
                     Router.push('/')
                 } catch (error) {
-                    toast.error('Não foi possível deslogar')
+                    destroyCookie(undefined, '@BuyPhone:User')
+                    destroyCookie(undefined, '@BuyPhone:Token')
+                    Router.push('/')
                 }
             }
         } else {
-            toast.error('Você precisa estar logado')
+            destroyCookie(undefined, '@BuyPhone:User')
+            destroyCookie(undefined, '@BuyPhone:Token')
+            Router.push('/')
         }
     }
 

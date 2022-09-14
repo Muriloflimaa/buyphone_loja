@@ -20,7 +20,7 @@ interface FooterProps {
 
 export default function Footer({ dataCategory }: FooterProps) {
     return (
-        <footer className="bg-secondary w-full py-6 pb-32 p-4 md:pb-6">
+        <footer className="bg-secondary w-full py-6 pb-32 p-4 md:pb-6 max-w-7xl mx-auto">
             <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between gap-y-12 md:gap-y-0 gap-x-6">
                 <div>
                     <h3 className="font-bold text-lg mb-3 text-info-content">

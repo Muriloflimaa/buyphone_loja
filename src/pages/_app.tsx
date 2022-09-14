@@ -23,37 +23,26 @@ interface AppProps {
 }
 
 export default function MyApp({ Component, pageProps, data }: AppProps) {
-    const router = useRouter()
-    const [width, setWidth] = useState('')
-
-    useEffect(() => {
-        if (router.asPath == '/terms' || router.asPath == '/politics') {
-            setWidth('max-w-2xl')
-        } else {
-            setWidth('max-w-md')
-        }
-    })
-
     const userData = GetUseType()
+    const router = useRouter()
 
     return (
         <Theme
             dataTheme={`${userData?.type === 1 ? 'dark' : 'light'}`}
             className="bg-base-100"
         >
-             <Toaster position="top-right" reverseOrder={false} />
+            <Toaster position="top-right" reverseOrder={false} />
             <AuthProvider>
                 {router.route === `/login` ||
                 router.route === `/register` ||
                 router.route === `/terms` ||
                 router.route === `/politics` ||
                 router.route === `/forgot-password` ? (
-                    <LoginRegister width={width}>
+                    <LoginRegister>
                         <Component {...pageProps} />
                     </LoginRegister>
                 ) : (
                     <>
-                       
                         <CartProvider>
                             <NavBar dataCategory={data} />
                             <div className="py-12 md:py-20"></div>

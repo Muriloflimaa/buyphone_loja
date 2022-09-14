@@ -15,10 +15,12 @@ import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
+import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
-import { formatPrice } from '../../utils/format'
 import { GetUseType } from '../../utils/getUserType'
+import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
@@ -30,15 +32,17 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { isAuthenticated, signOut } = useContext(AuthContext)
+    const [data, setData] = useState<any>([])
     const { cart } = useCart()
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
-    const total = formatPrice(
-        cart.reduce((sumTotal, product) => {
-            return sumTotal + product.price * product.amount
-        }, 0)
-    )
+    const user = GetUseType()
+    const returnPrice = verificationPrice(data, user)
+
+    const total = cart.reduce((sumTotal, product) => {
+        return sumTotal + returnPrice?.ourPrice * product.amount
+    }, 0)
 
     const handleClick = () => {
         setIsOn(!isOn)
@@ -52,7 +56,16 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         }
     }, [isAuthenticated])
 
-    const user = GetUseType()
+    useEffect(() => {
+        cart.map(async (item) => {
+            try {
+                const dat = await apiPedidos.get(`products/${item.id}`)
+                setData(dat.data.data)
+            } catch (error) {
+                console.log(error)
+            }
+        })
+    }, [cart])
 
     return (
         <>
@@ -93,17 +106,19 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         />
                                     </a>
                                 </Link>
-                                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden " />
+                                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden opacity-0" />
                                 <div className="hidden md:block w-full">
-                                    <div>
+                                    {/* <div>
                                         <label className="input-group">
                                             <input
-                                                type="text"
-                                                placeholder="Pesquisa..."
+                                                type="search"
+                                                name="search-form"
+                                                id="search-form"
                                                 className="input input-bordered rounded-md !important w-full text-info-content"
+                                                placeholder="Pesquisa..."
                                             />
                                         </label>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
                                     {!isUser ? (
@@ -142,9 +157,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                     </Link>
                                                 </li>
                                                 <li>
-                                                    <a href="https://loja.buyphone.com.br/minhas-compras">
-                                                        Minhas Compras
-                                                    </a>
+                                                    <Link href={'/myshopping'}>
+                                                        <a>Minhas Compras</a>
+                                                    </Link>
                                                 </li>
                                                 <li>
                                                     <button
@@ -202,7 +217,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             <div className="card-body">
                                                 <div>
                                                     {cartSize > 0 ? (
-                                                        <ProductCart />
+                                                        <ProductCart
+                                                            data={data}
+                                                        />
                                                     ) : (
                                                         <h1>Carrinho vazio</h1>
                                                     )}
@@ -214,7 +231,10 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                         Valor Total:
                                                     </span>
                                                     <span className="font-semibold text-lg">
-                                                        {total}
+                                                        R${' '}
+                                                        {moneyMask(
+                                                            total.toString()
+                                                        )}
                                                     </span>
                                                 </div>
                                             </div>

@@ -4,12 +4,13 @@ import {
     useContext,
     useEffect,
     useRef,
-    useState
+    useState,
 } from 'react'
 import { toast } from 'react-hot-toast'
 import { apiPedidos } from '../services/apiClient'
 import { Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface CartProviderProps {
     children: ReactNode
@@ -30,7 +31,7 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
-    const [storagedCart] = useLocalStorage('@BuyPhone:cart', '')
+    const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
 
     const [cart, setCart] = useState<Product[]>(() => {
         // Verificando se existe no localstorage o carrinho
@@ -87,8 +88,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
                 //Se não, obtem o produto da api e add ao carrinho com o valor de 1
                 const addProduct = await apiPedidos.get(`products/${productId}`)
                 const products = addProduct.data.data
+                // const returnPrice = verificationPrice(products)
+                // console.log(returnPrice)
 
-                //abaixo precisa typar o produto
                 const newProduct = {
                     id: products.id,
                     amount: 1,
@@ -97,7 +99,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
                     price: products.price,
                     image: products.media[0].original_url,
                     memory: products.memory,
-                }
+                } //pega os dados que vão ser gravados no carrinho
                 updatedCart.push(newProduct)
             }
             //Atualizando o Carrinho

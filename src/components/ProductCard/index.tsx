@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
+import { verificationColor } from '../../utils/verificationColors'
 
 interface ProductCardProps {
     id: number
@@ -28,64 +29,18 @@ const ProductCard = ({
     slugCategory,
     memory,
 }: ProductCardProps) => {
-    const [color, setColor] = useState('')
-
-    useEffect(() => {
-        if (colorPhone == 'Preto') {
-            setColor('bg-black')
-        }
-        if (colorPhone == 'Branco') {
-            setColor('bg-white')
-        }
-        if (colorPhone == 'Vermelho') {
-            setColor('bg-red-700')
-        }
-        if (colorPhone == 'Meia-noite') {
-            setColor('bg-gray-900')
-        }
-        if (colorPhone == 'Azul') {
-            setColor('bg-sky-700')
-        }
-        if (colorPhone == 'Azul-Sierra') {
-            setColor('bg-sky-200')
-        }
-        if (
-            colorPhone == 'Azul-Pacífico' ||
-            colorPhone == 'Azul Pacífico' ||
-            colorPhone == 'Azul pacífico'
-        ) {
-            setColor('bg-cyan-900')
-        }
-        if (colorPhone == 'Verde' || colorPhone == 'Verde-Alpino') {
-            setColor('bg-emerald-200')
-        }
-        if (colorPhone == 'Grafite') {
-            setColor('bg-zinc-500')
-        }
-        if (colorPhone == 'Prateado' || colorPhone == 'Estelar') {
-            setColor('bg-gray-50')
-        }
-        if (colorPhone == 'Dourado') {
-            setColor('bg-amber-100')
-        }
-        if (colorPhone == 'Rosa') {
-            setColor('bg-pink-200')
-        }
-    }, [])
-
+    const [color, setColor] = useState<string | undefined>()
     const { addProduct } = useCart()
 
     function handleAddProduct(id: number) {
         addProduct(id)
     }
 
+    useEffect(() => {
+        setColor(verificationColor(colorPhone))
+    }, [])
+
     return (
-        // <div className="relative flex items-center justify-center overflow-hidden rounded-lg">
-        //     <div
-        //         className={
-        //             'w-[390%] h-full absolute ' + styles.GradientBuyPhone
-        //         }
-        //     ></div>
         <div
             className="card card-compact w-full h-full shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
             key={id}
@@ -102,7 +57,7 @@ const ProductCard = ({
                 <div className="flex gap-2 justify-center">
                     <div className="badge badge-outline text-xs h-auto">
                         <div
-                            className={`h-2 w-2 rounded-full mr-2 border-white' ${color}`}
+                            className={`h-2 w-2 rounded-full mr-2 border border-black ${color}`}
                         ></div>
                         <span className="w-max">{colorPhone}</span>
                     </div>
@@ -150,12 +105,11 @@ const ProductCard = ({
                         Comprar
                     </button>
                 </div>
-                <Link href={`/${slugCategory}/${slug}`} passHref>
+                <Link href={`products/${slugCategory}/${slug}`} passHref>
                     <a className="text-xs link">Saiba mais</a>
                 </Link>
             </div>
         </div>
-        // </div>
     )
 }
 export default ProductCard

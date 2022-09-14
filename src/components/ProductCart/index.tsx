@@ -2,14 +2,20 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
+import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
-import { formatPrice } from '../../utils/format'
+import { moneyMask } from '../../utils/masks'
+import ReturnProduct from '../../utils/ReturnProduct'
+import { verificationPrice } from '../../utils/verificationPrice'
 
-const ProductCart = () => {
+const ProductCart = ({ data }: any) => {
     const router = useRouter()
-
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
+    const returnPrice = verificationPrice(data)
+
+    // Cart
+    const { cart, removeProduct, updateProductAmount } = useCart()
 
     useEffect(() => {
         if (
@@ -21,6 +27,7 @@ const ProductCart = () => {
             setShow(false)
         }
     }, [])
+
     useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
@@ -32,19 +39,12 @@ const ProductCart = () => {
             setPadding(false)
         }
     }, [])
-    // Cart
-    const { cart, removeProduct, updateProductAmount } = useCart()
 
     const cartFormatted = cart.map((product) => ({
         ...product,
-        priceFormated: formatPrice(product.price),
-        subTotal: formatPrice(product.price * product.amount),
+        priceFormated: returnPrice.ourPrice,
+        subTotal: returnPrice.ourPrice * product.amount,
     }))
-    const total = formatPrice(
-        cart.reduce((sumTotal, product) => {
-            return sumTotal + product.price * product.amount
-        }, 0)
-    )
 
     function handleProductIncrement(product: Product) {
         updateProductAmount({
@@ -67,10 +67,21 @@ const ProductCart = () => {
     return (
         <div className="flex flex-col gap-4">
             {cartFormatted.map((product) => {
+                // const [teste, setTeste] = useState([])
+
+                // useEffect(() => {
+                //     async function Return() {
+                //         const data = await ReturnProduct(product.id)
+                //         setTeste(...data)
+                //     }
+                //     Return()
+                // }, [])
+                // console.log(teste)
+
                 return (
                     <div
                         className={
-                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-PrimaryText text-xs flex-col ' +
+                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col ' +
                             (padding == true ? ' p-4' : ' p-0')
                         }
                         key={product.id}
@@ -135,7 +146,9 @@ const ProductCart = () => {
                             </div>
 
                             <div className="flex flex-col items-end">
-                                <strong>{product.subTotal}</strong>
+                                <strong>
+                                    {moneyMask(product.subTotal.toString())}
+                                </strong>
                                 <button
                                     type="button"
                                     data-testid="remove-product"
@@ -143,7 +156,7 @@ const ProductCart = () => {
                                         handleRemoveProduct(product.id)
                                     }
                                 >
-                                    <TrashIcon className="h-4 w-4 text-PrimaryText" />
+                                    <TrashIcon className="h-4 w-4 " />
                                 </button>
                             </div>
                         </div>

@@ -1,14 +1,18 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetStaticProps, NextPage } from 'next'
+import { SearchIcon } from '@heroicons/react/solid'
+import { NextPage } from 'next'
 import Link from 'next/link'
+import { useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
+import { PersistentLogin } from '../utils/PersistentLogin'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
     data: {
@@ -21,21 +25,45 @@ interface CartItemsAmount {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
+    const user = GetUseType()
     const { cart } = useCart()
-    // const { userData } = useContext(AuthContext)
+
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
-        const newSumAmount = { ...sumAmount }
+        const newSumAmount: any = { ...sumAmount }
         newSumAmount[product.id] = product.amount
         return newSumAmount
     }, {} as CartItemsAmount)
 
-    const userData = GetUseType()
+    const [inputSearch, setInputSearch] = useState('')
+    const [searchParam] = useState(['name', 'memory', 'color'])
 
-    const discount = userData?.type === 1 ? 12.5 : 7
+    function search(items: any) {
+        return items.filter((item: any) => {
+            return searchParam.some((newItem) => {
+                return (
+                    item[newItem]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(inputSearch.toLowerCase()) > -1
+                )
+            })
+        })
+    }
 
     return (
         <>
+            <div className=" z-50 pb-4 fixed w-[300px] left-1/2 -ml-[150px] -mt-[87px] md:-mt-32 hidden md:block">
+                <input
+                    type="search"
+                    name="search-form"
+                    id="search-form"
+                    className="input input-bordered rounded-md !important w-full text-info-content"
+                    placeholder="Pesquisa..."
+                    value={inputSearch}
+                    onChange={(e) => setInputSearch(e.target.value)}
+                />
+            </div>
             <div className="h-auto">
                 <CarouselComponent />
                 <img
@@ -55,39 +83,27 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         </span>
                     </div>
                 </div>
+
                 <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
                     {data.data.length > 0 ? (
                         data.data.map((category) =>
-                            category.products.map((products) => {
-                                const itens = [
-                                    products.price,
-                                    products.magalu_price,
-                                    products.americanas_price,
-                                    products.casasbahia_price,
-                                    products.ponto_price,
-                                ]
-                                const filteredItens = itens.filter(
-                                    (item) => item
+                            search(category.products).map((products: any) => {
+                                const returnPrice = verificationPrice(
+                                    products,
+                                    user
                                 )
-                                const averagePrice =
-                                    filteredItens.length > 0
-                                        ? Math.min(...filteredItens)
-                                        : 0
-                                const discountPrice = Math.round(
-                                    averagePrice * (discount / 100)
-                                )
-                                const ourPrice = averagePrice - discountPrice
-
                                 return (
-                                    ourPrice > 0 && (
+                                    returnPrice.ourPrice > 0 && (
                                         <ProductCard
                                             key={products.id}
                                             id={products.id}
                                             name={products.name}
                                             idCategory={category.id}
                                             colorPhone={products.color}
-                                            price={ourPrice}
-                                            averagePrice={averagePrice}
+                                            price={returnPrice.ourPrice}
+                                            averagePrice={
+                                                returnPrice.averagePrice
+                                            }
                                             slug={products.slug}
                                             slugCategory={category.slug}
                                             image={
@@ -124,7 +140,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps = PersistentLogin(async (ctx) => {
     try {
         const { data } = await apiPedidos.get(`categories/`)
         return {
@@ -139,6 +155,6 @@ export const getStaticProps: GetStaticProps = async () => {
             },
         }
     }
-}
+})
 
 export default Home

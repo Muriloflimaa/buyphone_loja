@@ -1,7 +1,8 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { FormEvent, useContext, useState } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import { AuthContext, setCookies } from '../context/AuthContext'
+import { apiLogin } from '../services/apiLogin'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function login() {
@@ -92,10 +93,8 @@ export default function login() {
     )
 }
 
-export const getServerSideProps = WithSSRGuest({
-    fn: async (ctx) => {
-        return {
-            props: {},
-        }
-    },
+export const getServerSideProps = WithSSRGuest(async (ctx) => {
+    return {
+        props: {},
+    }
 })
