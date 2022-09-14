@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
-import { WithSSRGuest } from '../../utils/WithSSRGuest'
 
 export default function profile() {
     return (
@@ -212,19 +211,19 @@ export default function profile() {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
-    const cookies = parseCookies(ctx)
+// export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
+//     const cookies = parseCookies(ctx)
 
-    if (cookies['@BuyPhone:Token']) {
-        return {
-            props: {},
-        }
-    } else {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-}
+//     if (cookies['@BuyPhone:Token']) {
+//         return {
+//             props: {},
+//         }
+//     } else {
+//         return {
+//             redirect: {
+//                 destination: '/',
+//                 permanent: false,
+//             },
+//         }
+//     }
+// }
