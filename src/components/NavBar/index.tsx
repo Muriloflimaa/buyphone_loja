@@ -60,7 +60,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         cart.map(async (item) => {
             try {
                 const dat = await apiPedidos.get(`products/${item.id}`)
-                setData(dat.data.data)
+                setData([dat.data.data])
             } catch (error) {
                 console.log(error)
             }
@@ -107,19 +107,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </a>
                                 </Link>
                                 <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden opacity-0" />
-                                <div className="hidden md:block w-full">
-                                    {/* <div>
-                                        <label className="input-group">
-                                            <input
-                                                type="search"
-                                                name="search-form"
-                                                id="search-form"
-                                                className="input input-bordered rounded-md !important w-full text-info-content"
-                                                placeholder="Pesquisa..."
-                                            />
-                                        </label>
-                                    </div> */}
-                                </div>
+                                <div className="hidden md:block w-full"></div>
                                 <div className="md:flex justify-end items-center gap-5 w-full hidden">
                                     {!isUser ? (
                                         <Link href={'/login'} passHref>

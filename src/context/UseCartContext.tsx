@@ -162,7 +162,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             toast.error('Erro na alteração de quantidade do produto')
         }
     }
-
+    console.log(cart)
     return (
         <CartContext.Provider
             value={{ cart, addProduct, removeProduct, updateProductAmount }}

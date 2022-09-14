@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
+import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import ReturnProduct from '../../utils/ReturnProduct'
 import { verificationPrice } from '../../utils/verificationPrice'
@@ -12,7 +13,8 @@ const ProductCart = ({ data }: any) => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
-    const returnPrice = verificationPrice(data)
+    const user = GetUseType()
+    const returnPrice = verificationPrice(data, user)
 
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
