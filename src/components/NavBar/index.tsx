@@ -32,17 +32,16 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
     const { isAuthenticated, signOut } = useContext(AuthContext)
-    const [data, setData] = useState<any>([])
     const { cart } = useCart()
     const cartSize = cart.length
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
     const user = GetUseType()
-    const returnPrice = verificationPrice(data, user)
+    // const returnPrice = verificationPrice(data, user)
 
-    const total = cart.reduce((sumTotal, product) => {
-        return sumTotal + returnPrice?.ourPrice * product.amount
-    }, 0)
+    // const total = cart.reduce((sumTotal, product) => {
+    //     return sumTotal + returnPrice?.ourPrice * product.amount
+    // }, 0)
 
     const handleClick = () => {
         setIsOn(!isOn)
@@ -55,17 +54,6 @@ export default function NavBar({ dataCategory }: NavBarProps) {
             setIsUser(true)
         }
     }, [isAuthenticated])
-
-    useEffect(() => {
-        cart.map(async (item) => {
-            try {
-                const dat = await apiPedidos.get(`products/${item.id}`)
-                setData([dat.data.data])
-            } catch (error) {
-                console.log(error)
-            }
-        })
-    }, [cart])
 
     return (
         <>
@@ -203,9 +191,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             <div className="card-body">
                                                 <div>
                                                     {cartSize > 0 ? (
-                                                        <ProductCart
-                                                            data={data}
-                                                        />
+                                                        <ProductCart />
                                                     ) : (
                                                         <h1>Carrinho vazio</h1>
                                                     )}
@@ -216,12 +202,12 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                     <span className="text-gray-500 text-lg">
                                                         Valor Total:
                                                     </span>
-                                                    <span className="font-semibold text-lg">
+                                                    {/* <span className="font-semibold text-lg">
                                                         R${' '}
                                                         {moneyMask(
                                                             total.toString()
                                                         )}
-                                                    </span>
+                                                    </span> */}
                                                 </div>
                                             </div>
                                         </div>

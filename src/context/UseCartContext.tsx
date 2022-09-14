@@ -94,12 +94,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
                 const newProduct = {
                     id: products.id,
                     amount: 1,
-                    title: products.name,
-                    color: products.color,
-                    price: products.price,
-                    image: products.media[0].original_url,
-                    memory: products.memory,
-                } //pega os dados que vão ser gravados no carrinho
+                }
                 updatedCart.push(newProduct)
             }
             //Atualizando o Carrinho
@@ -162,7 +157,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             toast.error('Erro na alteração de quantidade do produto')
         }
     }
-    console.log(cart)
+
     return (
         <CartContext.Provider
             value={{ cart, addProduct, removeProduct, updateProductAmount }}

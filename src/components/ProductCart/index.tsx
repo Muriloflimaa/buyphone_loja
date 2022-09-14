@@ -6,15 +6,14 @@ import { apiPedidos } from '../../services/apiClient'
 import { Product } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
-import ReturnProduct from '../../utils/ReturnProduct'
 import { verificationPrice } from '../../utils/verificationPrice'
 
-const ProductCart = ({ data }: any) => {
+const ProductCart = () => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
     const user = GetUseType()
-    const returnPrice = verificationPrice(data, user)
+    const [data, setData] = useState<any>([{}])
 
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
@@ -42,11 +41,23 @@ const ProductCart = ({ data }: any) => {
         }
     }, [])
 
-    const cartFormatted = cart.map((product) => ({
-        ...product,
-        priceFormated: returnPrice.ourPrice,
-        subTotal: returnPrice.ourPrice * product.amount,
-    }))
+    useEffect(() => {
+        cart.map(async (item) => {
+            try {
+                const dat = await apiPedidos.get(`products/${item.id}`)
+                const returnPrice = verificationPrice(dat.data.data, user)
+                const response = {
+                    ...item,
+                    product: dat.data.data,
+                    priceFormated: returnPrice.ourPrice,
+                    subTotal: returnPrice.ourPrice * item.amount,
+                }
+                setData((data: Array<{}>) => [...data, response])
+            } catch (error) {
+                console.log(error)
+            }
+        })
+    }, [cart])
 
     function handleProductIncrement(product: Product) {
         updateProductAmount({
@@ -68,18 +79,9 @@ const ProductCart = ({ data }: any) => {
 
     return (
         <div className="flex flex-col gap-4">
-            {cartFormatted.map((product) => {
-                // const [teste, setTeste] = useState([])
-
-                // useEffect(() => {
-                //     async function Return() {
-                //         const data = await ReturnProduct(product.id)
-                //         setTeste(...data)
-                //     }
-                //     Return()
-                // }, [])
-                // console.log(teste)
-
+            {data.map((product: any) => {
+                console.log(product)
+                // return
                 return (
                     <div
                         className={
@@ -95,16 +97,22 @@ const ProductCart = ({ data }: any) => {
                             <div className="flex gap-3">
                                 <div className="w-20 h-full">
                                     <img
-                                        src={product.image}
-                                        alt={product.title}
+                                        src={
+                                            product.product?.media[0]
+                                                .original_url
+                                        }
+                                        alt={product.product?.title}
                                     />
                                 </div>
 
                                 <div className="flex flex-col justify-between">
                                     <div className="flex flex-col">
-                                        <strong>{product.title}</strong>
+                                        <strong>
+                                            {product.product?.title}
+                                        </strong>
                                         <span>
-                                            {product.color} / {product.memory}
+                                            {product.product?.color} /{' '}
+                                            {product.product?.memory}
                                         </span>
                                     </div>
                                     <span>Quantidade: {product.amount}</span>
@@ -149,8 +157,9 @@ const ProductCart = ({ data }: any) => {
 
                             <div className="flex flex-col items-end">
                                 <strong>
-                                    {moneyMask(product.subTotal.toString())}
-                                </strong>
+                                    {moneyMask(product.subTotal?.toString())}
+                                </strong>{' '}
+                                *
                                 <button
                                     type="button"
                                     data-testid="remove-product"
