@@ -1,7 +1,7 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { SearchIcon } from '@heroicons/react/solid'
+import { SearchIcon, XIcon } from '@heroicons/react/solid'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -27,6 +27,7 @@ interface CartItemsAmount {
 const Home: NextPage<DataProps> = ({ data }) => {
     const user = GetUseType()
     const { cart } = useCart()
+    const [showSearch, setShowSearch] = useState(false)
 
     // Calculando itens por produto disponível no carrinho (anterior, atual)
     cart.reduce((sumAmount, product) => {
@@ -45,7 +46,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
                     item[newItem]
                         .toString()
                         .toLowerCase()
-                        .indexOf(inputSearch.toLowerCase()) > -1
+                        .replace(/ /g, '')
+                        .indexOf(inputSearch.toLowerCase().replace(/ /g, '')) >
+                    -1
                 )
             })
         })
@@ -53,12 +56,41 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
     return (
         <>
-            <div className=" z-50 pb-4 fixed w-[300px] left-1/2 -ml-[150px] -mt-[87px] md:-mt-32 hidden md:block">
+            <div className="w-full flex justify-end fixed z-50 -mt-[70px] px-7 md:hidden">
+                {showSearch === false ? (
+                    <SearchIcon
+                        className="h-5 w-5 text-PrimaryText block md:hidden"
+                        onClick={() => setShowSearch(!showSearch)}
+                    />
+                ) : (
+                    <XIcon
+                        className="h-5 w-5 text-PrimaryText block md:hidden"
+                        onClick={() => setShowSearch(!showSearch)}
+                    />
+                )}
+            </div>
+            <div
+                className={
+                    'fixed z-50 w-full h-12 transition-all duration-200 block md:hidden ' +
+                    (showSearch === false ? '-mt-[200px]' : '-mt-[30px]')
+                }
+            >
+                <input
+                    type="input"
+                    name="search-form"
+                    id="search-form"
+                    className="input input-bordered rounded-none  w-full text-white bg-primary"
+                    placeholder="Pesquisa..."
+                    value={inputSearch}
+                    onChange={(e) => setInputSearch(e.target.value)}
+                />
+            </div>
+            <div className=" z-50 pb-4 fixed xl:w-[600px] left-1/2 xl:-ml-[300px] md:w-[400px] md:-ml-[200px] -mt-[87px] md:-mt-32 hidden md:block">
                 <input
                     type="search"
                     name="search-form"
                     id="search-form"
-                    className="input input-bordered rounded-md !important w-full text-info-content"
+                    className="input input-bordered rounded-md !important w-full text-white bg-[#4a3e865b]"
                     placeholder="Pesquisa..."
                     value={inputSearch}
                     onChange={(e) => setInputSearch(e.target.value)}
