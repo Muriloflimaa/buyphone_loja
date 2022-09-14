@@ -18,7 +18,6 @@ import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { ICategory } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
-import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
@@ -37,10 +36,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
     const user = GetUseType()
-    // const returnPrice = verificationPrice(data, user)
 
-    // const total = cart.reduce((sumTotal, product) => {
-    //     return sumTotal + returnPrice?.ourPrice * product.amount
+    // const total = data.reduce((sumTotal, product) => {
+    //     return sumTotal + product.total
     // }, 0)
 
     const handleClick = () => {
@@ -189,13 +187,11 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 </div>
                                             </div>
                                             <div className="card-body">
-                                                <div>
-                                                    {cartSize > 0 ? (
-                                                        <ProductCart />
-                                                    ) : (
-                                                        <h1>Carrinho vazio</h1>
-                                                    )}
-                                                </div>
+                                                {cartSize > 0 ? (
+                                                    <ProductCart />
+                                                ) : (
+                                                    <h1>Carrinho vazio</h1>
+                                                )}
                                             </div>
                                             <div className="card-body bg-base-200">
                                                 <div className="flex justify-between py-4">
@@ -223,7 +219,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                                 <a>Todos</a>
                                             </Link>
                                         </li>
-                                        {dataCategory.data.length > 0 ? (
+                                        {dataCategory?.data.length > 0 ? (
                                             dataCategory.data.map(
                                                 (category) => {
                                                     return (
@@ -362,7 +358,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                     </a>
                                 </div>
                                 <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
-                                    {dataCategory.data.length > 0 ? (
+                                    {dataCategory?.data.length > 0 ? (
                                         dataCategory.data.map((category) => {
                                             return (
                                                 <li key={category.id}>

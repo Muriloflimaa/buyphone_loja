@@ -44,11 +44,11 @@ const ProductCart = () => {
     useEffect(() => {
         cart.map(async (item) => {
             try {
-                const dat = await apiPedidos.get(`products/${item.id}`)
-                const returnPrice = verificationPrice(dat.data.data, user)
+                const data = await apiPedidos.get(`products/${item.id}`)
+                const returnPrice = verificationPrice(data?.data.data, user)
                 const response = {
                     ...item,
-                    product: dat.data.data,
+                    product: data?.data.data,
                     priceFormated: returnPrice.ourPrice,
                     subTotal: returnPrice.ourPrice * item.amount,
                 }
@@ -80,8 +80,6 @@ const ProductCart = () => {
     return (
         <div className="flex flex-col gap-4">
             {data.map((product: any) => {
-                console.log(product)
-                // return
                 return (
                     <div
                         className={
@@ -101,15 +99,13 @@ const ProductCart = () => {
                                             product.product?.media[0]
                                                 .original_url
                                         }
-                                        alt={product.product?.title}
+                                        alt={product.product?.name}
                                     />
                                 </div>
 
                                 <div className="flex flex-col justify-between">
                                     <div className="flex flex-col">
-                                        <strong>
-                                            {product.product?.title}
-                                        </strong>
+                                        <strong>{product.product?.name}</strong>
                                         <span>
                                             {product.product?.color} /{' '}
                                             {product.product?.memory}
@@ -159,7 +155,6 @@ const ProductCart = () => {
                                 <strong>
                                     {moneyMask(product.subTotal?.toString())}
                                 </strong>{' '}
-                                *
                                 <button
                                     type="button"
                                     data-testid="remove-product"

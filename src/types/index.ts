@@ -144,6 +144,5 @@ export interface ICategory {
 
 export interface Product {
     id: number
-
     amount: number
 }
