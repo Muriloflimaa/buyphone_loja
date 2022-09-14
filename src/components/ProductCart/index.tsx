@@ -13,7 +13,7 @@ const ProductCart = () => {
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
     const user = GetUseType()
-    const [data, setData] = useState<any>([{}])
+    const [data, setData] = useState<any>([{}]) //state que recebe os produtos chamados da api
 
     // Cart
     const { cart, removeProduct, updateProductAmount } = useCart()
@@ -43,16 +43,18 @@ const ProductCart = () => {
 
     useEffect(() => {
         cart.map(async (item) => {
+            //entrando no map
             try {
-                const data = await apiPedidos.get(`products/${item.id}`)
-                const returnPrice = verificationPrice(data?.data.data, user)
+                const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
+                const returnPrice = verificationPrice(data.data.data, user) //verificando preço
                 const response = {
+                    //adicionando tudo na const item vem do storage
                     ...item,
-                    product: data?.data.data,
-                    priceFormated: returnPrice.ourPrice,
+                    product: data.data.data, //data vem da api que é chamada
+                    priceFormated: returnPrice.ourPrice, //formatação de preços
                     subTotal: returnPrice.ourPrice * item.amount,
                 }
-                setData((data: Array<{}>) => [...data, response])
+                setData((data: Array<{}>) => [...data, response]) //gravando response no state
             } catch (error) {
                 console.log(error)
             }
@@ -80,6 +82,7 @@ const ProductCart = () => {
     return (
         <div className="flex flex-col gap-4">
             {data.map((product: any) => {
+                //da um map no state
                 return (
                     <div
                         className={
