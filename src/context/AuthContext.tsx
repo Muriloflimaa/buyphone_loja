@@ -49,12 +49,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async function signIn({ email, password }: SignInCredentials) {
         try {
             const response = await axios.post(
-                'https://loja.buyphone.com.br/api/login',
+                'https://beta-loja.buyphone.com.br/api/login',
                 {
                     email,
                     password,
                 }
             )
+            console.log(response)
             const { type, name, id, profile_photo_url } = response.data.user
 
             const UserObject = {

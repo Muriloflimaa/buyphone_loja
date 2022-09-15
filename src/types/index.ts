@@ -146,3 +146,11 @@ export interface Product {
     id: number
     amount: number
 }
+
+export interface ArrayProduct {
+    id: number
+    amount: number
+    priceFormated: number
+    subTotal: number
+    product: IProduct
+}

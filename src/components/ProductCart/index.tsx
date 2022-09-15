@@ -2,21 +2,14 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
-import { apiPedidos } from '../../services/apiClient'
-import { Product } from '../../types'
-import { GetUseType } from '../../utils/getUserType'
+import { ArrayProduct, Product } from '../../types'
 import { moneyMask } from '../../utils/masks'
-import { verificationPrice } from '../../utils/verificationPrice'
 
-const ProductCart = () => {
+const ProductCart = ({ values }: any) => {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [padding, setPadding] = useState(false)
-    const user = GetUseType()
-    const [data, setData] = useState<any>([{}]) //state que recebe os produtos chamados da api
-
-    // Cart
-    const { cart, removeProduct, updateProductAmount } = useCart()
+    const { removeProduct, updateProductAmount } = useCart()
 
     useEffect(() => {
         if (
@@ -27,9 +20,6 @@ const ProductCart = () => {
         } else {
             setShow(false)
         }
-    }, [])
-
-    useEffect(() => {
         if (
             router.asPath == '/shipping/address' ||
             router.asPath == '/shipping/payment/pix' ||
@@ -39,50 +29,29 @@ const ProductCart = () => {
         } else {
             setPadding(false)
         }
-    }, [])
-
-    useEffect(() => {
-        setData([])
-        cart.map(async (item) => {
-            //entrando no map
-            try {
-                const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
-                const returnPrice = verificationPrice(data.data.data, user) //verificando preço
-                const response = {
-                    //adicionando tudo na const item vem do storage
-                    ...item,
-                    product: data.data.data, //data vem da api que é chamada
-                    priceFormated: returnPrice.ourPrice, //formatação de preços
-                    subTotal: returnPrice.ourPrice * item.amount,
-                }
-                setData((data: Array<{}>) => [...data, response]) //gravando response no state
-            } catch (error) {
-                console.log(error)
-            }
-        })
-    }, [cart])
+    }, []) //verificação de rota para setar padding
 
     function handleProductIncrement(product: Product) {
         updateProductAmount({
             productId: product.id,
             amount: product.amount + 1,
         })
-    }
+    } //incrementa 1 produto
 
     function handleProductDecrement(product: Product) {
         updateProductAmount({
             productId: product.id,
             amount: product.amount - 1,
         })
-    }
+    } //remove 1 amount do produto
 
     function handleRemoveProduct(productId: number) {
         removeProduct(productId)
-    }
+    } //remove produto do carrinho
 
     return (
         <div className="flex flex-col gap-4">
-            {data.map((product: any) => {
+            {values.map((product: ArrayProduct) => {
                 //da um map no state
                 return (
                     <div
@@ -176,4 +145,5 @@ const ProductCart = () => {
         </div>
     )
 }
+
 export default ProductCart

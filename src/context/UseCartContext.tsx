@@ -10,7 +10,6 @@ import { toast } from 'react-hot-toast'
 import { apiPedidos } from '../services/apiClient'
 import { Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
-import { verificationPrice } from '../utils/verificationPrice'
 
 interface CartProviderProps {
     children: ReactNode

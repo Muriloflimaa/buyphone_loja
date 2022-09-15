@@ -2,7 +2,6 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { FormEvent, useContext, useState } from 'react'
 import { AuthContext, setCookies } from '../context/AuthContext'
-import { apiLogin } from '../services/apiLogin'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 export default function login() {
