@@ -42,6 +42,7 @@ const ProductCart = () => {
     }, [])
 
     useEffect(() => {
+        setData([])
         cart.map(async (item) => {
             //entrando no map
             try {

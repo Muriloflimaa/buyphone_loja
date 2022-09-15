@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
@@ -36,6 +36,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     const [isOn, setIsOn] = useState(false)
     const [isUser, setIsUser] = useState(false)
     const user = GetUseType()
+
+    const [showCart, setShowCart] = useState(false)
 
     // const total = data.reduce((sumTotal, product) => {
     //     return sumTotal + product.total
@@ -145,11 +147,31 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                             </ul>
                                         </div>
                                     )}
-
-                                    <div className="dropdown dropdown-end">
-                                        <label tabIndex={0} className=" m-1">
+                                    <div
+                                        className={
+                                            'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
+                                            (showCart === true
+                                                ? 'block'
+                                                : 'hidden')
+                                        }
+                                        onClick={() => setShowCart(!showCart)}
+                                    ></div>
+                                    <div
+                                        className={
+                                            'dropdown dropdown-end  ' +
+                                            (showCart === true
+                                                ? 'opacity-100 visible'
+                                                : '')
+                                        }
+                                    >
+                                        <label className=" m-1">
                                             <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
-                                                <ShoppingCartIcon className="h-7 w-7 text-PrimaryText hidden md:block" />
+                                                <ShoppingCartIcon
+                                                    className="h-7 w-7 text-PrimaryText hidden md:block"
+                                                    onClick={() =>
+                                                        setShowCart(!showCart)
+                                                    }
+                                                />
                                                 {cartSize > 0 ? (
                                                     <div className="absolute">
                                                         <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
@@ -164,8 +186,12 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                                         </label>
 
                                         <div
-                                            tabIndex={0}
-                                            className="mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl"
+                                            className={
+                                                'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
+                                                (showCart === true
+                                                    ? 'opacity-100 visible'
+                                                    : '')
+                                            }
                                         >
                                             <div className="card-body">
                                                 <div className="flex justify-between">
