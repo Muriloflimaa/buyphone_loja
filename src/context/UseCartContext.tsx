@@ -131,7 +131,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             </div>
           </div>
         ),
-        { duration: 3000 }
+        { duration: 2000 }
       )
 
       setCart(updatedCart)

@@ -25,7 +25,6 @@ const ProductTeste = ({
 }: ProductProps) => {
   const router = useRouter()
   const [show, setShow] = useState(false)
-  const [padding, setPadding] = useState(false)
   const { removeProduct, updateProductAmount } = useCart()
 
   useEffect(() => {
@@ -36,15 +35,6 @@ const ProductTeste = ({
       setShow(true)
     } else {
       setShow(false)
-    }
-    if (
-      router.asPath == '/shipping/address' ||
-      router.asPath == '/shipping/payment/pix' ||
-      router.asPath == '/cart'
-    ) {
-      setPadding(true)
-    } else {
-      setPadding(false)
     }
   }, []) //verificação de rota para setar padding
 
@@ -69,8 +59,7 @@ const ProductTeste = ({
   return (
     <div
       className={
-        'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col ' +
-        (padding == true ? ' p-4' : ' p-0')
+        'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col '
       }
       key={id}
     >
@@ -108,7 +97,7 @@ const ProductTeste = ({
               {show == false ? (
                 <div className="btn-group w-12">
                   <button
-                    className="btn btn-error text-xs h-auto p-1 min-h-0 w-1/2"
+                    className="btn btn-accent text-xs h-auto p-1 min-h-0 w-1/2"
                     type="button"
                     data-testid="decrement-product"
                     disabled={amount <= 1}
@@ -118,7 +107,7 @@ const ProductTeste = ({
                   </button>
 
                   <button
-                    className="btn btn-success text-xs h-auto p-1 min-h-0 w-1/2"
+                    className="btn btn-accent text-xs h-auto p-1 min-h-0 w-1/2"
                     type="button"
                     data-testid="increment-product"
                     onClick={() => handleProductIncrement(id, amount)}

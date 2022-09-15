@@ -42,7 +42,7 @@ const ProductCard = ({
 
   return (
     <div
-      className="card card-compact w-full h-full text-black shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative bg-base-100 overflow-visible rounded-lg"
+      className="card card-compact w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
       key={id}
     >
       <div className="card-body text-center ">
