@@ -8,12 +8,14 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   UserIcon,
+  XIcon,
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
+import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
 import { ArrayProduct, ICategory } from '../../types'
@@ -21,7 +23,6 @@ import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import { verificationPrice } from '../../utils/verificationPrice'
-import ProductCart from '../ProductCart'
 import ProductTeste from '../ProductTeste'
 import styles from './styles.module.scss'
 
@@ -33,6 +34,7 @@ interface NavBarProps {
 
 export default function NavBar({ dataCategory }: NavBarProps) {
   const { isAuthenticated, signOut } = useContext(AuthContext)
+  const [showSearch, setShowSearch] = useState(false)
   const { cart } = useCart()
   const cartSize = cart.length
   const [isOn, setIsOn] = useState(false)
@@ -42,6 +44,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
   const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
+
+  const { changeState } = useContext(SearchContext)
 
   useEffect(() => {
     setData([]) //zera o array do data
@@ -77,12 +81,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
       soma += total[i]
     }
     setSomaTotal(soma) //somando produtos e setando no state
-  }, [data])
-  //effect para somar todos os produtos do carrinho - total / remover duplicados
-
-  const handleClick = () => {
-    setIsOn(!isOn)
-  } //chamar drawer
+  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -99,186 +98,255 @@ export default function NavBar({ dataCategory }: NavBarProps) {
           <nav className="relative mt-0 w-full bg-primary/[.9]">
             <div className="w-full">
               <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
-                <div className="block md:hidden">
-                  {/* CHAMA O MENU */}
-                  <label
-                    htmlFor="my-drawer"
-                    className="btn btn-circle bg-transparent border-none swap swap-rotate transition-none absolute -mt-[20px]"
-                    onClick={handleClick}
-                  >
-                    <input type="checkbox" />
-                    <div>
-                      <svg
-                        className="swap-off fill-current text-PrimaryText z-20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                      </svg>
-                    </div>
-                  </label>
-                  {/* FIM */}
-                </div>
-                <Link href={'/'} passHref>
-                  <a>
-                    <Image
-                      src={Logo}
-                      className="cursor-pointer"
-                      layout="fixed"
-                      alt="Logo BuyPhone"
-                    />
-                  </a>
-                </Link>
-                <SearchIcon className="h-5 w-5 text-PrimaryText block md:hidden opacity-0" />
-                <div className="hidden md:block w-full"></div>
-                <div className="md:flex justify-end items-center gap-5 w-full hidden">
-                  {!isUser ? (
-                    <Link href={'/login'} passHref>
-                      <div className="flex justify-end flex-col items-center cursor-pointer">
-                        <FontAwesomeIcon
-                          icon={faCircleUser}
-                          className="w-7 h-7 text-PrimaryText"
-                        />
-                      </div>
-                    </Link>
-                  ) : (
-                    <div className="hidden sm:inline-block dropdown dropdown-end">
-                      <label
-                        tabIndex={0}
-                        className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
-                      >
-                        <span className="normal-case text-white">
-                          Olá, {UniqueName(user?.name)}
-                        </span>
-                        <FontAwesomeIcon
-                          icon={faCircleUser}
-                          className="w-6 h-6 mr-1 text-PrimaryText"
-                        />
-                      </label>
-                      <ul
-                        tabIndex={0}
-                        className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
-                      >
-                        <li>
-                          <a href="https://loja.buyphone.com.br/user/profile">
-                            Meus Dados
-                          </a>
-                        </li>
-                        <li>
-                          <Link href={'/myshopping'}>
-                            <a>Minhas Compras</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <button
-                            className="text-left w-full"
-                            type="submit"
-                            onClick={signOut}
-                          >
-                            Sair
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+                <div>
                   <div
-                    className={
-                      'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
-                      (showCart === true ? 'block' : 'hidden')
-                    }
-                    onClick={() => setShowCart(!showCart)}
-                  ></div>
-                  <div
-                    className={
-                      'dropdown dropdown-end  ' +
-                      (showCart === true ? 'opacity-100 visible' : '')
-                    }
+                    className="block md:hidden"
+                    onClick={() => setIsOn(!isOn)}
                   >
-                    <label className=" m-1">
-                      <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
-                        <ShoppingCartIcon
-                          className="h-7 w-7 text-PrimaryText hidden md:block"
-                          onClick={() => setShowCart(!showCart)}
-                        />
-                        {cartSize > 0 ? (
-                          <div className="absolute">
-                            <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                            </span>
-                          </div>
-                        ) : (
-                          ''
-                        )}
+                    {/* CHAMA O MENU */}
+                    <label
+                      htmlFor="my-drawer"
+                      className="btn btn-circle z-50 bg-transparent border-none swap swap-rotate transition-none absolute -mt-[20px]"
+                      onClick={() => setIsOn(!isOn)}
+                    >
+                      <input type="checkbox" />
+                      <div>
+                        <svg
+                          className="swap-off fill-current text-PrimaryText z-20"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                        </svg>
                       </div>
                     </label>
+                    {/* FIM */}
+                  </div>
+                  <div className="hidden md:block">
+                    <Link href={'/'} passHref>
+                      <a>
+                        <Image
+                          src={Logo}
+                          className="cursor-pointer"
+                          layout="fixed"
+                          alt="Logo BuyPhone"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+                <div>
+                  <div className="w-full">
+                    <input
+                      type="search"
+                      name="search-form"
+                      id="search-form"
+                      className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-[#4a3e865b]"
+                      placeholder="Pesquisa..."
+                      onChange={(e) => changeState(e.target.value)}
+                    />
 
+                    <div className="block md:hidden mt-2 ml-8">
+                      <Link href={'/'} passHref>
+                        <a>
+                          <Image
+                            src={Logo}
+                            className="cursor-pointer"
+                            layout="intrinsic"
+                            width={120}
+                            height={80}
+                            alt="Logo BuyPhone"
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="block md:hidden">
+                    {showSearch === false ? (
+                      <SearchIcon
+                        className="h-5 w-5 text-PrimaryText block"
+                        onClick={() => setShowSearch(!showSearch)}
+                      />
+                    ) : (
+                      <XIcon
+                        className="h-5 w-5 text-PrimaryText block"
+                        onClick={() => setShowSearch(!showSearch)}
+                      />
+                    )}
+                  </div>
+
+                  <div className="md:flex justify-end items-center gap-5 w-full hidden">
+                    {!isUser ? (
+                      <Link href={'/login'} passHref>
+                        <div className="flex justify-end flex-col items-center cursor-pointer">
+                          <FontAwesomeIcon
+                            icon={faCircleUser}
+                            className="w-7 h-7 text-PrimaryText"
+                          />
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="hidden sm:inline-block dropdown dropdown-end">
+                        <label
+                          tabIndex={0}
+                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
+                        >
+                          <span className="normal-case text-white">
+                            Olá, {UniqueName(user?.name)}
+                          </span>
+                          <FontAwesomeIcon
+                            icon={faCircleUser}
+                            className="w-6 h-6 mr-1 text-PrimaryText"
+                          />
+                        </label>
+                        <ul
+                          tabIndex={0}
+                          className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
+                        >
+                          <li>
+                            <a href="https://loja.buyphone.com.br/user/profile">
+                              Meus Dados
+                            </a>
+                          </li>
+                          <li>
+                            <Link href={'/myshopping'}>
+                              <a>Minhas Compras</a>
+                            </Link>
+                          </li>
+                          <li>
+                            <button
+                              className="text-left w-full"
+                              type="submit"
+                              onClick={signOut}
+                            >
+                              Sair
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                     <div
                       className={
-                        'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
+                        'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
+                        (showCart === true ? 'block' : 'hidden')
+                      }
+                      onClick={() => setShowCart(!showCart)}
+                    ></div>
+                    <div
+                      className={
+                        'dropdown dropdown-end  ' +
                         (showCart === true ? 'opacity-100 visible' : '')
                       }
                     >
-                      <div className="card-body">
-                        <div className="flex justify-between">
-                          <span className="text-lg uppercase">
-                            Meu Carrinho
-                          </span>
-                          <span className="font-thin text-xs">
-                            {cartSize > 1 ? (
-                              cartSize + ' itens'
-                            ) : cartSize == 1 ? (
-                              cartSize + ' item'
-                            ) : (
-                              <h1>Carrinho está vazio</h1>
-                            )}
-                          </span>
+                      <label className=" m-1">
+                        <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
+                          <ShoppingCartIcon
+                            className="h-7 w-7 text-PrimaryText hidden md:block"
+                            onClick={() => setShowCart(!showCart)}
+                          />
+                          {cartSize > 0 ? (
+                            <div className="absolute">
+                              <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                              </span>
+                            </div>
+                          ) : (
+                            ''
+                          )}
                         </div>
-                      </div>
+                      </label>
 
-                      <div className="card-body gap-6">
-                        {cartSize > 0 ? (
-                          values.map((res: ArrayProduct) => (
-                            <li className="list-none" key={res?.id}>
-                              <ProductTeste
-                                id={res?.id}
-                                amount={res?.amount}
-                                name={res?.product?.name}
-                                color={res?.product?.color}
-                                price={res?.subTotal}
-                                memory={res?.product?.memory}
-                                image={res?.product?.media[0].original_url}
-                              />
-                              {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
-                            </li>
-                          ))
-                        ) : (
-                          // <ProductCart values={values} />
-                          <h1>Carrinho vazio</h1>
-                        )}
-                      </div>
-                      <div className="card-body bg-base-200">
-                        {somaTotal > 0 ? (
-                          <div className="flex justify-between py-4">
-                            <span className="text-gray-500 text-lg">
-                              Valor Total:
+                      <div
+                        className={
+                          'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
+                          (showCart === true ? 'opacity-100 visible' : '')
+                        }
+                      >
+                        <div className="card-body">
+                          <div className="flex justify-between">
+                            <span className="text-lg uppercase">
+                              Meu Carrinho
                             </span>
-                            <span className="font-semibold text-lg">
-                              R$ {moneyMask(somaTotal.toString())}
+                            <span className="font-thin text-xs">
+                              {cartSize > 1 ? (
+                                cartSize + ' itens'
+                              ) : cartSize == 1 ? (
+                                cartSize + ' item'
+                              ) : (
+                                <h1>Carrinho está vazio</h1>
+                              )}
                             </span>
                           </div>
-                        ) : (
-                          ''
-                        )}
+                        </div>
+
+                        <div className="card-body gap-6">
+                          {cartSize > 0 ? (
+                            values.map((res: ArrayProduct) => (
+                              <li className="list-none" key={res?.id}>
+                                <ProductTeste
+                                  id={res?.id}
+                                  amount={res?.amount}
+                                  name={res?.product?.name}
+                                  color={res?.product?.color}
+                                  price={res?.subTotal}
+                                  memory={res?.product?.memory}
+                                  image={res?.product?.media[0].original_url}
+                                />
+                                {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
+                              </li>
+                            ))
+                          ) : (
+                            // <ProductCart values={values} />
+                            <h1>Carrinho vazio</h1>
+                          )}
+                        </div>
+                        <div className="card-body bg-base-200">
+                          {somaTotal > 0 ? (
+                            <div className="flex justify-between py-4">
+                              <span className="text-gray-500 text-lg">
+                                Valor Total:
+                              </span>
+                              <span className="font-semibold text-lg">
+                                R$ {moneyMask(somaTotal.toString())}
+                              </span>
+                            </div>
+                          ) : (
+                            ''
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
-              <div className="w-full mb-2 ">
+              <div
+                className={
+                  'z-50 w-full h-12 transition-all duration-300 fixed flex md:hidden ' +
+                  (showSearch === false ? '-mt-[120px]' : 'mt-0')
+                }
+              >
+                <input
+                  type="input"
+                  name="search-form"
+                  id="search-form"
+                  className="input input-bordered rounded-none w-full text-white bg-primary"
+                  placeholder="Pesquisa..."
+                  onChange={(e) => changeState(e.target.value)}
+                />
+              </div>
+              <div
+                className={
+                  'w-full mb-2 transition-all durantion-200 ' +
+                  (showSearch === false ? 'mt-0' : 'mt-12')
+                }
+              >
                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                   <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                     <li>
@@ -327,7 +395,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
           <label
             htmlFor="my-drawer"
             className="drawer-overlay w-full h-[100vh] fixed"
-            onClick={handleClick}
+            onClick={() => setIsOn(!isOn)}
           ></label>
           <ul className="menu overflow-y-auto h-[100vh] bg-base-100 text-base-content fixed flex">
             <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
@@ -365,7 +433,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
               <label
                 htmlFor="my-drawer"
                 className="swap swap-rotate p-6"
-                onClick={handleClick}
+                onClick={() => setIsOn(!isOn)}
               >
                 <input type="checkbox" />
                 <div>
@@ -400,6 +468,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     Produtos
                   </a>
                 </div>
+
                 <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
                   {dataCategory?.data.length > 0 ? (
                     dataCategory.data.map((category) => {
