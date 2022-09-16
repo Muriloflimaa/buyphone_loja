@@ -8,7 +8,7 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -50,7 +50,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
     if (cart) {
       setCartSize(cart.length)
     }
-  }, [])
+  }, [cart])
 
   useEffect(() => {
     setData([]) //zera o array do data
@@ -214,7 +214,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                           className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
                         >
                           <li>
-                            <Link href={'https://loja.buyphone.com.br/user/profile'}>
+                            <Link
+                              href={'https://loja.buyphone.com.br/user/profile'}
+                            >
                               <a>Meus Dados</a>
                             </Link>
                           </li>
@@ -292,20 +294,25 @@ export default function NavBar({ dataCategory }: NavBarProps) {
 
                         <div className="card-body gap-6">
                           {cartSize && cartSize > 0 ? (
-                            values.map((res: ArrayProduct) => res.id && (
-                              <li className="list-none" key={res.id}>
-                                <ProductTeste
-                                  id={res?.id}
-                                  amount={res?.amount}
-                                  name={res?.product?.name}
-                                  color={res?.product?.color}
-                                  price={res?.subTotal}
-                                  memory={res?.product?.memory}
-                                  image={res?.product?.media[0].original_url}
-                                />
-                                {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
-                              </li>
-                            ))
+                            values.map(
+                              (res: ArrayProduct) =>
+                                res.id && (
+                                  <li className="list-none" key={res.id}>
+                                    <ProductTeste
+                                      id={res?.id}
+                                      amount={res?.amount}
+                                      name={res?.product?.name}
+                                      color={res?.product?.color}
+                                      price={res?.subTotal}
+                                      memory={res?.product?.memory}
+                                      image={
+                                        res?.product?.media[0].original_url
+                                      }
+                                    />
+                                    {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
+                                  </li>
+                                )
+                            )
                           ) : (
                             // <ProductCart values={values} />
                             <h1>Carrinho vazio</h1>

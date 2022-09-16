@@ -90,6 +90,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         //Se não, obtem o produto da api e add ao carrinho com o valor de 1
         const addProduct = await apiPedidos.get(`products/${productId}`)
         const products = addProduct.data.data
+
         setProducts(products)
 
         const newProduct = {
@@ -104,9 +105,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           <div
             className={`${
               t.visible ? 'animate-enter' : 'animate-leave'
-            } w-full lg:w-1/4 z-50 h-auto items-center rounded-lg pointer-events-auto`}
+            }  z-50 h-auto items-center rounded-lg pointer-events-auto`}
           >
-            <div className="alert bg-green-200 text-green-900 items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-full sm:w-80">
+            <div className="alert bg-green-200 text-green-900 items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80">
               <div className="flex gap-3">
                 <Image
                   layout="fixed"
