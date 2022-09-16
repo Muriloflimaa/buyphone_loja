@@ -8,7 +8,7 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -36,7 +36,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
   const { isAuthenticated, signOut } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart } = useCart()
-  const cartSize = cart.length
+  const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
   const [isUser, setIsUser] = useState(false)
   const user = GetUseType()
@@ -44,8 +44,13 @@ export default function NavBar({ dataCategory }: NavBarProps) {
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
   const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
-
   const { changeState } = useContext(SearchContext)
+
+  useEffect(() => {
+    if (cart) {
+      setCartSize(cart.length)
+    }
+  }, [])
 
   useEffect(() => {
     setData([]) //zera o array do data
@@ -167,7 +172,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
 
                 <div>
                   <div className="block md:hidden">
-                    {showSearch === false ? (
+                    {!showSearch ? (
                       <SearchIcon
                         className="h-5 w-5 text-PrimaryText block"
                         onClick={() => setShowSearch(!showSearch)}
@@ -209,9 +214,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                           className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
                         >
                           <li>
-                            <a href="https://loja.buyphone.com.br/user/profile">
-                              Meus Dados
-                            </a>
+                            <Link href={'https://loja.buyphone.com.br/user/profile'}>
+                              <a>Meus Dados</a>
+                            </Link>
                           </li>
                           <li>
                             <Link href={'/myshopping'}>
@@ -233,14 +238,14 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     <div
                       className={
                         'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
-                        (showCart === true ? 'block' : 'hidden')
+                        (showCart ? 'block' : 'hidden')
                       }
                       onClick={() => setShowCart(!showCart)}
                     ></div>
                     <div
                       className={
                         'dropdown dropdown-end  ' +
-                        (showCart === true ? 'opacity-100 visible' : '')
+                        (showCart ? 'opacity-100 visible' : '')
                       }
                     >
                       <label className=" m-1">
@@ -249,7 +254,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                             className="h-7 w-7 text-PrimaryText hidden md:block"
                             onClick={() => setShowCart(!showCart)}
                           />
-                          {cartSize > 0 ? (
+                          {cartSize && cartSize > 0 ? (
                             <div className="absolute">
                               <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -265,7 +270,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                       <div
                         className={
                           'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
-                          (showCart === true ? 'opacity-100 visible' : '')
+                          (showCart ? 'opacity-100 visible' : '')
                         }
                       >
                         <div className="card-body">
@@ -274,7 +279,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                               Meu Carrinho
                             </span>
                             <span className="font-thin text-xs">
-                              {cartSize > 1 ? (
+                              {cartSize && cartSize > 1 ? (
                                 cartSize + ' itens'
                               ) : cartSize == 1 ? (
                                 cartSize + ' item'
@@ -286,9 +291,9 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                         </div>
 
                         <div className="card-body gap-6">
-                          {cartSize > 0 ? (
-                            values.map((res: ArrayProduct) => (
-                              <li className="list-none" key={res?.id}>
+                          {cartSize && cartSize > 0 ? (
+                            values.map((res: ArrayProduct) => res.id && (
+                              <li className="list-none" key={res.id}>
                                 <ProductTeste
                                   id={res?.id}
                                   amount={res?.amount}
