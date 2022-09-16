@@ -102,8 +102,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
         <div className="glass">
           <nav className="relative mt-0 w-full bg-primary/[.9]">
             <div className="w-full">
-              <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-3 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
-                <div>
+              <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-6 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
+                <div className="md:col-span-1">
                   <div
                     className="block md:hidden"
                     onClick={() => setIsOn(!isOn)}
@@ -142,7 +142,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     </Link>
                   </div>
                 </div>
-                <div>
+                <div className="md:col-span-4 md:pl-10">
                   <div className="w-full">
                     <input
                       type="search"
@@ -170,8 +170,8 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                   </div>
                 </div>
 
-                <div>
-                  <div className="block md:hidden">
+                <div className="md:col-span-1">
+                  <div className="block md:hidden ">
                     {!showSearch ? (
                       <SearchIcon
                         className="h-5 w-5 text-PrimaryText block"
@@ -185,7 +185,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                     )}
                   </div>
 
-                  <div className="md:flex justify-end items-center gap-5 w-full hidden">
+                  <div className="md:flex justify-end items-center gap-5 w-full hidden ">
                     {!isUser ? (
                       <Link href={'/login'} passHref>
                         <div className="flex justify-end flex-col items-center cursor-pointer">

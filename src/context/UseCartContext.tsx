@@ -33,7 +33,6 @@ const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
-  const [products, setProducts] = useState<any>()
 
   const [cart, setCart] = useState<Product[]>(() => {
     // Verificando se existe no localstorage o carrinho
@@ -91,7 +90,40 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const addProduct = await apiPedidos.get(`products/${productId}`)
         const products = addProduct.data.data
 
-        setProducts(products)
+        toast.custom(
+          (t) => (
+            <div
+              className={`${
+                t.visible ? 'animate-enter' : 'animate-leave'
+              }  z-50 h-auto items-center rounded-lg pointer-events-auto`}
+            >
+              <div className="alert bg-green-200 text-green-900 items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80">
+                <div className="flex gap-3">
+                  <Image
+                    layout="fixed"
+                    width={70}
+                    height={60}
+                    src={SuccessImg}
+                  ></Image>
+                  <div>
+                    <h3 className="font-bold">Notificação</h3>
+                    <div className="text-xs">
+                      <span className="text-[8px]">
+                        {products?.name +
+                          ' ' +
+                          products?.color +
+                          ' - ' +
+                          products?.memory}
+                      </span>{' '}
+                      adicionado ao carrinho com sucesso!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ),
+          { duration: 2000 }
+        )
 
         const newProduct = {
           id: products.id,
@@ -100,40 +132,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         updatedCart.push(newProduct)
       }
       //Atualizando o Carrinho
-      toast.custom(
-        (t) => (
-          <div
-            className={`${
-              t.visible ? 'animate-enter' : 'animate-leave'
-            }  z-50 h-auto items-center rounded-lg pointer-events-auto`}
-          >
-            <div className="alert bg-green-200 text-green-900 items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80">
-              <div className="flex gap-3">
-                <Image
-                  layout="fixed"
-                  width={70}
-                  height={60}
-                  src={SuccessImg}
-                ></Image>
-                <div>
-                  <h3 className="font-bold">Notificação</h3>
-                  <div className="text-xs">
-                    <span className="text-[8px]">
-                      {products?.name +
-                        ' ' +
-                        products?.color +
-                        ' - ' +
-                        products?.memory}
-                    </span>{' '}
-                    adicionado ao carrinho com sucesso!
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ),
-        { duration: 2000 }
-      )
 
       setCart(updatedCart)
     } catch {
