@@ -18,7 +18,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
-import { ArrayProduct, ICategory } from '../../types'
+import { ArrayProduct } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
@@ -26,13 +26,7 @@ import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
-interface NavBarProps {
-  dataCategory: {
-    data: Array<ICategory>
-  }
-}
-
-export default function NavBar({ dataCategory }: NavBarProps) {
+export default function NavBar() {
   const { isAuthenticated, signOut } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart } = useCart()
@@ -45,6 +39,7 @@ export default function NavBar({ dataCategory }: NavBarProps) {
   const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
   const { changeState } = useContext(SearchContext)
+  const [dataApi, setDataApi] = useState<any>()
 
   useEffect(() => {
     if (cart) {
@@ -53,10 +48,23 @@ export default function NavBar({ dataCategory }: NavBarProps) {
   }, [cart])
 
   useEffect(() => {
+    async function Data() {
+      try {
+        const DATA = await apiPedidos.get(`categories/`)
+        setDataApi(DATA.data)
+      } catch (error) {
+        setDataApi(null)
+      }
+    }
+    Data()
+  }, [])
+
+  useEffect(() => {
     setData([]) //zera o array do data
     cart.map(async (item) => {
       try {
         const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
+
         const returnPrice = verificationPrice(data.data.data, user) //verificando preço
         const response = {
           ...item, //adicionando amount e id que está no localstorage
@@ -357,23 +365,46 @@ export default function NavBar({ dataCategory }: NavBarProps) {
               >
                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                   <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                    <li>
-                      <Link href={'/'}>
-                        <a>Todos</a>
-                      </Link>
-                    </li>
-                    {dataCategory?.data.length > 0 ? (
-                      dataCategory.data.map((category) => {
-                        return (
-                          <li key={category.id}>
-                            <Link href={`/${category.slug}`} passHref>
-                              <a className="w-max">{category.name}</a>
-                            </Link>
-                          </li>
-                        )
-                      })
+                    {dataApi?.data?.length > 0 && (
+                      <li>
+                        <Link href={'/'}>
+                          <a>Todos</a>
+                        </Link>
+                      </li>
+                    )}
+                    {dataApi?.data?.length > 0 ? (
+                      dataApi.data.map((category: any) => (
+                        <li key={category.id}>
+                          <Link href={`/${category.slug}`} passHref>
+                            <a className="w-max">{category.name}</a>
+                          </Link>
+                        </li>
+                      ))
                     ) : (
-                      <span>Categoria de produtos não disponíveis.</span>
+                      <li>
+                        <div className="flex gap-3">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          <h1>Carregando...</h1>
+                        </div>
+                      </li>
                     )}
                   </ul>
                 </div>
@@ -478,18 +509,18 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                 </div>
 
                 <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
-                  {dataCategory?.data.length > 0 ? (
-                    dataCategory.data.map((category) => {
+                  {dataApi?.data?.length > 0 ? (
+                    dataApi.data.map((category: any) => {
                       return (
                         <li key={category.id}>
-                          <Link href={`/${category.slug}`}>
+                          <Link href={`/${category.slug}`} passHref>
                             <a className="w-max">{category.name}</a>
                           </Link>
                         </li>
                       )
                     })
                   ) : (
-                    <span>Categoria de produtos não disponíveis.</span>
+                    <li>Carregando.</li>
                   )}
                 </ul>
               </div>
