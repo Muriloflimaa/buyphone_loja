@@ -1,24 +1,25 @@
 import { useEffect, useState } from 'react'
 import ProductCart from '../components/ProductCart'
-import ProductTeste from '../components/ProductTeste'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ArrayProduct } from '../types'
-import { formatPrice } from '../utils/format'
 import { GetUseType } from '../utils/getUserType'
 import { moneyMask } from '../utils/masks'
 import { verificationPrice } from '../utils/verificationPrice'
 
 export default function Cart() {
   const { cart } = useCart()
-  const cartSize = cart.length
-  const [isOn, setIsOn] = useState(false)
-  const [isUser, setIsUser] = useState(false)
   const user = GetUseType()
-  const [showCart, setShowCart] = useState(false)
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
   const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
+  const [cartSize, setCartSize] = useState<number>()
+
+  useEffect(() => {
+    if (cart) {
+      setCartSize(cart.length)
+    }
+  }, [cart])
 
   useEffect(() => {
     setData([]) //zera o array do data
@@ -54,7 +55,7 @@ export default function Cart() {
       soma += total[i]
     }
     setSomaTotal(soma) //somando produtos e setando no state
-  }, [data])
+  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   return (
     <>
@@ -64,7 +65,7 @@ export default function Cart() {
             Meu carrinho
           </h1>
           <span className="text-xs font-light text-info-content">
-            {cartSize > 1
+            {cartSize && cartSize > 1
               ? cartSize + ' itens'
               : cartSize == 1
               ? cartSize + ' item'
@@ -72,35 +73,36 @@ export default function Cart() {
           </span>
         </div>
         <div className="flex flex-col gap-3">
-          {cartSize > 0 ? (
-            values.map((res: ArrayProduct) => (
-              <li className="list-none" key={res?.id}>
-                <ProductTeste
-                  id={res?.id}
-                  amount={res?.amount}
-                  name={res?.product?.name}
-                  color={res?.product?.color}
-                  price={res?.subTotal}
-                  memory={res?.product?.memory}
-                  image={res?.product?.media[0].original_url}
-                />
-                {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
-              </li>
-            ))
+          {cartSize && cartSize > 0 ? (
+            values.map(
+              (res: ArrayProduct) =>
+                res.id && (
+                  <li className="list-none" key={res.id}>
+                    <ProductCart
+                      id={res.id}
+                      amount={res.amount}
+                      name={res.product.name}
+                      color={res.product.color}
+                      price={res.subTotal}
+                      memory={res.product.memory}
+                      image={res.product.media[0].original_url}
+                    />
+                  </li>
+                )
+            )
           ) : (
-            <div className="flex justify-center">
-              {' '}
-              <h1>Carrinho vazio</h1>
-            </div>
+            <h1 className="flex justify-center">Carrinho vazio</h1>
           )}
         </div>
-        {cartSize > 0 && (
+        {cartSize && cartSize > 0 ? (
           <div className="flex justify-between">
             <span className="text-info-content text-lg">Valor Total:</span>
             <span className="font-semibold text-info-content text-lg">
               R$ {moneyMask(somaTotal?.toString())}
             </span>
           </div>
+        ) : (
+          ''
         )}
       </div>
     </>

@@ -23,7 +23,7 @@ import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import { verificationPrice } from '../../utils/verificationPrice'
-import ProductTeste from '../ProductTeste'
+import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 interface NavBarProps {
@@ -298,23 +298,19 @@ export default function NavBar({ dataCategory }: NavBarProps) {
                               (res: ArrayProduct) =>
                                 res.id && (
                                   <li className="list-none" key={res.id}>
-                                    <ProductTeste
-                                      id={res?.id}
-                                      amount={res?.amount}
-                                      name={res?.product?.name}
-                                      color={res?.product?.color}
-                                      price={res?.subTotal}
-                                      memory={res?.product?.memory}
-                                      image={
-                                        res?.product?.media[0].original_url
-                                      }
+                                    <ProductCart
+                                      id={res.id}
+                                      amount={res.amount}
+                                      name={res.product.name}
+                                      color={res.product.color}
+                                      price={res.subTotal}
+                                      memory={res.product.memory}
+                                      image={res.product.media[0].original_url}
                                     />
-                                    {/* commits(apagar depois) !!raul - aqui eu removi o ProductCart para nao fazer map dentro dele denovo - o useEffect está dando erros */}
                                   </li>
                                 )
                             )
                           ) : (
-                            // <ProductCart values={values} />
                             <h1>Carrinho vazio</h1>
                           )}
                         </div>

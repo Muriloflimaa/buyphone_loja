@@ -2,148 +2,128 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
-import { ArrayProduct, Product } from '../../types'
 import { moneyMask } from '../../utils/masks'
 
-const ProductCart = ({ values }: any) => {
-    const router = useRouter()
-    const [show, setShow] = useState(false)
-    const [padding, setPadding] = useState(false)
-    const { removeProduct, updateProductAmount } = useCart()
+interface ProductProps {
+  id: number
+  amount: number
+  name: string
+  color: string
+  price: number
+  memory: string
+  image: string
+}
 
-    useEffect(() => {
-        if (
-            router.asPath == '/shipping/address' ||
-            router.asPath == '/shipping/payment/pix'
-        ) {
-            setShow(true)
-        } else {
-            setShow(false)
-        }
-        if (
-            router.asPath == '/shipping/address' ||
-            router.asPath == '/shipping/payment/pix' ||
-            router.asPath == '/cart'
-        ) {
-            setPadding(true)
-        } else {
-            setPadding(false)
-        }
-    }, []) //verificação de rota para setar padding
+const ProductCart = ({
+  id,
+  amount,
+  name,
+  color,
+  price,
+  memory,
+  image,
+}: ProductProps) => {
+  const router = useRouter()
+  const [show, setShow] = useState(false)
+  const { removeProduct, updateProductAmount } = useCart()
 
-    function handleProductIncrement(product: Product) {
-        updateProductAmount({
-            productId: product.id,
-            amount: product.amount + 1,
-        })
-    } //incrementa 1 produto
+  useEffect(() => {
+    if (
+      router.asPath == '/shipping/address' ||
+      router.asPath == '/shipping/payment/pix'
+    ) {
+      setShow(true)
+    } else {
+      setShow(false)
+    }
+  }, []) //verificação de rota para setar padding
 
-    function handleProductDecrement(product: Product) {
-        updateProductAmount({
-            productId: product.id,
-            amount: product.amount - 1,
-        })
-    } //remove 1 amount do produto
+  function handleProductIncrement(productId: number, productAmount: number) {
+    updateProductAmount({
+      productId: productId,
+      amount: productAmount + 1,
+    })
+  } //incrementa 1 produto
 
-    function handleRemoveProduct(productId: number) {
-        removeProduct(productId)
-    } //remove produto do carrinho
+  function handleProductDecrement(productId2: number, productAmount: number) {
+    updateProductAmount({
+      productId: productId2,
+      amount: productAmount - 1,
+    })
+  } //remove 1 amount do produto
 
-    return (
-        <div className="flex flex-col gap-4">
-            {values.map((product: ArrayProduct) => {
-                //da um map no state
-                return (
-                    <div
-                        className={
-                            'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col ' +
-                            (padding == true ? ' p-4' : ' p-0')
-                        }
-                        key={product.id}
-                    >
-                        <div
-                            className="flex justify-between w-full"
-                            data-testid="product"
-                        >
-                            <div className="flex gap-3">
-                                <div className="w-20 h-full">
-                                    <img
-                                        src={
-                                            product.product?.media[0]
-                                                .original_url
-                                        }
-                                        alt={product.product?.name}
-                                    />
-                                </div>
+  function handleRemoveProduct(productId: number) {
+    removeProduct(productId)
+  } //remove produto do carrinho
 
-                                <div className="flex flex-col justify-between">
-                                    <div className="flex flex-col">
-                                        <strong>{product.product?.name}</strong>
-                                        <span>
-                                            {product.product?.color} /{' '}
-                                            {product.product?.memory}
-                                        </span>
-                                    </div>
-                                    <span>Quantidade: {product.amount}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-end w-full justify-between">
-                                <div className="flex">
-                                    {show == false ? (
-                                        <div className="btn-group w-14">
-                                            <button
-                                                className="btn text-xs h-auto p-2 min-h-0 w-1/2"
-                                                type="button"
-                                                data-testid="decrement-product"
-                                                disabled={product.amount <= 1}
-                                                onClick={() =>
-                                                    handleProductDecrement(
-                                                        product
-                                                    )
-                                                }
-                                            >
-                                                -
-                                            </button>
+  return (
+    <div
+      className={
+        'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col '
+      }
+      key={id}
+    >
+      <div className="grid grid-cols-3" data-testid="product">
+        <div className="grid col-span-2 gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-12 h-full flex items-center">
+              <img src={image} alt={name} />
+            </div>
 
-                                            <button
-                                                className="btn text-xs h-auto p-2 min-h-0 w-1/2"
-                                                type="button"
-                                                data-testid="increment-product"
-                                                onClick={() =>
-                                                    handleProductIncrement(
-                                                        product
-                                                    )
-                                                }
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        ' '
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col items-end">
-                                <strong>
-                                    {moneyMask(product.subTotal?.toString())}
-                                </strong>{' '}
-                                <button
-                                    type="button"
-                                    data-testid="remove-product"
-                                    onClick={() =>
-                                        handleRemoveProduct(product.id)
-                                    }
-                                >
-                                    <TrashIcon className="h-4 w-4 " />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )
-            })}
+            <div className="flex flex-col gap-2 justify-between">
+              <div className="flex flex-col">
+                <strong>{name}</strong>
+                <span>
+                  {color} / {memory}
+                </span>
+              </div>
+              <span>Quantidade: {amount}</span>
+            </div>
+          </div>
         </div>
-    )
+        <div className="flex flex-col gap-2 justify-between items-end">
+          <strong>R$ {moneyMask(price?.toString())}</strong>
+          <div className="flex flex-col items-end">
+            <button
+              type="button"
+              data-testid="remove-product"
+              onClick={() => handleRemoveProduct(id)}
+            >
+              <TrashIcon className="h-4 w-4 " />
+            </button>
+          </div>
+          <div className="flex w-full justify-end">
+            <div className="flex">
+              {show == false ? (
+                <div className="btn-group w-12">
+                  <button
+                    className="btn btn-accent text-xs h-auto p-1 min-h-0 w-1/2"
+                    type="button"
+                    data-testid="decrement-product"
+                    disabled={amount <= 1}
+                    onClick={() => handleProductDecrement(id, amount)}
+                  >
+                    -
+                  </button>
+
+                  <button
+                    className="btn btn-accent text-xs h-auto p-1 min-h-0 w-1/2"
+                    type="button"
+                    data-testid="increment-product"
+                    onClick={() => handleProductIncrement(id, amount)}
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                ' '
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default ProductCart

@@ -13,6 +13,7 @@ import { ICategory } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { Theme } from 'react-daisyui'
 import { SearchProvider } from '../context/SearchContext'
+import { useEffect } from 'react'
 
 interface AppProps {
   data: {
@@ -25,6 +26,14 @@ interface AppProps {
 export default function MyApp({ Component, pageProps, data }: AppProps) {
   const userData = GetUseType()
   const router = useRouter()
+
+  useEffect(() => {
+    async function Teste() {
+      const { data } = await apiPedidos.get(`categories/`)
+      console.log(data)
+    }
+    Teste()
+  }, [])
 
   return (
     <Theme
