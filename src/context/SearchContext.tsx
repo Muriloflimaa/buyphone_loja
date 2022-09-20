@@ -1,17 +1,17 @@
 import { createContext, ReactNode, useState } from 'react'
 
-type AuthContextData = {
+type SearchContextData = {
   changeState: any
   search: any
 }
 
-type AuthProviderProps = {
+type SearchProviderProps = {
   children: ReactNode
 }
 
-export const SearchContext = createContext({} as AuthContextData)
+export const SearchContext = createContext({} as SearchContextData)
 
-export function SearchProvider({ children }: AuthProviderProps) {
+export function SearchProvider({ children }: SearchProviderProps) {
   const [changeInput, setChangeInput] = useState('')
 
   function changeState(props: string) {

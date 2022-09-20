@@ -37,7 +37,7 @@ export default function Footer() {
             Categorias
           </h3>
           <ul className="text-info-content gap-1 opacity-90">
-            {dataApi?.data?.length > 0 ? (
+            {dataApi?.data.length > 0 ? (
               dataApi.data.map((category: any) => (
                 <li key={category.id}>
                   <Link href={`/${category.slug}`} passHref>
@@ -49,7 +49,7 @@ export default function Footer() {
               <li>
                 <div className="flex gap-3">
                   <svg
-                    className="animate-spin h-5 w-5 text-white"
+                    className="animate-spin h-5 w-5 text-black"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

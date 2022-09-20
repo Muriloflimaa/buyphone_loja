@@ -9,6 +9,7 @@ import SuccessImg from '../assets/images/success.webp'
 import Image from 'next/image'
 import { apiLojaBeta } from '../services/apiBetaConfigs'
 import { useRouter } from 'next/router'
+import { api } from '../services/apiClient'
 
 export default function register() {
   const [show, setShow] = useState(true)
@@ -38,7 +39,7 @@ export default function register() {
           toast.error('senhas não conferem')
         } else {
           try {
-            await apiLojaBeta.post('/user/register', {
+            await api.post('/user/register', {
               email,
               document,
               name,
@@ -82,9 +83,11 @@ export default function register() {
             }, 1500)
           } catch (error: any) {
             const resposta = error.response.data.errors
+
             var MessageErrorArray = Object.keys(resposta).map(function (key) {
               return [resposta[key]]
             })
+            console.log(MessageErrorArray)
             toast.custom(
               (t) => (
                 <div

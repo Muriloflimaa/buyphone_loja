@@ -1,12 +1,9 @@
-import { faMagnifyingGlassPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Rating from '../../../../components/Rating'
 import { useCart } from '../../../../context/UseCartContext'
-import { apiPedidosBeta } from '../../../../services/apiBetaConfigs'
 import { apiPedidos } from '../../../../services/apiClient'
 import { IProduct } from '../../../../types'
 import { GetUseType } from '../../../../utils/getUserType'
@@ -34,8 +31,6 @@ export default function Products({ data }: DataProps) {
   const user = GetUseType()
   const returnPrice = verificationPrice(data.data, user)
   const [description, setDescrition] = useState('')
-
-  console.log(data)
 
   useEffect(() => {
     setColor(verificationColor(data.data.color))

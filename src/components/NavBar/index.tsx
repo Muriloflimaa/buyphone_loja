@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
@@ -40,6 +41,7 @@ export default function NavBar() {
   const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
   const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<any>()
+  const router = useRouter()
 
   useEffect(() => {
     if (cart) {
@@ -158,6 +160,9 @@ export default function NavBar() {
                       id="search-form"
                       className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-[#4a3e865b]"
                       placeholder="Pesquisa..."
+                      onClick={() =>
+                        router.asPath !== '/' ? router.push('/') : null
+                      }
                       onChange={(e) => changeState(e.target.value)}
                     />
 
