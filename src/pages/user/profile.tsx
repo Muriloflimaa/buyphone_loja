@@ -209,7 +209,7 @@ export default function profile() {
             </div>
         </div>
     )
-}
+} //
 
 // export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
 //     const cookies = parseCookies(ctx)
