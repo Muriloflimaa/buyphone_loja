@@ -1,10 +1,10 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { date, moneyMask } from '../../utils/masks'
 
 interface ListProductsProps {
-  key: number
   created: string
   statuspayment: string
   number: number
@@ -20,9 +20,9 @@ interface ListProductsProps {
   CodImgPix: string
   brCode: string
   pdf: string
+  expired: string
 }
 const ListProducts = ({
-  key,
   created,
   statuspayment,
   number,
@@ -38,10 +38,11 @@ const ListProducts = ({
   CodImgPix,
   brCode,
   pdf,
+  expired,
 }: ListProductsProps) => {
   const router = useRouter()
 
-  const copyToClipBoard = async (copyMe: any) => {
+  const copyToClipBoard = async (copyMe: string) => {
     try {
       await navigator.clipboard.writeText(copyMe)
       toast.success('link copiado com sucesso')
@@ -58,93 +59,96 @@ const ListProducts = ({
 
         <div className="flex gap-2 items-center">
           <div className="flex flex-col gap-1 items-end md:flex-row">
-            <span className="flex justify-center">
-              {(method === 'PIX' && statuspayment !== 'paid') ??
-              'manual_paid' ??
-              'captured' ? (
-                <>
-                  <label
-                    htmlFor={CodImgPix}
-                    className="badge cursor-pointer z-10"
-                  >
-                    Realizar pagamento
-                  </label>
+            {(method === 'PIX' &&
+              statuspayment !== 'paid' &&
+              expired !== 'expired') ??
+            'manual_paid' ??
+            'captured' ? (
+              <>
+                <label
+                  htmlFor={CodImgPix}
+                  className="badge cursor-pointer z-10"
+                >
+                  Realizar pagamento
+                </label>
 
-                  <input
-                    type="checkbox"
-                    id={CodImgPix}
-                    className="modal-toggle"
-                  />
-                  <label
-                    htmlFor={CodImgPix}
-                    className="modal cursor-pointer z-50"
-                  >
-                    <label className="modal-box relative max-w-7xl">
-                      <div className="my-10">
-                        <div className="flex flex-col gap-4 max-w-5xl mx-auto">
-                          <div className="flex flex-col w-full md:flex-row justify-evenly mb-10">
-                            <div className="text-center w-full px-8">
-                              <div className="card card-compact shadow w-fit mx-auto">
-                                <img
-                                  src={`https://loja.buyphone.com.br/img/qrcode/4551812214423552.png`}
-                                  alt="QRCode"
-                                  className="mx-auto h-60"
-                                />
-                              </div>
-                              <h3 className="font-bold text-3xl my-6">
-                                Valor: R$ {moneyMask(value.toString())}
-                              </h3>
-                              <div className="grid gap-2">
-                                <span
-                                  onClick={() => copyToClipBoard(`${brCode}`)}
-                                  className="btn btn-primary btn-block font-bold normal-case"
-                                >
-                                  <span className="">Copiar QRCode</span>
-                                </span>
-                                <a
-                                  href={pdf}
-                                  target="_blank"
-                                  className="btn btn-primary btn-outline btn-block font-bold normal-case"
-                                >
+                <input
+                  type="checkbox"
+                  id={CodImgPix}
+                  className="modal-toggle"
+                />
+                <label
+                  htmlFor={CodImgPix}
+                  className="modal cursor-pointer z-50"
+                >
+                  <label className="modal-box relative max-w-5xl">
+                    <div className="my-10">
+                      <div className="flex flex-col gap-4 max-w-5xl mx-auto">
+                        <div className="flex flex-col w-full md:flex-row justify-evenly">
+                          <div className="text-center w-full grid gap-3">
+                            <div className="card card-compact shadow w-fit mx-auto">
+                              <img
+                                src={`https://loja.buyphone.com.br/img/qrcode/${CodImgPix}.png`}
+                                alt="QRCode"
+                                className="mx-auto h-32"
+                              />
+                            </div>
+                            <h3 className="font-bold text-2xl">
+                              Valor: R$ {moneyMask(value.toString())}
+                            </h3>
+                            <div className="grid gap-2">
+                              <a
+                                onClick={() => copyToClipBoard(`${brCode}`)}
+                                className="btn btn-primary btn-block font-bold normal-case"
+                              >
+                                Copiar QRCode
+                              </a>
+
+                              <Link href={pdf}>
+                                <a className="btn btn-primary btn-outline btn-block font-bold normal-case">
                                   Baixar PDF
                                 </a>
+                              </Link>
+                            </div>
+                          </div>
+                          <div className="divider md:divider-horizontal"></div>
+                          <div className="flex flex-col w-full justify-center gap-3">
+                            <div className="badge badge-lg badge-warning">
+                              Aguardando Pagamento
+                            </div>
+                            <div className="flex flex-col gap-3">
+                              <h3 className="font-bold text-3xl">
+                                Enviar R$ {moneyMask(value.toString())} para:
+                              </h3>
+                              <div>
+                                <span className="font-bold">Nome:</span> Buyp
+                                Programas de Vantagens e Tecnologia Ltda
+                              </div>
+                              <div>
+                                <span className="font-bold">CNPJ:</span>{' '}
+                                45.679.637/0001-94
                               </div>
                             </div>
-                            <div className="divider md:divider-horizontal"></div>
-                            <div className="flex flex-col w-full justify-center px-8">
-                              <div className="badge badge-lg badge-warning px-6 py-4">
-                                Aguardando Pagamento
-                              </div>
-                              <div className="my-4 flex flex-col">
-                                <h3 className="font-bold text-3xl my-6">
-                                  Enviar R$ {moneyMask(value.toString())} para:
-                                </h3>
-                                <div>
-                                  <span className="font-bold">Nome:</span> Buyp
-                                  Programas de Vantagens e Tecnologia Ltda
-                                </div>
-                                <div>
-                                  <span className="font-bold">CNPJ:</span>{' '}
-                                  45.679.637/0001-94
-                                </div>
-                              </div>
-                              <a
-                                className="btn btn-primary btn-outline btn-block font-bold normal-case"
-                                onClick={() => router.push('/myshopping')}
-                              >
-                                Verificar Pagamento
-                              </a>
-                            </div>
+                            <a
+                              className="btn btn-primary btn-outline btn-block font-bold normal-case"
+                              onClick={() => router.push('/myshopping')}
+                            >
+                              Verificar Pagamento
+                            </a>
                           </div>
                         </div>
                       </div>
-                    </label>
+                    </div>
                   </label>
-                </>
-              ) : (
-                ''
-              )}
-            </span>
+                </label>
+              </>
+            ) : expired === 'expired' ? (
+              <span className="badge badge-error h-auto text-center ml-12">
+                Pedido expirado
+              </span>
+            ) : (
+              ''
+            )}
 
             {statuspayment == 'canceled' ?? 'voided' ? (
               <span className="badge h-auto text-center ml-12">

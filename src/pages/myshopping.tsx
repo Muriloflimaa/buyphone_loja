@@ -1,5 +1,5 @@
 import { parseCookies, setCookie } from 'nookies'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { api } from '../services/apiClient'
@@ -19,6 +19,8 @@ function MyShopping() {
     Teste()
   }, [])
 
+  console.log(data)
+
   return (
     <div className="max-w-7xl mx-auto my-8">
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
@@ -26,10 +28,9 @@ function MyShopping() {
       </h1>
 
       {data?.data.length > 0 ? (
-        data.data.map((pedido: any) => {
-          return (
+        data.data.map((pedido: any) => (
+          <React.Fragment key={pedido.id + 1}>
             <ListProducts
-              key={pedido.id}
               created={pedido.created_at}
               statuspayment={pedido.invoice.status}
               number={pedido.id}
@@ -45,9 +46,10 @@ function MyShopping() {
               CodImgPix={pedido.invoice.invoice_id}
               brCode={pedido.invoice.brcode}
               pdf={pedido.invoice.pdf}
+              expired={pedido.invoice.status}
             />
-          )
-        })
+          </React.Fragment>
+        ))
       ) : (
         <div className="flex gap-3">
           <svg

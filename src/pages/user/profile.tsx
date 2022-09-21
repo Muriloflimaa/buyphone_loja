@@ -1,11 +1,13 @@
 import axios from 'axios'
-import { parseCookies, setCookie } from 'nookies'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import ReactInputMask from 'react-input-mask'
 import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
 import { PersistentLogin } from '../../utils/PersistentLogin'
+import jwt_decode from 'jwt-decode'
+import { GetServerSidePropsContext } from 'next'
 
 export default function profile({ data }: UserData) {
   const [name, setName] = useState<string | null>(data.name)
@@ -312,8 +314,29 @@ export default function profile({ data }: UserData) {
   )
 }
 
-export const getServerSideProps = PersistentLogin(async (ctx) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
+
+  //se existe um token entrar aqui!
+  if (cookies['@BuyPhone:Token']) {
+    const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
+
+    //se existir um token e estiver expirado, mandar para o login
+    if (Date.now() >= decodedToken.exp * 1000) {
+      setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
+        maxAge: 60 * 60 * 24, // 24h
+        path: '/',
+      })
+      destroyCookie(ctx, '@BuyPhone:User')
+      destroyCookie(ctx, '@BuyPhone:Token')
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      }
+    }
+  }
 
   //verifica se não existe um token, se nao existir voltar para a home
   if (!cookies['@BuyPhone:Token']) {
@@ -361,4 +384,4 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
       },
     }
   }
-})
+}
