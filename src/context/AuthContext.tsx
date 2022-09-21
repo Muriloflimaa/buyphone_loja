@@ -88,16 +88,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         destroyCookie(undefined, '@BuyPhone:User')
         destroyCookie(undefined, '@BuyPhone:Token')
         Router.push('/')
+        return
       } else {
         try {
-          await apiLogin.post('/logout')
+          await apiLogin.post('/auth/logout')
           destroyCookie(undefined, '@BuyPhone:User')
           destroyCookie(undefined, '@BuyPhone:Token')
           Router.push('/')
+          return
         } catch (error) {
           destroyCookie(undefined, '@BuyPhone:User')
           destroyCookie(undefined, '@BuyPhone:Token')
           Router.push('/')
+          return
         }
       }
     } else {
