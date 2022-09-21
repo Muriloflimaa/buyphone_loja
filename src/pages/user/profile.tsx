@@ -1,9 +1,101 @@
 import axios from 'axios'
-import { parseCookies } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import ReactInputMask from 'react-input-mask'
+import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
 import { PersistentLogin } from '../../utils/PersistentLogin'
 
 export default function profile({ data }: UserData) {
+  const [name, setName] = useState<string | null>(data.name)
+  const [email, setEmail] = useState<string | null>(data.email)
+  const [mobilePhone, setMobilePhone] = useState<string | null>(
+    data.mobile_phone
+  )
+  const [password, setPassword] = useState<string | null>()
+  const [changePassword, setChangePassword] = useState<string | null>()
+  const [ConfirmCP, setConfirmCP] = useState<string | null>()
+
+  const AlterDataUser = async () => {
+    if (!name) {
+      toast.error('Campo nome obrigatório')
+      return
+    }
+    if (!email) {
+      toast.error('Campo email obrigatório')
+      return
+    }
+    if (!mobilePhone) {
+      toast.error('Campo telefone obrigatório')
+      return
+    }
+
+    const userInfo = {
+      name: name,
+      email: email,
+      mobile_phone: mobilePhone,
+    }
+    try {
+      await apiLogin.put(`/user/${data.id}`, userInfo)
+      toast.success('Dados alterados com sucesso.')
+    } catch (error) {
+      toast.error(
+        'Houve um problema para alterar os dados, consulte o suporte.'
+      )
+    }
+  }
+
+  const AlterPassword = async () => {
+    if (!password) {
+      toast.error('Digite sua senha atual.')
+      return
+    }
+    if (!changePassword) {
+      toast.error('Digite sua nova senha.')
+      return
+    }
+    if (!ConfirmCP) {
+      toast.error('Digite a confirmação da sua nova senha.')
+      return
+    }
+    if (changePassword == ConfirmCP) {
+      const userPasswords = {
+        password: password,
+        new_password: changePassword,
+      }
+
+      try {
+        const response = await apiLogin.put(
+          `/password/${data.id}`,
+          userPasswords
+        )
+        if (response.data.success) {
+          toast.success('Senha alterada com sucesso.')
+          return
+        }
+        if (response.data.error) {
+          toast.error(
+            response.data.error.replace(
+              'Password does not match',
+              'Senha atual não confere.'
+            )
+          )
+          return
+        }
+
+        console.log(response)
+      } catch (error: any) {
+        toast.error(
+          error.response.data.message.replace('new password', 'nova senha')
+        )
+      }
+    } else {
+      toast.error('Senhas não conferem')
+      return
+    }
+  }
+
   return (
     <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
       <div className="md: grid md:grid-cols-3 md:gap-6">
@@ -19,7 +111,7 @@ export default function profile({ data }: UserData) {
           </div>
         </div>
         <div className="mt-5 md:mt-0 md:col-span-2">
-          <form>
+          <div>
             <div className="px-4 py-5 bg-base-200 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
               <div className="grid grid-cols-6 gap-6">
                 <div className="col-span-6 sm:col-span-4">
@@ -34,6 +126,7 @@ export default function profile({ data }: UserData) {
                     id="name"
                     type="text"
                     defaultValue={data.name}
+                    onChange={(event) => setName(event.target.value)}
                   />
                 </div>
 
@@ -49,6 +142,7 @@ export default function profile({ data }: UserData) {
                     id="email"
                     type="email"
                     defaultValue={data.email}
+                    onChange={(event) => setEmail(event.target.value)}
                   />
                 </div>
 
@@ -60,6 +154,7 @@ export default function profile({ data }: UserData) {
                     CPF
                   </label>
                   <input
+                    disabled
                     className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
                     id="document"
                     defaultValue={data.document}
@@ -75,6 +170,7 @@ export default function profile({ data }: UserData) {
                     Nascimento
                   </label>
                   <input
+                    disabled
                     className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
                     id="birthdate"
                     defaultValue={data.birthdate}
@@ -89,21 +185,27 @@ export default function profile({ data }: UserData) {
                   >
                     Celular
                   </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                  <ReactInputMask
+                    mask="+55 (99) 99999-9999"
                     id="mobile_phone"
-                    defaultValue={data.mobile_phone}
+                    name="phone"
+                    onChange={(event) => setMobilePhone(event.target.value)}
                     type="tel"
+                    defaultValue={data.mobile_phone}
+                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
                   />
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-              <button type="submit" className="btn normal-case">
+              <button
+                onClick={() => AlterDataUser()}
+                className="btn normal-case"
+              >
                 Salvar
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
       <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -120,61 +222,61 @@ export default function profile({ data }: UserData) {
           <div className="px-4 sm:px-0"></div>
         </div>
         <div className="mt-5 md:mt-0 md:col-span-2">
-          <form>
-            <div className="px-4 py-5 bg-base-200 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="current_password"
-                  >
-                    Senha Atual
-                  </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="current_password"
-                    type="password"
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="password"
-                  >
-                    Nova Senha
-                  </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="password"
-                    type="password"
-                    aria-autocomplete="list"
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="password_confirmation"
-                  >
-                    Confirmação de senha
-                  </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="password_confirmation"
-                    type="password"
-                  />
-                </div>
+          <div className="px-4 py-5 bg-base-200 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
+            <div className="grid grid-cols-6 gap-6">
+              <div className="col-span-6 sm:col-span-4">
+                <label
+                  className="block font-semibold text-[10px] text-gray-500"
+                  htmlFor="current_password"
+                >
+                  Senha Atual
+                </label>
+                <input
+                  className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                  id="current_password"
+                  type="password"
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-4">
+                <label
+                  className="block font-semibold text-[10px] text-gray-500"
+                  htmlFor="password"
+                >
+                  Nova Senha
+                </label>
+                <input
+                  className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                  id="password"
+                  type="password"
+                  onChange={(event) => setChangePassword(event.target.value)}
+                  aria-autocomplete="list"
+                />
+              </div>
+              <div className="col-span-6 sm:col-span-4">
+                <label
+                  className="block font-semibold text-[10px] text-gray-500"
+                  htmlFor="password_confirmation"
+                >
+                  Confirmação de senha
+                </label>
+                <input
+                  className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                  id="password_confirmation"
+                  onChange={(event) => setConfirmCP(event.target.value)}
+                  type="password"
+                />
               </div>
             </div>
-            <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-              <div className="text-sm text-gray-600 mr-3">Salvo.</div>
-              <button type="submit" className="btn normal-case">
-                Salvar
-              </button>
-            </div>
-          </form>
+          </div>
+          <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
+            <button onClick={() => AlterPassword()} className="btn normal-case">
+              Salvar
+            </button>
+          </div>
         </div>
       </div>
-      <div className="md:grid md:grid-cols-3 md:gap-6">
+      {/* <div className="md:grid md:grid-cols-3 md:gap-6">
         <div className="md:col-span-1 flex justify-between">
           <div className="px-4 sm:px-0">
             <h3 className="text-lg font-medium text-neutral-100">
@@ -205,7 +307,7 @@ export default function profile({ data }: UserData) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
@@ -215,9 +317,13 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
 
   //verifica se não existe um token, se nao existir voltar para a home
   if (!cookies['@BuyPhone:Token']) {
+    setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
+      maxAge: 60 * 60 * 24, // 24h
+      path: '/',
+    })
     return {
       redirect: {
-        destination: '/',
+        destination: '/login',
         permanent: false,
       },
     }

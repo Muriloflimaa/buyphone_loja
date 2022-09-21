@@ -5,6 +5,7 @@ import { createContext, ReactNode, useState } from 'react'
 import toast from 'react-hot-toast'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
+import { api } from '../services/apiClient'
 
 type SignInCredentials = {
   email: string
@@ -48,14 +49,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await axios.post(
-        'https://loja.buyphone.com.br/api/auth/login',
-        {
-          email,
-          password,
-        }
-      )
-      console.log(response)
+      const response = await apiLogin.post('/auth/login', {
+        email,
+        password,
+      })
       const { type, name, id, profile_photo_url } = response.data.user
 
       const UserObject = {
@@ -70,9 +67,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setCookies('@BuyPhone:User', UserObject) //chama a função setCookies para gravar os dados
       setCookies('@BuyPhone:Token', token)
+      const cookies = parseCookies(undefined)
 
+      if (cookies['@BuyPhone:Router']) {
+        window.location.href = cookies['@BuyPhone:Router']
+        destroyCookie({}, '@BuyPhone:Router')
+        return
+      }
       window.location.href = '/'
-      Router.push('/')
     } catch (error) {
       toast.error('Não foi possível fazer o login')
     }
@@ -84,28 +86,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (cookies['@BuyPhone:Token']) {
       const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
 
+      //se tiver um token expirado apenas destruir os cookies
       if (Date.now() >= decodedToken.exp * 1000) {
-        destroyCookie(undefined, '@BuyPhone:User')
-        destroyCookie(undefined, '@BuyPhone:Token')
+        destroyCookie({}, '@BuyPhone:User')
+        destroyCookie({}, '@BuyPhone:Token')
         Router.push('/')
-        return
       } else {
+        //se tiver um cookies mandar para a rota de logout
         try {
           await apiLogin.post('/auth/logout')
-          destroyCookie(undefined, '@BuyPhone:User')
-          destroyCookie(undefined, '@BuyPhone:Token')
+          destroyCookie({}, '@BuyPhone:User')
+          destroyCookie({}, '@BuyPhone:Token')
           Router.push('/')
-          return
         } catch (error) {
-          destroyCookie(undefined, '@BuyPhone:User')
-          destroyCookie(undefined, '@BuyPhone:Token')
+          //se der algum erro apenas destruir os cookies
+          destroyCookie({}, '@BuyPhone:User')
+          destroyCookie({}, '@BuyPhone:Token')
           Router.push('/')
-          return
         }
       }
     } else {
-      destroyCookie(undefined, '@BuyPhone:User')
-      destroyCookie(undefined, '@BuyPhone:Token')
+      //caso não tiver um cookie destruir cookies, possivelmente nao entrara nesse caso
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
       Router.push('/')
     }
   }
