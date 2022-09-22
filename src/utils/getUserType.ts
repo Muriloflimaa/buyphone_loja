@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { IUser } from '../types'
 
 export const GetUseType = () => {
-    const [userJson, setUserJson] = useState<IUser | undefined>()
+    const [userJson, setUserJson] = useState<IUser | any>()
     const { '@BuyPhone:User': user } = parseCookies()
 
     useEffect(() => {

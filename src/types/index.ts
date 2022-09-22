@@ -144,10 +144,13 @@ export interface ICategory {
 
 export interface Product {
     id: number
-    title: string
-    price: number
-    image: string
     amount: number
-    color: string
-    memory: string
+}
+
+export interface ArrayProduct {
+    id: number
+    amount: number
+    priceFormated: number
+    subTotal: number
+    product: IProduct
 }
