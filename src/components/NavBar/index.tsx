@@ -13,7 +13,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
@@ -112,7 +112,7 @@ export default function NavBar() {
         <div className="glass">
           <nav className="relative mt-0 w-full bg-primary/[.9]">
             <div className="w-full">
-              <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-6 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
+              <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-4 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
                 <div className="md:col-span-1">
                   <div
                     className="block md:hidden"
@@ -152,7 +152,7 @@ export default function NavBar() {
                     </Link>
                   </div>
                 </div>
-                <div className="md:col-span-4 md:pl-10">
+                <div className="md:col-span-2">
                   <div className="w-full">
                     <input
                       type="search"
@@ -359,6 +359,9 @@ export default function NavBar() {
                   id="search-form"
                   className="input input-bordered rounded-none w-full text-white bg-primary"
                   placeholder="Pesquisa..."
+                  onClick={() =>
+                    router.asPath !== '/' ? router.push('/') : null
+                  }
                   onChange={(e) => changeState(e.target.value)}
                 />
               </div>
@@ -441,7 +444,7 @@ export default function NavBar() {
             className="drawer-overlay w-full h-[100vh] fixed"
             onClick={() => setIsOn(!isOn)}
           ></label>
-          <ul className="menu overflow-y-auto h-[100vh] bg-base-100 text-base-content fixed flex">
+          <div className="menu overflow-y-auto h-[100vh] bg-base-100 text-base-content fixed flex">
             <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
               <div className="flex justify-between items-center p-6">
                 <div>
@@ -479,7 +482,6 @@ export default function NavBar() {
                 className="swap swap-rotate p-6"
                 onClick={() => setIsOn(!isOn)}
               >
-                <input type="checkbox" />
                 <div>
                   <svg
                     className="swap-off fill-current text-info-content z-20"
@@ -493,58 +495,76 @@ export default function NavBar() {
                 </div>
               </label>
             </div>
-            <Link href={'/'}>
-              <li>
-                <div className="flex py-8">
-                  <HomeIcon className="h-5 w-5 text-info-content" />
-                  <a className="text-info-content">Página inicial</a>
-                </div>
-              </li>
-            </Link>
-            <li className="flex">
-              <div
-                tabIndex={0}
-                className="collapse collapse-arrow flex flex-col px-4 py-3 gap-0 h-auto p-0 items-start"
-              >
-                <div className="collapse-title min-h-0 text-xl font-medium flex items-center p-0 relative">
-                  <ShoppingBagIcon className="h-5 w-5 text-info-content" />
-                  <a className="text-info-content font-normal text-base collapse-title">
-                    Produtos
-                  </a>
-                </div>
 
-                <ul className="collapse-content flex flex-col ml-5 gap-3 text-info-content font-normal text-base">
-                  {dataApi?.data?.length > 0 ? (
-                    dataApi.data.map((category: any) => {
-                      return (
-                        <li key={category.id}>
-                          <Link href={`/${category.slug}`} passHref>
-                            <a className="w-max">{category.name}</a>
-                          </Link>
-                        </li>
-                      )
-                    })
-                  ) : (
-                    <li>Carregando.</li>
-                  )}
-                </ul>
+            <label
+              htmlFor="my-drawer"
+              className="flex px-4 cursor-pointer"
+              onClick={() => {
+                setIsOn(!isOn)
+                router.push('/')
+              }}
+            >
+              <div className="flex py-8 gap-3 w-full">
+                <HomeIcon className="h-5 w-5 text-info-content" />
+                <span className="text-info-content">Página inicial</span>
               </div>
-            </li>
-            <li>
-              <div className="flex py-8">
+            </label>
+
+            <div className="collapse h-auto overflow-y-auto">
+              <input type="checkbox" />
+              <div className="collapse-title flex gap-3 text-xl">
+                <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                <span className="text-info-content text-base">Produtos</span>
+              </div>
+              <div className="collapse-content flex flex-col overflow-auto gap-2 h-auto">
+                {dataApi?.data.length > 0 ? (
+                  dataApi.data.map((category: any) => (
+                    <label
+                      htmlFor="my-drawer"
+                      className="flex px-4 cursor-pointer"
+                      onClick={() => {
+                        setIsOn(!isOn)
+                        router.push(
+                          `/${category.name.replace(/ /g, '-').toLowerCase()}`
+                        )
+                      }}
+                    >
+                      {category.name}
+                    </label>
+                  ))
+                ) : (
+                  <p>Carregando.</p>
+                )}
+              </div>
+            </div>
+
+            <label
+              htmlFor="my-drawer"
+              className="flex px-4 cursor-pointer"
+              onClick={() => {
+                setIsOn(!isOn)
+                router.push('/user/profile')
+              }}
+            >
+              <div className="flex py-8 gap-3 w-full">
                 <UserIcon className="h-5 w-5 text-info-content" />
-                <a className="text-info-content">Minha conta</a>
+                <span className="text-info-content">Minha conta</span>
               </div>
-            </li>
-            <li>
-              <div className="flex py-8">
+            </label>
+            <label
+              htmlFor="my-drawer"
+              className="flex px-4 cursor-pointer"
+              onClick={() => {
+                setIsOn(!isOn)
+                signOut()
+              }}
+            >
+              <div className="flex py-8 gap-3 items-center w-full">
                 <LogoutIcon className="h-5 w-5 text-info-content" />
-                <a className="text-info-content" onClick={() => signOut()}>
-                  Sair
-                </a>
+                <span className="text-info-content">Sair</span>
               </div>
-            </li>
-          </ul>
+            </label>
+          </div>
         </div>
       </div>
     </>
