@@ -18,6 +18,7 @@ export default class MyDocument extends Document {
             name="subject"
             content="Garanta seu iphone novo com um match perfeito!"
           ></meta>
+          <link rel="icon" type="image/ico" href="/favicon.ico" />
           <meta charSet="utf-8" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
