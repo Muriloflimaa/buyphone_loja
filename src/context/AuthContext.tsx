@@ -17,7 +17,7 @@ type UserDataType = {
 
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>
-  signOut: any
+  signOut: Function
   user: string | undefined | number
   isAuthenticated: boolean
   userData: UserDataType | undefined

@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useState } from 'react'
+import { IProduct } from '../types'
 
 type SearchContextData = {
-  changeState: any
-  search: any
+  changeState: Function
+  search: Function
 }
 
 type SearchProviderProps = {
@@ -20,7 +21,7 @@ export function SearchProvider({ children }: SearchProviderProps) {
 
   const searchParam = ['name', 'memory', 'color']
 
-  function search(items: any) {
+  function search(items: Array<{}>) {
     return items.filter((item: any) => {
       return searchParam.some((newItem) => {
         return (
