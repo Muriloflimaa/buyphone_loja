@@ -222,6 +222,7 @@ export const getStaticProps = async ({ params }: IParams) => {
   const data = await apiPedidos.get(
     `products/${params.slugCategory}/${params.slugProduct}`
   )
+
   return {
     props: {
       data: data.data,
@@ -242,6 +243,6 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   }
 }
