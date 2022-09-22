@@ -1,18 +1,20 @@
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { api } from '../services/apiClient'
 
 function MyShopping() {
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<Array<{}> | undefined>()
+
+  console.log(data)
 
   useEffect(() => {
     async function Teste() {
       const cookies = parseCookies(undefined)
       if (cookies['@BuyPhone:User']) {
         const USER = JSON.parse(cookies['@BuyPhone:User'])
-        const data = await api(`orders/customer/${USER?.id}`)
+        const { data } = await api(`orders/customer/${USER?.id}`)
         setData(data)
       }
     }
@@ -25,11 +27,10 @@ function MyShopping() {
         Minhas Compras
       </h1>
 
-      {data?.data.length > 0 ? (
-        data?.data.map((pedido: any) => {
-          return (
+      {data && data.length > 0 ? (
+        data.map((pedido: any) => (
+          <React.Fragment key={pedido.id}>
             <ListProducts
-              key={pedido.id}
               created={pedido.created_at}
               statuspayment={pedido.invoice.status}
               number={pedido.id}
@@ -46,8 +47,8 @@ function MyShopping() {
               brCode={pedido.invoice.brcode}
               pdf={pedido.invoice.pdf}
             />
-          )
-        })
+          </React.Fragment>
+        ))
       ) : (
         <div className="flex gap-3">
           <svg
