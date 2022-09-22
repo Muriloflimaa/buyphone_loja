@@ -510,7 +510,7 @@ export default function NavBar() {
               </div>
             </label>
 
-            <div className="collapse h-auto overflow-y-auto">
+            <div className="collapse collapse-arrow h-auto overflow-y-auto">
               <input type="checkbox" />
               <div className="collapse-title flex gap-3 text-xl">
                 <ShoppingBagIcon className="h-5 w-5 text-info-content" />
@@ -521,6 +521,7 @@ export default function NavBar() {
                   dataApi.data.map((category: any) => (
                     <label
                       htmlFor="my-drawer"
+                      key={category.id}
                       className="flex px-4 cursor-pointer"
                       onClick={() => {
                         setIsOn(!isOn)

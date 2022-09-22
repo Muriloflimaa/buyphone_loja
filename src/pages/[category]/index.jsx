@@ -1,7 +1,7 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import ProductCard from '../../components/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
 import { AuthContext } from '../../context/AuthContext'
@@ -46,19 +46,21 @@ export default function Products({ data }) {
               const ourPrice = averagePrice - discountPrice
 
               return ourPrice ? (
-                <ProductCard
-                  key={products.id + 0}
-                  id={products.id}
-                  name={products.name}
-                  // idCategory={category.id}
-                  colorPhone={products.color}
-                  price={ourPrice}
-                  averagePrice={averagePrice}
-                  slug={products.slug}
-                  slugCategory={data.data.slug}
-                  image={products.media[0].original_url}
-                  memory={products.memory}
-                />
+                <React.Fragment key={products.id}>
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    // idCategory={category.id}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={data.data.slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                  />
+                </React.Fragment>
               ) : (
                 <></>
               )
@@ -114,5 +116,5 @@ export async function getStaticPaths() {
     }
   })
 
-  return { paths, fallback: 'blocking' }
+  return { paths, fallback: false }
 }
