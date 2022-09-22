@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-const ShippingCard = (props: any) => {
+const ShippingCard = () => {
   const router = useRouter()
-  const [show, setShow] = useState(false)
   const [message, setMessage] = useState('')
 
   useEffect(() => {

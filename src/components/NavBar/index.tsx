@@ -242,7 +242,7 @@ export default function NavBar() {
                             <button
                               className="text-left w-full"
                               type="submit"
-                              onClick={signOut}
+                              onClick={() => signOut()}
                             >
                               Sair
                             </button>
@@ -539,7 +539,7 @@ export default function NavBar() {
             <li>
               <div className="flex py-8">
                 <LogoutIcon className="h-5 w-5 text-info-content" />
-                <a className="text-info-content" onClick={signOut}>
+                <a className="text-info-content" onClick={() => signOut()}>
                   Sair
                 </a>
               </div>
