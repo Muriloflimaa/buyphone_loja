@@ -7,8 +7,6 @@ import { api } from '../services/apiClient'
 function MyShopping() {
   const [data, setData] = useState<Array<{}> | undefined>()
 
-  console.log(data)
-
   useEffect(() => {
     async function Teste() {
       const cookies = parseCookies(undefined)

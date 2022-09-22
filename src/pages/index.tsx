@@ -9,7 +9,7 @@ import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
 import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
-import { ICategory } from '../types'
+import { ICategory, IProduct } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -31,7 +31,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
   // Calculando itens por produto disponível no carrinho (anterior, atual)
   cart.reduce((sumAmount, product) => {
-    const newSumAmount: any = { ...sumAmount }
+    const newSumAmount = { ...sumAmount }
     newSumAmount[product.id] = product.amount
     return newSumAmount
   }, {} as CartItemsAmount)
@@ -61,7 +61,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
         <div className="grid  grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
           {data?.data.length > 0 ? (
             data.data.map((category) =>
-              search(category.products).map((products: any) => {
+              search(category.products).map((products: IProduct) => {
                 const returnPrice = verificationPrice(products, user)
                 return (
                   returnPrice.ourPrice > 0 && (
