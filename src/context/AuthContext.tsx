@@ -55,7 +55,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
           password,
         }
       )
-      console.log(response)
       const { type, name, id, profile_photo_url } = response.data.user
 
       const UserObject = {
@@ -72,9 +71,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookies('@BuyPhone:Token', token)
 
       window.location.href = '/'
-      Router.push('/')
-    } catch (error) {
-      toast.error('Não foi possível fazer o login')
+    } catch (response: any) {
+      response.response.data.message
+        ? toast.error(response.response.data.message)
+        : toast.error('Erro no servidor, contate o suporte.')
     }
   }
 
