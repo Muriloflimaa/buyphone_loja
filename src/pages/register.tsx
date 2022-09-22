@@ -7,7 +7,6 @@ import { WithSSRGuest } from '../utils/WithSSRGuest'
 import ErrorImg from '../assets/images/error.webp'
 import SuccessImg from '../assets/images/success.webp'
 import Image from 'next/image'
-import { apiLojaBeta } from '../services/apiBetaConfigs'
 import { useRouter } from 'next/router'
 import { api } from '../services/apiClient'
 
