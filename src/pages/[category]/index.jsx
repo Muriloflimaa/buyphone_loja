@@ -5,6 +5,7 @@ import { useContext } from 'react'
 import ProductCard from '../../components/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
 import { AuthContext } from '../../context/AuthContext'
+import Head from 'next/head'
 
 export default function Products({ data }) {
   const { userData } = useContext(AuthContext)
@@ -12,6 +13,9 @@ export default function Products({ data }) {
 
   return (
     <>
+      <Head>
+        <title>BuyPhone - {data.data.name}</title>
+      </Head>
       <div className="h-auto">
         <div className="flex justify-center mx-5">
           <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm text-center md:text-md w-full max-w-7xl">

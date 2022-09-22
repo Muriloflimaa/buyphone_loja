@@ -2,6 +2,7 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useContext, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
@@ -38,6 +39,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
   return (
     <>
+      <Head>
+        <title>BuyPhone - Seu match perfeito</title>
+      </Head>
       <div className="h-auto">
         <CarouselComponent />
         <img

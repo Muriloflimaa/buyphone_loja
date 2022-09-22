@@ -1,4 +1,5 @@
 import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
+import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -47,6 +48,16 @@ export default function Products({ data }: DataProps) {
 
   return (
     <>
+      <Head>
+        <title>
+          BuyPhone -{' '}
+          {data.data.name +
+            ' Apple ' +
+            data.data.memory +
+            ' ' +
+            data.data.color}
+        </title>
+      </Head>
       <div className="max-w-4xl mx-auto p-4 md:my-4 w-full">
         <h1 className="font-medium flex items-start gap-2">
           <Link href={'/'} passHref>

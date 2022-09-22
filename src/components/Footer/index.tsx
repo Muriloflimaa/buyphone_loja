@@ -17,8 +17,6 @@ import { apiPedidos } from '../../services/apiClient'
 export default function Footer() {
   const [dataApi, setDataApi] = useState<Array<{}> | undefined>()
 
-  console.log(dataApi)
-
   useEffect(() => {
     async function Data() {
       try {
