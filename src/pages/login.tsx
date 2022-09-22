@@ -1,6 +1,7 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { FormEvent, useContext, useState } from 'react'
+import toast from 'react-hot-toast'
 import { AuthContext, setCookies } from '../context/AuthContext'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 
@@ -10,8 +11,15 @@ export default function login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault()
+  async function onSubmit() {
+    if (!email) {
+      toast.error('Campo email é obrigatório.')
+      return
+    }
+    if (!password) {
+      toast.error('Campo senha é obrigatório.')
+      return
+    }
     const data = {
       email,
       password,
@@ -24,7 +32,7 @@ export default function login() {
       <h1 className="text-2xl flex justify-center pt-4 text-default font-medium">
         Faça login ou cadastre-se
       </h1>
-      <form onSubmit={handleSubmit} className="w-full">
+      <div className="w-full">
         {/* começo login */}
         <div className="form-control w-full">
           <div>
@@ -67,14 +75,14 @@ export default function login() {
         </div>
         {/* fim login */}
         <div className="flex justify-end w-full my-2">
-          <Link href={'/forgout-password'} passHref>
+          <Link href={'/forgot-password'} passHref>
             <a className="text-xs  text-blue-600 link cursor-pointer">
               Esqueceu sua senha?
             </a>
           </Link>
         </div>
         <button
-          type="submit"
+          onClick={() => onSubmit()}
           className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
         >
           Entrar
@@ -85,7 +93,7 @@ export default function login() {
             <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
           </Link>
         </div>
-      </form>
+      </div>
     </>
   )
 }

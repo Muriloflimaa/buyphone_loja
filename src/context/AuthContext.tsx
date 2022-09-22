@@ -72,9 +72,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       window.location.href = '/'
     } catch (response: any) {
-      response.response.data.message
-        ? toast.error(response.response.data.message)
-        : toast.error('Erro no servidor, contate o suporte.')
+      if (response.response.data.message) {
+        toast.error(response.response.data.message)
+        return
+      }
+
+      toast.error('Erro no servidor, contate o suporte.')
     }
   }
 
