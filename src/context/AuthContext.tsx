@@ -90,7 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         Router.push('/')
       } else {
         try {
-          await apiLogin.post('/logout')
+          await apiLogin.post('/auth/logout')
           destroyCookie(undefined, '@BuyPhone:User')
           destroyCookie(undefined, '@BuyPhone:Token')
           Router.push('/')
