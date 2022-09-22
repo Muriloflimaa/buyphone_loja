@@ -18,7 +18,7 @@ type UserDataType = {
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>
   signOut: any
-  user: any
+  user: string | undefined | number
   isAuthenticated: boolean
   userData: UserDataType | undefined
 }
@@ -29,7 +29,7 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export const setCookies = (key: any, value: any) => {
+export const setCookies = (key: string, value: string | number | object) => {
   if (typeof value !== 'string') {
     value = JSON.stringify(value)
   }
