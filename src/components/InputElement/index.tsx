@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
-import React, { useState } from 'react'
+import React from 'react'
 // import { FieldError } from 'react-hook-form'
 
 interface InputProps {
@@ -11,7 +11,7 @@ interface InputProps {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, type, ...props }, ref) => {
-    const [show, setShow] = useState(true)
+    const [show, setShow] = React.useState(true)
     return (
       <div className="grid gap-3">
         <div>

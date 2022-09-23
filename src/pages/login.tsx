@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
@@ -6,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Input } from '../components/InputElement'
+import Link from 'next/link'
 
 type SignInFormData = {
   email: string
@@ -47,7 +47,6 @@ export default function login() {
         Faça login ou cadastre-se
       </h1>
       <div className="w-full">
-        {/* começo login */}
         <form
           onSubmit={handleSubmit(handleSignIn)}
           className="form-control gap-2 w-full"
