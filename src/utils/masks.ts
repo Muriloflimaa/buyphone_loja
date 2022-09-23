@@ -31,16 +31,18 @@ export const cpfMask = (value: string) => {
 }
 
 export function maskCpfInput(evt: any) {
-  var v = evt?.target.value.replace(
-    /(\d{3})(\d{3})(\d{3})(\d{2})/g,
-    '$1.$2.$3-$4'
-  )
+  var v = evt?.target.value
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+
   evt.target.value = v
 }
 
-export function mtel(evt: any) {
+export function masktel(evt: any) {
   var v = evt?.target.value
     .replace(/\D/g, '')
-    .replace(/^(\d{2})(\d)/g, '($1) $2') //Remove tudo o que não é dígito
+    .replace(/^(\d{2})(\d)/g, '($1) $2')
+    .replace(/(\d)(\d{4})$/, '$1-$2')
   evt.target.value = v
 }

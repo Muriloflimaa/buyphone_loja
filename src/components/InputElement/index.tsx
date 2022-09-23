@@ -1,6 +1,6 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import React from 'react'
-import { cpfMask, maskCpfInput, mtel } from '../../utils/masks'
+import { cpfMask, maskCpfInput, masktel } from '../../utils/masks'
 // import { FieldError } from 'react-hook-form'
 
 interface InputProps {
@@ -35,7 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               maxLength={max}
               onKeyUp={(e) =>
                 (mask === 'cpf' && maskCpfInput(e)) ||
-                (mask === 'telefone' && mtel(e))
+                (mask === 'telefone' && masktel(e))
               }
             />
             {type === 'password' ? (

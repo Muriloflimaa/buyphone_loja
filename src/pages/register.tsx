@@ -16,106 +16,109 @@ import { Input } from '../components/InputElement'
 type SignUpFormData = {
   email: string
   password: string
+  mobile_phone: string
+  birthdate: string
+  document: string
 }
 
 export default function register() {
-  const [show, setShow] = useState(true)
+  // const [show, setShow] = useState(true)
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [document, setDocument] = useState('')
-  const [mobile_phone, setMobilePhone] = useState('')
-  const [birthdate, setBirthDate] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPass, setConfirmPass] = useState('')
-  const [acceptTerms, setAcceptTerms] = useState(false)
+  // const [name, setName] = useState('')
+  // const [email, setEmail] = useState('')
+  // const [document, setDocument] = useState('')
+  // const [mobile_phone, setMobilePhone] = useState('')
+  // const [birthdate, setBirthDate] = useState('')
+  // const [password, setPassword] = useState('')
+  // const [confirmPass, setConfirmPass] = useState('')
+  // const [acceptTerms, setAcceptTerms] = useState(false)
   const router = useRouter()
 
-  const Register = async () => {
-    if (
-      name &&
-      email &&
-      document &&
-      mobile_phone &&
-      birthdate &&
-      password &&
-      confirmPass
-    ) {
-      if (acceptTerms) {
-        if (password != confirmPass) {
-          toast.error('senhas não conferem')
-          return
-        } else {
-          try {
-            await api.post('/user/register', {
-              email,
-              document,
-              name,
-              mobile_phone,
-              birthdate,
-              password,
-              type: 0,
-            })
-            router.push('/login')
-            return
-          } catch (error: any) {
-            if (error.response.data.errors) {
-              const resposta = error.response.data.errors
+  // const Register = async () => {
+  //   if (
+  //     name &&
+  //     email &&
+  //     document &&
+  //     mobile_phone &&
+  //     birthdate &&
+  //     password &&
+  //     confirmPass
+  //   ) {
+  //     if (acceptTerms) {
+  //       if (password != confirmPass) {
+  //         toast.error('senhas não conferem')
+  //         return
+  //       } else {
+  //         try {
+  //           await api.post('/user/register', {
+  //             email,
+  //             document,
+  //             name,
+  //             mobile_phone,
+  //             birthdate,
+  //             password,
+  //             type: 0,
+  //           })
+  //           router.push('/login')
+  //           return
+  //         } catch (error: any) {
+  //           if (error.response.data.errors) {
+  //             const resposta = error.response.data.errors
 
-              var MessageErrorArray = Object.keys(resposta)?.map(function (
-                key
-              ) {
-                return [resposta[key]]
-              })
-              toast.custom(
-                (t) => (
-                  <div
-                    className={`${
-                      t.visible ? 'animate-enter' : 'animate-leave'
-                    } w-full lg:w-1/4 bg-[#FECACA] text-[#484752] h-auto items-center shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-                  >
-                    <div className="flex-1 w-0 p-4">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 pt-0.5">
-                          <Image
-                            src={ErrorImg}
-                            layout="fixed"
-                            width={40}
-                            height={50}
-                          ></Image>
-                        </div>
-                        <div className="ml-3 flex-1">
-                          <p className="text-xs font-medium text-gray-900">
-                            Verifique o alerta abaixo e corrija:
-                          </p>
-                          <p className="mt-1 text-[11px] text-gray-900 opacity-70">
-                            {MessageErrorArray}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ),
-                {
-                  duration: 8000,
-                }
-              )
-              return
-            }
-            toast.error(
-              'Ocorreu um erro no servidor, entre em contato com o suporte.'
-            )
-          }
-        }
-      } else {
-        toast.error('você precisa aceitar os termos')
-      }
-      return
-    } else {
-      toast.error('preencha todos os campos')
-    }
-    return
-  }
+  //             var MessageErrorArray = Object.keys(resposta)?.map(function (
+  //               key
+  //             ) {
+  //               return [resposta[key]]
+  //             })
+  //             toast.custom(
+  //               (t) => (
+  //                 <div
+  //                   className={`${
+  //                     t.visible ? 'animate-enter' : 'animate-leave'
+  //                   } w-full lg:w-1/4 bg-[#FECACA] text-[#484752] h-auto items-center shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+  //                 >
+  //                   <div className="flex-1 w-0 p-4">
+  //                     <div className="flex items-center">
+  //                       <div className="flex-shrink-0 pt-0.5">
+  //                         <Image
+  //                           src={ErrorImg}
+  //                           layout="fixed"
+  //                           width={40}
+  //                           height={50}
+  //                         ></Image>
+  //                       </div>
+  //                       <div className="ml-3 flex-1">
+  //                         <p className="text-xs font-medium text-gray-900">
+  //                           Verifique o alerta abaixo e corrija:
+  //                         </p>
+  //                         <p className="mt-1 text-[11px] text-gray-900 opacity-70">
+  //                           {MessageErrorArray}
+  //                         </p>
+  //                       </div>
+  //                     </div>
+  //                   </div>
+  //                 </div>
+  //               ),
+  //               {
+  //                 duration: 8000,
+  //               }
+  //             )
+  //             return
+  //           }
+  //           toast.error(
+  //             'Ocorreu um erro no servidor, entre em contato com o suporte.'
+  //           )
+  //         }
+  //       }
+  //     } else {
+  //       toast.error('você precisa aceitar os termos')
+  //     }
+  //     return
+  //   } else {
+  //     toast.error('preencha todos os campos')
+  //   }
+  //   return
+  // }
 
   const signUpFormSchema = yup.object().shape({
     email: yup
@@ -127,7 +130,10 @@ export default function register() {
       .string()
       .required('Campo obrigatório')
       .min(10, 'Minímo de 10 digitos'),
-    mobile_phone: yup.string().required('Campo obrigatório'),
+    mobile_phone: yup
+      .string()
+      .required('Campo obrigatório')
+      .min(14, 'Digite número de telefone completo'),
     birthdate: yup.string().required('Campo obrigatório'),
     password: yup
       .string()
@@ -151,8 +157,28 @@ export default function register() {
   ) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    // await signIn(values)
-    console.log(values)
+
+    try {
+      //precisa formatar os dados antes de enviar
+
+      const response = await api.post('/user/register', {
+        //enviar dados por aqui
+      })
+      // router.push('/login')
+      console.log(response)
+      return
+    } catch (error: any) {
+      if (error.response.data.errors) {
+        const resposta = error.response.data.errors
+
+        var MessageErrorArray = Object.keys(resposta)?.map(function (key) {
+          return [resposta[key]]
+        })
+
+        console.log(MessageErrorArray)
+      }
+      console.log(error)
+    }
   }
 
   return (
@@ -179,15 +205,15 @@ export default function register() {
           label="CPF"
           error={errors.document}
           mask="cpf"
-          max={11}
+          max={14}
         />
         <Input
           {...register('mobile_phone')}
-          type="text"
+          type="tel"
           label="Telefone Celular"
           error={errors.mobile_phone}
           mask="telefone"
-          max={14}
+          max={15}
         />
         <Input
           {...register('birthdate')}
@@ -213,13 +239,6 @@ export default function register() {
           htmlFor="terms"
         >
           <div className="flex items-center">
-            <input
-              type="checkbox"
-              onClick={() => setAcceptTerms(!acceptTerms)}
-              className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              name="terms"
-              id="terms"
-            />
             <div className="ml-2 text-xs">
               Eu li e concordo com os{' '}
               <Link href={'/terms'} passHref>
