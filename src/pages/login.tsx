@@ -1,9 +1,13 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { FormEvent, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
-import { AuthContext, setCookies } from '../context/AuthContext'
+import { AuthContext } from '../context/AuthContext'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Input } from '../components/InputElement'
 
 export default function login() {
   const [show, setShow] = useState(true)
@@ -27,6 +31,25 @@ export default function login() {
     await signIn(data)
   }
 
+  const signInFormSchema = yup.object().shape({
+    email: yup.string().required().email(),
+    password: yup.string().required(),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(signInFormSchema),
+  })
+
+  const { errors } = formState
+
+  console.log(errors)
+
+  const submit = async (values: any, event: any) => {
+    event.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // console.log(values)
+  }
+
   return (
     <>
       <h1 className="text-2xl flex justify-center pt-4 text-default font-medium">
@@ -34,6 +57,29 @@ export default function login() {
       </h1>
       <div className="w-full">
         {/* começo login */}
+        <form
+          onSubmit={handleSubmit(submit)}
+          className="form-control gap-2 w-full"
+        >
+          <Input {...register('text')} label="Email" error={errors.email} />
+          <Input
+            {...register('password')}
+            label="Senha"
+            error={errors.password}
+          />
+          {formState.isSubmitting ? (
+            <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+              Carregando
+            </button>
+          ) : (
+            <button
+              className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+              type="submit"
+            >
+              Entrar
+            </button>
+          )}
+        </form>
         <div className="form-control w-full">
           <div>
             <label className="label">

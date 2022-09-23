@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useState } from 'react'
-import { IProduct } from '../types'
 
 type SearchContextData = {
   changeState: Function

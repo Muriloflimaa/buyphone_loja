@@ -1,11 +1,9 @@
-import axios from 'axios'
 import Router from 'next/router'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
 import toast from 'react-hot-toast'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
-import { api } from '../services/apiClient'
 
 type SignInCredentials = {
   email: string

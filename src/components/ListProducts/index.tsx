@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { date, moneyMask } from '../../utils/masks'
 
@@ -22,6 +21,7 @@ interface ListProductsProps {
   pdf: string
   expired: string
 }
+
 const ListProducts = ({
   created,
   statuspayment,
@@ -41,6 +41,8 @@ const ListProducts = ({
   expired,
 }: ListProductsProps) => {
   const router = useRouter()
+
+  console.log(CodImgPix)
 
   const copyToClipBoard = async (copyMe: string) => {
     try {

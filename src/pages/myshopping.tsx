@@ -19,8 +19,6 @@ function MyShopping() {
     Teste()
   }, [])
 
-  console.log(data)
-
   return (
     <div className="max-w-7xl mx-auto my-8">
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
