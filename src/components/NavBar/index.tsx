@@ -227,9 +227,7 @@ export default function NavBar() {
                           className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
                         >
                           <li>
-                            <Link
-                              href={'https://loja.buyphone.com.br/user/profile'}
-                            >
+                            <Link href={'/user/profile'}>
                               <a>Meus Dados</a>
                             </Link>
                           </li>
