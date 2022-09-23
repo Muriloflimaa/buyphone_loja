@@ -1,5 +1,6 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import React from 'react'
+import { cpfMask, maskCpfInput } from '../../utils/masks'
 // import { FieldError } from 'react-hook-form'
 
 interface InputProps {
@@ -7,11 +8,14 @@ interface InputProps {
   name: string
   error?: { message?: string | undefined }
   type: string
+  mask?: string | undefined
+  max?: any
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, type, ...props }, ref) => {
+  ({ label, error, type, mask, max, ...props }, ref) => {
     const [show, setShow] = React.useState(true)
+
     return (
       <div className="grid gap-3">
         <div>
@@ -28,6 +32,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               type={type === 'password' ? (show ? type : 'text') : type}
               ref={ref}
               className="input input-bordered rounded-md !important w-full text-info-content"
+              maxLength={max}
+              onKeyUp={(e) => mask === 'cpf' && maskCpfInput(e)}
             />
             {type === 'password' ? (
               <span onClick={() => setShow(!show)}>

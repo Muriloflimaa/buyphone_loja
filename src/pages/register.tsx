@@ -8,6 +8,15 @@ import ErrorImg from '../assets/images/error.webp'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { api } from '../services/apiClient'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { Input } from '../components/InputElement'
+
+type SignUpFormData = {
+  email: string
+  password: string
+}
 
 export default function register() {
   const [show, setShow] = useState(true)
@@ -108,171 +117,148 @@ export default function register() {
     return
   }
 
+  const signUpFormSchema = yup.object().shape({
+    email: yup
+      .string()
+      .required('Campo obrigatório')
+      .email('Esse campo precisa ser um e-mail'),
+    document: yup.string().required('Campo obrigatório'),
+    name: yup
+      .string()
+      .required('Campo obrigatório')
+      .min(10, 'Minímo de 10 digitos'),
+    mobile_phone: yup.string().required('Campo obrigatório'),
+    birthdate: yup.string().required('Campo obrigatório'),
+    password: yup
+      .string()
+      .required('Campo obrigatório')
+      .min(6, 'Minímo 6 digitos'),
+    confirm_password: yup
+      .string()
+      .required('Campo obrigatório')
+      .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(signUpFormSchema),
+  })
+
+  const { errors } = formState
+
+  const handleSignUp: SubmitHandler<SignUpFormData | any> = async (
+    values,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // await signIn(values)
+    console.log(values)
+  }
+
   return (
-    <div className="form-control w-full">
-      <div>
-        <label className="label">
-          <span className="label-text">Nome</span>
-        </label>
-        <label className="input-group">
-          <input
-            id="name"
-            name="name"
-            onChange={(event) => setName(event.target.value)}
-            type="text"
-            className="input input-bordered rounded-md !important w-full text-info-contentt"
-          />
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">Email</span>
-        </label>
-        <label className="input-group">
-          <input
-            id="email"
-            name="email"
-            onChange={(event) => setEmail(event.target.value)}
-            type="text"
-            className="input input-bordered rounded-md !important w-full text-info-contentt"
-          />
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">CPF</span>
-        </label>
-        <label className="input-group">
-          <ReactInputMask
-            mask="999.999.999-99"
-            id="document"
-            name="document"
-            onChange={(event) => setDocument(event.target.value)}
-            type="text"
-            className="input input-bordered rounded-md !important w-full text-info-contentt"
-          />
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">Telefone </span>
-        </label>
-        <label className="input-group">
-          <ReactInputMask
-            mask="+55 (99) 99999-9999"
-            id="phone"
-            name="phone"
-            onChange={(event) => setMobilePhone(event.target.value)}
-            type="tel"
-            className="input input-bordered rounded-md !important w-full text-info-contentt"
-          />
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">Data de nascimento </span>
-        </label>
-        <label className="input-group">
-          <input
-            id="date"
-            name="date"
-            onChange={(event) => setBirthDate(event.target.value)}
-            type="date"
-            className="input input-bordered rounded-md !important w-full text-info-contentt"
-          />
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">Senha</span>
-        </label>
-        <label className="input-group">
-          <input
-            id="password"
-            name="password"
-            onChange={(event) => setPassword(event.target.value)}
-            type={show ? 'password' : 'text'}
-            placeholder="●●●●●●●"
-            className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-info-contentt"
-          />
-          <span onClick={() => setShow(!show)}>
-            {show ? (
-              <EyeOffIcon className="w-4 h-4" />
-            ) : (
-              <EyeIcon className="w-4 h-4" />
-            )}
-          </span>
-        </label>
-      </div>
-      <div>
-        <label className="label">
-          <span className="label-text">Confirmar senha</span>
-        </label>
-        <label className="input-group">
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            onChange={(event) => setConfirmPass(event.target.value)}
-            type={show ? 'password' : 'text'}
-            placeholder="●●●●●●●"
-            className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-info-contentt"
-          />
-          <span onClick={() => setShow(!show)}>
-            {show ? (
-              <EyeOffIcon className="w-4 h-4" />
-            ) : (
-              <EyeIcon className="w-4 h-4" />
-            )}
-          </span>
-        </label>
-      </div>
-      <label
-        className="block font-semibold text-[10px] py-3 text-gray-500"
-        htmlFor="terms"
+    <>
+      <form
+        onSubmit={handleSubmit(handleSignUp)}
+        className="form-control gap-2 w-full"
       >
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            onClick={() => setAcceptTerms(!acceptTerms)}
-            className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            name="terms"
-            id="terms"
-          />
-          <div className="ml-2 text-xs">
-            Eu li e concordo com os{' '}
-            <Link href={'/terms'} passHref>
-              <a className="underline text-gray-600 hover:text-gray-900">
-                Termos de Serviço
-              </a>
-            </Link>{' '}
-            e{' '}
-            <Link href={'/politics'} passHref>
-              <a
-                href="https://pedidos.buyphone.com.br/privacy-policy"
-                className="underline text-gray-600 hover:text-gray-900"
-              >
-                Política de Privacidade
-              </a>
-            </Link>
+        <Input
+          {...register('name')}
+          type="text"
+          label="Nome"
+          error={errors.name}
+        />
+        <Input
+          {...register('email')}
+          type="text"
+          label="email"
+          error={errors.email}
+        />
+        <Input
+          {...register('document')}
+          type="text"
+          label="CPF"
+          error={errors.document}
+          mask="cpf"
+          max={11}
+        />
+        <Input
+          {...register('mobile_phone')}
+          type="text"
+          label="Telefone Celular"
+          error={errors.mobile_phone}
+        />
+        <Input
+          {...register('birthdate')}
+          type="date"
+          label="Data de nascimento"
+          error={errors.birthdate}
+        />
+
+        <Input
+          {...register('password')}
+          label="Senha"
+          type="password"
+          error={errors.password}
+        />
+        <Input
+          {...register('confirm_password')}
+          type="password"
+          label="Confirmar senha"
+          error={errors.confirm_password}
+        />
+        <label
+          className="block font-semibold text-[10px] text-gray-500"
+          htmlFor="terms"
+        >
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              onClick={() => setAcceptTerms(!acceptTerms)}
+              className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              name="terms"
+              id="terms"
+            />
+            <div className="ml-2 text-xs">
+              Eu li e concordo com os{' '}
+              <Link href={'/terms'} passHref>
+                <a className="underline text-gray-600 hover:text-gray-900">
+                  Termos de Serviço
+                </a>
+              </Link>{' '}
+              e{' '}
+              <Link href={'/politics'} passHref>
+                <a
+                  href="https://pedidos.buyphone.com.br/privacy-policy"
+                  className="underline text-gray-600 hover:text-gray-900"
+                >
+                  Política de Privacidade
+                </a>
+              </Link>
+            </div>
           </div>
+        </label>
+        {formState.isSubmitting ? (
+          <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+            Carregando
+          </button>
+        ) : (
+          <button
+            className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+            type="submit"
+          >
+            Registrar
+          </button>
+        )}
+        <div className="text-center text-sm">
+          Já é registrado?{' '}
+          <Link href={'/login'} passHref>
+            <a className="font-semibold text-blue-700 hover:text-blue-600">
+              Entrar
+            </a>
+          </Link>
         </div>
-      </label>
-      <button
-        type="submit"
-        onClick={Register}
-        className="btn normal-case py-4 mb-5 flex justify-center w-full bg-buyphone shadow-md border-0"
-      >
-        Registre-se
-      </button>
-      <div className="text-center text-sm">
-        Já é registrado?{' '}
-        <Link href={'/login'} passHref>
-          <a className="font-semibold text-blue-700 hover:text-blue-600">
-            Entrar
-          </a>
-        </Link>
-      </div>
-    </div>
+      </form>
+    </>
   )
 }
 
