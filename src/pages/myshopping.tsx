@@ -1,4 +1,4 @@
-import { parseCookies } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
@@ -18,6 +18,8 @@ function MyShopping() {
     }
     Teste()
   }, [])
+
+  console.log(data)
 
   return (
     <div className="max-w-7xl mx-auto my-8">
@@ -44,6 +46,7 @@ function MyShopping() {
               CodImgPix={pedido.invoice.invoice_id}
               brCode={pedido.invoice.brcode}
               pdf={pedido.invoice.pdf}
+              expired={pedido.invoice.status}
             />
           </React.Fragment>
         ))
@@ -79,6 +82,10 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
   const cookies = parseCookies(ctx)
 
   if (!cookies['@BuyPhone:Token']) {
+    setCookie(ctx, '@BuyPhone:Router', '/myshopping', {
+      maxAge: 60 * 60 * 24, // 24h
+      path: '/',
+    })
     return {
       redirect: {
         destination: '/login',
