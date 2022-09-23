@@ -186,6 +186,8 @@ export default function register() {
           type="text"
           label="Telefone Celular"
           error={errors.mobile_phone}
+          mask="telefone"
+          max={14}
         />
         <Input
           {...register('birthdate')}

@@ -37,3 +37,10 @@ export function maskCpfInput(evt: any) {
   )
   evt.target.value = v
 }
+
+export function mtel(evt: any) {
+  var v = evt?.target.value
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d)/g, '($1) $2') //Remove tudo o que não é dígito
+  evt.target.value = v
+}
