@@ -1,9 +1,9 @@
 import Router from 'next/router'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
-import toast from 'react-hot-toast'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
+import { ToastCustom } from '../utils/toastCustom'
 
 type SignInCredentials = {
   email: string
@@ -74,7 +74,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       window.location.href = '/'
     } catch (error) {
-      toast.error('Não foi possível fazer o login')
+      ToastCustom(
+        3000,
+        'Não foi possível fazer o login',
+        'error',
+        'Notificação'
+      )
     }
   }
 

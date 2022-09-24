@@ -12,6 +12,7 @@ import { apiPedidos } from '../services/apiClient'
 import { Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
 import SuccessImg from '../assets/images/success.webp'
+import { ToastCustom } from '../utils/toastCustom'
 
 interface CartProviderProps {
   children: ReactNode
@@ -90,39 +91,16 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const addProduct = await apiPedidos.get(`products/${productId}`)
         const products = addProduct.data.data
 
-        toast.custom(
-          (t) => (
-            <div
-              className={`${
-                t.visible ? 'animate-enter' : 'animate-leave'
-              }  z-50 h-auto items-center rounded-lg pointer-events-auto`}
-            >
-              <div className="alert bg-green-200 text-green-900 items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80">
-                <div className="flex gap-3">
-                  <Image
-                    layout="fixed"
-                    width={70}
-                    height={60}
-                    src={SuccessImg}
-                  ></Image>
-                  <div>
-                    <h3 className="font-bold">Notificação</h3>
-                    <div className="text-xs">
-                      <span className="text-[8px]">
-                        {products?.name +
-                          ' ' +
-                          products?.color +
-                          ' - ' +
-                          products?.memory}
-                      </span>{' '}
-                      adicionado ao carrinho com sucesso!
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ),
-          { duration: 2000 }
+        ToastCustom(
+          2000,
+          products?.name +
+            ' ' +
+            products?.color +
+            ' - ' +
+            products?.memory +
+            ' adicionado ao carrinho com sucesso!',
+          'success',
+          'Notificação'
         )
 
         const newProduct = {
@@ -135,8 +113,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       setCart(updatedCart)
     } catch {
-      //Caso dê algum erro exibir uma notificação
-      toast.error('Erro na adição do produto')
+      ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
+      localStorage.removeItem('@BuyPhone:cart')
     }
   }
   /**
@@ -158,7 +136,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         throw Error()
       }
     } catch {
-      toast.error('Erro na remoção do produto')
+      ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Notificação')
+      localStorage.removeItem('@BuyPhone:cart')
     }
   }
   /**
@@ -189,7 +168,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         throw Error()
       }
     } catch {
-      toast.error('Erro na alteração de quantidade do produto')
+      ToastCustom(
+        2000,
+        'Erro na alteração de quantidade do produto',
+        'error',
+        'Notificação'
+      )
+      localStorage.removeItem('@BuyPhone:cart')
     }
   }
 
