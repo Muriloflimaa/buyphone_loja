@@ -1,17 +1,12 @@
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
-import ReactInputMask from 'react-input-mask'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
-import ErrorImg from '../assets/images/error.webp'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { api } from '../services/apiClient'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input } from '../components/InputElement'
+import { ToastCustom } from '../utils/toastCustom'
 
 type SignUpFormData = {
   email: string
@@ -22,103 +17,7 @@ type SignUpFormData = {
 }
 
 export default function register() {
-  // const [show, setShow] = useState(true)
-
-  // const [name, setName] = useState('')
-  // const [email, setEmail] = useState('')
-  // const [document, setDocument] = useState('')
-  // const [mobile_phone, setMobilePhone] = useState('')
-  // const [birthdate, setBirthDate] = useState('')
-  // const [password, setPassword] = useState('')
-  // const [confirmPass, setConfirmPass] = useState('')
-  // const [acceptTerms, setAcceptTerms] = useState(false)
   const router = useRouter()
-
-  // const Register = async () => {
-  //   if (
-  //     name &&
-  //     email &&
-  //     document &&
-  //     mobile_phone &&
-  //     birthdate &&
-  //     password &&
-  //     confirmPass
-  //   ) {
-  //     if (acceptTerms) {
-  //       if (password != confirmPass) {
-  //         toast.error('senhas não conferem')
-  //         return
-  //       } else {
-  //         try {
-  //           await api.post('/user/register', {
-  //             email,
-  //             document,
-  //             name,
-  //             mobile_phone,
-  //             birthdate,
-  //             password,
-  //             type: 0,
-  //           })
-  //           router.push('/login')
-  //           return
-  //         } catch (error: any) {
-  //           if (error.response.data.errors) {
-  //             const resposta = error.response.data.errors
-
-  //             var MessageErrorArray = Object.keys(resposta)?.map(function (
-  //               key
-  //             ) {
-  //               return [resposta[key]]
-  //             })
-  //             toast.custom(
-  //               (t) => (
-  //                 <div
-  //                   className={`${
-  //                     t.visible ? 'animate-enter' : 'animate-leave'
-  //                   } w-full lg:w-1/4 bg-[#FECACA] text-[#484752] h-auto items-center shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-  //                 >
-  //                   <div className="flex-1 w-0 p-4">
-  //                     <div className="flex items-center">
-  //                       <div className="flex-shrink-0 pt-0.5">
-  //                         <Image
-  //                           src={ErrorImg}
-  //                           layout="fixed"
-  //                           width={40}
-  //                           height={50}
-  //                         ></Image>
-  //                       </div>
-  //                       <div className="ml-3 flex-1">
-  //                         <p className="text-xs font-medium text-gray-900">
-  //                           Verifique o alerta abaixo e corrija:
-  //                         </p>
-  //                         <p className="mt-1 text-[11px] text-gray-900 opacity-70">
-  //                           {MessageErrorArray}
-  //                         </p>
-  //                       </div>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               ),
-  //               {
-  //                 duration: 8000,
-  //               }
-  //             )
-  //             return
-  //           }
-  //           toast.error(
-  //             'Ocorreu um erro no servidor, entre em contato com o suporte.'
-  //           )
-  //         }
-  //       }
-  //     } else {
-  //       toast.error('você precisa aceitar os termos')
-  //     }
-  //     return
-  //   } else {
-  //     toast.error('preencha todos os campos')
-  //   }
-  //   return
-  // }
 
   const signUpFormSchema = yup.object().shape({
     email: yup
@@ -158,14 +57,20 @@ export default function register() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
+    const data = {
+      email: values.email,
+      document: values.document,
+      name: values.name,
+      mobile_phone: '+55' + values.mobile_phone,
+      birthdate: values.birthdate,
+      password: values.password,
+      type: 0,
+    }
+
     try {
       //precisa formatar os dados antes de enviar
-
-      const response = await api.post('/user/register', {
-        //enviar dados por aqui
-      })
-      // router.push('/login')
-      console.log(response)
+      await api.post('/user/register', data)
+      router.push('/login')
       return
     } catch (error: any) {
       if (error.response.data.errors) {
@@ -174,10 +79,10 @@ export default function register() {
         var MessageErrorArray = Object.keys(resposta)?.map(function (key) {
           return [resposta[key]]
         })
-
-        console.log(MessageErrorArray)
+        ToastCustom(8000, MessageErrorArray, 'error')
+        return
       }
-      console.log(error)
+      ToastCustom(8000, 'Erro no servidor, contate o suporte.', 'error')
     }
   }
 

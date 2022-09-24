@@ -1,15 +1,14 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import React from 'react'
-import { cpfMask, maskCpfInput, masktel } from '../../utils/masks'
-// import { FieldError } from 'react-hook-form'
+import { maskCpfInput, masktel } from '../../utils/masks'
 
 interface InputProps {
-  label?: string
+  label: string
   name: string
   error?: { message?: string | undefined }
   type: string
   mask?: string | undefined
-  max?: any
+  max?: number | any
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
