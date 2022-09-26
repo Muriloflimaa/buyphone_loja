@@ -54,9 +54,11 @@ const ListProducts = ({
   }
 
   return (
-    <div className="collapse collapse-arrow card show border border-gray-100">
+    <div
+      className={'collapse collapse-arrow card shadow-lg shadow-indigo-500/50 '}
+    >
       <input type="checkbox" className="peer" />
-      <div className="collapse-title border-b flex justify-between items-center">
+      <div className="collapse-title flex justify-between items-center">
         <span className="font-bold text-lg">Pedido #{number}</span>
 
         <div className="flex gap-2 items-center">
@@ -67,12 +69,14 @@ const ListProducts = ({
             'manual_paid' ??
             'captured' ? (
               <>
-                <label
-                  htmlFor={CodImgPix}
-                  className="badge cursor-pointer z-10"
-                >
-                  Realizar pagamento
-                </label>
+                <div className="justify-end flex-col items-center cursor-pointer">
+                  <label
+                    htmlFor={CodImgPix}
+                    className="badge cursor-pointer animate-pulse"
+                  >
+                    Realizar pagamento
+                  </label>
+                </div>
 
                 <input
                   type="checkbox"
