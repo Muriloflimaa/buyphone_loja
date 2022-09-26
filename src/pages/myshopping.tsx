@@ -12,8 +12,8 @@ function MyShopping() {
     async function Teste() {
       const cookies = parseCookies(undefined)
       if (cookies['@BuyPhone:User']) {
-        const USER = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await api(`orders/customer/${USER?.id}`)
+        const user = JSON.parse(cookies['@BuyPhone:User'])
+        const { data } = await api(`orders/customer/${user?.id}`)
         setData(data)
       }
     }

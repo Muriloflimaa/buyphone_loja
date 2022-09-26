@@ -44,14 +44,12 @@ export default function Products({ data }) {
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-
               return ourPrice ? (
                 <React.Fragment key={products.id}>
                   <ProductCard
                     key={products.id}
                     id={products.id}
                     name={products.name}
-                    // idCategory={category.id}
                     colorPhone={products.color}
                     price={ourPrice}
                     averagePrice={averagePrice}
@@ -94,7 +92,7 @@ export const getStaticProps = async (context) => {
       props: {
         data,
       },
-      revalidate: 60 * 60 * 24 * 30,
+      revalidate: 60 * 30,
     }
   } catch (error) {
     return {

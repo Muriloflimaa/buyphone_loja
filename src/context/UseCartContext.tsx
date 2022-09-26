@@ -28,6 +28,7 @@ interface CartContextData {
   addProduct: (productId: number) => Promise<void>
   removeProduct: (productId: number) => void
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void
+  CleanCart: () => void
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
@@ -44,6 +45,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
     return []
   })
+
+  function CleanCart() {
+    setCart([])
+  } //função para limpar o state do carrinho
 
   /**
    *
@@ -93,12 +98,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         ToastCustom(
           2000,
-          products?.name +
-            ' ' +
-            products?.color +
-            ' - ' +
-            products?.memory +
-            ' adicionado ao carrinho com sucesso!',
+          `${products?.name} ${
+            products?.color
+          } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
           'success',
           'Notificação'
         )
@@ -115,6 +117,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     } catch {
       ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
       localStorage.removeItem('@BuyPhone:cart')
+      setCart([]) // se der algum erro a aplicação irá limpar o storage e atualizar o carrinho
     }
   }
   /**
@@ -180,7 +183,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   return (
     <CartContext.Provider
-      value={{ cart, addProduct, removeProduct, updateProductAmount }}
+      value={{
+        cart,
+        addProduct,
+        removeProduct,
+        updateProductAmount,
+        CleanCart,
+      }}
     >
       {children}
     </CartContext.Provider>

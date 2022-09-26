@@ -23,6 +23,7 @@ import { ArrayProduct } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import { ToastCustom } from '../../utils/toastCustom'
 import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -30,7 +31,7 @@ import styles from './styles.module.scss'
 export default function NavBar() {
   const { isAuthenticated, signOut } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
-  const { cart } = useCart()
+  const { cart, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
   const [isUser, setIsUser] = useState(false)
@@ -63,22 +64,34 @@ export default function NavBar() {
 
   useEffect(() => {
     setData([]) //zera o array do data
-    cart.map(async (item) => {
-      try {
-        const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
+    if (cart.length <= 7) {
+      cart.map(async (item) => {
+        try {
+          const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
 
-        const returnPrice = verificationPrice(data.data.data, user) //verificando preço
-        const response = {
-          ...item, //adicionando amount e id que está no localstorage
-          product: data.data.data, //data vem da api que é chamada
-          priceFormated: returnPrice.ourPrice, //formatação de preços
-          subTotal: returnPrice.ourPrice * item.amount, //total simples
+          const returnPrice = verificationPrice(data.data.data, user) //verificando preço
+          const response = {
+            ...item, //adicionando amount e id que está no localstorage
+            product: data.data.data, //data vem da api que é chamada
+            priceFormated: returnPrice.ourPrice, //formatação de preços
+            subTotal: returnPrice.ourPrice * item.amount, //total simples
+          }
+          setData((data: Array<{}>) => [...data, response]) //gravando response no state
+        } catch (error) {
+          setData([]) //se der erro zerar o data com um array vazio
         }
-        setData((data: Array<{}>) => [...data, response]) //gravando response no state
-      } catch (error) {
-        setData([]) //se der erro zerar o data com um array vazio
-      }
-    })
+      })
+    } else {
+      ToastCustom(
+        5000,
+        'Não adicione tantos produtos ao carrinho ao mesmo tempo',
+        'error',
+        'Notificação'
+      )
+      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart() //chama a função e limpa o state do cart
+    }
+    setData([])
   }, [cart])
 
   useEffect(() => {

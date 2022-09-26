@@ -37,6 +37,7 @@ export interface IProduct {
   stock: null
   updated_at: string
   slug: string
+  category_slug: string
 }
 
 export interface IMedia {
