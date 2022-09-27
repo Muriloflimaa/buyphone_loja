@@ -38,8 +38,8 @@ export default function NavBar() {
   const user = GetUseType()
   const [showCart, setShowCart] = useState(false)
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
-  const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
-  const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
+  const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
+  const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<any>()
   const router = useRouter()
@@ -76,7 +76,8 @@ export default function NavBar() {
             priceFormated: returnPrice.ourPrice, //formatação de preços
             subTotal: returnPrice.ourPrice * item.amount, //total simples
           }
-          setData((data: Array<{}>) => [...data, response]) //gravando response no state
+
+          setData((data) => [...data, response]) //gravando response no state
         } catch (error) {
           setData([]) //se der erro zerar o data com um array vazio
         }
@@ -319,7 +320,7 @@ export default function NavBar() {
                         <div className="card-body gap-6">
                           {cartSize && cartSize > 0 ? (
                             values.map(
-                              (res: ArrayProduct) =>
+                              (res) =>
                                 res.id && (
                                   <li className="list-none" key={res.id}>
                                     <ProductCart
