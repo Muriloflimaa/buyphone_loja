@@ -95,7 +95,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
 
   const handleAddressDefault = async (props: any) => {
     setCookies('@BuyPhone:GetCep', props, 30)
-    router.push('/shipping/address')
+    router.push('/shipping/payment')
   }
 
   return (
