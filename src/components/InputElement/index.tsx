@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
-import React from 'react'
+import { forwardRef, useState } from 'react'
 import { maskCpfInput, masktel } from '../../utils/masks'
 
 interface InputProps {
@@ -8,17 +8,16 @@ interface InputProps {
   error?: { message?: string | undefined }
   type: string
   mask?: string | undefined
-  max?: number | any
+  max?: any
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, type, mask, max, ...props }, ref) => {
-    const [show, setShow] = React.useState(true)
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, type, mask, max = 100, ...props }, ref) => {
+    const [show, setShow] = useState(true)
 
     return (
       <div className="grid gap-3">
         <div>
-          {' '}
           {!!label && (
             <label className="label">
               <span className="label-text">{label}</span>
