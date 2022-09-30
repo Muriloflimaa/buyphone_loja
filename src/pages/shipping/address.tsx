@@ -85,14 +85,14 @@ export default function address({ cepJson }: CepJsonProps) {
                 {...register('address')}
                 type="text"
                 label="Endereço"
-                defaultValue={cepJson.Street}
+                defaultValue={cepJson?.Street}
                 error={errors.address}
               />
               <Input
                 {...register('neighborhood')}
                 type="text"
                 label="Bairro"
-                defaultValue={cepJson.District}
+                defaultValue={cepJson?.District}
                 error={errors.neighborhood}
               />
               <Input
@@ -111,14 +111,14 @@ export default function address({ cepJson }: CepJsonProps) {
                 {...register('city')}
                 type="text"
                 label="Cidade"
-                defaultValue={cepJson.City}
+                defaultValue={cepJson?.City}
                 error={errors.city}
               />
               <Input
                 {...register('uf')}
                 type="text"
                 label="Estado"
-                defaultValue={cepJson.UF}
+                defaultValue={cepJson?.UF}
                 error={errors.uf}
               />
               <div className="flex justify-end">
@@ -191,8 +191,11 @@ export default function address({ cepJson }: CepJsonProps) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
   const cep = cookies['@BuyPhone:GetCep']
-  const cepJson = JSON.parse(cep)
-  return {
-    props: { cepJson },
+  if (cep) {
+    const cepJson = JSON.parse(cep)
+    return {
+      props: { cepJson },
+    }
   }
+  return { props: {} }
 }

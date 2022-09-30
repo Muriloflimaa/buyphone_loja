@@ -86,20 +86,16 @@ export default function Shipping({ userJson }: userJsonTypes) {
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
       }
-      setCookies('@BuyPhone:GetCep', response.data, 60 * 60)
+      setCookies('@BuyPhone:GetCep', response.data, 30)
       router.push('/shipping/address')
     } catch (error) {
       toast.error('Erro no servidor, entre em contato com o suporte')
     }
   }
 
-  const handleAddressDefault: SubmitHandler<GetCepTypes | any> = async (
-    value,
-    event
-  ) => {
-    event?.preventDefault()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log(value)
+  const handleAddressDefault = async (props: any) => {
+    setCookies('@BuyPhone:GetCep', props, 30)
+    router.push('/shipping/address')
   }
 
   return (
@@ -141,26 +137,20 @@ export default function Shipping({ userJson }: userJsonTypes) {
               )}
               {Address.map((ad) => {
                 return (
-                  <form
+                  <div
                     key={ad.id}
-                    onSubmit={(e) => e.preventDefault()}
-                    className="w-full"
+                    onClick={() =>
+                      handleAddressDefault({
+                        CEP: ad.postal_code,
+                        UF: ad.uf,
+                        City: ad.city,
+                        District: ad.neighborhood,
+                        Street: ad.address,
+                        Message: 'ok',
+                      })
+                    }
+                    className="w-full cursor-pointer"
                   >
-                    <input type="hidden" name="cep" value="16012-529" />
-                    <input type="hidden" name="address" value={ad.address} />
-                    <input
-                      type="hidden"
-                      name="district"
-                      value={ad.neighborhood}
-                    />
-                    <input type="hidden" name="number" value={ad.number} />
-                    <input
-                      type="hidden"
-                      name="complement"
-                      value={!!ad.complement ? ad.complement : ''}
-                    />
-                    <input type="hidden" name="city" value={ad.city} />
-                    <input type="hidden" name="uf" value={ad.uf} />
                     <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md">
                       <FontAwesomeIcon
                         icon={faMapLocation}
@@ -201,7 +191,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                         </div>
                       </div>
                     </div>
-                  </form>
+                  </div>
                 )
               })}
             </div>
@@ -215,9 +205,10 @@ export default function Shipping({ userJson }: userJsonTypes) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
   const user = cookies['@BuyPhone:User']
-  const userJson = JSON.parse(user)
-
-  return {
-    props: { userJson },
+  if (user) {
+    const userJson = JSON.parse(user)
+    return {
+      props: { userJson },
+    }
   }
 }
