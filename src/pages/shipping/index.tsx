@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,6 +11,7 @@ import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
 import { apiStoreBeta } from '../../services/apiBetaConfigs'
 import { setCookies } from '../../utils/useCookies'
+import jwt_decode from 'jwt-decode'
 
 type GetCepTypes = {
   cep: string
@@ -137,21 +138,21 @@ export default function Shipping({ userJson }: userJsonTypes) {
               )}
               {Address.map((ad) => {
                 return (
-                  <div
-                    key={ad.id}
-                    onClick={() =>
-                      handleAddressDefault({
-                        CEP: ad.postal_code,
-                        UF: ad.uf,
-                        City: ad.city,
-                        District: ad.neighborhood,
-                        Street: ad.address,
-                        Message: 'ok',
-                      })
-                    }
-                    className="w-full cursor-pointer"
-                  >
-                    <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md">
+                  <div key={ad.id} className="w-full cursor-pointer">
+                    <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md relative">
+                      <div
+                        onClick={() =>
+                          handleAddressDefault({
+                            CEP: ad.postal_code,
+                            UF: ad.uf,
+                            City: ad.city,
+                            District: ad.neighborhood,
+                            Street: ad.address,
+                            Message: 'ok',
+                          })
+                        }
+                        className="w-5/6 h-full absolute"
+                      ></div>
                       <FontAwesomeIcon
                         icon={faMapLocation}
                         className="w-8 h-8"
@@ -163,10 +164,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                       </div>
 
                       <div className="dropdown drop-shadow-left dropdown-end">
-                        <label
-                          tabIndex={ad.id}
-                          className="m-1 z-1 btn bg-transparent border-none"
-                        >
+                        <label tabIndex={ad.id} className="m-1 z-50 btn">
                           <FontAwesomeIcon
                             icon={faTrash}
                             className="w-4 h-4"
@@ -204,6 +202,42 @@ export default function Shipping({ userJson }: userJsonTypes) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
+
+  //se existe um token entrar aqui!
+  if (cookies['@BuyPhone:Token']) {
+    const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
+
+    //se existir um token e estiver expirado, mandar para o login
+    if (Date.now() >= decodedToken.exp * 1000) {
+      setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
+        maxAge: 60 * 60 * 24, // 24h
+        path: '/',
+      })
+      destroyCookie(ctx, '@BuyPhone:User')
+      destroyCookie(ctx, '@BuyPhone:Token')
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      }
+    }
+  }
+
+  //verifica se não existe um token, se nao existir voltar para a home
+  if (!cookies['@BuyPhone:Token']) {
+    setCookie(ctx, '@BuyPhone:Router', '/shipping', {
+      maxAge: 60 * 60 * 24, // 24h
+      path: '/',
+    })
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   const user = cookies['@BuyPhone:User']
   if (user) {
     const userJson = JSON.parse(user)
