@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Router, useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
@@ -40,10 +41,13 @@ const ProductCard = ({
     setColor(verificationColor(colorPhone))
   }, [])
 
+  const router = useRouter()
+
   return (
     <div
-      className="card card-compact w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
+      className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
       key={id}
+      onClick={() => router.push(`products/${slugCategory}/${slug}`)}
     >
       <div className="card-body text-center ">
         <div className="w-[80%] mx-auto">
