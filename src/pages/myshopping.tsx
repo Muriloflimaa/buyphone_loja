@@ -4,6 +4,7 @@ import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import { api } from '../services/apiClient'
 import Link from 'next/link'
+import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 function MyShopping() {
   const [data, setData] = useState<Array<{}> | undefined>()
@@ -13,7 +14,8 @@ function MyShopping() {
       const cookies = parseCookies(undefined)
       if (cookies['@BuyPhone:User']) {
         const user = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await api(`orders/customer/${user?.id}`)
+        const { data } = await apiStoreBeta(`orders/customer/${user?.id}`)
+
         setData(data)
       }
     }

@@ -1,14 +1,16 @@
 import axios from 'axios'
-import { GetServerSidePropsContext } from 'next/types'
+import { parseCookies } from 'nookies'
 
-export function setupAPIClient(
-    endpoint: string,
-    ctx?: GetServerSidePropsContext
-) {
-    const api = axios.create({
-        baseURL: `https://beta-${endpoint}.buyphone.com.br/api/`,
-        headers: { token: 'ef7223f0-55b4-49a7-9eed-f4b4ef14b2f1' },
-    })
+const { '@BuyPhone:Token': Cookies } = parseCookies()
 
-    return api
+export function setupAPIClient(endpoint: string) {
+  const api = axios.create({
+    baseURL: `https://beta-api.buyphone.com.br/${endpoint}`,
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${Cookies}`,
+    },
+  })
+
+  return api
 }

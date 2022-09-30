@@ -352,6 +352,19 @@ export default function NavBar() {
                           ) : (
                             ''
                           )}
+                          {cartSize && cartSize > 0 ? (
+                            <div className="card-actions justify-center">
+                              <a
+                                onClick={() => {
+                                  setShowCart(!showCart)
+                                  router.push('/shipping')
+                                }}
+                                className="btn btn-success btn-block font-medium normal-case"
+                              >
+                                Finalizar Compra
+                              </a>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>

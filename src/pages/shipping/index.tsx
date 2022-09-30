@@ -1,53 +1,223 @@
-import { ChevronRightIcon, MapIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
-import ShippingCard from '../../components/ShippingCard.tsx'
+import { faMapLocation, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { GetServerSidePropsContext } from 'next'
+import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import * as yup from 'yup'
+import { Input } from '../../components/InputElement'
+import { apiStoreBeta } from '../../services/apiBetaConfigs'
+import { setCookies } from '../../utils/useCookies'
 
-export default function Shipping() {
+type GetCepTypes = {
+  cep: string
+}
+
+type userJsonTypes = {
+  userJson: {
+    name: string
+    id: number
+    type: number
+  }
+}
+
+export interface Address {
+  address: string
+  city: string
+  complement: string | null
+  created_at: string
+  id: number
+  neighborhood: string
+  number: number
+  postal_code: string
+  uf: string
+  updated_at: string
+  user_id: number
+}
+
+export default function Shipping({ userJson }: userJsonTypes) {
+  const [Address, setAddress] = useState<Address[]>([])
+
+  async function handleRemoveAddress(id: number) {
+    try {
+      setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
+      await apiStoreBeta.delete(`addresses/${id}`)
+    } catch (error) {
+      toast.error('Ocorreu um erro no servidor, contate o suporte')
+    }
+  }
+
+  useEffect(() => {
+    const getAddress = async () => {
+      const userAddress = await apiStoreBeta.get(
+        `addresses/user/${userJson.id}`
+      )
+      setAddress(userAddress.data)
+    }
+    getAddress()
+  }, [])
+
+  const router = useRouter()
+  const getCepSchema = yup.object().shape({
+    cep: yup
+      .string()
+      .required('Campo CEP é obrigatório')
+      .min(9, 'CEP precisa ter 8 caracteres'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(getCepSchema),
+  })
+
+  const { errors } = formState
+
+  const handleCepStorage: SubmitHandler<GetCepTypes | any> = async (
+    value,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const cep = value.cep.replace('-', '')
+    try {
+      const response = await apiStoreBeta.get(`addresses/cep/${cep}`)
+      if (response.data.Message === 'CEP NAO ENCONTRADO') {
+        toast.error('CEP não foi encontrado')
+      }
+      setCookies('@BuyPhone:GetCep', response.data, 60 * 60)
+      router.push('/shipping/address')
+    } catch (error) {
+      toast.error('Erro no servidor, entre em contato com o suporte')
+    }
+  }
+
+  const handleAddressDefault: SubmitHandler<GetCepTypes | any> = async (
+    value,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log(value)
+  }
+
   return (
     <>
-      <div className="max-w-7xl mx-auto grid gap-3 my-10">
-        <ShippingCard />
-        <div className="max-w-2xl w-full mx-auto grid gap-3">
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl mt-3 text-info-content">
-              Insira o CEP para ver as opções de entrega
-            </h2>
-          </div>
-          <div>
-            <label className="input-group">
-              <input
+      <div className="max-w-7xl mx-auto grid gap-3 px-4">
+        <div className="flex justify-between mt-6">
+          <span>Resumo</span> <span>Valor total: R$ 2.995,62</span>
+        </div>
+        <div className="divider"></div>
+
+        <div>
+          <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
+            Informações para a entrega
+          </h2>
+          <div className="flex flex-col items-center sm:items-start gap-4 my-6">
+            <form
+              onSubmit={handleSubmit(handleCepStorage)}
+              className="flex flex-col justify-center items-center gap-4 w-full sm:w-6/12 mx-auto"
+            >
+              <h3 className="font-medium">
+                Insira o CEP para ver as opções de entrega
+              </h3>
+              <Input
+                {...register('cep')}
                 type="text"
-                placeholder="CEP"
-                className="input input-bordered rounded-md !important w-full text-info-content"
+                label="CEP"
+                max="9"
+                mask="cep"
+                error={errors.cep}
               />
-            </label>
-          </div>
+              <button type="submit" className="link self-end text-info">
+                Avançar <i className="fa fa-angle-right"></i>
+              </button>
+            </form>
 
-          <div className="flex justify-end text-info-content">
-            <Link href={'/shipping/address'} passHref>
-              <a className="link ">Avançar</a>
-            </Link>
-          </div>
-          <div className="flex justify-center text-info-content">
-            <p>Ou selecione um endereço abaixo</p>
-          </div>
+            <div className="mx-auto flex flex-col w-full items-center gap-4 sm:w-6/12">
+              {Address.length >= 1 && (
+                <h3 className="font-medium">Ou selecione um endereço abaixo</h3>
+              )}
+              {Address.map((ad) => {
+                return (
+                  <form
+                    key={ad.id}
+                    onSubmit={(e) => e.preventDefault()}
+                    className="w-full"
+                  >
+                    <input type="hidden" name="cep" value="16012-529" />
+                    <input type="hidden" name="address" value={ad.address} />
+                    <input
+                      type="hidden"
+                      name="district"
+                      value={ad.neighborhood}
+                    />
+                    <input type="hidden" name="number" value={ad.number} />
+                    <input
+                      type="hidden"
+                      name="complement"
+                      value={!!ad.complement ? ad.complement : ''}
+                    />
+                    <input type="hidden" name="city" value={ad.city} />
+                    <input type="hidden" name="uf" value={ad.uf} />
+                    <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md">
+                      <FontAwesomeIcon
+                        icon={faMapLocation}
+                        className="w-8 h-8"
+                      ></FontAwesomeIcon>
+                      <div className="flex flex-col text-xs">
+                        <span>{`${ad.address}, ${ad.number}`}</span>
+                        <span>{ad.neighborhood}</span>
+                        <span>{`${ad.city} ${ad.uf}`}</span>
+                      </div>
 
-          <button
-            type="submit"
-            className="normal-case btn btn-sm btn-primary text-info-content btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
-          >
-            <div className="flex gap-3 items-center">
-              <MapIcon className="w-10 h-7" />
-              <div className="flex flex-col items-start">
-                <strong>Gilberto Trivelato - lado ímpar, 502</strong>
-                <p> Conjunto Habitacional Hilda Mandarino</p>
-                <p>Araçatuba SP</p>
-              </div>
+                      <div className="dropdown drop-shadow-left dropdown-end">
+                        <label
+                          tabIndex={ad.id}
+                          className="m-1 z-1 btn bg-transparent border-none"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="w-4 h-4"
+                          ></FontAwesomeIcon>
+                        </label>
+                        <div
+                          tabIndex={ad.id}
+                          className="dropdown-content card card-compact p-2 shadow bg-primary text-primary-content"
+                        >
+                          <div className="card-body">
+                            <h3 className="card-title">
+                              Deseja excluir o endereço?
+                            </h3>
+                            <p
+                              tabIndex={ad.id}
+                              className="btn btn-primary"
+                              onClick={() => handleRemoveAddress(ad.id)}
+                            >
+                              Sim
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                )
+              })}
             </div>
-            <ChevronRightIcon className="w-7 h-7" />
-          </button>
+          </div>
         </div>
       </div>
     </>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const cookies = parseCookies(ctx)
+  const user = cookies['@BuyPhone:User']
+  const userJson = JSON.parse(user)
+
+  return {
+    props: { userJson },
+  }
 }

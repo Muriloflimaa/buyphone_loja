@@ -4,6 +4,8 @@ import { createContext, ReactNode, useState } from 'react'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 import { ToastCustom } from '../utils/toastCustom'
+import { setCookies } from '../utils/useCookies'
+import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 type SignInCredentials = {
   email: string
@@ -28,16 +30,6 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export const setCookies = (key: string, value: string | number | object) => {
-  if (typeof value !== 'string') {
-    value = JSON.stringify(value)
-  }
-  setCookie(undefined, key, value, {
-    maxAge: 60 * 60 * 24 * 30, // 30 dias
-    path: '/',
-  })
-}
-
 export function AuthProvider({ children }: AuthProviderProps) {
   const { '@BuyPhone:User': user } = parseCookies()
 
@@ -47,7 +39,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await apiLogin.post('/auth/login', {
+      const response = await apiStoreBeta.post('/login', {
         email,
         password,
       })
@@ -63,8 +55,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setUserData(UserObject)
 
-      setCookies('@BuyPhone:User', UserObject) //chama a função setCookies para gravar os dados
-      setCookies('@BuyPhone:Token', token)
+      setCookies('@BuyPhone:User', UserObject, 60 * 60 * 24 * 90) //chama a função setCookies para gravar os dados
+      setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 90)
       const cookies = parseCookies(undefined)
 
       if (cookies['@BuyPhone:Router']) {

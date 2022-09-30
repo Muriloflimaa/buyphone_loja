@@ -1,6 +1,6 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
 import { forwardRef, useState } from 'react'
-import { maskCpfInput, masktel } from '../../utils/masks'
+import { mascaraCep, maskCpfInput, masktel } from '../../utils/masks'
 
 interface InputProps {
   label: string
@@ -9,15 +9,16 @@ interface InputProps {
   type: string
   mask?: string | undefined
   max?: any
+  defaultValue?: string | number | readonly string[] | undefined
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, type, mask, max = 100, ...props }, ref) => {
+  ({ label, error, type, mask, max = 100, defaultValue, ...props }, ref) => {
     const [show, setShow] = useState(true)
 
     return (
-      <div className="grid gap-3">
-        <div>
+      <div className="grid gap-3 w-full">
+        <div className="w-full">
           {!!label && (
             <label className="label">
               <span className="label-text">{label}</span>
@@ -29,10 +30,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               id={props.name}
               type={type === 'password' ? (show ? type : 'text') : type}
               ref={ref}
+              defaultValue={defaultValue}
               className="input input-bordered rounded-md !important w-full text-info-content"
               maxLength={max}
               onKeyUp={(e) =>
                 (mask === 'cpf' && maskCpfInput(e)) ||
+                (mask === 'cep' && mascaraCep(e.target, '#####-###')) ||
                 (mask === 'telefone' && masktel(e))
               }
             />

@@ -7,6 +7,7 @@ import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
 import jwt_decode from 'jwt-decode'
 import { GetServerSidePropsContext } from 'next'
+import { apiStoreBeta } from '../../services/apiBetaConfigs'
 
 export default function profile({ data }: UserData) {
   const [name, setName] = useState<string | null>(data.name)
@@ -360,7 +361,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     //chamada api com id do user obtido + bearer token do cookies
     const { data } = await axios.get(
-      `https://loja.buyphone.com.br/api/user/${userjson.id}`,
+      `https://beta-api.buyphone.com.br/store/users/${userjson.id}`,
       {
         headers: {
           Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,
