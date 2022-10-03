@@ -37,7 +37,7 @@ export default function PixCheckout() {
   }
 
   return (
-    <div className="my-10">
+    <div className="my-10 px-4">
       <div className="flex flex-col gap-4 max-w-5xl mx-auto">
         <div className="flex flex-col w-full md:flex-row justify-evenly">
           <div className="text-center w-full grid gap-3">

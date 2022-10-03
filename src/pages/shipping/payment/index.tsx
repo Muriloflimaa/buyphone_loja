@@ -4,9 +4,8 @@ import { TotalPayment } from '../../../components/TotalPayment'
 export default function payment() {
   return (
     <>
-      <div className="max-w-7xl mx-auto grid gap-3 my-10">
+      <div className="max-w-7xl mx-auto grid gap-3">
         <TotalPayment />
-        <div className="divider"></div>
         <div className="flex flex-col justify-center items-center gap-4 max-w-sm mx-auto px-4">
           <div className="w-full">
             <h2 className="text-2xl md:text-3xl text-center font-medium">

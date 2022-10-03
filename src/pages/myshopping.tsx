@@ -2,7 +2,6 @@ import { parseCookies, setCookie } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
-import { api } from '../services/apiClient'
 import Link from 'next/link'
 import { apiStoreBeta } from '../services/apiBetaConfigs'
 
@@ -14,8 +13,8 @@ function MyShopping() {
       const cookies = parseCookies(undefined)
       if (cookies['@BuyPhone:User']) {
         const user = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await apiStoreBeta(`orders/customer/${user?.id}`)
-
+        const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
+        console.log(data)
         setData(data)
       }
     }
@@ -33,7 +32,7 @@ function MyShopping() {
             <React.Fragment key={pedido.id}>
               <ListProducts
                 created={pedido.created_at}
-                statuspayment={pedido.invoice.status}
+                statuspayment={pedido.invoice?.status}
                 number={pedido.id}
                 value={pedido.total}
                 method={pedido.method}

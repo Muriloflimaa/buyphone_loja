@@ -1,4 +1,4 @@
-import { faMapLocation, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { GetServerSidePropsContext } from 'next'
@@ -13,6 +13,7 @@ import { apiStoreBeta } from '../../services/apiBetaConfigs'
 import { setCookies } from '../../utils/useCookies'
 import jwt_decode from 'jwt-decode'
 import { TotalPayment } from '../../components/TotalPayment'
+import { faMap } from '@fortawesome/free-regular-svg-icons'
 
 type GetCepTypes = {
   cep: string
@@ -43,14 +44,15 @@ export interface Address {
 export default function Shipping({ userJson }: userJsonTypes) {
   const [Address, setAddress] = useState<Address[]>([])
 
-  async function handleRemoveAddress(id: number) {
-    try {
-      setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
-      await apiStoreBeta.delete(`addresses/${id}`)
-    } catch (error) {
-      toast.error('Ocorreu um erro no servidor, contate o suporte')
-    }
-  }
+  // async function handleRemoveAddress(id: number) {
+  //   console.log(id)
+  //   try {
+  //     setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
+  //     await apiStoreBeta.delete(`addresses/${id}`)
+  //   } catch (error) {
+  //     toast.error('Ocorreu um erro no servidor, contate o suporte')
+  //   }
+  // }
 
   useEffect(() => {
     const getAddress = async () => {
@@ -139,50 +141,29 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 console.log(ad)
                 return (
                   <div key={ad.id} className="w-full cursor-pointer">
-                    <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md relative">
-                      <div
-                        onClick={() =>
-                          handleAddressDefault({
-                            ...ad,
-                          })
-                        }
-                        className="w-5/6 h-full absolute"
-                      ></div>
-                      <FontAwesomeIcon
-                        icon={faMapLocation}
-                        className="w-8 h-8"
-                      ></FontAwesomeIcon>
-                      <div className="flex flex-col text-xs">
-                        <span>{`${ad.address}, ${ad.number}`}</span>
-                        <span>{ad.neighborhood}</span>
-                        <span>{`${ad.city} ${ad.uf}`}</span>
-                      </div>
-
-                      <div className="dropdown drop-shadow-left dropdown-end">
-                        <label tabIndex={ad.id} className="m-1 z-50 btn">
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            className="w-4 h-4"
-                          ></FontAwesomeIcon>
-                        </label>
-                        <div
-                          tabIndex={ad.id}
-                          className="dropdown-content card card-compact p-2 shadow bg-primary text-primary-content"
-                        >
-                          <div className="card-body">
-                            <h3 className="card-title">
-                              Deseja excluir o endereço?
-                            </h3>
-                            <p
-                              tabIndex={ad.id}
-                              className="btn btn-primary"
-                              onClick={() => handleRemoveAddress(ad.id)}
-                            >
-                              Sim
-                            </p>
-                          </div>
+                    <div
+                      onClick={() =>
+                        handleAddressDefault({
+                          ...ad,
+                        })
+                      }
+                      className="normal-case btn btn-sm btn-primary btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
+                    >
+                      <div className="flex items-center gap-8">
+                        <FontAwesomeIcon
+                          icon={faMap}
+                          className="w-8 h-8"
+                        ></FontAwesomeIcon>
+                        <div className="flex flex-col items-start text-start text-xs font-medium">
+                          <span className="font-bold">{`${ad.address}, ${ad.number}`}</span>
+                          <span>{ad.neighborhood}</span>
+                          <span>{`${ad.city} ${ad.uf}`}</span>
                         </div>
                       </div>
+                      <FontAwesomeIcon
+                        icon={faAngleRight}
+                        className="w-4 h-4"
+                      ></FontAwesomeIcon>
                     </div>
                   </div>
                 )

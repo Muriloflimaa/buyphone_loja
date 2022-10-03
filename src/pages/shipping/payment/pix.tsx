@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import ProductCart from '../../../components/ProductCart'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
@@ -71,6 +70,7 @@ export default function pix() {
         '/shipping/payment/pixCheckout'
       )
       CleanCart()
+      destroyCookie({}, '@BuyPhone:GetCep')
       router.push('/shipping/payment/pixCheckout')
     } catch (error) {
       console.log(error)

@@ -29,8 +29,12 @@ const ProductCart = ({
 
   useEffect(() => {
     if (
+      router.asPath == '/shipping' ||
+      router.asPath == '/shipping/payment/pix' ||
       router.asPath == '/shipping/address' ||
-      router.asPath == '/shipping/payment/pix'
+      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/payment/custom' ||
+      router.asPath == '/shipping/payment/credit'
     ) {
       setShow(true)
     } else {
@@ -83,18 +87,20 @@ const ProductCart = ({
         </div>
         <div className="flex flex-col gap-2 justify-between items-end">
           <strong>R$ {moneyMask(price?.toString())}</strong>
-          <div className="flex flex-col items-end">
-            <button
-              type="button"
-              data-testid="remove-product"
-              onClick={() => handleRemoveProduct(id)}
-            >
-              <TrashIcon className="h-4 w-4 " />
-            </button>
-          </div>
+          {!show && (
+            <div className="flex flex-col items-end">
+              <button
+                type="button"
+                data-testid="remove-product"
+                onClick={() => handleRemoveProduct(id)}
+              >
+                <TrashIcon className="h-4 w-4 " />
+              </button>
+            </div>
+          )}
           <div className="flex w-full justify-end">
             <div className="flex">
-              {show == false ? (
+              {!show && (
                 <div className="btn-group w-12">
                   <button
                     className="btn btn-accent text-xs h-auto p-1 min-h-0 w-1/2"
@@ -115,8 +121,6 @@ const ProductCart = ({
                     +
                   </button>
                 </div>
-              ) : (
-                ' '
               )}
             </div>
           </div>
