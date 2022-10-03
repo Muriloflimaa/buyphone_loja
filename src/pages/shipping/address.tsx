@@ -8,6 +8,8 @@ import * as yup from 'yup'
 import { apiStoreBeta } from '../../services/apiBetaConfigs'
 import { GetUseType } from '../../utils/getUserType'
 import toast from 'react-hot-toast'
+import { TotalPayment } from '../../components/TotalPayment'
+import { setCookies } from '../../utils/useCookies'
 
 interface CepJsonProps {
   cepJson: {
@@ -56,11 +58,13 @@ export default function address({ cepJson }: CepJsonProps) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     try {
-      await apiStoreBeta.post(`addresses`, {
+      const { data } = await apiStoreBeta.post(`addresses`, {
         ...values,
         user_id: user.id,
         postal_code: cepJson.CEP,
       })
+
+      setCookies('@BuyPhone:GetCep', data, 60 * 60)
       router.push('/shipping/payment')
     } catch (error) {
       toast.error('Erro no servidor, entre em contato com o suporte')
@@ -69,10 +73,8 @@ export default function address({ cepJson }: CepJsonProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
-      <div className="flex justify-between py-4 border-b border-base-300">
-        <span>Resumo</span>
-        <span>Valor Total: R$ 3.207,57</span>
-      </div>
+      <TotalPayment />
+      <div className="divider" />
       <div>
         <h2 className="text-2xl md:text-3xl font-medium text-center my-6">
           Informações para a entrega
@@ -190,6 +192,16 @@ export default function address({ cepJson }: CepJsonProps) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
+
+  if (cookies['@BuyPhone:cart'] === '[]') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   const cep = cookies['@BuyPhone:GetCep']
   if (cep) {
     const cepJson = JSON.parse(cep)

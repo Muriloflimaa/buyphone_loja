@@ -47,7 +47,6 @@ const ProductCard = ({
     <div
       className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
       key={id}
-      onClick={() => router.push(`products/${slugCategory}/${slug}`)}
     >
       <div className="card-body text-center ">
         <div className="w-[80%] mx-auto">

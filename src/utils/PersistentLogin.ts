@@ -13,7 +13,6 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
     const cookies = parseCookies(ctx)
 
     if (cookies['@BuyPhone:Token']) {
-      //se existe um token entrar aqui!
       const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
 
       //se existir um token e estiver expirado, mandar para o login
@@ -26,8 +25,6 @@ export function PersistentLogin<P>(fn: GetServerSideProps<any>) {
             permanent: false,
           },
         }
-      } else {
-        return await fn(ctx)
       }
     }
     return await fn(ctx)

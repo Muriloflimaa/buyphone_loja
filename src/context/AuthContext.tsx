@@ -31,7 +31,7 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { '@BuyPhone:User': user } = parseCookies()
+  const { '@BuyPhone:User': user } = parseCookies(undefined)
 
   const [userData, setUserData] = useState<UserDataType | undefined>()
 
@@ -50,6 +50,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id: id,
         type: type,
         profile_photo_url: profile_photo_url,
+        email: email,
       }
       const token = response.data.authorization.token
 

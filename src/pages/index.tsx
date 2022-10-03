@@ -21,21 +21,9 @@ interface DataProps {
   }
 }
 
-interface CartItemsAmount {
-  [key: number]: number
-}
-
 const Home: NextPage<DataProps> = ({ data }) => {
   const user = GetUseType()
-  const { cart } = useCart()
   const { search } = useContext(SearchContext)
-
-  // Calculando itens por produto disponível no carrinho (anterior, atual)
-  cart.reduce((sumAmount, product) => {
-    const newSumAmount = { ...sumAmount }
-    newSumAmount[product.id] = product.amount
-    return newSumAmount
-  }, {} as CartItemsAmount)
 
   return (
     <>

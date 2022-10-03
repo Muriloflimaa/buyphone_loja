@@ -36,7 +36,7 @@ const ProductCart = ({
     } else {
       setShow(false)
     }
-  }, []) //verificação de rota para setar padding
+  }, [router]) //verificação de rota para setar padding
 
   function handleProductIncrement(productId: number, productAmount: number) {
     updateProductAmount({

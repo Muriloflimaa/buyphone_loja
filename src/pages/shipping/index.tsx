@@ -12,6 +12,7 @@ import { Input } from '../../components/InputElement'
 import { apiStoreBeta } from '../../services/apiBetaConfigs'
 import { setCookies } from '../../utils/useCookies'
 import jwt_decode from 'jwt-decode'
+import { TotalPayment } from '../../components/TotalPayment'
 
 type GetCepTypes = {
   cep: string
@@ -87,7 +88,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
       }
-      setCookies('@BuyPhone:GetCep', response.data, 30)
+      setCookies('@BuyPhone:GetCep', response.data, 60 * 60)
       router.push('/shipping/address')
     } catch (error) {
       toast.error('Erro no servidor, entre em contato com o suporte')
@@ -95,16 +96,14 @@ export default function Shipping({ userJson }: userJsonTypes) {
   }
 
   const handleAddressDefault = async (props: any) => {
-    setCookies('@BuyPhone:GetCep', props, 30)
+    setCookies('@BuyPhone:GetCep', props, 60 * 60)
     router.push('/shipping/payment')
   }
 
   return (
     <>
       <div className="max-w-7xl mx-auto grid gap-3 px-4">
-        <div className="flex justify-between mt-6">
-          <span>Resumo</span> <span>Valor total: R$ 2.995,62</span>
-        </div>
+        <TotalPayment />
         <div className="divider"></div>
 
         <div>
@@ -137,18 +136,14 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 <h3 className="font-medium">Ou selecione um endereço abaixo</h3>
               )}
               {Address.map((ad) => {
+                console.log(ad)
                 return (
                   <div key={ad.id} className="w-full cursor-pointer">
                     <div className="btn-primary p-4 flex text-sm items-center h-full max-h-20 py-3 w-full gap-4 justify-between rounded-md relative">
                       <div
                         onClick={() =>
                           handleAddressDefault({
-                            CEP: ad.postal_code,
-                            UF: ad.uf,
-                            City: ad.city,
-                            District: ad.neighborhood,
-                            Street: ad.address,
-                            Message: 'ok',
+                            ...ad,
                           })
                         }
                         className="w-5/6 h-full absolute"
@@ -200,7 +195,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx)
 
   //se existe um token entrar aqui!
@@ -233,6 +228,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  if (cookies['@BuyPhone:cart'] === '[]') {
+    return {
+      redirect: {
+        destination: '/',
         permanent: false,
       },
     }

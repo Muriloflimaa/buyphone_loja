@@ -9,10 +9,13 @@ import {
 } from 'react'
 import { toast } from 'react-hot-toast'
 import { apiPedidos } from '../services/apiClient'
-import { Product } from '../types'
+import { ArrayProduct, Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
 import SuccessImg from '../assets/images/success.webp'
 import { ToastCustom } from '../utils/toastCustom'
+import { verificationPrice } from '../utils/verificationPrice'
+import { GetUseType } from '../utils/getUserType'
+import { setCookies } from '../utils/useCookies'
 
 interface CartProviderProps {
   children: ReactNode
@@ -29,12 +32,18 @@ interface CartContextData {
   removeProduct: (productId: number) => void
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void
   CleanCart: () => void
+  values: ArrayProduct[]
+  somaTotal: string | number
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
+  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
+  const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
+  const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
+  const user = GetUseType()
 
   const [cart, setCart] = useState<Product[]>(() => {
     // Verificando se existe no localstorage o carrinho
@@ -45,6 +54,56 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
     return []
   })
+
+  useEffect(() => {
+    setData([]) //zera o array do data
+    if (cart.length <= 7) {
+      cart.map(async (item) => {
+        try {
+          const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
+
+          const returnPrice = verificationPrice(data.data.data, user) //verificando preço
+          const response = {
+            ...item, //adicionando amount e id que está no localstorage
+            product: data.data.data, //data vem da api que é chamada
+            priceFormated: returnPrice.ourPrice, //formatação de preços
+            subTotal: returnPrice.ourPrice * item.amount, //total simples
+          }
+
+          setData((data) => [...data, response]) //gravando response no state
+        } catch (error) {
+          setData([]) //se der erro zerar o data com um array vazio
+        }
+      })
+    } else {
+      ToastCustom(
+        5000,
+        'Não adicione tantos produtos ao carrinho ao mesmo tempo',
+        'error',
+        'Notificação'
+      )
+      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart() //chama a função e limpa o state do cart
+    }
+    setData([])
+  }, [cart])
+
+  useEffect(() => {
+    const values = data.filter(function (this: any, a: any) {
+      return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true)
+    }, Object.create(null)) //removendo items duplicados do array, o data manda o primeiro produto adicionado 2x
+    setValues(values) //setando values para dar o map no productCart
+
+    const total = values.map((product: ArrayProduct) => {
+      return product.subTotal
+    }, 0) //da um map nos produtos e adiciona a const total
+
+    var soma = 0
+    for (var i = 0; i < total.length; i++) {
+      soma += total[i]
+    }
+    setSomaTotal(soma) //somando produtos e setando no state
+  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
     setCart([])
@@ -65,6 +124,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   useEffect(() => {
     if (cartPreviousValue !== cart) {
       localStorage.setItem('@BuyPhone:cart', JSON.stringify(cart))
+      setCookies('@BuyPhone:cart', JSON.stringify(cart), 100000000)
     }
   }, [cart, cartPreviousValue])
   /**
@@ -189,6 +249,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         removeProduct,
         updateProductAmount,
         CleanCart,
+        values,
+        somaTotal,
       }}
     >
       {children}
