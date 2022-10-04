@@ -1,25 +1,23 @@
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
+import { parseCookies } from 'nookies'
 import { useState } from 'react'
-import ReactInputMask from 'react-input-mask'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
+import { Address } from '../../../types'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { Input } from '../../../components/InputTeste'
+import { mascaraCep } from '../../../utils/masks'
 
-export default function credit() {
+export default function credit({ address }: Address) {
   const [name, setName] = useState('')
   const [card, setCard] = useState('')
   const [expiration_date, setExpiration_date] = useState('')
   const [code, setCode] = useState('')
   const [flag, setFlag] = useState('')
-  const [document, setDocument] = useState('')
   const [focus, setFocus] = useState(false)
-
-  function inputFocus() {
-    setFocus(!focus)
-  }
-
-  function inputNoFocus() {
-    setFocus(!focus)
-  }
 
   const checksFlag = (card: string) => {
     const cardnumber = card.replace(/[^0-9]+/g, '')
@@ -36,6 +34,27 @@ export default function credit() {
       }
     }
   }
+
+  const creditSchema = yup.object().shape({
+    name: yup.string().required(),
+    number_card: yup.string().required(),
+    validate: yup.string().required(),
+    // code: yup.string().required(),
+    cpf: yup.string().required(),
+    installments: yup.number().required(),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(creditSchema),
+  })
+
+  const handleSubmitCredit: SubmitHandler<any> = async (values, event) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log(values)
+  }
+
+  const { errors } = formState
 
   return (
     <>
@@ -58,7 +77,10 @@ export default function credit() {
               </a>
             </Link>
           </h3>
-          <div className="grid gap-4">
+          <form
+            onSubmit={handleSubmit(handleSubmitCredit)}
+            className="form-control gap-2 w-full"
+          >
             <div className="w-full btn btn-disabled bg-base-200 btn-md gap-2 normal-case lg:gap-3 justify-between my-2">
               <div className="flex flex-col text-left">
                 <span>Cartão de Crédito</span>
@@ -91,91 +113,67 @@ export default function credit() {
               </a>
             </Link>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <form id="form">
-                <div className="field-container">
-                  <label htmlFor="name" className="label">
-                    Nome impresso no cartão
-                  </label>
-                  <input
-                    className="input input-bordered w-full"
-                    id="name"
-                    name="name"
-                    onChange={(event) => setName(event.target.value)}
-                    placeholder={name}
-                    maxLength={20}
-                    type="text"
-                  />
-                </div>
-                <div className="field-container">
-                  <label htmlFor="card" className="label">
-                    Número do Cartão
-                  </label>
-                  <ReactInputMask
-                    mask="9999 9999 9999 9999"
-                    id="card"
-                    name="card"
-                    onChange={(event) => (
-                      setCard(event.target.value),
-                      checksFlag(event.target.value)
-                    )}
-                    type="tel"
-                    className="input input-bordered w-full"
-                  />
-                </div>
+              <div>
+                <Input
+                  {...register('name')}
+                  type="text"
+                  name="name"
+                  label="Nome impresso no cartão"
+                  error={errors.name}
+                  onChange={(event) => setName(event.target.value)}
+                />
+
+                <Input
+                  {...register('number_card')}
+                  type="tel"
+                  name="number_card"
+                  label="Número do Cartão"
+                  maxLength={19}
+                  error={errors.number_card}
+                  onChange={(event) => (
+                    setCard(event.target.value), checksFlag(event.target.value)
+                  )}
+                  onKeyUp={(e) => mascaraCep(e.target, '#### #### #### ####')}
+                />
                 <div className="flex gap-2 w-full">
-                  <div className="field-container">
-                    <label htmlFor="card-expiration" className="label">
-                      MM/AA
-                    </label>
-                    <ReactInputMask
-                      mask="99/99"
-                      id="card-expiration"
-                      name="card-expiration"
-                      onChange={(event) =>
-                        setExpiration_date(event.target.value)
-                      }
-                      type="tel"
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-                  <div className="field-container w-full">
-                    <label htmlFor="securitycode" className="label">
-                      Código de Segurança
-                    </label>
-                    <ReactInputMask
-                      mask="999"
-                      id="securitycode"
-                      name="card_cvv"
-                      onChange={(event) => setCode(event.target.value)}
-                      type="tel"
-                      className="input input-bordered w-full"
-                      onFocus={inputFocus}
-                      onBlur={inputNoFocus}
-                    />
-                  </div>
-                </div>
-                <div className="field-container">
-                  <label htmlFor="carddocument" className="label">
-                    CPF / CNPJ
-                  </label>
-                  <ReactInputMask
-                    mask="999.999.999-99"
-                    id="carddocument"
-                    name="document"
-                    onChange={(event) => setDocument(event.target.value)}
-                    type="tel"
-                    className="input input-bordered w-full"
+                  <Input
+                    {...register('validate')}
+                    type="text"
+                    name="validate"
+                    label="MM/AA"
+                    error={errors.validate}
+                    onKeyUp={(e) => mascaraCep(e.target, '##/##')}
+                    onChange={(event) => setExpiration_date(event.target.value)}
+                  />
+                  <Input
+                    {...register('code')}
+                    type="text"
+                    name="code"
+                    label="Código de Segurança"
+                    maxLength={4}
+                    error={errors.code}
+                    onChange={(event) => setCode(event.target.value)}
+                    onFocus={() => setFocus(!focus)}
+                    onBlur={() => setFocus(!focus)}
                   />
                 </div>
+                <Input
+                  {...register('cpf')}
+                  type="text"
+                  label="CPF / CNPJ"
+                  error={errors.cpf}
+                  onKeyUp={(e) => mascaraCep(e.target, '###.###.###-##')}
+                  maxLength={14}
+                />
                 <div className="field-container">
                   <label htmlFor="installments" className="label">
                     Opções de Parcelamento
                   </label>
                   <select
-                    name="installments"
                     id="installments"
                     className="select select-bordered w-full"
                     defaultValue={2}
+                    {...register('installments')}
                   >
                     <option value={1}>1x de R$0,00 (sem juros)</option>
                     <option value={2}>2x de R$0,50 (com juros)</option>
@@ -191,7 +189,7 @@ export default function credit() {
                     <option value={12}>12x de R$0,08 (com juros)</option>
                   </select>
                 </div>
-              </form>
+              </div>
               <div className="flex flex-col">
                 <Link href={'/shipping/payment/pix'} passHref>
                   <a className="alert border-2 my-2 md:mt-5 md:flex flex-row justify-start hidden">
@@ -223,9 +221,28 @@ export default function credit() {
             >
               Pagar
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cart } = parseCookies(ctx)
+
+  if (getDataUser && cart !== '[]') {
+    const address = JSON.parse(getDataUser)
+    return {
+      props: { address },
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
 }

@@ -6,26 +6,11 @@ import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { Address } from '../../../types'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
 import { setCookies } from '../../../utils/useCookies'
-
-export interface Address {
-  address: {
-    address: string
-    city: string
-    complement: string | null
-    created_at: string
-    id: number
-    neighborhood: string
-    number: number
-    postal_code: string
-    uf: string
-    updated_at: string
-    user_id: number
-  }
-}
 
 interface Product {
   product_id: number

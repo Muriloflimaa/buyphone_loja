@@ -175,3 +175,19 @@ export interface UserData {
     profile_photo_url: string
   }
 }
+
+export interface Address {
+  address: {
+    address: string
+    city: string
+    complement: string | null
+    created_at: string
+    id: number
+    neighborhood: string
+    number: number
+    postal_code: string
+    uf: string
+    updated_at: string
+    user_id: number
+  }
+}
