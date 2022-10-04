@@ -1,8 +1,10 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useCart } from '../../../context/UseCartContext'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
 
@@ -114,6 +116,18 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:Pix': pixCookies } = parseCookies(ctx)
-  const pix = JSON.parse(pixCookies)
-  return { props: { pix } }
+
+  if (pixCookies) {
+    const pix = JSON.parse(pixCookies)
+    return { props: { pix } }
+  }
+
+  if (!pixCookies) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
 }

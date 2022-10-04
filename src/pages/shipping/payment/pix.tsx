@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
@@ -7,17 +8,23 @@ import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
+import { ToastCustom } from '../../../utils/toastCustom'
 import { setCookies } from '../../../utils/useCookies'
 
 export interface Address {
-  CEP: string
-  UF: string
-  city: string
-  address: string
-  neighborhood: string
-  number: number
-  Message?: string
-  id: number
+  address: {
+    address: string
+    city: string
+    complement: string | null
+    created_at: string
+    id: number
+    neighborhood: string
+    number: number
+    postal_code: string
+    uf: string
+    updated_at: string
+    user_id: number
+  }
 }
 
 interface Product {
@@ -26,17 +33,11 @@ interface Product {
   qty: number
 }
 
-export default function pix() {
-  const [address, setAddress] = useState<Address>()
+export default function pix({ address }: Address) {
   const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const router = useRouter()
-
-  useEffect(() => {
-    const { '@BuyPhone:GetCep': getDataUser } = parseCookies(undefined)
-    setAddress(JSON?.parse(getDataUser))
-  }, [])
 
   useEffect(() => {
     if (values) {
@@ -63,17 +64,15 @@ export default function pix() {
         items: setDat,
       }
       const { data } = await apiStoreBeta.post('checkout/pix', items)
-      setCookies(
-        '@BuyPhone:Pix',
-        data,
-        60 * 60,
-        '/shipping/payment/pixCheckout'
-      )
-      CleanCart()
+      setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
       destroyCookie({}, '@BuyPhone:GetCep')
+      CleanCart()
       router.push('/shipping/payment/pixCheckout')
     } catch (error) {
-      console.log(error)
+      ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
+      CleanCart()
+      destroyCookie({}, '@BuyPhone:GetCep')
+      router.push('/')
     }
   }
 
@@ -192,4 +191,22 @@ export default function pix() {
       </div>
     </>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
+
+  if (getDataUser) {
+    const address = JSON.parse(getDataUser)
+    return {
+      props: { address },
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
 }
