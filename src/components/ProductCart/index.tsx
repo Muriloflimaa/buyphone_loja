@@ -34,7 +34,9 @@ const ProductCart = ({
       router.asPath == '/shipping/address' ||
       router.asPath == '/shipping/payment' ||
       router.asPath == '/shipping/payment/custom' ||
-      router.asPath == '/shipping/payment/credit'
+      router.asPath == '/shipping/payment/credit' ||
+      router.asPath == '/shipping/payment/credit-checkout' ||
+      router.asPath == '/shipping/payment/match-installments'
     ) {
       setShow(true)
     } else {

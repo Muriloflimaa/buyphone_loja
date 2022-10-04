@@ -36,7 +36,7 @@ export default function payment() {
                   </span>
                 </div>
                 <div>
-                  <Link href={'/shipping/payment/credit'}>
+                  <Link href={'/shipping/payment/credit-checkout'}>
                     <a className="btn btn-outline w-full justify-between">
                       <span>Cartão de crédito</span>
                       <svg

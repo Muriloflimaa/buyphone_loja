@@ -10,7 +10,7 @@ export const setCookies = (
     value = JSON.stringify(value)
   }
   setCookie(undefined, key, value, {
-    maxAge: time, // 30 dias
+    maxAge: time,
     path: path ?? '/',
   })
 }

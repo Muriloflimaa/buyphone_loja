@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { Address, ArrayProduct, ProductPayment } from '../../../types'
@@ -18,6 +18,9 @@ import {
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
 import { useRouter } from 'next/router'
 import { useCart } from '../../../context/UseCartContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCcVisa } from '@fortawesome/free-brands-svg-icons'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -122,6 +125,7 @@ export default function credit({ address }: Address) {
               </a>
             </Link>
           </h3>
+
           <form
             onSubmit={handleSubmit(handleSubmitCredit)}
             className="form-control gap-2 w-full"
@@ -252,15 +256,16 @@ export default function credit({ address }: Address) {
                     </div>
                   </a>
                 </Link>
-
-                <Card
-                  name={name}
-                  card={card}
-                  expiration_date={expiration_date}
-                  foc={focus}
-                  code={code}
-                  flags={flag}
-                />
+                <div onClick={() => setFocus(!focus)}>
+                  <Card
+                    name={name}
+                    card={card}
+                    expiration_date={expiration_date}
+                    foc={focus}
+                    code={code}
+                    flags={flag}
+                  />
+                </div>
               </div>
             </div>
             {formState.isSubmitting ? (

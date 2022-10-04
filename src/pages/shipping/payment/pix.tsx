@@ -46,7 +46,7 @@ export default function pix({ address }: Address) {
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
       destroyCookie({}, '@BuyPhone:GetCep')
       CleanCart()
-      router.push('/shipping/payment/pixCheckout')
+      router.push('/shipping/payment/pix-checkout')
     } catch (error) {
       ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
       CleanCart()
