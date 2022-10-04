@@ -262,6 +262,29 @@ export default function NavBar() {
                           (showCart ? 'opacity-100 visible' : '')
                         }
                       >
+                        {cartSize && cartSize >= 4 && (
+                          <div className="card-body bg-base-200">
+                            <div className="flex justify-between py-4">
+                              <span className="text-gray-500 text-lg">
+                                Valor Total:
+                              </span>
+                              <span className="font-semibold text-lg">
+                                R$ {moneyMask(somaTotal.toString())}
+                              </span>
+                            </div>
+                            <div className="card-actions justify-center">
+                              <a
+                                onClick={() => {
+                                  setShowCart(!showCart)
+                                  router.push('/shipping')
+                                }}
+                                className="btn btn-success btn-block font-medium normal-case"
+                              >
+                                Finalizar Compra
+                              </a>
+                            </div>
+                          </div>
+                        )}
                         <div className="card-body">
                           <div className="flex justify-between">
                             <span className="text-lg uppercase">
