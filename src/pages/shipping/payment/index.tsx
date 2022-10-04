@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { parseCookies } from 'nookies'
 import { TotalPayment } from '../../../components/TotalPayment'
+import { PersistentLogin } from '../../../utils/PersistentLogin'
 
 export default function payment() {
   return (
@@ -83,3 +85,37 @@ export default function payment() {
     </>
   )
 }
+
+export const getServerSideProps = PersistentLogin(async (ctx) => {
+  const { '@BuyPhone:GetCep': cepCookies } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cartCookies } = parseCookies(ctx)
+
+  if (cartCookies === '[]') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  if (!cepCookies) {
+    return {
+      redirect: {
+        destination: '/shipping',
+        permanent: false,
+      },
+    }
+  }
+
+  if (cepCookies) {
+    const cepJson = JSON.parse(cepCookies)
+    return {
+      props: { cepJson },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}, '/shipping/payment')

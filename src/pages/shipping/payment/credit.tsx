@@ -4,12 +4,20 @@ import { parseCookies } from 'nookies'
 import { useState } from 'react'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
-import { Address } from '../../../types'
+import { Address, ArrayProduct, ProductPayment } from '../../../types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input } from '../../../components/InputTeste'
-import { mascaraCep } from '../../../utils/masks'
+import {
+  maskCpfInput,
+  maskCreditCard,
+  maskExpirationDate,
+  maskMustNumber,
+} from '../../../utils/masks'
+import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { useRouter } from 'next/router'
+import { useCart } from '../../../context/UseCartContext'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -18,6 +26,8 @@ export default function credit({ address }: Address) {
   const [code, setCode] = useState('')
   const [flag, setFlag] = useState('')
   const [focus, setFocus] = useState(false)
+  const router = useRouter()
+  const { values, somaTotal, CleanCart } = useCart()
 
   const checksFlag = (card: string) => {
     const cardnumber = card.replace(/[^0-9]+/g, '')
@@ -36,22 +46,57 @@ export default function credit({ address }: Address) {
   }
 
   const creditSchema = yup.object().shape({
-    name: yup.string().required(),
-    number_card: yup.string().required(),
-    validate: yup.string().required(),
-    // code: yup.string().required(),
-    cpf: yup.string().required(),
-    installments: yup.number().required(),
+    card_holder_name: yup.string().required('Campo nome é obrigatório'),
+    card_number: yup
+      .number()
+      .typeError('Digite um número de cartão válido')
+      .required('Campo número do cartão é obrigatório'),
+    expiration_date: yup
+      .string()
+      .required('Campo Data de validade é obrigatório'),
+    card_cvv: yup
+      .number()
+      .typeError('Digite um código de segurança válido')
+      .required('Campo código de segurança é obrigatório'),
+    document: yup.string().required('O campo CPF é obrigatório'),
+    installments: yup
+      .number()
+      .typeError('Amount must be a number')
+      .required('O campo de parcelas é obrigatório'),
   })
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(creditSchema),
   })
 
-  const handleSubmitCredit: SubmitHandler<any> = async (values, event) => {
+  const handleSubmitCredit: SubmitHandler<any> = async (value, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log(values)
+
+    try {
+      const setDat: ProductPayment[] = []
+      values.map(async (item: ArrayProduct) => {
+        const response = {
+          product_id: item.id,
+          price: item.priceFormated,
+          qty: item.amount,
+        }
+        setDat.push(response)
+      })
+
+      const { data } = await apiStoreBeta.post(`checkout/credit-card`, {
+        ...value,
+        user_id: address.user_id,
+        address_id: address.id,
+        shippingPrice: 0,
+        items: setDat,
+        amount: somaTotal,
+      })
+
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const { errors } = formState
@@ -115,54 +160,57 @@ export default function credit({ address }: Address) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Input
-                  {...register('name')}
+                  {...register('card_holder_name')}
                   type="text"
-                  name="name"
+                  name="card_holder_name"
                   label="Nome impresso no cartão"
-                  error={errors.name}
+                  error={errors.card_holder_name}
                   onChange={(event) => setName(event.target.value)}
                 />
 
                 <Input
-                  {...register('number_card')}
+                  {...register('card_number')}
                   type="tel"
-                  name="number_card"
+                  name="card_number"
                   label="Número do Cartão"
                   maxLength={19}
-                  error={errors.number_card}
+                  error={errors.card_number}
                   onChange={(event) => (
                     setCard(event.target.value), checksFlag(event.target.value)
                   )}
-                  onKeyUp={(e) => mascaraCep(e.target, '#### #### #### ####')}
+                  onKeyUp={(e) => maskCreditCard(e)}
                 />
-                <div className="flex gap-2 w-full">
+                <div className="flex flex-col md:flex-row gap-2 w-full">
                   <Input
-                    {...register('validate')}
+                    {...register('expiration_date')}
                     type="text"
-                    name="validate"
+                    name="expiration_date"
                     label="MM/AA"
-                    error={errors.validate}
-                    onKeyUp={(e) => mascaraCep(e.target, '##/##')}
+                    error={errors.expiration_date}
+                    onKeyUp={(e) => maskExpirationDate(e)}
+                    maxLength={5}
                     onChange={(event) => setExpiration_date(event.target.value)}
                   />
                   <Input
-                    {...register('code')}
-                    type="text"
-                    name="code"
+                    {...register('card_cvv')}
+                    type="tel"
+                    name="card_cvv"
                     label="Código de Segurança"
                     maxLength={4}
-                    error={errors.code}
-                    onChange={(event) => setCode(event.target.value)}
+                    error={errors.card_cvv}
+                    onChange={(event) => (
+                      setCode(event.target.value), maskMustNumber(event)
+                    )}
                     onFocus={() => setFocus(!focus)}
-                    onBlur={() => setFocus(!focus)}
+                    // onBlur={() => setFocus(!focus)}
                   />
                 </div>
                 <Input
-                  {...register('cpf')}
+                  {...register('document')}
                   type="text"
-                  label="CPF / CNPJ"
-                  error={errors.cpf}
-                  onKeyUp={(e) => mascaraCep(e.target, '###.###.###-##')}
+                  label="document / CNPJ"
+                  error={errors.document}
+                  onKeyUp={(e) => maskCpfInput(e)}
                   maxLength={14}
                 />
                 <div className="field-container">
@@ -204,6 +252,7 @@ export default function credit({ address }: Address) {
                     </div>
                   </a>
                 </Link>
+
                 <Card
                   name={name}
                   card={card}
@@ -214,13 +263,15 @@ export default function credit({ address }: Address) {
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="btn btn-info mt-8 mb-0"
-              id="refresh"
-            >
-              Pagar
-            </button>
+            {formState.isSubmitting ? (
+              <button className="btn loading btn-info mt-8 mb-0">
+                Carregando
+              </button>
+            ) : (
+              <button type="submit" className="btn btn-info mt-8 mb-0">
+                Pagar
+              </button>
+            )}
           </form>
         </div>
       </div>

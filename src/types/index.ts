@@ -191,3 +191,9 @@ export interface Address {
     user_id: number
   }
 }
+
+export interface ProductPayment {
+  product_id: number
+  price: number
+  qty: number
+}

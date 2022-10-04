@@ -6,17 +6,11 @@ import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
-import { Address } from '../../../types'
+import { Address, ProductPayment } from '../../../types'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
 import { setCookies } from '../../../utils/useCookies'
-
-interface Product {
-  product_id: number
-  price: number
-  qty: number
-}
 
 export default function pix({ address }: Address) {
   const user = GetUseType()
@@ -32,7 +26,7 @@ export default function pix({ address }: Address) {
 
   async function handlePayment() {
     try {
-      const setDat: Product[] = []
+      const setDat: ProductPayment[] = []
       values.map(async (item) => {
         const response = {
           product_id: item.id,

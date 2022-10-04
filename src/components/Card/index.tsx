@@ -19,7 +19,7 @@ const Card = ({ name, card, expiration_date, foc, code, flags }: CardProps) => {
     <>
       <div
         onClick={() => !foc}
-        className={styles.card_container + ' cursor-pointer'}
+        className={styles.card_container + ' cursor-pointer hidden md:flex'}
       >
         <div className={styles.card + (foc == true ? ' rotate-Y-180' : '')}>
           <div

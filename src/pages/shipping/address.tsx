@@ -10,6 +10,7 @@ import { GetUseType } from '../../utils/getUserType'
 import toast from 'react-hot-toast'
 import { TotalPayment } from '../../components/TotalPayment'
 import { setCookies } from '../../utils/useCookies'
+import { PersistentLogin } from '../../utils/PersistentLogin'
 
 interface CepJsonProps {
   cepJson: {
@@ -189,10 +190,11 @@ export default function address({ cepJson }: CepJsonProps) {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const cookies = parseCookies(ctx)
+export const getServerSideProps = PersistentLogin(async (ctx) => {
+  const { '@BuyPhone:GetCep': cepCookies } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cartCookies } = parseCookies(ctx)
 
-  if (cookies['@BuyPhone:cart'] === '[]') {
+  if (cartCookies === '[]') {
     return {
       redirect: {
         destination: '/',
@@ -201,12 +203,14 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   }
 
-  const cep = cookies['@BuyPhone:GetCep']
-  if (cep) {
-    const cepJson = JSON.parse(cep)
+  if (cepCookies) {
+    const cepJson = JSON.parse(cepCookies)
     return {
       props: { cepJson },
     }
   }
-  return { props: {} }
-}
+
+  return {
+    props: {},
+  }
+}, '/shipping/address')

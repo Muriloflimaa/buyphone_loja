@@ -95,23 +95,9 @@ function MyShopping() {
 }
 
 export const getServerSideProps = PersistentLogin(async (ctx) => {
-  const cookies = parseCookies(ctx)
-
-  if (!cookies['@BuyPhone:Token']) {
-    setCookie(ctx, '@BuyPhone:Router', '/myshopping', {
-      maxAge: 60 * 60 * 24, // 24h
-      path: '/',
-    })
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
   return {
     props: {},
   }
-})
+}, '/myshopping')
 
 export default MyShopping

@@ -14,6 +14,7 @@ import { setCookies } from '../../utils/useCookies'
 import jwt_decode from 'jwt-decode'
 import { TotalPayment } from '../../components/TotalPayment'
 import { faMap } from '@fortawesome/free-regular-svg-icons'
+import { PersistentLogin } from '../../utils/PersistentLogin'
 
 type GetCepTypes = {
   cep: string
@@ -175,45 +176,11 @@ export default function Shipping({ userJson }: userJsonTypes) {
   )
 }
 
-export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
-  const cookies = parseCookies(ctx)
+export const getServerSideProps = PersistentLogin(async (ctx) => {
+  const { '@BuyPhone:cart': cartCookies } = parseCookies(ctx)
+  const { '@BuyPhone:User': userCookies } = parseCookies(ctx)
 
-  //se existe um token entrar aqui!
-  if (cookies['@BuyPhone:Token']) {
-    const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-
-    //se existir um token e estiver expirado, mandar para o login
-    if (Date.now() >= decodedToken.exp * 1000) {
-      setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
-        maxAge: 60 * 60 * 24, // 24h
-        path: '/',
-      })
-      destroyCookie(ctx, '@BuyPhone:User')
-      destroyCookie(ctx, '@BuyPhone:Token')
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: false,
-        },
-      }
-    }
-  }
-
-  //verifica se não existe um token, se nao existir voltar para a home
-  if (!cookies['@BuyPhone:Token']) {
-    setCookie(ctx, '@BuyPhone:Router', '/shipping', {
-      maxAge: 60 * 60 * 24, // 24h
-      path: '/',
-    })
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  if (cookies['@BuyPhone:cart'] === '[]') {
+  if (cartCookies === '[]') {
     return {
       redirect: {
         destination: '/',
@@ -222,11 +189,14 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
     }
   }
 
-  const user = cookies['@BuyPhone:User']
-  if (user) {
-    const userJson = JSON.parse(user)
+  if (userCookies) {
+    const userJson = JSON.parse(userCookies)
     return {
       props: { userJson },
     }
   }
-}
+
+  return {
+    props: {},
+  }
+}, '/shipping')

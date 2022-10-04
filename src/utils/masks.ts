@@ -32,10 +32,36 @@ export const cpfMask = (value: string) => {
 
 export function maskCpfInput(evt: any) {
   var v = evt?.target.value
+    .replace(/\D/g, '')
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
 
+  evt.target.value = v
+}
+
+export function maskCreditCard(evt: any) {
+  var v = evt?.target.value
+  v = v.replace(/\D/g, '') // Permite apenas dígitos
+  v = v.replace(/(\d{4})/g, '$1 ') // Coloca um ponto a cada 4 caracteres
+  v = v.replace(/\.$/, '') // Remove o ponto se estiver sobrando
+  v = v.substring(0, 19) // Limita o tamanho
+
+  evt.target.value = v
+}
+
+export function maskExpirationDate(evt: any) {
+  var v = evt?.target.value
+  v = v.replace(/\D/g, '') // Permite apenas dígitos
+  v = v.replace(/(\d{2})/g, '$1/') // Coloca um / a cada 2 caracteres
+  v = v.substring(0, 5) // Limita o tamanho
+  evt.target.value = v
+}
+
+export function maskMustNumber(evt: any) {
+  var v = evt?.target.value
+  v = v.replace(/\D/g, '') // Permite apenas dígitos
+  v = v.substring(0, 5) // Limita o tamanho
   evt.target.value = v
 }
 
