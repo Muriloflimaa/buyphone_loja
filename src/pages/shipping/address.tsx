@@ -74,7 +74,6 @@ export default function address({ cepJson }: CepJsonProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
       <TotalPayment />
-      <div className="divider" />
       <div>
         <h2 className="text-2xl md:text-3xl font-medium text-center my-6">
           Informações para a entrega

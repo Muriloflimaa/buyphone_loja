@@ -195,8 +195,9 @@ export default function pix({ address }: Address) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cart } = parseCookies(ctx)
 
-  if (getDataUser) {
+  if (getDataUser && cart !== '[]') {
     const address = JSON.parse(getDataUser)
     return {
       props: { address },

@@ -106,7 +106,6 @@ export default function Shipping({ userJson }: userJsonTypes) {
     <>
       <div className="max-w-7xl mx-auto grid gap-3 px-4">
         <TotalPayment />
-        <div className="divider"></div>
 
         <div>
           <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
