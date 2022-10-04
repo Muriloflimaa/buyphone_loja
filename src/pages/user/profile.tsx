@@ -5,7 +5,6 @@ import toast from 'react-hot-toast'
 import ReactInputMask from 'react-input-mask'
 import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
-import { PersistentLogin } from '../../utils/PersistentLogin'
 import jwt_decode from 'jwt-decode'
 import { GetServerSidePropsContext } from 'next'
 

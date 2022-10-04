@@ -5,13 +5,12 @@ import Card from '../../../components/Card/index'
 import ShippingCard from '../../../components/ShippingCard.tsx'
 
 export default function credit() {
-  const [name, setName] = useState('José Antonio')
+  const [name, setName] = useState('')
   const [card, setCard] = useState('')
   const [expiration_date, setExpiration_date] = useState('')
   const [code, setCode] = useState('')
   const [flag, setFlag] = useState('')
   const [document, setDocument] = useState('')
-  const [unMask, setUnMask] = useState()
   const [focus, setFocus] = useState(false)
 
   function inputFocus() {

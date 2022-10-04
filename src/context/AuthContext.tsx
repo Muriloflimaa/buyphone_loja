@@ -1,11 +1,9 @@
-import axios from 'axios'
 import Router from 'next/router'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
-import toast from 'react-hot-toast'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
-import { api } from '../services/apiClient'
+import { ToastCustom } from '../utils/toastCustom'
 
 type SignInCredentials = {
   email: string
@@ -18,8 +16,8 @@ type UserDataType = {
 
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>
-  signOut: any
-  user: any
+  signOut: Function
+  user: string | undefined | number
   isAuthenticated: boolean
   userData: UserDataType | undefined
 }
@@ -30,7 +28,7 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export const setCookies = (key: any, value: any) => {
+export const setCookies = (key: string, value: string | number | object) => {
   if (typeof value !== 'string') {
     value = JSON.stringify(value)
   }
@@ -76,7 +74,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       window.location.href = '/'
     } catch (error) {
-      toast.error('Não foi possível fazer o login')
+      ToastCustom(
+        3000,
+        'Não foi possível fazer o login',
+        'error',
+        'Notificação'
+      )
     }
   }
 

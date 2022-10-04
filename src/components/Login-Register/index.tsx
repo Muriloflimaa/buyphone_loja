@@ -48,16 +48,18 @@ const LoginRegister = ({ children }: Homeprops) => {
         >
           <div className="card-body w-full ">
             <div className="w-full">
-              <div className="flex justify-center">
-                <Link href={'/login'} className="cursor-pointer" passHref>
-                  <div className="w-56 h-auto cursor-pointer">
-                    <Image
-                      src={LogoSvg}
-                      layout="responsive"
-                      alt="Logo BuyPhone"
-                    />
-                  </div>
-                </Link>
+              <div
+                className="flex justify-center cursor-pointer"
+                onClick={() => router.push('/login')}
+              >
+                <Image
+                  src={LogoSvg}
+                  layout="fixed"
+                  width={160}
+                  height={80}
+                  className="object-contain"
+                  alt="Logo BuyPhone"
+                />
               </div>
               {showBack === true ? (
                 <div className="flex justify-center pt-4">

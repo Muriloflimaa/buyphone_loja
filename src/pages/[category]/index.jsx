@@ -1,10 +1,11 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import ProductCard from '../../components/ProductCard'
 import { apiPedidos } from '../../services/apiClient'
 import { AuthContext } from '../../context/AuthContext'
+import Head from 'next/head'
 
 export default function Products({ data }) {
   const { userData } = useContext(AuthContext)
@@ -12,6 +13,9 @@ export default function Products({ data }) {
 
   return (
     <>
+      <Head>
+        <title>BuyPhone - {data.data.name}</title>
+      </Head>
       <div className="h-auto">
         <div className="flex justify-center mx-5">
           <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm text-center md:text-md w-full max-w-7xl">
@@ -40,21 +44,21 @@ export default function Products({ data }) {
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-
               return ourPrice ? (
-                <ProductCard
-                  key={products.id + 0}
-                  id={products.id}
-                  name={products.name}
-                  // idCategory={category.id}
-                  colorPhone={products.color}
-                  price={ourPrice}
-                  averagePrice={averagePrice}
-                  slug={products.slug}
-                  slugCategory={data.data.slug}
-                  image={products.media[0].original_url}
-                  memory={products.memory}
-                />
+                <React.Fragment key={products.id}>
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={data.data.slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                  />
+                </React.Fragment>
               ) : (
                 <></>
               )
@@ -88,7 +92,7 @@ export const getStaticProps = async (context) => {
       props: {
         data,
       },
-      revalidate: 60 * 60 * 24 * 30,
+      revalidate: 60 * 30,
     }
   } catch (error) {
     return {

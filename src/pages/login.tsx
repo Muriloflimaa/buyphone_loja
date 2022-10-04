@@ -1,22 +1,44 @@
-import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
-import { FormEvent, useContext, useState } from 'react'
-import { AuthContext, setCookies } from '../context/AuthContext'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Input } from '../components/InputElement'
+import Link from 'next/link'
+
+type SignInFormData = {
+  email: string
+  password: string
+}
 
 export default function login() {
-  const [show, setShow] = useState(true)
   const { signIn } = useContext(AuthContext)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-    const data = {
-      email,
-      password,
-    }
-    await signIn(data)
+  const signInFormSchema = yup.object().shape({
+    email: yup
+      .string()
+      .required('Campo email é obrigatório')
+      .email('Esse campo precisa ser um e-mail'),
+    password: yup
+      .string()
+      .required('Campo senha é obrigatório')
+      .min(6, 'Minímo 6 digitos'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(signInFormSchema),
+  })
+
+  const { errors } = formState
+
+  const handleSignIn: SubmitHandler<SignInFormData | any> = async (
+    values,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await signIn(values)
   }
 
   return (
@@ -24,68 +46,50 @@ export default function login() {
       <h1 className="text-2xl flex justify-center pt-4 text-default font-medium">
         Faça login ou cadastre-se
       </h1>
-      <form onSubmit={handleSubmit} className="w-full">
-        {/* começo login */}
-        <div className="form-control w-full">
-          <div>
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <label className="input-group">
-              <input
-                defaultValue={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="BuyPhone@gmail.com"
-                required
-                className="input input-bordered rounded-md !important w-full text-PrimaryText"
-              />
-            </label>
-          </div>
-          <div>
-            <label className="label">
-              <span className="label-text">Senha</span>
-            </label>
-            <label className="input-group">
-              <input
-                defaultValue={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type={show ? 'password' : 'text'}
-                placeholder="●●●●●●●"
-                required
-                className="input input-bordered rounded-tl-md rounded-tb-md !important w-full text-PrimaryText"
-              />
-              <span onClick={() => setShow(!show)}>
-                {show ? (
-                  <EyeOffIcon className="w-4 h-4" />
-                ) : (
-                  <EyeIcon className="w-4 h-4" />
-                )}
-              </span>
-            </label>
-          </div>
-        </div>
-        {/* fim login */}
-        <div className="flex justify-end w-full my-2">
-          <Link href={'/forgout-password'} passHref>
-            <a className="text-xs  text-blue-600 link cursor-pointer">
-              Esqueceu sua senha?
-            </a>
-          </Link>
-        </div>
-        <button
-          type="submit"
-          className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+      <div className="w-full">
+        <form
+          onSubmit={handleSubmit(handleSignIn)}
+          className="form-control gap-2 w-full"
         >
-          Entrar
-        </button>
-        <div className="text-default mt-4 flex gap-1 justify-center">
-          Deseja criar uma conta?
-          <Link href={'/register'} passHref>
-            <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
-          </Link>
-        </div>
-      </form>
+          <Input
+            {...register('email')}
+            type="text"
+            label="Email"
+            error={errors.email}
+          />
+          <Input
+            {...register('password')}
+            label="Senha"
+            type="password"
+            error={errors.password}
+          />
+          <div className="flex justify-end w-full">
+            <Link href={'/forgot-password'} passHref>
+              <a className="text-xs  text-blue-600 link cursor-pointer">
+                Esqueceu sua senha?
+              </a>
+            </Link>
+          </div>
+          {formState.isSubmitting ? (
+            <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+              Carregando
+            </button>
+          ) : (
+            <button
+              className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+              type="submit"
+            >
+              Entrar
+            </button>
+          )}
+          <div className="text-default flex gap-1 justify-center">
+            Deseja criar uma conta?
+            <Link href={'/register'} passHref>
+              <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
+            </Link>
+          </div>
+        </form>
+      </div>
     </>
   )
 }

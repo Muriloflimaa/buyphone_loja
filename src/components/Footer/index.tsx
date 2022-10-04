@@ -11,19 +11,19 @@ import Parc1Svg from '../../assets/images/Group115.svg'
 import Parc2Svg from '../../assets/images/image28.svg'
 import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { apiPedidos } from '../../services/apiClient'
 
 export default function Footer() {
-  const [dataApi, setDataApi] = useState<any>()
+  const [dataApi, setDataApi] = useState<Array<{}> | undefined>()
 
   useEffect(() => {
     async function Data() {
       try {
         const DATA = await apiPedidos.get(`categories/`)
-        setDataApi(DATA.data)
+        setDataApi(DATA.data.data)
       } catch (error) {
-        setDataApi(null)
+        setDataApi(undefined)
       }
     }
     Data()
@@ -37,8 +37,8 @@ export default function Footer() {
             Categorias
           </h3>
           <ul className="text-info-content gap-1 opacity-90">
-            {dataApi?.data.length > 0 ? (
-              dataApi.data.map((category: any) => (
+            {dataApi ? (
+              dataApi.map((category: ICategory | any) => (
                 <li key={category.id}>
                   <Link href={`/${category.slug}`} passHref>
                     <a className="w-max">{category.name}</a>

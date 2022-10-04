@@ -8,7 +8,7 @@ import styles from './Card.module.scss'
 interface CardProps {
   name: string
   card: string
-  expiration_date: any
+  expiration_date: string | number
   foc: boolean
   code: string
   flags: string

@@ -53,10 +53,10 @@ module.exports = {
         },
         dark: {
           ...require('daisyui/src/colors/themes')['[data-theme=dark]'],
-          'base-100': '#161C24',
-          secondary: '#161C24',
-          'base-content': '#FFFFFF',
           primary: '#161C24',
+          secondary: '#161C24',
+          'base-100': '#161C24',
+          'base-content': '#FFFFFF',
           accent: '#212B36',
           info: '#0E9AFF',
           success: '#00A944',

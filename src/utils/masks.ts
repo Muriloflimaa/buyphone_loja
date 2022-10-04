@@ -17,15 +17,32 @@ export const cpfMask = (value: string) => {
   value = value + ''
 
   if (value.length <= 11) {
-    value = value.replace(/(\d{3})(\d)/, "$1.$2")
-    value = value.replace(/(\d{3})(\d)/, "$1.$2")
-    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+    value = value.replace(/(\d{3})(\d)/, '$1.$2')
+    value = value.replace(/(\d{3})(\d)/, '$1.$2')
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
   } else {
-    value = value.replace(/^(\d{2})(\d)/, "$1.$2")
-    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-    value = value.replace(/\.(\d{3})(\d)/, ".$1/$2")
-    value = value.replace(/(\d{4})(\d)/, "$1-$2")
+    value = value.replace(/^(\d{2})(\d)/, '$1.$2')
+    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    value = value.replace(/\.(\d{3})(\d)/, '.$1/$2')
+    value = value.replace(/(\d{4})(\d)/, '$1-$2')
   }
 
   return value
+}
+
+export function maskCpfInput(evt: any) {
+  var v = evt?.target.value
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+
+  evt.target.value = v
+}
+
+export function masktel(evt: any) {
+  var v = evt?.target.value
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d)/g, '($1) $2')
+    .replace(/(\d)(\d{4})$/, '$1-$2')
+  evt.target.value = v
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { GetUseType } from '../../utils/getUserType'
 import { date, moneyMask } from '../../utils/masks'
 
 interface ListProductsProps {
@@ -22,6 +22,7 @@ interface ListProductsProps {
   pdf: string
   expired: string
 }
+
 const ListProducts = ({
   created,
   statuspayment,
@@ -41,6 +42,7 @@ const ListProducts = ({
   expired,
 }: ListProductsProps) => {
   const router = useRouter()
+  const user = GetUseType()
 
   const copyToClipBoard = async (copyMe: string) => {
     try {
@@ -52,9 +54,11 @@ const ListProducts = ({
   }
 
   return (
-    <div className="collapse collapse-arrow card show border border-gray-100">
+    <div
+      className={'collapse collapse-arrow card shadow-lg shadow-indigo-500/50 '}
+    >
       <input type="checkbox" className="peer" />
-      <div className="collapse-title border-b flex justify-between items-center">
+      <div className="collapse-title flex justify-between items-center">
         <span className="font-bold text-lg">Pedido #{number}</span>
 
         <div className="flex gap-2 items-center">
@@ -65,12 +69,17 @@ const ListProducts = ({
             'manual_paid' ??
             'captured' ? (
               <>
-                <label
-                  htmlFor={CodImgPix}
-                  className="badge cursor-pointer z-10"
-                >
-                  Realizar pagamento
-                </label>
+                <div className="justify-end flex-col items-center cursor-pointer">
+                  <label
+                    htmlFor={CodImgPix}
+                    className={
+                      'badge cursor-pointer animate-pulse ' +
+                      (user?.type === 1 ? 'badge-info' : '')
+                    }
+                  >
+                    Realizar pagamento
+                  </label>
+                </div>
 
                 <input
                   type="checkbox"
@@ -99,13 +108,25 @@ const ListProducts = ({
                             <div className="grid gap-2">
                               <a
                                 onClick={() => copyToClipBoard(`${brCode}`)}
-                                className="btn btn-primary btn-block font-bold normal-case"
+                                className={
+                                  'btn font-bold normal-case ' +
+                                  (user?.type === 1
+                                    ? 'btn-info bg-white text-black hover:opacity-80'
+                                    : 'btn-primary')
+                                }
                               >
                                 Copiar QRCode
                               </a>
 
                               <Link href={pdf}>
-                                <a className="btn btn-primary btn-outline btn-block font-bold normal-case">
+                                <a
+                                  className={
+                                    'btn font-bold normal-case ' +
+                                    (user?.type === 1
+                                      ? 'btn-info bg-white text-black hover:opacity-80'
+                                      : 'btn-primary')
+                                  }
+                                >
                                   Baixar PDF
                                 </a>
                               </Link>
@@ -130,7 +151,12 @@ const ListProducts = ({
                               </div>
                             </div>
                             <a
-                              className="btn btn-primary btn-outline btn-block font-bold normal-case"
+                              className={
+                                'btn font-bold normal-case ' +
+                                (user?.type === 1
+                                  ? 'btn-info bg-white text-black hover:opacity-80'
+                                  : 'btn-primary')
+                              }
                               onClick={() => router.push('/myshopping')}
                             >
                               Verificar Pagamento

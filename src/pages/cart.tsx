@@ -41,7 +41,7 @@ export default function Cart() {
   }, [cart])
 
   useEffect(() => {
-    const values = data.filter(function (this: any, a: any) {
+    const values = data.filter(function (this: any, a: number) {
       return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true)
     }, Object.create(null)) //removendo items duplicados do array, o data manda o primeiro produto adicionado 2x
     setValues(values) //setando values para dar o map no productCart
