@@ -1,30 +1,29 @@
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
 
 interface PixPaymentProps {
-  invoice_id: string
-  id: number
-  pdf: string
-  brcode: string
-  amount: any
+  pix: {
+    amount: number
+    brcode: string
+    created_at: string
+    id: number
+    invoice_id: string
+    link: string
+    order_id: number
+    pdf: string
+    qrcode: string
+    status: string
+    updated_at: string
+  }
 }
 
-export default function PixCheckout() {
+export default function PixCheckout({ pix }: PixPaymentProps) {
   const router = useRouter()
-  const { '@BuyPhone:Pix': pix } = parseCookies(undefined)
-  const [pixPayment, setPixPayment] = useState<PixPaymentProps>()
-
-  useEffect(() => {
-    if (pix) {
-      setPixPayment(JSON.parse(pix))
-    }
-  }, [])
-
   const user = GetUseType()
 
   const copyToClipBoard = async (copyMe: string) => {
@@ -43,17 +42,17 @@ export default function PixCheckout() {
           <div className="text-center w-full grid gap-3">
             <div className="card card-compact shadow w-fit mx-auto">
               <img
-                src={`https://loja.buyphone.com.br/img/qrcode/${pixPayment?.invoice_id}.png`}
+                src={`https://loja.buyphone.com.br/img/qrcode/${pix.invoice_id}.png`}
                 alt="QRCode"
                 className="mx-auto h-32"
               />
             </div>
             <h3 className="font-bold text-2xl">
-              Valor: R$ {moneyMask(pixPayment?.amount?.toString())}
+              Valor: R$ {moneyMask(pix.amount?.toString())}
             </h3>
             <div className="grid gap-2">
               <a
-                onClick={() => copyToClipBoard(`${pixPayment?.brcode}`)}
+                onClick={() => copyToClipBoard(`${pix.brcode}`)}
                 className={
                   'btn font-bold normal-case ' +
                   (user?.type === 1
@@ -64,7 +63,7 @@ export default function PixCheckout() {
                 Copiar QRCode
               </a>
 
-              <Link href={pixPayment?.pdf ?? ''}>
+              <Link href={pix?.pdf ?? ''}>
                 <a
                   className={
                     'btn font-bold normal-case ' +
@@ -85,7 +84,7 @@ export default function PixCheckout() {
             </div>
             <div className="flex flex-col gap-3">
               <h3 className="font-bold text-3xl">
-                Enviar R$ {moneyMask(pixPayment?.amount?.toString())} para:
+                Enviar R$ {moneyMask(pix.amount.toString())} para:
               </h3>
               <div>
                 <span className="font-bold">Nome:</span> Buyp Programas de
@@ -111,4 +110,10 @@ export default function PixCheckout() {
       </div>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:Pix': pixCookies } = parseCookies(ctx)
+  const pix = JSON.parse(pixCookies)
+  return { props: { pix } }
 }

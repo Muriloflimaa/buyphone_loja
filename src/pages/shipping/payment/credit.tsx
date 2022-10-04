@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import ReactInputMask from 'react-input-mask'
 import Card from '../../../components/Card/index'
-import ShippingCard from '../../../components/ShippingCard.tsx'
+import { TotalPayment } from '../../../components/TotalPayment'
 
 export default function credit() {
   const [name, setName] = useState('')
@@ -39,9 +39,9 @@ export default function credit() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto grid gap-3 my-10">
-        <ShippingCard />
-        <div className="flex flex-col gap-4 max-w-4xl mx-auto my-6">
+      <div className="max-w-7xl mx-auto grid gap-3">
+        <TotalPayment />
+        <div className="flex flex-col gap-4 max-w-4xl mx-auto px-4">
           <h3 className="font-medium flex items-center gap-2">
             <Link href={'/shipping/payment'} passHref>
               <a className="flex items-center gap-2 normal-case lg:gap-3 my-2">
