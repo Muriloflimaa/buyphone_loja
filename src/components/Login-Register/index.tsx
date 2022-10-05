@@ -10,15 +10,12 @@ interface Homeprops {
 }
 
 const LoginRegister = ({ children }: Homeprops) => {
-  const [width, setWidth] = useState('')
   const [showBack, setShowBack] = useState(false)
   const router = useRouter()
   useEffect(() => {
     if (router.asPath == '/terms' || router.asPath == '/politics') {
-      setWidth('max-w-2xl')
       setShowBack(true)
     } else {
-      setWidth('max-w-md')
       setShowBack(false)
     }
   }, [router])
@@ -40,17 +37,10 @@ const LoginRegister = ({ children }: Homeprops) => {
       </ul>
 
       <div className="px-4 min-h-screen flex justify-center items-center mx-auto">
-        <div
-          className={
-            'card bg-white z-50 w-full flex flex-col shadow-lg ' + width
-          }
-        >
+        <div className="card bg-white z-50 w-full flex flex-col shadow-lg max-w-md">
           <div className="card-body w-full ">
             <div className="w-full">
-              <div
-                className="flex justify-center cursor-pointer"
-                onClick={() => router.push('/login')}
-              >
+              <div className="flex justify-center">
                 <Image
                   src={LogoSvg}
                   layout="fixed"

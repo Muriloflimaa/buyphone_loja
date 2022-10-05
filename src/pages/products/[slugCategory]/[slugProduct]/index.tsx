@@ -219,28 +219,36 @@ export default function Products({ data }: DataProps) {
 }
 
 export const getStaticProps = async ({ params }: IParams) => {
-  const data = await apiPedidos.get(
-    `products/${params.slugCategory}/${params.slugProduct}`
-  )
-  return {
-    props: {
-      data: data.data,
-    },
-    revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
+  try {
+    const data = await apiPedidos.get(
+      `products/${params.slugCategory}/${params.slugProduct}`
+    )
+    return {
+      props: {
+        data: data.data,
+      },
+      revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
+    }
+  } catch (error) {
+    return { props: {} }
   }
 }
 
 export const getStaticPaths = async () => {
-  const { data } = await apiPedidos.get(`products/`)
-  const paths = data.data.map((product: IProduct) => ({
-    params: {
-      slugCategory: product.category_slug.replace('-3-geracao', ''),
-      slugProduct: product.slug,
-    },
-  }))
+  try {
+    const { data } = await apiPedidos.get(`products/`)
+    const paths = data.data.map((product: IProduct) => ({
+      params: {
+        slugCategory: product.category_slug.replace('-3-geracao', ''),
+        slugProduct: product.slug,
+      },
+    }))
 
-  return {
-    paths,
-    fallback: false,
+    return {
+      paths,
+      fallback: false,
+    }
+  } catch (error) {
+    return {}
   }
 }

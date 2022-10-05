@@ -119,7 +119,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
    *
    */
   const addProduct = async (productId: number) => {
-    if (values.length <= 6) {
+    if (cart.length <= 6) {
       try {
         //Criando um novo array para manipular o cart
         const updatedCart = [...cart]
@@ -163,7 +163,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       } catch {
         ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
         localStorage.removeItem('@BuyPhone:cart')
-        setCart([]) // se der algum erro a aplicação irá limpar o storage e atualizar o carrinho
+        CleanCart()
       }
     } else {
       ToastCustom(
@@ -194,7 +194,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
     } catch {
       ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Notificação')
-      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart()
     }
   }
   /**
@@ -231,7 +231,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         'error',
         'Notificação'
       )
-      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart()
     }
   }
 

@@ -104,15 +104,19 @@ export const getStaticProps = async (context) => {
 }
 
 export async function getStaticPaths() {
-  const { data } = await apiPedidos.get(`categories/`)
+  try {
+    const { data } = await apiPedidos.get(`categories/`)
 
-  const paths = data.data.map((category) => {
-    return {
-      params: {
-        category: `${category.slug}`,
-      },
-    }
-  })
+    const paths = data.data.map((category) => {
+      return {
+        params: {
+          category: `${category.slug}`,
+        },
+      }
+    })
 
-  return { paths, fallback: false }
+    return { paths, fallback: false }
+  } catch (error) {
+    return {}
+  }
 }
