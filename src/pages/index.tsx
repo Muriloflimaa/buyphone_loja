@@ -1,7 +1,7 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { NextPage } from 'next'
+import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useContext } from 'react'
@@ -120,7 +120,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
   )
 }
 
-export const getServerSideProps = PersistentLogin(async (ctx) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     const { data } = await apiPedidos.get(`categories/`)
     return {
@@ -135,6 +135,6 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
       },
     }
   }
-})
+}
 
 export default Home

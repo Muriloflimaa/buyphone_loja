@@ -1,20 +1,19 @@
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
-import { Input } from '../../components/InputElement'
 import { apiStoreBeta } from '../../services/apiBetaConfigs'
 import { setCookies } from '../../utils/useCookies'
-import jwt_decode from 'jwt-decode'
 import { TotalPayment } from '../../components/TotalPayment'
 import { faMap } from '@fortawesome/free-regular-svg-icons'
 import { PersistentLogin } from '../../utils/PersistentLogin'
+import { Input } from '../../components/InputElement'
+import { mascaraCep } from '../../utils/masks'
 
 type GetCepTypes = {
   cep: string
@@ -45,15 +44,15 @@ export interface Address {
 export default function Shipping({ userJson }: userJsonTypes) {
   const [Address, setAddress] = useState<Address[]>([])
 
-  // async function handleRemoveAddress(id: number) {
-  //   console.log(id)
-  //   try {
-  //     setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
-  //     await apiStoreBeta.delete(`addresses/${id}`)
-  //   } catch (error) {
-  //     toast.error('Ocorreu um erro no servidor, contate o suporte')
-  //   }
-  // }
+  async function handleRemoveAddress(id: number) {
+    console.log(id)
+    try {
+      setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
+      await apiStoreBeta.delete(`addresses/${id}`)
+    } catch (error) {
+      return
+    }
+  }
 
   useEffect(() => {
     getAddress()
@@ -89,6 +88,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
       const response = await apiStoreBeta.get(`addresses/cep/${cep}`)
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
+        return
       }
       setCookies('@BuyPhone:GetCep', response.data, 60 * 60)
       router.push('/shipping/address')
@@ -123,8 +123,8 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 {...register('cep')}
                 type="text"
                 label="CEP"
-                max="9"
-                mask="cep"
+                maxLength={9}
+                onChange={(e) => mascaraCep(e.target, '#####-####')}
                 error={errors.cep}
               />
               <button type="submit" className="link self-end text-info">
@@ -137,33 +137,39 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 <h3 className="font-medium">Ou selecione um endereço abaixo</h3>
               )}
               {Address.map((ad) => {
-                console.log(ad)
                 return (
-                  <div key={ad.id} className="w-full cursor-pointer">
-                    <div
-                      onClick={() =>
-                        handleAddressDefault({
-                          ...ad,
-                        })
-                      }
-                      className="normal-case btn btn-sm btn-primary btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
-                    >
-                      <div className="flex items-center gap-8">
-                        <FontAwesomeIcon
-                          icon={faMap}
-                          className="w-8 h-8"
-                        ></FontAwesomeIcon>
-                        <div className="flex flex-col items-start text-start text-xs font-medium">
-                          <span className="font-bold">{`${ad.address}, ${ad.number}`}</span>
-                          <span>{ad.neighborhood}</span>
-                          <span>{`${ad.city} ${ad.uf}`}</span>
+                  <div className="flex gap-2 w-full items-center">
+                    <div key={ad.id} className="w-full cursor-pointer">
+                      <div
+                        onClick={() =>
+                          handleAddressDefault({
+                            ...ad,
+                          })
+                        }
+                        className="normal-case btn btn-sm btn-primary btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
+                      >
+                        <div className="flex items-center gap-3 md:gap-8">
+                          <FontAwesomeIcon
+                            icon={faMap}
+                            className="w-8 h-8"
+                          ></FontAwesomeIcon>
+                          <div className="flex flex-col items-start text-start text-xs font-medium">
+                            <span className="font-bold">{`${ad.address}, ${ad.number}`}</span>
+                            <span>{ad.neighborhood}</span>
+                            <span>{`${ad.city} ${ad.uf}`}</span>
+                          </div>
                         </div>
+                        <FontAwesomeIcon
+                          icon={faAngleRight}
+                          className="w-4 h-4"
+                        ></FontAwesomeIcon>
                       </div>
-                      <FontAwesomeIcon
-                        icon={faAngleRight}
-                        className="w-4 h-4"
-                      ></FontAwesomeIcon>
                     </div>
+                    <FontAwesomeIcon
+                      onClick={() => handleRemoveAddress(ad.id)}
+                      icon={faTrash}
+                      className="w-5 h-5 cursor-pointer"
+                    />
                   </div>
                 )
               })}

@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import { useState } from 'react'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
@@ -8,15 +8,15 @@ import { Address, ArrayProduct, ProductPayment } from '../../../types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Input } from '../../../components/InputTeste'
+import { Input } from '../../../components/InputElement'
 import {
+  maskCpfCnpjInput,
   maskCpfInput,
   maskCreditCard,
   maskExpirationDate,
   maskMustNumber,
 } from '../../../utils/masks'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
-import { useRouter } from 'next/router'
 import { useCart } from '../../../context/UseCartContext'
 import { ToastCustom } from '../../../utils/toastCustom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -34,7 +34,6 @@ export default function credit({ address }: Address) {
   const [focus, setFocus] = useState(false)
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const router = useRouter()
   const { values, somaTotal, CleanCart } = useCart()
 
   const checksFlag = (card: string) => {
@@ -103,6 +102,8 @@ export default function credit({ address }: Address) {
 
       if (data.original.status === 'paid') {
         setStateModalSuccess(true)
+        CleanCart()
+        destroyCookie(undefined, '@BuyPhone:GetCep')
       } else {
         setStateModalError(true)
       }
@@ -292,10 +293,10 @@ export default function credit({ address }: Address) {
                 <Input
                   {...register('document')}
                   type="text"
-                  label="document / CNPJ"
+                  label="CPF / CNPJ"
                   error={errors.document}
-                  onKeyUp={(e) => maskCpfInput(e)}
-                  maxLength={14}
+                  onChange={(e) => maskCpfCnpjInput(e)}
+                  maxLength={18}
                 />
                 <div className="field-container">
                   <label htmlFor="installments" className="label">

@@ -40,6 +40,42 @@ export function maskCpfInput(evt: any) {
   evt.target.value = v
 }
 
+export function maskCpfCnpjInput(evt: any) {
+  //Remove tudo o que não é dígito
+  var v = evt?.target.value
+  v = v.replace(/\D/g, '')
+
+  if (v.length <= 11) {
+    //CPF
+
+    //Coloca um ponto entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d)/, '$1.$2')
+
+    //Coloca um ponto entre o terceiro e o quarto dígitos
+    //de novo (para o segundo bloco de números)
+    v = v.replace(/(\d{3})(\d)/, '$1.$2')
+
+    //Coloca um hífen entre o terceiro e o quarto dígitos
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+  } else {
+    //CNPJ
+
+    //Coloca ponto entre o segundo e o terceiro dígitos
+    v = v.replace(/^(\d{2})(\d)/, '$1.$2')
+
+    //Coloca ponto entre o quinto e o sexto dígitos
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+
+    //Coloca uma barra entre o oitavo e o nono dígitos
+    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2')
+
+    //Coloca um hífen depois do bloco de quatro dígitos
+    v = v.replace(/(\d{4})(\d)/, '$1-$2')
+  }
+
+  evt.target.value = v
+}
+
 export function maskCreditCard(evt: any) {
   var v = evt?.target.value
   v = v.replace(/\D/g, '') // Permite apenas dígitos

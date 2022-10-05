@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ProductCart from '../components/ProductCart'
 import { useCart } from '../context/UseCartContext'
@@ -8,11 +10,9 @@ import { moneyMask } from '../utils/masks'
 import { verificationPrice } from '../utils/verificationPrice'
 
 export default function Cart() {
-  const { cart } = useCart()
+  const { cart, CleanCart, values, somaTotal } = useCart()
   const user = GetUseType()
-  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
-  const [data, setData] = useState<ArrayProduct | Array<{}> | any>([{}]) //state que recebe os produtos chamados da api
-  const [values, setValues] = useState([]) //recebe o values do useEffect sem o item duplicado
+  const router = useRouter()
   const [cartSize, setCartSize] = useState<number>()
 
   useEffect(() => {
@@ -20,42 +20,6 @@ export default function Cart() {
       setCartSize(cart.length)
     }
   }, [cart])
-
-  useEffect(() => {
-    setData([]) //zera o array do data
-    cart.map(async (item) => {
-      try {
-        const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
-        const returnPrice = verificationPrice(data.data.data, user) //verificando preço
-        const response = {
-          ...item, //adicionando amount e id que está no localstorage
-          product: data.data.data, //data vem da api que é chamada
-          priceFormated: returnPrice.ourPrice, //formatação de preços
-          subTotal: returnPrice.ourPrice * item.amount, //total simples
-        }
-        setData((data: Array<{}>) => [...data, response]) //gravando response no state
-      } catch (error) {
-        setData([]) //se der erro zerar o data com um array vazio
-      }
-    })
-  }, [cart])
-
-  useEffect(() => {
-    const values = data.filter(function (this: any, a: number) {
-      return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true)
-    }, Object.create(null)) //removendo items duplicados do array, o data manda o primeiro produto adicionado 2x
-    setValues(values) //setando values para dar o map no productCart
-
-    const total = values.map((product: ArrayProduct) => {
-      return product.subTotal
-    }, 0) //da um map nos produtos e adiciona a const total
-
-    var soma = 0
-    for (var i = 0; i < total.length; i++) {
-      soma += total[i]
-    }
-    setSomaTotal(soma) //somando produtos e setando no state
-  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   return (
     <>
@@ -104,6 +68,15 @@ export default function Cart() {
         ) : (
           ''
         )}
+        {cartSize && cartSize > 0 ? (
+          <div className="card-actions justify-center">
+            <Link href={'/shipping'}>
+              <a className="btn btn-success btn-block font-medium normal-case">
+                Finalizar Compra
+              </a>
+            </Link>
+          </div>
+        ) : null}
       </div>
     </>
   )

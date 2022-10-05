@@ -4,8 +4,8 @@ import { WithSSRGuest } from '../utils/WithSSRGuest'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Input } from '../components/InputElement'
 import Link from 'next/link'
+import { Input } from '../components/InputElement'
 
 type SignInFormData = {
   email: string
@@ -55,12 +55,13 @@ export default function login() {
             {...register('email')}
             type="text"
             label="Email"
-            error={errors.email}
+            error={errors.password}
           />
+
           <Input
             {...register('password')}
-            label="Senha"
             type="password"
+            label="Senha"
             error={errors.password}
           />
           <div className="flex justify-end w-full">

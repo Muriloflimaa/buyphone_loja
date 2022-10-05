@@ -44,13 +44,13 @@ export default function pix({ address }: Address) {
       }
       const { data } = await apiStoreBeta.post('checkout/pix', items)
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
-      destroyCookie({}, '@BuyPhone:GetCep')
+      destroyCookie(undefined, '@BuyPhone:GetCep')
       CleanCart()
       router.push('/shipping/payment/pix-checkout')
     } catch (error) {
       ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
       CleanCart()
-      destroyCookie({}, '@BuyPhone:GetCep')
+      destroyCookie(undefined, '@BuyPhone:GetCep')
       router.push('/')
     }
   }

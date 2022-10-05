@@ -1,18 +1,27 @@
-import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
+import {
+  faCircleCheck,
+  faCircleXmark,
+  faCreditCard,
+} from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
-import { parseCookies } from 'nookies'
+import Link from 'next/link'
+import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
 import { Address, ArrayProduct, ProductPayment } from '../../../types'
+import { moneyMask } from '../../../utils/masks'
+import { ToastCustom } from '../../../utils/toastCustom'
 
 export default function MatchInstallments({ address }: Address) {
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
+  const [stateModalSuccess, setStateModalSuccess] = useState(false)
+  const [stateModalError, setStateModalError] = useState(false)
   const installments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   const { '@BuyPhone:GetCredit': Getcredit } = parseCookies(undefined)
 
@@ -44,17 +53,94 @@ export default function MatchInstallments({ address }: Address) {
         amount: somaTotal,
       })
 
-      console.log(data)
-    } catch (error) {
-      console.log(error)
+      if (data.original.status === 'paid') {
+        setStateModalSuccess(true)
+        CleanCart()
+        destroyCookie(null, '@BuyPhone:GetCep')
+        destroyCookie(null, '@BuyPhone:GetCredit')
+      } else {
+        setStateModalError(true)
+      }
+    } catch (error: any) {
+      if (error.response.data.errors?.document) {
+        ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
+        return
+      }
+
+      setStateModalError(true)
     }
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
       <TotalPayment />
+      {stateModalSuccess == true && (
+        <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
+          <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
+            <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
+              <FontAwesomeIcon icon={faCircleCheck} className="h-20 w-h-20" />
+              <h3 className="font-bold text-2xl">Sucesso!</h3>
+            </div>
+
+            <div className="divider m-0 mt-36"></div>
+            <p className="font-bold text-lg text-success">
+              Obrigado pela sua compra!
+            </p>
+            <span className="mb-6 text-success">
+              O seu pedido foi aceito. <br />
+              Você irá receber uma notificação com os detalhes do pedido no seu
+              e-mail.
+            </span>
+
+            <Link href={'/myshopping'} passHref>
+              <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
+                Ok
+              </button>
+            </Link>
+            <Link href={'/'} passHref>
+              <a className="link  md:mb-0 text-success">
+                Ir para página inicial
+              </a>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {stateModalError == true && (
+        <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
+          <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
+            <div className="bg-error shadow-sm shadow-error w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
+              <FontAwesomeIcon icon={faCircleXmark} className="h-20 w-h-20" />
+              <h3 className="font-bold text-2xl">Falha!</h3>
+            </div>
+
+            <div className="divider m-0 mt-36"></div>
+            <p className="font-bold text-lg text-error">
+              Ops, ocorreu alguma falha no pagamento!
+            </p>
+            <span className="mb-6 text-error">
+              Tente novamente ou contate o nosso suporte.
+            </span>
+
+            <button
+              onClick={() => setStateModalError(false)}
+              className="btn btn-error max-w-xs text-white w-full rounded-full shadow-md shadow-error/60"
+            >
+              Tentar novamente
+            </button>
+
+            <a
+              target={'_blank'}
+              href="#link-para-suporte"
+              className="link  md:mb-0 text-error"
+            >
+              Contatar o suporte
+            </a>
+          </div>
+        </div>
+      )}
       <div>
-        <h2 className="text-2xl md:text-3xl font-medium text-start my-6">
+        <h2 className="text-2xl md:text-3xl font-medium text-center md:text-start my-6">
           Em quantas vezes?
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
@@ -92,8 +178,20 @@ export default function MatchInstallments({ address }: Address) {
               </button>
             </div>
           </div>
-          <div className="card card-compact bg-base-100 w-full ">
-            <div className="card-body p-4 gap-4">
+          <div className="card card-compact bg-base-100 shadow w-full h-fit">
+            <div className="card-body">
+              <div className="flex justify-between items-center">
+                <span className="text-lg uppercase">Meu Carrinho</span>
+                <span className="font-thin text-xs">
+                  {cartSize && cartSize > 1
+                    ? cartSize + ' itens'
+                    : cartSize == 1
+                    ? cartSize + ' item'
+                    : 'Carrinho está vazio'}
+                </span>
+              </div>
+            </div>
+            <div className="card-body">
               {cartSize && cartSize > 0 ? (
                 values.map(
                   (res) =>
@@ -135,6 +233,14 @@ export default function MatchInstallments({ address }: Address) {
                   <h1>Carregando...</h1>
                 </div>
               )}
+            </div>
+            <div className="card-body bg-base-200">
+              <div className="flex justify-between py-4">
+                <span className="text-gray-500 text-lg">Valor Total:</span>
+                <span className="font-semibold text-lg">
+                  R$ {moneyMask(somaTotal.toString())}
+                </span>
+              </div>
             </div>
           </div>
         </div>

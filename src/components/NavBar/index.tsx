@@ -28,7 +28,7 @@ import styles from './styles.module.scss'
 export default function NavBar() {
   const { isAuthenticated, signOut } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
-  const { cart, CleanCart, values, somaTotal } = useCart()
+  const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
   const [isUser, setIsUser] = useState(false)
@@ -270,13 +270,11 @@ export default function NavBar() {
                               Meu Carrinho
                             </span>
                             <span className="font-thin text-xs">
-                              {cartSize && cartSize > 1 ? (
-                                cartSize + ' itens'
-                              ) : cartSize == 1 ? (
-                                cartSize + ' item'
-                              ) : (
-                                <h1>Carrinho está vazio</h1>
-                              )}
+                              {cartSize && cartSize > 1
+                                ? cartSize + ' itens'
+                                : cartSize == 1
+                                ? cartSize + ' item'
+                                : 'Carrinho está vazio'}
                             </span>
                           </div>
                         </div>

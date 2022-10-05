@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
@@ -60,16 +60,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 90)
       const cookies = parseCookies(undefined)
 
-      if (cookies['@BuyPhone:Router']) {
+      if (
+        cookies['@BuyPhone:Router'] &&
+        cookies['@BuyPhone:Router'] !== 'undefined'
+      ) {
         window.location.href = cookies['@BuyPhone:Router']
         destroyCookie({}, '@BuyPhone:Router')
         return
       }
       window.location.href = '/'
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.data.message === 'Unauthorized.') {
+        ToastCustom(
+          3000,
+          'Senha ou email incorreto(s). Tente novamente.',
+          'error',
+          'Notificação'
+        )
+        return
+      }
       ToastCustom(
         3000,
-        'Não foi possível fazer o login',
+        'Ocorreu um erro para realizar o login, contate o suporte.',
         'error',
         'Notificação'
       )

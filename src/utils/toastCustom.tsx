@@ -18,7 +18,7 @@ export const ToastCustom = (
       >
         <div
           className={
-            'alert items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80 ' +
+            'alert items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80 mx-auto ' +
             (!!alert
               ? 'bg-green-200 text-green-900'
               : 'bg-primary text-primary-content')
@@ -26,19 +26,13 @@ export const ToastCustom = (
         >
           <div className="flex gap-3">
             {state === 'error' ? (
-              <Image
-                src={ErrorImg}
-                layout="fixed"
-                width={70}
-                height={60}
-              ></Image>
+              <div className="w-10 h-10 md:w-20 md:h-w-20">
+                <Image src={ErrorImg} layout="responsive"></Image>
+              </div>
             ) : (
-              <Image
-                src={SuccessImg}
-                layout="fixed"
-                width={70}
-                height={60}
-              ></Image>
+              <div className="w-10 h-10 md:w-20 md:h-w-20">
+                <Image src={SuccessImg} layout="responsive"></Image>
+              </div>
             )}
             <div>
               <p className="text-xs font-medium">

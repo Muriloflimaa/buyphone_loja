@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'

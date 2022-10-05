@@ -1,5 +1,5 @@
-import { faCcVisa } from '@fortawesome/free-brands-svg-icons'
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
@@ -10,11 +10,23 @@ import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
 import { Address } from '../../../types'
+import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
 import { setCookies } from '../../../utils/useCookies'
 
+interface CardProps {
+  brand: string
+  card_id: string
+  created_at: string
+  holder_name: string
+  id: number
+  last_digits: string
+  updated_at: string
+  user_id: number
+}
+
 export default function CreditCheckout({ address }: Address) {
-  const [cards, setCards] = useState([])
+  const [cards, setCards] = useState<CardProps[]>([])
   const [matchCard, setMatchCard] = useState<string>('')
   const router = useRouter()
   const { values, somaTotal, CleanCart } = useCart()
@@ -30,6 +42,15 @@ export default function CreditCheckout({ address }: Address) {
     GetCreditCard()
   }, [])
 
+  async function handleRemoveCard(id: number) {
+    try {
+      setCards((oldState) => oldState.filter((card) => card.id !== id))
+      await apiStoreBeta.delete(`cards/${id}`)
+    } catch (error) {
+      return
+    }
+  }
+
   async function GetCreditCard() {
     try {
       const { data } = await apiStoreBeta.get(`cards/user/${address.user_id}`)
@@ -41,7 +62,6 @@ export default function CreditCheckout({ address }: Address) {
 
   function handleCard() {
     if (matchCard === 'newCard') {
-      setCookies('@BuyPhone:GetCredit', matchCard, 60 * 60)
       router.push('/shipping/payment/credit')
       return
     }
@@ -65,26 +85,32 @@ export default function CreditCheckout({ address }: Address) {
           <div className="flex flex-col w-full gap-3">
             {cards.map((res) => {
               return (
-                <div
-                  key={res.id}
-                  className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg"
-                >
-                  <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                    <input
-                      type="radio"
-                      name={res.card_id}
-                      onClick={() => setMatchCard(res.id.toString())}
-                      name="radio-6"
-                      className="radio checked:bg-primary"
-                    />
-                    <FontAwesomeIcon
-                      icon={faCreditCard}
-                      className="w-4 h-4 ml-5"
-                    />
-                    <span className="label-text text-lg">
-                      {res.brand} **** {res.last_digits}
-                    </span>
-                  </label>
+                <div className="flex gap-2 w-full items-center">
+                  <div
+                    key={res.id}
+                    className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg"
+                  >
+                    <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
+                      <input
+                        type="radio"
+                        onClick={() => setMatchCard(res.id.toString())}
+                        name="radio-6"
+                        className="radio checked:bg-primary"
+                      />
+                      <FontAwesomeIcon
+                        icon={faCreditCard}
+                        className="w-4 h-4 ml-5"
+                      />
+                      <span className="label-text text-lg">
+                        {res.brand} **** {res.last_digits}
+                      </span>
+                    </label>
+                  </div>
+                  <FontAwesomeIcon
+                    onClick={() => handleRemoveCard(res.id)}
+                    icon={faTrash}
+                    className="w-5 h-5 cursor-pointer"
+                  />
                 </div>
               )
             })}
@@ -110,8 +136,20 @@ export default function CreditCheckout({ address }: Address) {
               </button>
             </div>
           </div>
-          <div className="card card-compact bg-base-100 w-full ">
-            <div className="card-body p-4 gap-4">
+          <div className="card card-compact bg-base-100 shadow w-full h-fit">
+            <div className="card-body">
+              <div className="flex justify-between items-center">
+                <span className="text-lg uppercase">Meu Carrinho</span>
+                <span className="font-thin text-xs">
+                  {cartSize && cartSize > 1
+                    ? cartSize + ' itens'
+                    : cartSize == 1
+                    ? cartSize + ' item'
+                    : 'Carrinho está vazio'}
+                </span>
+              </div>
+            </div>
+            <div className="card-body">
               {cartSize && cartSize > 0 ? (
                 values.map(
                   (res) =>
@@ -153,6 +191,14 @@ export default function CreditCheckout({ address }: Address) {
                   <h1>Carregando...</h1>
                 </div>
               )}
+            </div>
+            <div className="card-body bg-base-200">
+              <div className="flex justify-between py-4">
+                <span className="text-gray-500 text-lg">Valor Total:</span>
+                <span className="font-semibold text-lg">
+                  R$ {moneyMask(somaTotal.toString())}
+                </span>
+              </div>
             </div>
           </div>
         </div>

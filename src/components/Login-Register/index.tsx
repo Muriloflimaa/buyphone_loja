@@ -1,6 +1,5 @@
 import { ArrowLeftIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
 import LogoSvg from '../../assets/images/LogoPurple.svg'

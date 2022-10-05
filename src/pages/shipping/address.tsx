@@ -1,6 +1,4 @@
-import { GetServerSidePropsContext } from 'next'
 import { parseCookies } from 'nookies'
-import { Input } from '../../components/InputElement'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -11,6 +9,11 @@ import toast from 'react-hot-toast'
 import { TotalPayment } from '../../components/TotalPayment'
 import { setCookies } from '../../utils/useCookies'
 import { PersistentLogin } from '../../utils/PersistentLogin'
+import ProductCart from '../../components/ProductCart'
+import React, { useEffect, useState } from 'react'
+import { useCart } from '../../context/UseCartContext'
+import { moneyMask } from '../../utils/masks'
+import { Input } from '../../components/InputElement'
 
 interface CepJsonProps {
   cepJson: {
@@ -20,6 +23,11 @@ interface CepJsonProps {
     Message: string
     Street: string
     UF: string
+    uf: string
+    address: string
+    neighborhood: string
+    city: string
+    postal_code: string
   }
 }
 
@@ -35,6 +43,14 @@ type GetCepTypes = {
 export default function address({ cepJson }: CepJsonProps) {
   const router = useRouter()
   const user = GetUseType()
+  const { values, somaTotal } = useCart()
+  const [cartSize, setCartSize] = useState<number>()
+
+  useEffect(() => {
+    if (values) {
+      setCartSize(values.length)
+    }
+  }, [values])
 
   const SaveAddressSchema = yup.object().shape({
     address: yup.string().required('Campo endereço é obrigatório'),
@@ -62,12 +78,13 @@ export default function address({ cepJson }: CepJsonProps) {
       const { data } = await apiStoreBeta.post(`addresses`, {
         ...values,
         user_id: user.id,
-        postal_code: cepJson.CEP,
+        postal_code: cepJson.CEP ?? cepJson.postal_code,
       })
 
       setCookies('@BuyPhone:GetCep', data, 60 * 60)
       router.push('/shipping/payment')
     } catch (error) {
+      console.log(error)
       toast.error('Erro no servidor, entre em contato com o suporte')
     }
   }
@@ -87,14 +104,14 @@ export default function address({ cepJson }: CepJsonProps) {
                 {...register('address')}
                 type="text"
                 label="Endereço"
-                defaultValue={cepJson?.Street}
+                defaultValue={cepJson?.Street ?? cepJson?.address}
                 error={errors.address}
               />
               <Input
                 {...register('neighborhood')}
                 type="text"
                 label="Bairro"
-                defaultValue={cepJson?.District}
+                defaultValue={cepJson?.District ?? cepJson?.neighborhood}
                 error={errors.neighborhood}
               />
               <Input
@@ -113,14 +130,14 @@ export default function address({ cepJson }: CepJsonProps) {
                 {...register('city')}
                 type="text"
                 label="Cidade"
-                defaultValue={cepJson?.City}
+                defaultValue={cepJson?.City ?? cepJson?.city}
                 error={errors.city}
               />
               <Input
                 {...register('uf')}
                 type="text"
                 label="Estado"
-                defaultValue={cepJson?.UF}
+                defaultValue={cepJson?.UF ?? cepJson?.uf}
                 error={errors.uf}
               />
               <div className="flex justify-end">
@@ -132,55 +149,68 @@ export default function address({ cepJson }: CepJsonProps) {
               </div>
             </form>
           </div>
-          <div className="card card-compact bg-base-100 shadow w-full h-fit lg:mt-16">
+          <div className="card card-compact bg-base-100 shadow w-full h-fit">
             <div className="card-body">
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-lg uppercase">Meu Carrinho</span>
-                <span className="font-thin text-xs">1 itens</span>
+                <span className="font-thin text-xs">
+                  {cartSize && cartSize > 1
+                    ? cartSize + ' itens'
+                    : cartSize == 1
+                    ? cartSize + ' item'
+                    : 'Carrinho está vazio'}
+                </span>
               </div>
             </div>
             <div className="card-body">
-              <div className="h-16 flex justify-between w-full">
-                <div className="flex gap-2">
-                  <img
-                    src="https://pedidos.buyphone.com.br/media/2528/11-BRANCO.webp"
-                    className="h-full"
-                    alt=""
-                  />
-                  <div className="flex flex-col justify-between opacity-60 text-2xs leading-4 h-full">
-                    <div className="flex flex-col">
-                      <span>iPhone 11</span>
-                      <span>Branco / 64Gb</span>
-                    </div>
-                    <span>
-                      Quantidade: <strong>1</strong>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col justify-between text-right">
-                  <span className="text-md">R$3.207,57</span>
-                  <form
-                    action="https://loja.buyphone.com.br/cart/remove/b067b9de3f4248e60bd1ab934df2adf2"
-                    method="POST"
+              {cartSize && cartSize > 0 ? (
+                values.map(
+                  (res) =>
+                    res.id && (
+                      <React.Fragment key={res.id}>
+                        <ProductCart
+                          id={res.id}
+                          amount={res.amount}
+                          name={res.product.name}
+                          color={res.product.color}
+                          price={res.subTotal}
+                          memory={res.product.memory}
+                          image={res.product.media[0].original_url}
+                        />
+                      </React.Fragment>
+                    )
+                )
+              ) : (
+                <div className="flex gap-3">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
                   >
-                    <input
-                      type="hidden"
-                      name="_token"
-                      value="mWfdz2XhPzyRPhrITj3Y6Qb2RQ3mof26SPWW8cYk"
-                    />
-
-                    <span className="fa fa-trash"></span>
-                  </form>
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <h1>Carregando...</h1>
                 </div>
-              </div>
-              <div className="overflow-hidden">
-                <div className="divisor-buyphone"></div>
-              </div>
+              )}
             </div>
             <div className="card-body bg-base-200">
               <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
-                <span className="font-semibold text-lg">R$ 3.207,57</span>
+                <span className="font-semibold text-lg">
+                  R$ {moneyMask(somaTotal.toString())}
+                </span>
               </div>
             </div>
           </div>
