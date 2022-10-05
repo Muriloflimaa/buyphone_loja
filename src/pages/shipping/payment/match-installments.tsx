@@ -1,16 +1,20 @@
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GetServerSidePropsContext } from 'next'
+import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { Address, ArrayProduct, ProductPayment } from '../../../types'
 
-export default function MatchInstallments() {
+export default function MatchInstallments({ address }: Address) {
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const [matchCard, setMatchCard] = useState<string>('')
+  const [matchInstallments, setMatchInstallments] = useState<string>('')
+  const installments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const { '@BuyPhone:GetCredit': Getcredit } = parseCookies(undefined)
 
   useEffect(() => {
     if (values) {
@@ -18,18 +22,31 @@ export default function MatchInstallments() {
     }
   }, [values])
 
-  function handleCard() {
-    if (matchCard === 'newCard') {
-      setCookies('@BuyPhone:GetCredit', matchCard, 60 * 60)
+  async function handleCard() {
+    try {
+      const setDat: ProductPayment[] = []
+      values.map(async (item: ArrayProduct) => {
+        const response = {
+          product_id: item.id,
+          price: item.priceFormated,
+          qty: item.amount,
+        }
+        setDat.push(response)
+      })
 
-      return
-    }
-    if (matchCard !== '') {
-      setCookies('@BuyPhone:GetCredit', matchCard, 60 * 60)
+      const { data } = await apiStoreBeta.post(`checkout/credit-card`, {
+        user_id: address.user_id,
+        address_id: address.id,
+        card_id: Getcredit,
+        installments: matchInstallments,
+        shippingPrice: 0,
+        items: setDat,
+        amount: somaTotal,
+      })
 
-      return
-    } else {
-      ToastCustom(1500, 'Escolha uma das opções de cartão', 'error')
+      console.log(data)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -42,53 +59,35 @@ export default function MatchInstallments() {
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-2">
-            <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-              <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                <input
-                  type="radio"
-                  name="radio-6"
-                  className="radio checked:bg-primary"
-                />
-                <FontAwesomeIcon icon={faCreditCard} className="w-4 h-4 ml-5" />
-                <span className="label-text text-lg">1x R$1.633</span>
-              </label>
-            </div>
-            <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-              <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                <input
-                  type="radio"
-                  name="radio-6"
-                  className="radio checked:bg-primary"
-                />
-                <FontAwesomeIcon icon={faCreditCard} className="w-4 h-4 ml-5" />
-                <span className="label-text text-lg">2x R$1.633</span>
-              </label>
-            </div>
-            <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-              <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                <input
-                  type="radio"
-                  name="radio-6"
-                  className="radio checked:bg-primary"
-                />
-                <FontAwesomeIcon icon={faCreditCard} className="w-4 h-4 ml-5" />
-                <span className="label-text text-lg">3x R$1.633</span>
-              </label>
-            </div>
-            <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-              <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                <input
-                  type="radio"
-                  name="radio-6"
-                  className="radio checked:bg-primary"
-                />
-                <FontAwesomeIcon icon={faCreditCard} className="w-4 h-4 ml-5" />
-                <span className="label-text text-lg">4x R$1.633</span>
-              </label>
-            </div>
+            {installments.map((res) => {
+              return (
+                <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
+                  <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
+                    <input
+                      type="radio"
+                      onClick={(e: any) => setMatchInstallments(e.target.value)}
+                      value={res}
+                      name="radio-6"
+                      className="radio checked:bg-primary"
+                    />
+                    <FontAwesomeIcon
+                      icon={faCreditCard}
+                      className="w-4 h-4 ml-5"
+                    />
+                    <span className="label-text text-lg">{res}x R$1.633</span>
+                  </label>
+                </div>
+              )
+            })}
 
             <div className="flex justify-end mt-4">
-              <button onClick={handleCard} className="btn btn-info text-white">
+              <button
+                onClick={handleCard}
+                className={
+                  'btn text-white ' +
+                  (matchInstallments ? 'btn-info' : 'btn-disabled')
+                }
+              >
                 Continuar
               </button>
             </div>
@@ -142,4 +141,23 @@ export default function MatchInstallments() {
       </div>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cart } = parseCookies(ctx)
+
+  if (getDataUser && cart !== '[]') {
+    const address = JSON.parse(getDataUser)
+    return {
+      props: { address },
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
 }

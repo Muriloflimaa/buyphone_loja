@@ -27,16 +27,17 @@ export default function CreditCheckout({ address }: Address) {
   }, [values])
 
   useEffect(() => {
-    async function GetCreditCard() {
-      try {
-        const { data } = await apiStoreBeta.get(`cards/user/${address.user_id}`)
-        setCards(data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
     GetCreditCard()
   }, [])
+
+  async function GetCreditCard() {
+    try {
+      const { data } = await apiStoreBeta.get(`cards/user/${address.user_id}`)
+      setCards(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   function handleCard() {
     if (matchCard === 'newCard') {

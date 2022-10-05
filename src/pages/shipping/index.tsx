@@ -56,14 +56,13 @@ export default function Shipping({ userJson }: userJsonTypes) {
   // }
 
   useEffect(() => {
-    const getAddress = async () => {
-      const userAddress = await apiStoreBeta.get(
-        `addresses/user/${userJson.id}`
-      )
-      setAddress(userAddress.data)
-    }
     getAddress()
   }, [])
+
+  const getAddress = async () => {
+    const userAddress = await apiStoreBeta.get(`addresses/user/${userJson.id}`)
+    setAddress(userAddress.data)
+  }
 
   const router = useRouter()
   const getCepSchema = yup.object().shape({
