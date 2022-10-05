@@ -1,6 +1,18 @@
 export default function Terms() {
   return (
-    <div className="py-10 px-5 text-default grid gap-2">
+    <div className="py-10 px-4 text-default gap-2 relative flex flex-col">
+      <div className="opacity-0 absolute bg-red-500 ">
+        <span className="bg-gray-900"></span>
+        <span className="bg-sky-800"></span>
+        <span className="bg-slate-400"></span>
+        <span className="bg-sky-700"></span>
+        <span className="bg-green-200"></span>
+        <span className="bg-lime-900"></span>
+        <span className="bg-gray-700"></span>
+        <span className="bg-gray-400"></span>
+        <span className="bg-pink-200"></span>
+        <span className="bg-amber-100"></span>
+      </div>
       <h1>TERMOS DE USO DA BUYPHONE</h1>
       <p>Última Atualização: 27 de outubro de 2021</p>
       <p>Bem-vindo(a)! Obrigado por utilizar a BUYPHONE!</p>
@@ -224,7 +236,7 @@ export default function Terms() {
         ALGUMA INFERFACE CONOSCO.
       </p>
       <h2>COMO VENDER OU COMPRAR PRODUTOS APPLE UTILIZANDO A BUYPHONE</h2>
-      <p>
+      <span>
         Vendedor.Para vender seus produtos Apple por meio da BUYPHONE você
         deverá realizar o seu cadastro como vendedor pelo endereço{' '}
         <a href="https://painel.buyphone.com.br/register">
@@ -232,7 +244,7 @@ export default function Terms() {
         </a>
         , e aceitar todos os termos de uso, bem como preencher de forma correta
         todos os campos necessários e anexar a documentação solicitada.
-      </p>
+      </span>
       <p>
         Comprador.Para realizar compras por meio da BUYPHONE você deverá
         realizar o seu cadastro como comprador pelo endereço{' '}
