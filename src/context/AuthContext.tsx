@@ -102,7 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         //se tiver um cookies mandar para a rota de logout
         try {
-          await apiLogin.post('/auth/logout')
+          await apiStoreBeta.post('/logout')
           destroyCookie({}, '@BuyPhone:User')
           destroyCookie({}, '@BuyPhone:Token')
           Router.push('/')

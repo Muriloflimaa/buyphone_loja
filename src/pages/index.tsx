@@ -8,11 +8,9 @@ import { useContext } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
-import { useCart } from '../context/UseCartContext'
 import { apiPedidos } from '../services/apiClient'
 import { ICategory, IProduct } from '../types'
 import { GetUseType } from '../utils/getUserType'
-import { PersistentLogin } from '../utils/PersistentLogin'
 import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {

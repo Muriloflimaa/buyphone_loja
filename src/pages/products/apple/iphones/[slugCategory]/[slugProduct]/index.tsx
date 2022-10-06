@@ -194,7 +194,7 @@ export default function Products({ data }: DataProps) {
         <div className="flex-col my-5 gap-3 text-info-content flex">
           <div className="alert bg-accent border-[1px] border-[#00000014] items-center justify-start gap-1 md:flex-col md:items-start md:flex">
             <h1 className="text-base font-medium">
-              Avalaliação de clientes
+              Avaliações de clientes
               <span className="text-[10px] pl-1 font-normal">
                 (300 avaliações)
               </span>

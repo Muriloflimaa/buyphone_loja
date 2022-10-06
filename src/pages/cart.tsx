@@ -3,11 +3,9 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ProductCart from '../components/ProductCart'
 import { useCart } from '../context/UseCartContext'
-import { apiPedidos } from '../services/apiClient'
 import { ArrayProduct } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { moneyMask } from '../utils/masks'
-import { verificationPrice } from '../utils/verificationPrice'
 
 export default function Cart() {
   const { cart, CleanCart, values, somaTotal } = useCart()
@@ -23,7 +21,7 @@ export default function Cart() {
 
   return (
     <>
-      <div className="max-w-7xl mx-5 my-10 flex flex-col gap-3">
+      <div className="max-w-7xl mx-auto px-5 my-10 flex flex-col gap-3">
         <div className="w-full flex flex-col justify-center items-center">
           <h1 className="uppercase text-xl font-light text-info-content">
             Meu carrinho
