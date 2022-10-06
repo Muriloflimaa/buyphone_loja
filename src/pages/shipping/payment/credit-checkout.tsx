@@ -27,7 +27,7 @@ interface CardProps {
 
 export default function CreditCheckout({ address }: Address) {
   const [cards, setCards] = useState<CardProps[]>([])
-  const [matchCard, setMatchCard] = useState<string>('')
+  const [matchCard, setMatchCard] = useState<string | null>(null)
   const router = useRouter()
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
@@ -65,12 +65,12 @@ export default function CreditCheckout({ address }: Address) {
       router.push('/shipping/payment/credit')
       return
     }
-    if (matchCard !== '') {
+    if (matchCard !== null) {
       setCookies('@BuyPhone:GetCredit', matchCard, 60 * 60)
       router.push('/shipping/payment/match-installments')
       return
     } else {
-      ToastCustom(1500, 'Escolha uma das opções de cartão', 'error')
+      ToastCustom(3000, 'Escolha uma opção de cartão', 'error')
     }
   }
 
@@ -86,6 +86,11 @@ export default function CreditCheckout({ address }: Address) {
             {cards.map((res) => {
               return (
                 <div className="flex gap-2 w-full items-center">
+                  <FontAwesomeIcon
+                    onClick={() => handleRemoveCard(res.id)}
+                    icon={faTrash}
+                    className="w-5 h-5 cursor-pointer"
+                  />
                   <div
                     key={res.id}
                     className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg"
@@ -95,7 +100,7 @@ export default function CreditCheckout({ address }: Address) {
                         type="radio"
                         onClick={() => setMatchCard(res.id.toString())}
                         name="radio-6"
-                        className="radio checked:bg-primary"
+                        className="radio checked:bg-blue-500"
                       />
                       <FontAwesomeIcon
                         icon={faCreditCard}
@@ -106,39 +111,45 @@ export default function CreditCheckout({ address }: Address) {
                       </span>
                     </label>
                   </div>
-                  <FontAwesomeIcon
-                    onClick={() => handleRemoveCard(res.id)}
-                    icon={faTrash}
-                    className="w-5 h-5 cursor-pointer"
-                  />
                 </div>
               )
             })}
 
-            <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-              <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                <input
-                  type="radio"
-                  name="radio-6"
-                  onClick={() => setMatchCard('newCard')}
-                  className="radio checked:bg-primary"
-                />
-                <FontAwesomeIcon icon={faCreditCard} className="w-4 h-4 ml-5" />
-                <span className="label-text text-lg">
-                  Novo cartão de crédito
-                </span>
-              </label>
+            <div className="flex gap-2 w-full items-center">
+              <div className="w-5 h-5" />
+              <div className="form-control w-full stat p-0 flex shadow-md rounded-lg">
+                <label className="label gap-2  py-5 px-6 cursor-pointer justify-start">
+                  <input
+                    type="radio"
+                    name="radio-6"
+                    onClick={() => setMatchCard('newCard')}
+                    className="radio checked:bg-blue-500"
+                  />
+                  <FontAwesomeIcon
+                    icon={faCreditCard}
+                    className="w-4 h-4 ml-5"
+                  />
+                  <span className="label-text text-lg">
+                    Novo cartão de crédito
+                  </span>
+                </label>
+              </div>
             </div>
 
             <div className="flex justify-end mt-4">
-              <button onClick={handleCard} className="btn btn-info text-white">
+              <button
+                onClick={handleCard}
+                className={
+                  'btn text-white ' + (!matchCard ? 'btn-disabled' : 'btn-info')
+                }
+              >
                 Continuar
               </button>
             </div>
           </div>
           <div className="card card-compact bg-base-100 shadow w-full h-fit">
             <div className="card-body">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center text-gray-500">
                 <span className="text-lg uppercase">Meu Carrinho</span>
                 <span className="font-thin text-xs">
                   {cartSize && cartSize > 1
