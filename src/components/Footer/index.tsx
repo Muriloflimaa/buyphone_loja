@@ -40,7 +40,10 @@ export default function Footer() {
             {dataApi ? (
               dataApi.map((category: ICategory | any) => (
                 <li key={category.id}>
-                  <Link href={`/${category.slug}`} passHref>
+                  <Link
+                    href={`/products/apple/iphones/${category.slug}`}
+                    passHref
+                  >
                     <a className="w-max">{category.name}</a>
                   </Link>
                 </li>

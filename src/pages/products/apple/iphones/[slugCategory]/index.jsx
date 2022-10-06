@@ -2,9 +2,9 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext } from 'react'
-import ProductCard from '../../components/ProductCard'
-import { apiPedidos } from '../../services/apiClient'
-import { AuthContext } from '../../context/AuthContext'
+import ProductCard from '../../../../../components/ProductCard'
+import { apiPedidos } from '../../../../../services/apiClient'
+import { AuthContext } from '../../../../../context/AuthContext'
 import Head from 'next/head'
 
 export default function Products({ data }) {
@@ -87,7 +87,7 @@ export default function Products({ data }) {
 export const getStaticProps = async (context) => {
   try {
     const { params } = context
-    const { data } = await apiPedidos.get(`categories/${params.category}`)
+    const { data } = await apiPedidos.get(`categories/${params.slugCategory}`)
     return {
       props: {
         data,
@@ -110,7 +110,7 @@ export async function getStaticPaths() {
     const paths = data.data.map((category) => {
       return {
         params: {
-          category: `${category.slug}`,
+          slugCategory: `${category.slug}`,
         },
       }
     })

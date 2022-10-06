@@ -370,7 +370,10 @@ export default function NavBar() {
                     {dataApi?.data?.length > 0 ? (
                       dataApi.data.map((category: any) => (
                         <li key={category.id}>
-                          <Link href={`/${category.slug}`} passHref>
+                          <Link
+                            href={`/products/apple/iphones/${category.slug}`}
+                            passHref
+                          >
                             <a className="w-max">{category.name}</a>
                           </Link>
                         </li>
@@ -512,9 +515,7 @@ export default function NavBar() {
                       className="flex px-4 cursor-pointer"
                       onClick={() => {
                         setIsOn(!isOn)
-                        router.push(
-                          `/${category.name.replace(/ /g, '-').toLowerCase()}`
-                        )
+                        router.push(`/products/apple/iphones/${category.slug}`)
                       }}
                     >
                       {category.name}
