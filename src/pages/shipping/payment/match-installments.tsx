@@ -154,7 +154,7 @@ export default function MatchInstallments({ address }: Address) {
                       onClick={(e: any) => setMatchInstallments(e.target.value)}
                       value={res}
                       name="radio-6"
-                      className="radio checked:bg-primary"
+                      className="radio checked:bg-blue-500"
                     />
                     <FontAwesomeIcon
                       icon={faCreditCard}

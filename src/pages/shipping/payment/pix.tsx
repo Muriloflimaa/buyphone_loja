@@ -152,8 +152,8 @@ export default function pix({ address }: Address) {
               </div>
             </div>
           </div>
-          <div className="fixed bottom-[-10px] right-1 card card-compact bg-white glass bg-opacity-90 w-[98%] md:w-80 z-50">
-            <div className="card-body">
+          <div className="fixed bottom-[-10px] mb-20 md:mb-4 right-1 text-primary-content card card-compact glass w-[98%] md:w-80 z-50">
+            <div className="card-body bg-primary/90">
               <div className="flex justify-between gap-4 w-full text-xl">
                 <span>Total</span>
                 <span> R$ {moneyMask(somaTotal.toString())}</span>

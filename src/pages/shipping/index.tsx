@@ -146,7 +146,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                             ...ad,
                           })
                         }
-                        className="normal-case btn btn-sm btn-primary btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
+                        className="normal-case btn btn-sm btn-primary text-info-content btn-outline h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
                       >
                         <div className="flex items-center gap-3 md:gap-8">
                           <FontAwesomeIcon
@@ -161,7 +161,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                         </div>
                         <FontAwesomeIcon
                           icon={faAngleRight}
-                          className="w-4 h-4"
+                          className="w-4 h-4 hidden md:block"
                         ></FontAwesomeIcon>
                       </div>
                     </div>

@@ -24,6 +24,7 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons'
+import { GetUseType } from '../../../utils/getUserType'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -35,6 +36,7 @@ export default function credit({ address }: Address) {
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
   const { values, somaTotal, CleanCart } = useCart()
+  const user = GetUseType()
 
   const checksFlag = (card: string) => {
     const cardnumber = card.replace(/[^0-9]+/g, '')
@@ -93,7 +95,7 @@ export default function credit({ address }: Address) {
 
       const { data } = await apiStoreBeta.post(`checkout/credit-card`, {
         ...value,
-        user_id: address.user_id,
+        user_id: user.id,
         address_id: address.id,
         shippingPrice: 0,
         items: setDat,
@@ -107,12 +109,13 @@ export default function credit({ address }: Address) {
       } else {
         setStateModalError(true)
       }
+      console.log(data)
     } catch (error: any) {
       if (error.response.data.errors?.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
         return
       }
-
+      console.log(error)
       setStateModalError(true)
     }
   }
