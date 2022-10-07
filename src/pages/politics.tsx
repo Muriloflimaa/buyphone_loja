@@ -1,6 +1,6 @@
 export default function Politics() {
   return (
-    <div className="py-10 text-default grid gap-2">
+    <div className="py-10 text-default flex flex-col gap-2">
       <h1>POLÍTICA DE PRIVACIDADE</h1>
       <p>
         O(a) Comprador e Vendedor autoriza a A BUYPHONE a realizar o tratamento,

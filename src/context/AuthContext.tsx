@@ -1,9 +1,11 @@
 import Router from 'next/router'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
 import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 import { ToastCustom } from '../utils/toastCustom'
+import { setCookies } from '../utils/useCookies'
+import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 type SignInCredentials = {
   email: string
@@ -28,18 +30,8 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export const setCookies = (key: string, value: string | number | object) => {
-  if (typeof value !== 'string') {
-    value = JSON.stringify(value)
-  }
-  setCookie(undefined, key, value, {
-    maxAge: 60 * 60 * 24 * 30, // 30 dias
-    path: '/',
-  })
-}
-
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { '@BuyPhone:User': user } = parseCookies()
+  const { '@BuyPhone:User': user } = parseCookies(undefined)
 
   const [userData, setUserData] = useState<UserDataType | undefined>()
 
@@ -47,7 +39,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await apiLogin.post('/auth/login', {
+      const response = await apiStoreBeta.post('/login', {
         email,
         password,
       })
@@ -58,25 +50,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id: id,
         type: type,
         profile_photo_url: profile_photo_url,
+        email: email,
       }
       const token = response.data.authorization.token
 
       setUserData(UserObject)
 
-      setCookies('@BuyPhone:User', UserObject) //chama a função setCookies para gravar os dados
-      setCookies('@BuyPhone:Token', token)
+      setCookies('@BuyPhone:User', UserObject, 60 * 60 * 24 * 90) //chama a função setCookies para gravar os dados
+      setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 90)
       const cookies = parseCookies(undefined)
 
-      if (cookies['@BuyPhone:Router']) {
+      if (
+        cookies['@BuyPhone:Router'] &&
+        cookies['@BuyPhone:Router'] !== 'undefined'
+      ) {
         window.location.href = cookies['@BuyPhone:Router']
         destroyCookie({}, '@BuyPhone:Router')
         return
       }
       window.location.href = '/'
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.data.message === 'Unauthorized.') {
+        ToastCustom(
+          3000,
+          'Senha ou email incorreto(s). Tente novamente.',
+          'error',
+          'Notificação'
+        )
+        return
+      }
       ToastCustom(
         3000,
-        'Não foi possível fazer o login',
+        'Ocorreu um erro para realizar o login, contate o suporte.',
         'error',
         'Notificação'
       )
@@ -97,7 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         //se tiver um cookies mandar para a rota de logout
         try {
-          await apiLogin.post('/auth/logout')
+          await apiStoreBeta.post('/logout')
           destroyCookie({}, '@BuyPhone:User')
           destroyCookie({}, '@BuyPhone:Token')
           Router.push('/')

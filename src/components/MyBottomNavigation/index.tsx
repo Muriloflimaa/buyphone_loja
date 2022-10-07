@@ -1,9 +1,12 @@
 import {
+  ArrowNarrowLeftIcon,
   BellIcon,
   CashIcon,
   ChartBarIcon,
   HomeIcon,
+  ShoppingBagIcon,
   ShoppingCartIcon,
+  UserCircleIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -23,15 +26,41 @@ const MyBottomNavigation = () => {
     setPos(positions[where].toString())
   }
   useEffect(() => {
-    if (
-      router.asPath === '/cart' ||
-      router.asPath === '/shipping' ||
-      router.asPath === '/shipping/address'
-    ) {
-      handleSlide(3)
+    if (router.asPath === '/rotadoslide0aqui-estadesativado') {
+      handleSlide(0)
+      return
+    }
+
+    if (router.asPath === '/user/profile') {
+      handleSlide(1)
+      return
     }
 
     if (router.asPath === '/') {
+      handleSlide(2)
+      return
+    }
+
+    if (
+      router.asPath === '/cart' ||
+      router.asPath == '/shipping' ||
+      router.asPath == '/shipping/payment/pix' ||
+      router.asPath == '/shipping/address' ||
+      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/payment/custom' ||
+      router.asPath == '/shipping/payment/credit' ||
+      router.asPath == '/shipping/payment/credit-checkout' ||
+      router.asPath == '/shipping/payment/match-installments' ||
+      router.asPath == '/shipping/payment/pix-checkout'
+    ) {
+      handleSlide(3)
+      return
+    }
+
+    if (router.asPath === '/myshopping') {
+      handleSlide(4)
+      return
+    } else {
       handleSlide(2)
     }
   }, [router.asPath])
@@ -51,36 +80,53 @@ const MyBottomNavigation = () => {
       </div>
 
       <div
-        onClick={() => handleSlide(0)}
+        onClick={() => /*handleSlide(0),*/ router.back()}
         className={
           'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' +
           (pos === '10' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
         }
       >
-        <ChartBarIcon id="ChartBarIcon" className="h-5 w-5 text-PrimaryText" />
-      </div>
-      <div
-        onClick={() => handleSlide(1)}
-        className={
-          'w-auto text-PrimaryText cursor-pointer z-50  ease-in-out transition-all duration-300 ' +
-          (pos === '30' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
-        }
-      >
-        <CashIcon id="CashIcon" className="h-5 w-5 text-PrimaryText" />
-      </div>
-      <div
-        onClick={() => handleSlide(2)}
-        className={
-          'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' +
-          (pos === '50' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
-        }
-      >
-        <HomeIcon
-          onClick={() => router.push('/')}
-          id="HomeIcon"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="2.5"
+          stroke="currentColor"
           className="h-5 w-5 text-PrimaryText"
-        />
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+          />
+        </svg>
       </div>
+
+      <Link href="/user/profile" passHref>
+        <div
+          onClick={() => handleSlide(1)}
+          className={
+            'w-auto text-PrimaryText cursor-pointer z-50  ease-in-out transition-all duration-300 ' +
+            (pos === '30' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+          }
+        >
+          <UserCircleIcon
+            id="ChartBarIcon"
+            className="h-5 w-5 text-PrimaryText"
+          />
+        </div>
+      </Link>
+      <Link href="/" passHref>
+        <div
+          onClick={() => handleSlide(2)}
+          className={
+            'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' +
+            (pos === '50' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+          }
+        >
+          <HomeIcon id="HomeIcon" className="h-5 w-5 text-PrimaryText" />
+        </div>
+      </Link>
       <Link href="/cart" passHref>
         <div
           onClick={() => handleSlide(3)}
@@ -95,15 +141,17 @@ const MyBottomNavigation = () => {
           />
         </div>
       </Link>
-      <div
-        onClick={() => handleSlide(4)}
-        className={
-          'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' +
-          (pos === '90' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
-        }
-      >
-        <BellIcon className="h-5 w-5 text-PrimaryText" />
-      </div>
+      <Link href="/myshopping" passHref>
+        <div
+          onClick={() => handleSlide(4)}
+          className={
+            'w-auto text-PrimaryText cursor-pointer z-50 ease-in-out transition-all duration-300 ' +
+            (pos === '90' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
+          }
+        >
+          <ShoppingBagIcon className="h-5 w-5 text-PrimaryText" />
+        </div>
+      </Link>
     </div>
   )
 }

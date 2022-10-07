@@ -19,29 +19,24 @@ import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiPedidos } from '../../services/apiClient'
-import { ArrayProduct } from '../../types'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
-import { ToastCustom } from '../../utils/toastCustom'
-import { verificationPrice } from '../../utils/verificationPrice'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 export default function NavBar() {
   const { isAuthenticated, signOut } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
-  const { cart, CleanCart } = useCart()
+  const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
   const [isUser, setIsUser] = useState(false)
   const user = GetUseType()
   const [showCart, setShowCart] = useState(false)
-  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
-  const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
-  const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<any>()
+  const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -63,62 +58,29 @@ export default function NavBar() {
   }, [])
 
   useEffect(() => {
-    setData([]) //zera o array do data
-    if (cart.length <= 7) {
-      cart.map(async (item) => {
-        try {
-          const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
-
-          const returnPrice = verificationPrice(data.data.data, user) //verificando preço
-          const response = {
-            ...item, //adicionando amount e id que está no localstorage
-            product: data.data.data, //data vem da api que é chamada
-            priceFormated: returnPrice.ourPrice, //formatação de preços
-            subTotal: returnPrice.ourPrice * item.amount, //total simples
-          }
-
-          setData((data) => [...data, response]) //gravando response no state
-        } catch (error) {
-          setData([]) //se der erro zerar o data com um array vazio
-        }
-      })
-    } else {
-      ToastCustom(
-        5000,
-        'Não adicione tantos produtos ao carrinho ao mesmo tempo',
-        'error',
-        'Notificação'
-      )
-      localStorage.removeItem('@BuyPhone:cart')
-      CleanCart() //chama a função e limpa o state do cart
-    }
-    setData([])
-  }, [cart])
-
-  useEffect(() => {
-    const values = data.filter(function (this: any, a: any) {
-      return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true)
-    }, Object.create(null)) //removendo items duplicados do array, o data manda o primeiro produto adicionado 2x
-    setValues(values) //setando values para dar o map no productCart
-
-    const total = values.map((product: ArrayProduct) => {
-      return product.subTotal
-    }, 0) //da um map nos produtos e adiciona a const total
-
-    var soma = 0
-    for (var i = 0; i < total.length; i++) {
-      soma += total[i]
-    }
-    setSomaTotal(soma) //somando produtos e setando no state
-  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
-
-  useEffect(() => {
     if (!isAuthenticated) {
       setIsUser(false)
     } else {
       setIsUser(true)
     }
   }, [isAuthenticated]) //ve se o usuario esta logado
+
+  useEffect(() => {
+    if (
+      router.asPath == '/shipping' ||
+      router.asPath == '/shipping/payment/pix' ||
+      router.asPath == '/shipping/address' ||
+      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/payment/custom' ||
+      router.asPath == '/shipping/payment/credit' ||
+      router.asPath == '/shipping/payment/credit-checkout' ||
+      router.asPath == '/shipping/payment/match-installments'
+    ) {
+      setNotShowCart(true)
+    } else {
+      setNotShowCart(false)
+    }
+  }, [router.asPath])
 
   return (
     <>
@@ -275,24 +237,26 @@ export default function NavBar() {
                         (showCart ? 'opacity-100 visible' : '')
                       }
                     >
-                      <label className=" m-1">
-                        <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
-                          <ShoppingCartIcon
-                            className="h-7 w-7 text-PrimaryText hidden md:block"
-                            onClick={() => setShowCart(!showCart)}
-                          />
-                          {cartSize && cartSize > 0 ? (
-                            <div className="absolute">
-                              <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                              </span>
-                            </div>
-                          ) : (
-                            ''
-                          )}
-                        </div>
-                      </label>
+                      {!notShowCart && (
+                        <label className=" m-1">
+                          <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
+                            <ShoppingCartIcon
+                              className="h-7 w-7 text-PrimaryText hidden md:block"
+                              onClick={() => setShowCart(!showCart)}
+                            />
+                            {cartSize && cartSize > 0 ? (
+                              <div className="absolute">
+                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                        </label>
+                      )}
 
                       <div
                         className={
@@ -306,18 +270,16 @@ export default function NavBar() {
                               Meu Carrinho
                             </span>
                             <span className="font-thin text-xs">
-                              {cartSize && cartSize > 1 ? (
-                                cartSize + ' itens'
-                              ) : cartSize == 1 ? (
-                                cartSize + ' item'
-                              ) : (
-                                <h1>Carrinho está vazio</h1>
-                              )}
+                              {cartSize && cartSize > 1
+                                ? cartSize + ' itens'
+                                : cartSize == 1
+                                ? cartSize + ' item'
+                                : 'Carrinho está vazio'}
                             </span>
                           </div>
                         </div>
 
-                        <div className="card-body gap-6">
+                        <div className="card-body max-h-80 overflow-y-auto gap-6">
                           {cartSize && cartSize > 0 ? (
                             values.map(
                               (res) =>
@@ -352,6 +314,19 @@ export default function NavBar() {
                           ) : (
                             ''
                           )}
+                          {cartSize && cartSize > 0 ? (
+                            <div className="card-actions justify-center">
+                              <a
+                                onClick={() => {
+                                  setShowCart(!showCart)
+                                  router.push('/shipping')
+                                }}
+                                className="btn btn-success btn-block font-medium normal-case"
+                              >
+                                Finalizar Compra
+                              </a>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -395,7 +370,10 @@ export default function NavBar() {
                     {dataApi?.data?.length > 0 ? (
                       dataApi.data.map((category: any) => (
                         <li key={category.id}>
-                          <Link href={`/${category.slug}`} passHref>
+                          <Link
+                            href={`/products/apple/iphones/${category.slug}`}
+                            passHref
+                          >
                             <a className="w-max">{category.name}</a>
                           </Link>
                         </li>
@@ -537,9 +515,7 @@ export default function NavBar() {
                       className="flex px-4 cursor-pointer"
                       onClick={() => {
                         setIsOn(!isOn)
-                        router.push(
-                          `/${category.name.replace(/ /g, '-').toLowerCase()}`
-                        )
+                        router.push(`/products/apple/iphones/${category.slug}`)
                       }}
                     >
                       {category.name}

@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
 import { useRouter } from 'next/router'
-import { api } from '../services/apiClient'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Input } from '../components/InputElement'
 import { ToastCustom } from '../utils/toastCustom'
+import { Input } from '../components/InputElement'
+import { maskCpfInput, masktel } from '../utils/masks'
+import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 type SignUpFormData = {
   email: string
@@ -69,10 +70,11 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      await api.post('/user/register', data)
+      const response = await apiStoreBeta.post('/user', data)
       router.push('/login')
-      return
+      console.log(response)
     } catch (error: any) {
+      console.log(error)
       if (error.response.data.errors) {
         const resposta = error.response.data.errors
 
@@ -109,16 +111,16 @@ export default function register() {
           type="text"
           label="CPF"
           error={errors.document}
-          mask="cpf"
-          max={14}
+          onKeyUp={(e) => maskCpfInput(e)}
+          maxLength={14}
         />
         <Input
           {...register('mobile_phone')}
           type="tel"
           label="Telefone Celular"
           error={errors.mobile_phone}
-          mask="telefone"
-          max={15}
+          onKeyUp={(e) => masktel(e)}
+          maxLength={15}
         />
         <Input
           {...register('birthdate')}

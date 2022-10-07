@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import {
   createContext,
   ReactNode,
@@ -7,12 +6,13 @@ import {
   useRef,
   useState,
 } from 'react'
-import { toast } from 'react-hot-toast'
 import { apiPedidos } from '../services/apiClient'
-import { Product } from '../types'
+import { ArrayProduct, Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
-import SuccessImg from '../assets/images/success.webp'
 import { ToastCustom } from '../utils/toastCustom'
+import { verificationPrice } from '../utils/verificationPrice'
+import { GetUseType } from '../utils/getUserType'
+import { setCookies } from '../utils/useCookies'
 
 interface CartProviderProps {
   children: ReactNode
@@ -29,12 +29,18 @@ interface CartContextData {
   removeProduct: (productId: number) => void
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void
   CleanCart: () => void
+  values: ArrayProduct[]
+  somaTotal: string | number
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
+  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
+  const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
+  const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
+  const user = GetUseType()
 
   const [cart, setCart] = useState<Product[]>(() => {
     // Verificando se existe no localstorage o carrinho
@@ -45,6 +51,44 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
     return []
   })
+
+  useEffect(() => {
+    setData([]) //zera o array do data
+    cart.map(async (item) => {
+      try {
+        const data = await apiPedidos.get(`products/${item.id}`) //chamando o produto pelo id
+
+        const returnPrice = verificationPrice(data.data.data, user) //verificando preço
+        const response = {
+          ...item, //adicionando amount e id que está no localstorage
+          product: data.data.data, //data vem da api que é chamada
+          priceFormated: returnPrice.ourPrice, //formatação de preços
+          subTotal: returnPrice.ourPrice * item.amount, //total simples
+        }
+
+        setData((data) => [...data, response]) //gravando response no state
+      } catch (error) {
+        CleanCart()
+      }
+    })
+  }, [cart])
+
+  useEffect(() => {
+    const values = data.filter(function (this: any, a: any) {
+      return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true)
+    }, Object.create(null)) //removendo items duplicados do array, o data manda o primeiro produto adicionado 2x
+    setValues(values) //setando values para dar o map no productCart
+
+    const total = values.map((product: ArrayProduct) => {
+      return product.subTotal
+    }, 0) //da um map nos produtos e adiciona a const total
+
+    var soma = 0
+    for (var i = 0; i < total.length; i++) {
+      soma += total[i]
+    }
+    setSomaTotal(soma) //somando produtos e setando no state
+  }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
     setCart([])
@@ -65,6 +109,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   useEffect(() => {
     if (cartPreviousValue !== cart) {
       localStorage.setItem('@BuyPhone:cart', JSON.stringify(cart))
+      setCookies('@BuyPhone:cart', JSON.stringify(cart), 100000000)
     }
   }, [cart, cartPreviousValue])
   /**
@@ -74,50 +119,59 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
    *
    */
   const addProduct = async (productId: number) => {
-    try {
-      //Criando um novo array para manipular o cart
-      const updatedCart = [...cart]
-      // Verificando se ja existe o produto no carrinho
-      const productExists = updatedCart.find(
-        (product) => product.id === productId
-      )
-
-      // Verificando a quantidade inserida no carrinho
-      const currentAmount = productExists ? productExists.amount : 0
-      // Adicionando mais um item
-      const newAmount = currentAmount + 1
-
-      //verificando se o produto existe no carrinho
-      if (productExists) {
-        // se sim incrementa a quantidade
-        productExists.amount = newAmount
-      } else {
-        //Se não, obtem o produto da api e add ao carrinho com o valor de 1
-        const addProduct = await apiPedidos.get(`products/${productId}`)
-        const products = addProduct.data.data
-
-        ToastCustom(
-          2000,
-          `${products?.name} ${
-            products?.color
-          } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
-          'success',
-          'Notificação'
+    if (cart.length <= 6) {
+      try {
+        //Criando um novo array para manipular o cart
+        const updatedCart = [...cart]
+        // Verificando se ja existe o produto no carrinho
+        const productExists = updatedCart.find(
+          (product) => product.id === productId
         )
 
-        const newProduct = {
-          id: products.id,
-          amount: 1,
-        }
-        updatedCart.push(newProduct)
-      }
-      //Atualizando o Carrinho
+        // Verificando a quantidade inserida no carrinho
+        const currentAmount = productExists ? productExists.amount : 0
+        // Adicionando mais um item
+        const newAmount = currentAmount + 1
 
-      setCart(updatedCart)
-    } catch {
-      ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
-      localStorage.removeItem('@BuyPhone:cart')
-      setCart([]) // se der algum erro a aplicação irá limpar o storage e atualizar o carrinho
+        //verificando se o produto existe no carrinho
+        if (productExists) {
+          // se sim incrementa a quantidade
+          productExists.amount = newAmount
+        } else {
+          //Se não, obtem o produto da api e add ao carrinho com o valor de 1
+          const addProduct = await apiPedidos.get(`products/${productId}`)
+          const products = addProduct.data.data
+
+          ToastCustom(
+            300,
+            `${products?.name} ${
+              products?.color
+            } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
+            'success',
+            'Notificação'
+          )
+
+          const newProduct = {
+            id: products.id,
+            amount: 1,
+          }
+          updatedCart.push(newProduct)
+        }
+        //Atualizando o Carrinho
+
+        setCart(updatedCart)
+      } catch {
+        ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
+        localStorage.removeItem('@BuyPhone:cart')
+        CleanCart()
+      }
+    } else {
+      ToastCustom(
+        3000,
+        'Não adicione tantos produtos ao mesmo tempo',
+        'error',
+        'Notificação'
+      )
     }
   }
   /**
@@ -140,7 +194,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
     } catch {
       ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Notificação')
-      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart()
     }
   }
   /**
@@ -177,7 +231,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         'error',
         'Notificação'
       )
-      localStorage.removeItem('@BuyPhone:cart')
+      CleanCart()
     }
   }
 
@@ -189,6 +243,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         removeProduct,
         updateProductAmount,
         CleanCart,
+        values,
+        somaTotal,
       }}
     >
       {children}

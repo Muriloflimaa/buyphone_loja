@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
@@ -32,6 +33,8 @@ const ProductCard = ({
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
 
+  const link = `/products/apple/iphones/${slugCategory}/${slug}`
+
   function handleAddProduct(id: number) {
     addProduct(id)
   }
@@ -40,21 +43,29 @@ const ProductCard = ({
     setColor(verificationColor(colorPhone))
   }, [])
 
+  const router = useRouter()
+
   return (
     <div
-      className="card card-compact w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
+      className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
       key={id}
     >
       <div className="card-body text-center ">
-        <div className="w-[80%] mx-auto">
+        <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
           <figure className="mb-6">
             <Image src={image} width={350} height={450} />
           </figure>
         </div>
-        <h2 className="card-title justify-center flex-col font-medium">
+        <h2
+          onClick={() => router.push(link)}
+          className="card-title justify-center flex-col font-medium"
+        >
           {name}
         </h2>
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div
+          onClick={() => router.push(link)}
+          className="flex flex-wrap gap-2 justify-center"
+        >
           <div className="badge badge-outline text-xs h-auto">
             <div
               className={`h-2 w-2 rounded-full mr-2 border border-black ${color}`}
@@ -64,7 +75,10 @@ const ProductCard = ({
           <span className="badge badge-outline text-xs">{memory}</span>
         </div>
         {/* //para desktok */}
-        <div className="flex-col mb-3 text-left my-6 gap-2 hidden lg:flex">
+        <div
+          onClick={() => router.push(link)}
+          className="flex-col mb-3 text-left my-6 gap-2 hidden lg:flex"
+        >
           <div className="flex justify-between items-center text-xs">
             <span>Preço comum:</span>
             <span className="opacity-80 line-through decoration-red-600">
@@ -79,7 +93,10 @@ const ProductCard = ({
           </div>
         </div>
         {/* //para mobile */}
-        <div className="flex flex-col gap-1 lg:hidden">
+        <div
+          onClick={() => router.push(link)}
+          className="flex flex-col gap-1 lg:hidden"
+        >
           <div className="flex flex-col">
             <span className="text-xs">Preço comum:</span>
             <span className="opacity-40 line-through decoration-red-600">
@@ -103,7 +120,7 @@ const ProductCard = ({
             Adicionar
           </button>
         </div>
-        <Link href={`products/${slugCategory}/${slug}`} passHref>
+        <Link href={link} passHref>
           <a className="text-xs link">Saiba mais</a>
         </Link>
       </div>

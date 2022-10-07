@@ -40,7 +40,10 @@ export default function Footer() {
             {dataApi ? (
               dataApi.map((category: ICategory | any) => (
                 <li key={category.id}>
-                  <Link href={`/${category.slug}`} passHref>
+                  <Link
+                    href={`/products/apple/iphones/${category.slug}`}
+                    passHref
+                  >
                     <a className="w-max">{category.name}</a>
                   </Link>
                 </li>
@@ -94,7 +97,7 @@ export default function Footer() {
                 <a className="flex items-center">
                   <FontAwesomeIcon
                     icon={faEnvelope}
-                    className="mr-2 text-info-content"
+                    className="mr-2 w-5 h-5 text-info-content"
                   />
                   contatobuyphone@gmail.com
                 </a>
@@ -105,7 +108,7 @@ export default function Footer() {
                 <a target="_blank" className="flex items-center">
                   <FontAwesomeIcon
                     icon={faFacebook}
-                    className="mr-2 text-info-content"
+                    className="mr-2 w-5 h-5 text-info-content"
                   />
                   BuyPhone
                 </a>
@@ -119,7 +122,7 @@ export default function Footer() {
                 >
                   <FontAwesomeIcon
                     icon={faInstagram}
-                    className="mr-2 text-info-content"
+                    className="mr-2 w-5 h-5 text-info-content"
                   />
                   buyphone.match
                 </a>
