@@ -5,12 +5,24 @@ import React, { useContext } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
 import { apiPedidos } from '../../../../../services/apiClient'
 import { AuthContext } from '../../../../../context/AuthContext'
+import { ICategory } from '../../../../../types'
 import Head from 'next/head'
 
-export default function Products({ data }) {
+interface DataProps {
+  data: {
+    data: ICategory
+  }
+}
+
+interface IParams {
+  params: {
+    slugCategory: string
+  }
+}
+
+export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
   const discount = userData?.type === 1 ? 12.5 : 7
-
   return (
     <>
       <Head>
@@ -53,6 +65,7 @@ export default function Products({ data }) {
                     colorPhone={products.color}
                     price={ourPrice}
                     averagePrice={averagePrice}
+                    idCategory={products.id}
                     slug={products.slug}
                     slugCategory={data.data.slug}
                     image={products.media[0].original_url}
@@ -84,15 +97,14 @@ export default function Products({ data }) {
   )
 }
 
-export const getStaticProps = async (context) => {
+export const getStaticProps = async ({ params }: IParams) => {
   try {
-    const { params } = context
     const { data } = await apiPedidos.get(`categories/${params.slugCategory}`)
     return {
       props: {
         data,
       },
-      revalidate: 60 * 30,
+      revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
   } catch (error) {
     return {
@@ -107,7 +119,7 @@ export async function getStaticPaths() {
   try {
     const { data } = await apiPedidos.get(`categories/`)
 
-    const paths = data.data.map((category) => {
+    const paths = data.data.map((category: ICategory) => {
       return {
         params: {
           slugCategory: `${category.slug}`,
