@@ -1,10 +1,10 @@
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
@@ -12,6 +12,11 @@ import { apiPedidos } from '../services/apiClient'
 import { ICategory, IProduct } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
+import MiniBanner1 from '../assets/images/miniBanner1.webp'
+import MiniBanner2 from '../assets/images/miniBanner2.webp'
+import { Carousel } from 'react-responsive-carousel'
+import CardMatch from '../components/CardMatch'
+import ScrapeImg from '../assets/images/scrape.webp'
 
 interface DataProps {
   data: {
@@ -23,29 +28,53 @@ const Home: NextPage<DataProps> = ({ data }) => {
   const user = GetUseType()
   const { search } = useContext(SearchContext)
 
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  const next = () => {
+    setCurrentSlide(currentSlide + 1)
+  }
+
+  const prev = () => {
+    setCurrentSlide(currentSlide - 1)
+  }
+
   return (
     <>
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
-      <div className="h-auto">
+      <div className="h-auto -mt-8">
         <CarouselComponent />
+        {/* banner para mobile */}
         <img
           className="md:hidden max-h-full"
           src="https://loja.buyphone.com.br/img/banner-full1.webp"
           alt=""
-        ></img>
-        <div className="flex justify-center mx-5">
-          <div className="alert alert-success bg-[#00a843] justify-center my-10 text-sm text-center md:text-md w-full max-w-7xl">
-            <FontAwesomeIcon
-              icon={faTruckFast}
-              className="w-7 h-7 text-PrimaryText hidden md:flex"
-            />
-            <span className="text-PrimaryText">
-              Todos os nossos produtos com frete grátis. Prazo: 10 a 15 dias
-              úteis
-            </span>
-          </div>
+        />
+        <div className="flex w-full max-w-[2000px] mx-auto mt-2 flex-col md:flex-row">
+          <Image src={MiniBanner1} quality={100}></Image>
+          <Image src={MiniBanner2} quality={100}></Image>
+        </div>
+        <div className="mt-10">
+          <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>
+
+          <Carousel
+            showIndicators={false}
+            showArrows={false}
+            showStatus={false}
+            showThumbs={false}
+            infiniteLoop={true}
+            centerSlidePercentage={90}
+            centerMode
+            selectedItem={currentSlide}
+          >
+            <CardMatch next={next} prev={prev} />
+            <CardMatch next={next} prev={prev} />
+            <CardMatch next={next} prev={prev} />
+          </Carousel>
+        </div>
+        <div className="max-w-7xl mx-auto">
+          <Image src={ScrapeImg} layout="responsive" quality={100} />
         </div>
 
         <div className="grid  grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
