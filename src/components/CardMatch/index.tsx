@@ -5,12 +5,11 @@ import Image from 'next/image'
 
 interface CardMatchProps {
   next: () => void
-  prev: () => void
 }
 
-const CardMatch = ({ next, prev }: CardMatchProps) => {
+const CardMatch = () => {
   return (
-    <div className="card md:px-36 md:py-14 flex md:flex-row flex-col justify-center items-center cursor-pointer text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
+    <div className="card md:px-36 md:py-14 flex md:flex-row flex-col justify-center items-center text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
       <div className="w-[80%] mx-auto">
         <figure>
           <Image
@@ -47,17 +46,11 @@ const CardMatch = ({ next, prev }: CardMatchProps) => {
             <h2 className="text-2xl font-medium">R$ 6000</h2>
           </div>
           <div className="flex gap-3">
-            <button
-              onClick={prev}
-              className="btn btn-circle bg-transparent border-error rounded-full"
-            >
+            <button className="btn btn-circle bg-transparent border-error rounded-full">
               <FontAwesomeIcon icon={faX} className="w-6 h-6 text-error" />
             </button>
 
-            <button
-              onClick={next}
-              className="btn btn-circle bg-transparent border-slate-600 rounded-full"
-            >
+            <button className="btn btn-circle bg-transparent border-slate-600 rounded-full">
               <FontAwesomeIcon
                 icon={faBars}
                 className="w-4 h-4 text-slate-600"

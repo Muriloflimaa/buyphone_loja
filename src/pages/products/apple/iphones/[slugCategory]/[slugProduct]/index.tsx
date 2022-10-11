@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Rating from '../../../../../../components/Rating'
 import { useCart } from '../../../../../../context/UseCartContext'
+import { apiStoreBeta } from '../../../../../../services/apiBetaConfigs'
 import { apiPedidos } from '../../../../../../services/apiClient'
 import { IProduct } from '../../../../../../types'
 import { GetUseType } from '../../../../../../utils/getUserType'
@@ -23,22 +24,22 @@ interface IParams {
 }
 
 interface DataProps {
-  data: {
-    data: IProduct
-  }
+  data: IProduct
 }
 
 export default function Products({ data }: DataProps) {
+  console.log(data)
+
   const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const user = GetUseType()
-  const returnPrice = verificationPrice(data.data, user)
+  const returnPrice = verificationPrice(data, user)
   const [description, setDescrition] = useState('')
 
   useEffect(() => {
-    setColor(verificationColor(data.data.color))
-    if (data.data.description) {
-      setDescrition(data.data.description)
+    setColor(verificationColor(data.color))
+    if (data.description) {
+      setDescrition(data.description)
     }
   }, [])
 
@@ -52,12 +53,7 @@ export default function Products({ data }: DataProps) {
     <>
       <Head>
         <title>
-          BuyPhone -{' '}
-          {data.data.name +
-            ' Apple ' +
-            data.data.memory +
-            ' ' +
-            data.data.color}
+          BuyPhone - {data.name + ' Apple ' + data.memory + ' ' + data.color}
         </title>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -73,17 +69,17 @@ export default function Products({ data }: DataProps) {
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
             <Image
-              src={data.data.media[0].original_url}
+              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
               width={60}
               height={75}
             />
             <Image
-              src={data.data.media[0].original_url}
+              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
               width={60}
               height={75}
             />
             <Image
-              src={data.data.media[0].original_url}
+              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
               width={60}
               height={75}
             />
@@ -91,9 +87,9 @@ export default function Products({ data }: DataProps) {
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
-          <div className="w-full h-full flex justify-start col-span-2">
+          <div className="w-full h-full flex justify-center col-span-2">
             <Image
-              src={data.data.media[0].original_url}
+              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
               layout="fixed"
               width="260"
               height="350"
@@ -104,7 +100,7 @@ export default function Products({ data }: DataProps) {
             <div className="flex flex-col gap-5">
               <div>
                 <h1 className="text-2xl">
-                  {data.data.name} Apple {data.data.color} {data.data.memory}
+                  {data.name} Apple {data.color} {data.memory}
                 </h1>
 
                 <div className="flex items-center  mt-2 text-xs">
@@ -117,10 +113,10 @@ export default function Products({ data }: DataProps) {
                 <h1 className="text-2xl">Especificações</h1>
                 <div className="flex gap-3 mt-2">
                   <span className="badge p-3 bg-transparent border border-info-content text-info-content">
-                    {data.data.memory}
+                    {data.memory}
                   </span>
                   <span className="badge p-3 bg-transparent border border-info-content text-info-content">
-                    {data.data.color}
+                    {data.color}
                   </span>
                 </div>
               </div>
@@ -138,7 +134,7 @@ export default function Products({ data }: DataProps) {
                 <button
                   className="btn btn-primary text-white"
                   data-testid="add-product-button"
-                  onClick={() => handleAddProduct(data.data.id)}
+                  onClick={() => handleAddProduct(data.id)}
                 >
                   Adicionar
                 </button>
@@ -154,7 +150,7 @@ export default function Products({ data }: DataProps) {
                   <button
                     className="btn btn-info block md:hidden text-white"
                     data-testid="add-product-button"
-                    onClick={() => handleAddProduct(data.data.id)}
+                    onClick={() => handleAddProduct(data.id)}
                   >
                     Adicionar
                   </button>
@@ -209,7 +205,7 @@ export default function Products({ data }: DataProps) {
 
 export const getStaticProps = async ({ params }: IParams) => {
   try {
-    const data = await apiPedidos.get(
+    const data = await apiStoreBeta.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
     return {
@@ -225,7 +221,8 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiPedidos.get(`products/`)
+    const { data } = await apiStoreBeta.get(`products/`)
+
     const paths = data.data.map((product: IProduct) => ({
       params: {
         slugCategory: product.category_slug.replace('-3-geracao', ''),

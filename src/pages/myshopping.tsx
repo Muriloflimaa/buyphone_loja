@@ -1,4 +1,4 @@
-import { parseCookies, setCookie } from 'nookies'
+import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
@@ -42,11 +42,11 @@ function MyShopping() {
                 district={pedido.address.neighborhood}
                 state={pedido.address.uf}
                 zipCode={pedido.address.postal_code}
-                linkPayment={pedido.invoice.link}
-                CodImgPix={pedido.invoice.invoice_id}
-                brCode={pedido.invoice.brcode}
-                pdf={pedido.invoice.pdf}
-                expired={pedido.invoice.status}
+                linkPayment={pedido.invoice?.link}
+                CodImgPix={pedido.invoice?.invoice_id}
+                brCode={pedido.invoice?.brcode}
+                pdf={pedido.invoice?.pdf}
+                expired={pedido.invoice?.status}
               />
             </React.Fragment>
           ))

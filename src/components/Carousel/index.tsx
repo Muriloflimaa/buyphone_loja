@@ -1,6 +1,8 @@
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import Banner1 from '../../assets/images/banner1.webp'
+import Banner2 from '../../assets/images/banner2.svg'
+import Banner3 from '../../assets/images/banner3.svg'
 import Image from 'next/image'
 
 const CarouselComponent = () => {
@@ -9,29 +11,16 @@ const CarouselComponent = () => {
       <Carousel
         infiniteLoop
         autoPlay
+        interval={2000}
         showStatus={false}
         showThumbs={false}
         showArrows={false}
       >
         <Image src={Banner1} layout="responsive" quality={100} />
 
-        <div className="rounded-xl">
-          <img
-            src="https://loja.buyphone.com.br/img/banner1.webp"
-            className="w-full rounded-xl"
-            alt="Banner 2"
-            aria-hidden="true"
-          />
-        </div>
+        <Image src={Banner2} layout="responsive" quality={100} />
 
-        <div className="rounded-xl">
-          <img
-            src="https://loja.buyphone.com.br/img/banner2.webp"
-            className="w-full rounded-xl"
-            alt="Banner 3"
-            aria-hidden="true"
-          />
-        </div>
+        <Image src={Banner3} layout="responsive" quality={100} />
       </Carousel>
     </div>
   )

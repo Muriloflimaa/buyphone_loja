@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { CSSProperties, useContext, useRef, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
@@ -17,6 +17,7 @@ import MiniBanner2 from '../assets/images/miniBanner2.webp'
 import { Carousel } from 'react-responsive-carousel'
 import CardMatch from '../components/CardMatch'
 import ScrapeImg from '../assets/images/scrape.webp'
+import Banner4 from '../assets/images/banner4.webp'
 
 interface DataProps {
   data: {
@@ -28,15 +29,11 @@ const Home: NextPage<DataProps> = ({ data }) => {
   const user = GetUseType()
   const { search } = useContext(SearchContext)
 
+  function products(product: any) {
+    return product
+  }
+
   const [currentSlide, setCurrentSlide] = useState(0)
-
-  const next = () => {
-    setCurrentSlide(currentSlide + 1)
-  }
-
-  const prev = () => {
-    setCurrentSlide(currentSlide - 1)
-  }
 
   return (
     <>
@@ -60,49 +57,98 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
           <Carousel
             showIndicators={false}
-            showArrows={false}
+            // showArrows={false}
             showStatus={false}
             showThumbs={false}
             infiniteLoop={true}
-            centerSlidePercentage={90}
-            centerMode
+            centerSlidePercentage={80}
+            centerMode={true}
             selectedItem={currentSlide}
+            renderArrowNext={(onClickHandler, hasNext, label) =>
+              hasNext && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  title={label}
+                  className="btn btn-circle md:p-10 absolute z-10 bottom-[10%] left-16 md:top-[65%] md:right-1/2"
+                >
+                  ❯
+                </button>
+              )
+            }
           >
-            <CardMatch next={next} prev={prev} />
-            <CardMatch next={next} prev={prev} />
-            <CardMatch next={next} prev={prev} />
+            <CardMatch />
+            <CardMatch />
+            <CardMatch />
           </Carousel>
         </div>
         <div className="max-w-7xl mx-auto">
           <Image src={ScrapeImg} layout="responsive" quality={100} />
         </div>
 
-        <div className="grid  grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
-          {data?.data.length > 0 ? (
-            data.data.map((category) =>
-              search(category.products).map((products: IProduct) => {
-                const returnPrice = verificationPrice(products, user)
-                return (
-                  returnPrice.ourPrice > 0 && (
-                    <ProductCard
-                      key={products.id}
-                      id={products.id}
-                      name={products.name}
-                      idCategory={category.id}
-                      colorPhone={products.color}
-                      price={returnPrice.ourPrice}
-                      averagePrice={returnPrice.averagePrice}
-                      slug={products.slug}
-                      slugCategory={category.slug}
-                      image={products.media[0].original_url}
-                      memory={products.memory}
-                    />
-                  )
+        <div className="mt-10">
+          <h1 className="text-4xl font-medium text-center">Mais vendidos</h1>
+
+          {data.data.length > 0 ? (
+            <Carousel
+              centerMode={true}
+              showIndicators={false}
+              showStatus={false}
+              showThumbs={false}
+              centerSlidePercentage={26}
+              infiniteLoop={true}
+              renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                hasPrev && (
+                  <button
+                    type="button"
+                    onClick={onClickHandler}
+                    title={label}
+                    className="btn btn-circle absolute z-10 top-[50%] left-4"
+                  >
+                    ❮
+                  </button>
                 )
-              })
-            )
+              }
+              renderArrowNext={(onClickHandler, hasNext, label) =>
+                hasNext && (
+                  <button
+                    type="button"
+                    onClick={onClickHandler}
+                    title={label}
+                    className="btn btn-circle absolute z-10 top-[50%] right-4"
+                  >
+                    ❯
+                  </button>
+                )
+              }
+            >
+              {data.data.map((category) =>
+                products(category.products).map((products: IProduct) => {
+                  const returnPrice = verificationPrice(products, user)
+                  return (
+                    returnPrice.ourPrice > 0 && (
+                      <div className="my-10">
+                        <ProductCard
+                          key={products.id}
+                          id={products.id}
+                          name={products.name}
+                          idCategory={category.id}
+                          colorPhone={products.color}
+                          price={returnPrice.ourPrice}
+                          averagePrice={returnPrice.averagePrice}
+                          slug={products.slug}
+                          slugCategory={category.slug}
+                          image={products.media[0].original_url}
+                          memory={products.memory}
+                        />
+                      </div>
+                    )
+                  )
+                })
+              )}
+            </Carousel>
           ) : (
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center">
               <svg
                 className="animate-spin h-5 w-5 text-black"
                 xmlns="http://www.w3.org/2000/svg"
@@ -125,6 +171,64 @@ const Home: NextPage<DataProps> = ({ data }) => {
               <h1>Carregando...</h1>
             </div>
           )}
+        </div>
+        <div>
+          <div className="max-w-7xl my-8 mx-auto">
+            <Image src={Banner4} quality={100} layout="responsive"></Image>
+          </div>
+          <h1 className="text-4xl font-medium text-center mb-8">
+            Todos os produtos!
+          </h1>
+
+          <div className="grid  grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
+            {data?.data.length > 0 ? (
+              data.data.map((category) =>
+                search(category.products).map((products: IProduct) => {
+                  const returnPrice = verificationPrice(products, user)
+                  return (
+                    returnPrice.ourPrice > 0 && (
+                      <ProductCard
+                        key={products.id}
+                        id={products.id}
+                        name={products.name}
+                        idCategory={category.id}
+                        colorPhone={products.color}
+                        price={returnPrice.ourPrice}
+                        averagePrice={returnPrice.averagePrice}
+                        slug={products.slug}
+                        slugCategory={category.slug}
+                        image={products.media[0].original_url}
+                        memory={products.memory}
+                      />
+                    )
+                  )
+                })
+              )
+            ) : (
+              <div className="flex gap-3 justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <h1>Carregando...</h1>
+              </div>
+            )}
+          </div>
         </div>
         <Link
           href={'https://api.whatsapp.com/send?phone=5518981367275'}
