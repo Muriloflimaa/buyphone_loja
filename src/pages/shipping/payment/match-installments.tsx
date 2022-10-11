@@ -71,6 +71,26 @@ export default function MatchInstallments({ address }: Address) {
     }
   }
 
+  async function GetInstallments() {
+    if (somaTotal > 0) {
+      const data = {
+        amount: somaTotal,
+      }
+      try {
+        const response = await apiStoreBeta.get('/checkout/installments', {
+          data,
+        })
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    GetInstallments()
+  }, [somaTotal])
+
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
       <TotalPayment />

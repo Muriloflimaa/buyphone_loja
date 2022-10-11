@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { destroyCookie, parseCookies } from 'nookies'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { Address, ArrayProduct, ProductPayment } from '../../../types'
@@ -11,7 +11,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input } from '../../../components/InputElement'
 import {
   maskCpfCnpjInput,
-  maskCpfInput,
   maskCreditCard,
   maskExpirationDate,
   maskMustNumber,
@@ -101,7 +100,7 @@ export default function credit({ address }: Address) {
         items: setDat,
         amount: somaTotal,
       })
-
+      console.log(data)
       if (data.original.status === 'paid') {
         setStateModalSuccess(true)
         CleanCart()
@@ -109,7 +108,6 @@ export default function credit({ address }: Address) {
       } else {
         setStateModalError(true)
       }
-      console.log(data)
     } catch (error: any) {
       if (error.response.data.errors?.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
@@ -121,6 +119,26 @@ export default function credit({ address }: Address) {
   }
 
   const { errors } = formState
+
+  async function GetInstallments() {
+    if (somaTotal > 0) {
+      const data = {
+        amount: somaTotal,
+      }
+      try {
+        const response = await apiStoreBeta.get(`checkout/installments`, {
+          data,
+        })
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    GetInstallments()
+  }, [somaTotal])
 
   return (
     <>
