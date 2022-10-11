@@ -7,18 +7,18 @@ import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 function MyShopping() {
   const [data, setData] = useState<Array<{}> | undefined>()
+  const cookies = parseCookies(undefined)
+
+  async function GetInvoice() {
+    if (cookies['@BuyPhone:User']) {
+      const user = JSON.parse(cookies['@BuyPhone:User'])
+      const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
+      setData(data)
+    }
+  }
 
   useEffect(() => {
-    async function Teste() {
-      const cookies = parseCookies(undefined)
-      if (cookies['@BuyPhone:User']) {
-        const user = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
-        console.log(data)
-        setData(data)
-      }
-    }
-    Teste()
+    GetInvoice()
   }, [])
 
   return (
@@ -26,7 +26,7 @@ function MyShopping() {
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
         Minhas Compras
       </h1>
-      <div className="grid gap-3">
+      <div className="grid gap-3 px-3">
         {data && data.length > 0 ? (
           data.map((pedido: any) => (
             <React.Fragment key={pedido.id}>
