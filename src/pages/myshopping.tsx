@@ -1,4 +1,4 @@
-import { parseCookies, setCookie } from 'nookies'
+import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
@@ -7,18 +7,18 @@ import { apiStoreBeta } from '../services/apiBetaConfigs'
 
 function MyShopping() {
   const [data, setData] = useState<Array<{}> | undefined>()
+  const cookies = parseCookies(undefined)
+
+  async function GetInvoice() {
+    if (cookies['@BuyPhone:User']) {
+      const user = JSON.parse(cookies['@BuyPhone:User'])
+      const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
+      setData(data)
+    }
+  }
 
   useEffect(() => {
-    async function Teste() {
-      const cookies = parseCookies(undefined)
-      if (cookies['@BuyPhone:User']) {
-        const user = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
-        console.log(data)
-        setData(data)
-      }
-    }
-    Teste()
+    GetInvoice()
   }, [])
 
   return (
@@ -26,7 +26,7 @@ function MyShopping() {
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
         Minhas Compras
       </h1>
-      <div className="grid gap-3">
+      <div className="grid gap-3 px-3">
         {data && data.length > 0 ? (
           data.map((pedido: any) => (
             <React.Fragment key={pedido.id}>
@@ -42,11 +42,11 @@ function MyShopping() {
                 district={pedido.address.neighborhood}
                 state={pedido.address.uf}
                 zipCode={pedido.address.postal_code}
-                linkPayment={pedido.invoice.link}
-                CodImgPix={pedido.invoice.invoice_id}
-                brCode={pedido.invoice.brcode}
-                pdf={pedido.invoice.pdf}
-                expired={pedido.invoice.status}
+                linkPayment={pedido.invoice?.link}
+                CodImgPix={pedido.invoice?.invoice_id}
+                brCode={pedido.invoice?.brcode}
+                pdf={pedido.invoice?.pdf}
+                expired={pedido.invoice?.status}
               />
             </React.Fragment>
           ))
