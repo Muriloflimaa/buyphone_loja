@@ -1,16 +1,41 @@
-import { faBars, faHeart, faX } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faHeart, faI, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
+import { useState } from 'react'
+import OuterImg from '../../assets/images/outer.svg'
 
 interface CardMatchProps {
   next: () => void
 }
 
-const CardMatch = () => {
+const CardMatch = ({ next }: CardMatchProps) => {
+  const [failMatch, setFailMatch] = useState(false)
+
+  async function noMatch() {
+    setFailMatch(false)
+  }
+
+  const wrapperFunction = async () => {
+    setFailMatch(true)
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    noMatch()
+    next()
+  }
+
   return (
     <div className="card md:px-36 md:py-14 flex md:flex-row flex-col justify-center items-center text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
-      <div className="w-[80%] mx-auto">
+      <div className="w-[80%] mx-auto relative">
+        <div
+          className={
+            'flex absolute w-full z-10 justify-end transition-all duration-300 ml-8 -mt-16 ' +
+            (failMatch === false ? 'opacity-0' : 'opacity-100')
+          }
+        >
+          <Image src={OuterImg} layout="fixed" />
+        </div>
+
         <figure>
           <Image
             src="https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp"
@@ -19,6 +44,7 @@ const CardMatch = () => {
           />
         </figure>
       </div>
+
       <div className="card-body items-start w-full">
         <h1 className="font-normal text-2xl text-start">
           iPhone 12 Apple Branco 64Gb
@@ -46,8 +72,11 @@ const CardMatch = () => {
             <h2 className="text-2xl font-medium">R$ 6000</h2>
           </div>
           <div className="flex gap-3">
-            <button className="btn btn-circle bg-transparent border-error rounded-full">
-              <FontAwesomeIcon icon={faX} className="w-6 h-6 text-error" />
+            <button
+              onClick={wrapperFunction}
+              className="btn btn-circle bg-transparent text-error hover:bg-error hover:text-white border-error rounded-full"
+            >
+              <FontAwesomeIcon icon={faX} className="w-6 h-6" />
             </button>
 
             <button className="btn btn-circle bg-transparent border-slate-600 rounded-full">
@@ -57,11 +86,8 @@ const CardMatch = () => {
               />
             </button>
 
-            <button className="btn btn-circle bg-transparent border-success rounded-full">
-              <FontAwesomeIcon
-                icon={faHeart}
-                className="w-6 h-6 text-success"
-              />
+            <button className="btn btn-circle bg-transparent text-success hover:bg-success hover:text-white border-success rounded-full">
+              <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
             </button>
           </div>
         </div>

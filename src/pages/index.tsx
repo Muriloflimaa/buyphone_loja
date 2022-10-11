@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { CSSProperties, useContext, useRef, useState } from 'react'
+import { CSSProperties, useContext, useEffect, useRef, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
@@ -14,10 +14,11 @@ import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
 import MiniBanner1 from '../assets/images/miniBanner1.webp'
 import MiniBanner2 from '../assets/images/miniBanner2.webp'
-import { Carousel } from 'react-responsive-carousel'
+import { Carousel, CarouselProps } from 'react-responsive-carousel'
 import CardMatch from '../components/CardMatch'
 import ScrapeImg from '../assets/images/scrape.webp'
 import Banner4 from '../assets/images/banner4.webp'
+import { CarouselState } from 'react-responsive-carousel/lib/ts/components/Carousel/types'
 
 interface DataProps {
   data: {
@@ -26,14 +27,24 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
+  const currentRefCarroussel = useRef<any>()
   const user = GetUseType()
   const { search } = useContext(SearchContext)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
-  function products(product: any) {
+  function hotProducts(product: Element | Array<IProduct> | any) {
     return product
   }
 
-  const [currentSlide, setCurrentSlide] = useState(0)
+  function next() {
+    const maxCurrent = currentRefCarroussel.current?.itemsRef.length
+
+    if (currentSlide >= maxCurrent) {
+      setCurrentSlide(0)
+      return
+    }
+    setCurrentSlide(currentSlide + 1)
+  }
 
   return (
     <>
@@ -56,30 +67,20 @@ const Home: NextPage<DataProps> = ({ data }) => {
           <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>
 
           <Carousel
+            ref={currentRefCarroussel}
             showIndicators={false}
-            // showArrows={false}
             showStatus={false}
             showThumbs={false}
             infiniteLoop={true}
             centerSlidePercentage={80}
             centerMode={true}
             selectedItem={currentSlide}
-            renderArrowNext={(onClickHandler, hasNext, label) =>
-              hasNext && (
-                <button
-                  type="button"
-                  onClick={onClickHandler}
-                  title={label}
-                  className="btn btn-circle md:p-10 absolute z-10 bottom-[10%] left-16 md:top-[65%] md:right-1/2"
-                >
-                  ❯
-                </button>
-              )
-            }
           >
-            <CardMatch />
-            <CardMatch />
-            <CardMatch />
+            <CardMatch next={next} />
+            <CardMatch next={next} />
+            <CardMatch next={next} />
+            <CardMatch next={next} />
+            <CardMatch next={next} />
           </Carousel>
         </div>
         <div className="max-w-7xl mx-auto">
@@ -123,7 +124,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
               }
             >
               {data.data.map((category) =>
-                products(category.products).map((products: IProduct) => {
+                hotProducts(category.products).map((products: IProduct) => {
                   const returnPrice = verificationPrice(products, user)
                   return (
                     returnPrice.ourPrice > 0 && (
