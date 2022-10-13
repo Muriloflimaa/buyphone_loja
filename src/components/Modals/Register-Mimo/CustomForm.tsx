@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
 import { FormEvent, useEffect, useState } from 'react';
 import { ToastCustom } from '../../../utils/toastCustom';
 
@@ -21,10 +22,42 @@ export default function CustomForm({ status, message, onValidated }: ICustomForm
     const [phone, setPhone] = useState('');
 
     useEffect(() => {
+        console.log(status)
+        if (status === "sending") {
+            ToastCustom(
+                8000,
+                'Enviando dados...',
+                'warning',
+                'Notificação'
+            )
+        }
         if (status === "success") {
+            ToastCustom(
+                8000,
+                'Cadastrado com sucesso!',
+                'success',
+                'Notificação'
+            )
+            const dataCookies = {
+                email: email,
+                name: name,
+                phone: phone
+            }
+            setCookie(null, 'USER_CAMPAIGN', JSON.stringify(dataCookies), {
+                maxAge: 60 * 60 * 24,
+                path: '/',
+            })
             clearFields()
             router.push('/')
-        };
+        }
+        if (status === "error") {
+            ToastCustom(
+                8000,
+                'Erro ao cadastrar!',
+                'error',
+                'Notificação'
+            )
+        }
     }, [status])
 
     const clearFields = () => {
@@ -44,28 +77,6 @@ export default function CustomForm({ status, message, onValidated }: ICustomForm
                 FNAME: name,
                 PHONE: phone,
             });
-        if (status === "success") {
-            ToastCustom(
-                8000,
-                'Cadastrado com sucesso!',
-                'success',
-                'Notificação'
-            )
-        } else if (status === "error") {
-            ToastCustom(
-                8000,
-                'Erro ao cadastrar!',
-                'error',
-                'Notificação'
-            )
-        } else {
-            ToastCustom(
-                8000,
-                'Houve um erro inesperado!',
-                'error',
-                'Notificação'
-            )
-        }
     }
 
     return (

@@ -4,7 +4,7 @@ import DollarPack from '../../../assets/images/dollar-pack.svg';
 import LeftDollar from '../../../assets/images/left-dollar.svg';
 import Present from '../../../assets/images/present.svg';
 import RightDollar from '../../../assets/images/right-dollar.svg';
-import NewsletterSubscribe from "./NewsletterSubscribe";
+import NewsletterSubscribe from "./MailchimpSubscribe";
 
 export default function RegisterMimo() {
     const router = useRouter();
