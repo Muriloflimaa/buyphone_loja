@@ -158,7 +158,6 @@ export default function profile({ data }: UserData) {
                     error={errors.name}
                   />
                 </div>
-
                 <div className="col-span-6 sm:col-span-4">
                   <Input
                     {...register('email')}
