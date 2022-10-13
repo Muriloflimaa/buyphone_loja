@@ -16,7 +16,7 @@ interface DataProps {
   links: Array<{
     active: boolean
     label: string
-    url: string | null
+    url: string
   }>
   next_page_url: string
   path: string
@@ -43,6 +43,22 @@ function MyShopping() {
   useEffect(() => {
     GetInvoice()
   }, [])
+
+  async function handleChangePagination(page: string) {
+    console.log(page)
+    try {
+      const user = JSON.parse(cookies['@BuyPhone:User'])
+      const { data } = await apiStoreBeta(
+        `orders/user/${user?.id}?page=${page.replace(
+          `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+          ''
+        )}`
+      )
+      setData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="max-w-7xl mx-auto my-8">
@@ -115,6 +131,13 @@ function MyShopping() {
         <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
           {data?.links.map((link) => (
             <button
+              onClick={() =>
+                handleChangePagination(
+                  link.label
+                    .replace('&laquo; Previous', link.url)
+                    .replace('Next &raquo;', link.url)
+                )
+              }
               className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
                 link.active === true ? 'btn-disabled' : ''
               }`}
