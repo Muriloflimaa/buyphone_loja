@@ -28,8 +28,6 @@ interface DataProps {
 }
 
 export default function Products({ data }: DataProps) {
-  console.log(data)
-
   const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const user = GetUseType()
@@ -123,21 +121,31 @@ export default function Products({ data }: DataProps) {
 
               <div>
                 <h1 className="opacity-80 line-through decoration-red-600">
-                  R$ {moneyMask(returnPrice.averagePrice.toString())}
+                  {returnPrice.ourPrice <= 0
+                    ? 'Sem estoque'
+                    : 'R$' + moneyMask(returnPrice.averagePrice.toString())}
                 </h1>
                 <h2 className="text-2xl font-bold">
-                  R$ {moneyMask(returnPrice.ourPrice.toString())}
+                  {returnPrice.ourPrice <= 0
+                    ? 'Sem estoque'
+                    : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
                 </h2>
               </div>
 
               <div className="hidden md:flex gap-3 items-center">
-                <button
-                  className="btn btn-primary text-white"
-                  data-testid="add-product-button"
-                  onClick={() => handleAddProduct(data.id)}
-                >
-                  Adicionar
-                </button>
+                {returnPrice.ourPrice <= 0 ? (
+                  <button className="btn btn-disabled text-white">
+                    Sem estoque
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary text-white"
+                    data-testid="add-product-button"
+                    onClick={() => handleAddProduct(data.id)}
+                  >
+                    Adicionar
+                  </button>
+                )}
               </div>
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014]  text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2">
                 <div className="alert items-start md:items-center bg-accent border-[1px] border-accent">
@@ -147,13 +155,19 @@ export default function Products({ data }: DataProps) {
                   </span>
                 </div>
                 <div className="flex md:block gap-3 items-center">
-                  <button
-                    className="btn btn-info block md:hidden text-white"
-                    data-testid="add-product-button"
-                    onClick={() => handleAddProduct(data.id)}
-                  >
-                    Adicionar
-                  </button>
+                  {returnPrice.ourPrice <= 0 ? (
+                    <button className="btn btn-disabled block md:hidden text-white">
+                      Sem estoque
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-info block md:hidden text-white"
+                      data-testid="add-product-button"
+                      onClick={() => handleAddProduct(data.id)}
+                    >
+                      Adicionar
+                    </button>
+                  )}
                 </div>
 
                 <div className="alert items-start bg-accent w-full grid md:hidden">
@@ -221,7 +235,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStoreBeta.get(`products/`)
+    const { data } = await apiStoreBeta.get(`products/?per_page=200&page=1`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {

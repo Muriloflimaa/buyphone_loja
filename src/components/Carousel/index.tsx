@@ -7,11 +7,12 @@ import Image from 'next/image'
 
 const CarouselComponent = () => {
   return (
-    <div className="carousel-wrapper mx-auto hidden md:block rounded-xl">
+    <div className="carousel-wrapper max-w-[2000px] mx-auto hidden md:block rounded-xl">
       <Carousel
         infiniteLoop
         autoPlay
         interval={2000}
+        showIndicators={false}
         showStatus={false}
         showThumbs={false}
         showArrows={false}

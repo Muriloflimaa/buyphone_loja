@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { CSSProperties, useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
@@ -14,11 +14,11 @@ import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
 import MiniBanner1 from '../assets/images/miniBanner1.webp'
 import MiniBanner2 from '../assets/images/miniBanner2.webp'
-import { Carousel, CarouselProps } from 'react-responsive-carousel'
+import MiniBanner3 from '../assets/images/miniBanner3.webp'
+import { Carousel } from 'react-responsive-carousel'
 import CardMatch from '../components/CardMatch'
 import ScrapeImg from '../assets/images/scrape.webp'
 import Banner4 from '../assets/images/banner4.webp'
-import { CarouselState } from 'react-responsive-carousel/lib/ts/components/Carousel/types'
 
 interface DataProps {
   data: {
@@ -30,7 +30,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
   const currentRefCarroussel = useRef<any>()
   const user = GetUseType()
   const { search } = useContext(SearchContext)
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(1)
 
   function hotProducts(product: Element | Array<IProduct> | any) {
     return product
@@ -40,7 +40,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
     const maxCurrent = currentRefCarroussel.current?.itemsRef.length
 
     if (currentSlide >= maxCurrent) {
-      setCurrentSlide(0)
+      setCurrentSlide(1)
       return
     }
     setCurrentSlide(currentSlide + 1)
@@ -52,16 +52,46 @@ const Home: NextPage<DataProps> = ({ data }) => {
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        <CarouselComponent />
         {/* banner para mobile */}
         <img
           className="md:hidden max-h-full"
           src="https://loja.buyphone.com.br/img/banner-full1.webp"
           alt=""
         />
-        <div className="flex w-full max-w-[2000px] mx-auto mt-2 flex-col md:flex-row">
-          <Image src={MiniBanner1} quality={100}></Image>
-          <Image src={MiniBanner2} quality={100}></Image>
+        <CarouselComponent />
+        <div className="flex w-full max-w-[2000px] mx-auto mt-2 ">
+          <Carousel
+            infiniteLoop
+            autoPlay
+            interval={2500}
+            showStatus={false}
+            showThumbs={false}
+            showArrows={false}
+            showIndicators={false}
+            className="w-1/2"
+          >
+            <Link
+              className="cursor-pointer"
+              href={'/products/apple/iphones/iphone-13-pro'}
+              passHref
+            >
+              <a>
+                <Image src={MiniBanner1} quality={100}></Image>
+              </a>
+            </Link>
+            <Image src={MiniBanner3} quality={100}></Image>
+          </Carousel>
+          <div className="w-1/2">
+            <Link
+              className="cursor-pointer"
+              href={'/products/apple/iphones/iphone-12-pro'}
+              passHref
+            >
+              <a>
+                <Image src={MiniBanner2} quality={100}></Image>
+              </a>
+            </Link>
+          </div>
         </div>
         <div className="mt-10">
           <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>

@@ -7,11 +7,10 @@ import { apiPedidos } from '../../../../../services/apiClient'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
+import { apiStoreBeta } from '../../../../../services/apiBetaConfigs'
 
 interface DataProps {
-  data: {
-    data: ICategory
-  }
+  data: ICategory
 }
 
 interface IParams {
@@ -26,7 +25,7 @@ export default function Products({ data }: DataProps) {
   return (
     <>
       <Head>
-        <title>BuyPhone - {data.data.name}</title>
+        <title>BuyPhone - {data.name}</title>
       </Head>
       <div className="h-auto">
         <div className="flex justify-center mx-5">
@@ -42,8 +41,8 @@ export default function Products({ data }: DataProps) {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
-          {data.data.products.length > 0 ? (
-            data.data.products.map((products) => {
+          {data.products.length > 0 ? (
+            data.products.map((products) => {
               const itens = [
                 products.price,
                 products.magalu_price,
@@ -67,8 +66,10 @@ export default function Products({ data }: DataProps) {
                     averagePrice={averagePrice}
                     idCategory={products.id}
                     slug={products.slug}
-                    slugCategory={data.data.slug}
-                    image={products.media[0].original_url}
+                    slugCategory={data.slug}
+                    image={
+                      'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
+                    }
                     memory={products.memory}
                   />
                 </React.Fragment>
@@ -99,7 +100,7 @@ export default function Products({ data }: DataProps) {
 
 export const getStaticProps = async ({ params }: IParams) => {
   try {
-    const { data } = await apiPedidos.get(`categories/${params.slugCategory}`)
+    const { data } = await apiStoreBeta.get(`categories/${params.slugCategory}`)
     return {
       props: {
         data,
@@ -117,7 +118,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export async function getStaticPaths() {
   try {
-    const { data } = await apiPedidos.get(`categories/`)
+    const { data } = await apiStoreBeta.get(`categories/`)
 
     const paths = data.data.map((category: ICategory) => {
       return {

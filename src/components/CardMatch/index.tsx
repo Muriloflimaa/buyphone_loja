@@ -21,15 +21,16 @@ const CardMatch = ({ next }: CardMatchProps) => {
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     noMatch()
+    await new Promise((resolve) => setTimeout(resolve, 200))
     next()
   }
 
   return (
     <div className="card md:px-36 md:py-14 flex md:flex-row flex-col justify-center items-center text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
-      <div className="w-[80%] mx-auto relative">
+      <div className="w-[50%] md:w-[80%] mx-auto relative">
         <div
           className={
-            'flex absolute w-full z-10 justify-end transition-all duration-300 ml-8 -mt-16 ' +
+            'flex absolute w-full z-10 justify-end transition-all duration-300 ml-8 md:-mt-16 ' +
             (failMatch === false ? 'opacity-0' : 'opacity-100')
           }
         >
