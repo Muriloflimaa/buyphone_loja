@@ -1,49 +1,86 @@
 import axios from 'axios'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useState } from 'react'
-import toast from 'react-hot-toast'
-import ReactInputMask from 'react-input-mask'
 import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
 import jwt_decode from 'jwt-decode'
 import { GetServerSidePropsContext } from 'next'
+import { ToastCustom } from '../../utils/toastCustom'
+import * as yup from 'yup'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Input } from '../../components/InputElement'
 import { apiStoreBeta } from '../../services/apiBetaConfigs'
+import { masktel } from '../../utils/masks'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
+
+type SignInFormData = {
+  nome: string
+  email: string
+  mobile_phone: string
+}
 
 export default function profile({ data }: UserData) {
-  const [name, setName] = useState<string | null>(data.name)
-  const [email, setEmail] = useState<string | null>(data.email)
-  const [mobilePhone, setMobilePhone] = useState<string | null>(
-    data.mobile_phone
-  )
   const [password, setPassword] = useState<string | null>()
   const [changePassword, setChangePassword] = useState<string | null>()
   const [ConfirmCP, setConfirmCP] = useState<string | null>()
+  const router = useRouter()
 
-  const AlterDataUser = async () => {
-    if (!name) {
-      toast.error('Campo nome obrigatório')
-      return
-    }
-    if (!email) {
-      toast.error('Campo email obrigatório')
-      return
-    }
-    if (!mobilePhone) {
-      toast.error('Campo telefone obrigatório')
-      return
+  const changeInfoFormSchema = yup.object().shape({
+    name: yup
+      .string()
+      .required('Campo nome é obrigatório')
+      .min(10, 'Minímo 6 digitos'),
+    email: yup
+      .string()
+      .required('Campo email é obrigatório')
+      .email('Campo precisa ser um e-mail'),
+    mobile_phone: yup.string().required('Campo celular é obrigatório'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(changeInfoFormSchema),
+  })
+
+  const { errors } = formState
+
+  const handleChangeInfoUser: SubmitHandler<SignInFormData | any> = async (
+    values,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    const value = {
+      name: values.name,
+      mobile_phone: '+55' + values.mobile_phone,
+      email: values.email,
     }
 
-    const userInfo = {
-      name: name,
-      email: email,
-      mobile_phone: mobilePhone,
-    }
     try {
-      await apiLogin.put(`/user/${data.id}`, userInfo)
-      toast.success('Dados alterados com sucesso.')
-    } catch (error) {
-      toast.error(
-        'Houve um problema para alterar os dados, consulte o suporte.'
+      await apiStoreBeta.put(`/users/${data.id}`, value)
+      ToastCustom(3000, 'Dados alterados com sucesso', 'success', 'Notificação')
+    } catch (error: any) {
+      if (error.response.data.errors.email) {
+        ToastCustom(3000, error.response.data.errors.email, 'error')
+
+        return
+      }
+      if (error.response.data.errors.mobile_phone) {
+        ToastCustom(3000, error.response.data.errors.mobile_phone, 'error')
+
+        return
+      }
+      if (error.response.data.errors.name) {
+        ToastCustom(3000, error.response.data.errors.name, 'error')
+
+        return
+      }
+      ToastCustom(
+        3000,
+        'Ocorreu algum problema na alteração de dados, tente novamente ou contate o suporte',
+        'error'
       )
     }
   }
@@ -57,6 +94,10 @@ export default function profile({ data }: UserData) {
       toast.error('Digite sua nova senha.')
       return
     }
+    if (changePassword?.length <= 8) {
+      toast.error('Nova senha precisa ter mais de 8 dígitos')
+      return
+    }
     if (!ConfirmCP) {
       toast.error('Digite a confirmação da sua nova senha.')
       return
@@ -68,28 +109,20 @@ export default function profile({ data }: UserData) {
       }
 
       try {
-        const response = await apiLogin.put(
-          `/password/${data.id}`,
+        const response = await apiStoreBeta.put(
+          `/users/${data.id}`,
           userPasswords
         )
-        if (response.data.success) {
-          toast.success('Senha alterada com sucesso.')
-          return
-        }
-        if (response.data.error) {
-          toast.error(
-            response.data.error.replace(
-              'Password does not match',
-              'Senha atual não confere.'
-            )
-          )
-          return
-        }
-
         console.log(response)
+        ToastCustom(2000, 'Senha alterada com sucesso', 'success')
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+
+        router.push('/user/profile')
       } catch (error: any) {
-        toast.error(
-          error.response.data.message.replace('new password', 'nova senha')
+        ToastCustom(
+          2000,
+          'Ocorreu algum erro na alteração de senha, entre em contato com o suporte.',
+          'success'
         )
       }
     } else {
@@ -113,101 +146,82 @@ export default function profile({ data }: UserData) {
           </div>
         </div>
         <div className="mt-5 md:mt-0 md:col-span-2">
-          <div>
+          <form onSubmit={handleSubmit(handleChangeInfoUser)}>
             <div className="px-4 py-5 bg-base-200 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
               <div className="grid grid-cols-6 gap-6">
                 <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="name"
-                  >
-                    Nome
-                  </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="name"
+                  <Input
+                    {...register('name')}
                     type="text"
                     defaultValue={data.name}
-                    onChange={(event) => setName(event.target.value)}
+                    label="Nome"
+                    error={errors.name}
                   />
                 </div>
 
                 <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="email"
-                  >
-                    Email
-                  </label>
-                  <input
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="email"
-                    type="email"
+                  <Input
+                    {...register('email')}
+                    type="text"
                     defaultValue={data.email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    label="Email"
+                    error={errors.email}
                   />
                 </div>
 
                 <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="document"
-                  >
-                    CPF
+                  <label className="label">
+                    <span className="label-text">CPF</span>
                   </label>
-                  <input
-                    disabled
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="document"
-                    defaultValue={data.document}
-                    type="tel"
-                  />
+
+                  <label className="input-group">
+                    <input
+                      defaultValue={data.document}
+                      disabled
+                      className="input input-disabled bg-base-100 border-error rounded-md !important w-full text-info-content"
+                    />
+                  </label>
                 </div>
 
                 <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="birthdate"
-                  >
-                    Nascimento
-                  </label>
-                  <input
-                    disabled
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
-                    id="birthdate"
-                    defaultValue={data.birthdate}
-                    type="date"
-                  />
+                  <div className="col-span-6 sm:col-span-4">
+                    <label className="label">
+                      <span className="label-text">Nascimento</span>
+                    </label>
+
+                    <label className="input-group">
+                      <input
+                        defaultValue={data.birthdate}
+                        disabled
+                        className="input input-disabled bg-base-100 border-error rounded-md !important w-full text-info-content"
+                      />
+                    </label>
+                  </div>
                 </div>
 
                 <div className="col-span-6 sm:col-span-4">
-                  <label
-                    className="block font-semibold text-[10px] text-gray-500"
-                    htmlFor="mobile_phone"
-                  >
-                    Celular
-                  </label>
-                  <ReactInputMask
-                    mask="+55 (99) 99999-9999"
-                    id="mobile_phone"
-                    name="phone"
-                    onChange={(event) => setMobilePhone(event.target.value)}
-                    type="tel"
-                    defaultValue={data.mobile_phone}
-                    className="input bg-base-100 border-base-200/30 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                  <Input
+                    {...register('mobile_phone')}
+                    defaultValue={data.mobile_phone.replace('+55', '')}
+                    type="text"
+                    label="Celular"
+                    onKeyUp={(e) => masktel(e)}
+                    maxLength={15}
+                    error={errors.mobile_phone}
                   />
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-              <button
-                onClick={() => AlterDataUser()}
-                className="btn normal-case"
-              >
-                Salvar
-              </button>
+              {formState.isSubmitting ? (
+                <button className="btn normal-case loading">Carregando</button>
+              ) : (
+                <button type="submit" className="btn normal-case">
+                  Salvar
+                </button>
+              )}
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -278,38 +292,6 @@ export default function profile({ data }: UserData) {
           </div>
         </div>
       </div>
-      {/* <div className="md:grid md:grid-cols-3 md:gap-6">
-        <div className="md:col-span-1 flex justify-between">
-          <div className="px-4 sm:px-0">
-            <h3 className="text-lg font-medium text-neutral-100">
-              Sessões do navegador
-            </h3>
-            <p className="mt-1 text-sm text-neutral-200">
-              Gerencie e saia de suas sessões ativas em outros navegadores e
-              dispositivos.
-            </p>
-          </div>
-          <div className="px-4 sm:px-0"></div>
-        </div>
-        <div className="mt-5 md:mt-0 md:col-span-2">
-          <div className="px-4 py-5 sm:p-6 bg-base-200 shadow sm:rounded-lg">
-            <div className="max-w-xl text-sm text-neutral-100">
-              Se necessário, você pode sair de todas as outras sessões do
-              navegador em todos os seus dispositivos. Algumas de suas sessões
-              recentes estão listadas abaixo; no entanto, esta lista pode não
-              ser exaustiva. Se você acha que sua conta foi comprometida, você
-              também deve atualizar sua senha.
-            </div>
-
-            <div className="flex items-center mt-5">
-              <button type="submit" className="btn normal-case">
-                Sair de outras sessões do navegador
-              </button>
-              <div className="text-sm text-gray-600 ml-3">Feito.</div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   )
 }
