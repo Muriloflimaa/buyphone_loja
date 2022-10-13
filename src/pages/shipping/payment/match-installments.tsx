@@ -22,13 +22,14 @@ export default function MatchInstallments({ address }: Address) {
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const installments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const [installments, setInstallments] = useState<any>()
   const { '@BuyPhone:GetCredit': Getcredit } = parseCookies(undefined)
 
   useEffect(() => {
     if (values) {
       setCartSize(values.length)
     }
+    getInstallments()
   }, [values])
 
   async function handleCard() {
@@ -68,6 +69,23 @@ export default function MatchInstallments({ address }: Address) {
       }
 
       setStateModalError(true)
+    }
+  }
+
+  async function getInstallments() {
+    try {
+      const data = {
+        amount: somaTotal,
+      }
+
+      const response = await apiStoreBeta.get(`checkout/installments`, {
+        params: data,
+        headers: { 'contents-type': 'application/json' },
+      })
+
+      setInstallments(Object.values(response.data))
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -145,7 +163,7 @@ export default function MatchInstallments({ address }: Address) {
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-2">
-            {installments.map((res) => {
+            {installments.map((res: any) => {
               return (
                 <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
                   <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
@@ -160,7 +178,7 @@ export default function MatchInstallments({ address }: Address) {
                       icon={faCreditCard}
                       className="w-4 h-4 ml-5"
                     />
-                    <span className="label-text text-lg">{res}x R$1.633</span>
+                    <span className="label-text text-lg">{res}</span>
                   </label>
                 </div>
               )
