@@ -1,5 +1,7 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
+import { setCookie } from 'nookies'
+import { useEffect } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
@@ -15,6 +17,12 @@ import { GetUseType } from '../utils/getUserType'
 export default function MyApp({ Component, pageProps }: AppProps) {
   const userData = GetUseType()
   const router = useRouter()
+
+  useEffect(() => {
+    router.query.user && setCookie(null, 'USER_LEAD', 'true', {
+      path: '/',
+    })
+  }, [])
 
   return (
     <Theme
