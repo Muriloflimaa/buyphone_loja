@@ -21,7 +21,11 @@ type SignInFormData = {
   mobile_phone: string
 }
 
-export default function profile({ data }: UserData) {
+interface user {
+  data: UserData
+}
+
+export default function profile({ data }: user) {
   const [password, setPassword] = useState<string | null>()
   const [changePassword, setChangePassword] = useState<string | null>()
   const [ConfirmCP, setConfirmCP] = useState<string | null>()

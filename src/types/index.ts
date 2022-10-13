@@ -157,23 +157,21 @@ export interface ArrayProduct {
 }
 
 export interface UserData {
-  data: {
-    id: number
-    name: string
-    email: string
-    email_verified_at: null | string
-    current_team_id: null | string
-    profile_photo_path: null | string
-    creat_at: string
-    updated_at: string
-    document: string
-    external_id: string
-    birthdate: string
-    mobile_phone: string
-    code: null | string | number
-    type: number
-    profile_photo_url: string
-  }
+  id: number
+  name: string
+  email: string
+  email_verified_at: null | string
+  current_team_id: null | string
+  profile_photo_path: null | string
+  creat_at: string
+  updated_at: string
+  document: string
+  external_id: string
+  birthdate: string
+  mobile_phone: string
+  code: null | string | number
+  type: number
+  profile_photo_url: string
 }
 
 export interface Address {
@@ -196,4 +194,17 @@ export interface ProductPayment {
   product_id: number
   price: number
   qty: number
+}
+
+export interface UserData {
+  address: Address
+  address_id: number
+  created_at: string
+  id: number
+  invoice: IInvoice
+  invoice_id: number
+  method: string
+  total: number
+  updated_at: string
+  user_id: number
 }

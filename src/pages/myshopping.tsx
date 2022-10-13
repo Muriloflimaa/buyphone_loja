@@ -4,10 +4,33 @@ import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import Link from 'next/link'
 import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { UserData } from '../types'
+
+interface DataProps {
+  current_page: number
+  data: Array<UserData>
+  first_page_url: string
+  from: number
+  last_page: number
+  last_page_url: string
+  links: Array<{
+    active: boolean
+    label: string
+    url: string | null
+  }>
+  next_page_url: string
+  path: string
+  per_page: number
+  prev_page_url: null | number
+  to: number
+  total: number
+}
 
 function MyShopping() {
-  const [data, setData] = useState<Array<{}> | undefined>()
+  const [data, setData] = useState<DataProps>()
   const cookies = parseCookies(undefined)
+
+  console.log(data)
 
   async function GetInvoice() {
     if (cookies['@BuyPhone:User']) {
@@ -26,9 +49,9 @@ function MyShopping() {
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
         Minhas Compras
       </h1>
-      <div className="grid gap-3 px-3">
-        {data && data.length > 0 ? (
-          data.map((pedido: any) => (
+      <div className="grid border rounded-md border-b-0">
+        {data && data?.data.length >= 0 ? (
+          data?.data.map((pedido: any) => (
             <React.Fragment key={pedido.id}>
               <ListProducts
                 created={pedido.created_at}
@@ -50,7 +73,7 @@ function MyShopping() {
               />
             </React.Fragment>
           ))
-        ) : data && data.length <= 0 ? (
+        ) : data && data.data.length <= 0 ? (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
             <img
               src="https://loja.buyphone.com.br/img/empty.webp"
@@ -89,6 +112,19 @@ function MyShopping() {
             <h1>Carregando...</h1>
           </div>
         )}
+        <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
+          {data?.links.map((link) => (
+            <button
+              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
+                link.active === true ? 'btn-disabled' : ''
+              }`}
+            >
+              {link.label
+                .replace('&laquo; Previous', 'Anterior')
+                .replace('Next &raquo;', 'Próximo')}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

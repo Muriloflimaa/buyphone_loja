@@ -59,7 +59,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           alt=""
         />
         <CarouselComponent />
-        <div className="flex w-full max-w-[2000px] mx-auto mt-2 ">
+        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-2 ">
           <Carousel
             infiniteLoop
             autoPlay
@@ -68,7 +68,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             showThumbs={false}
             showArrows={false}
             showIndicators={false}
-            className="w-1/2"
+            className="md:w-1/2"
           >
             <Link
               className="cursor-pointer"
@@ -81,7 +81,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             </Link>
             <Image src={MiniBanner3} quality={100}></Image>
           </Carousel>
-          <div className="w-1/2">
+          <div className="md:w-1/2">
             <Link
               className="cursor-pointer"
               href={'/products/apple/iphones/iphone-12-pro'}

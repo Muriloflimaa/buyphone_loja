@@ -1,3 +1,10 @@
+import {
+  faHandPointer,
+  faICursor,
+  faMoneyCheck,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -54,30 +61,37 @@ const ListProducts = ({
   }
 
   return (
-    <div
-      className={'collapse collapse-arrow card shadow-lg shadow-indigo-500/50 '}
-    >
+    <div className="collapse collapse-arrow card rounded-none border-b border-gray-300">
       <input type="checkbox" className="peer" />
       <div className="collapse-title flex justify-between items-center">
-        <span className="font-bold text-lg">Pedido #{number}</span>
+        <div className="flex flex-col">
+          <span className="font-bold">Pedido #{number}</span>
+          <span className="hidden badge badge-xs badge-ghost sm:block">
+            {date(created)}
+          </span>
+        </div>
 
         <div className="flex gap-2 items-center">
-          <div className="flex flex-col gap-1 items-end md:flex-row">
+          <div className="flex flex-col gap-3 items-center md:flex-row">
             {(method === 'PIX' &&
               statuspayment !== 'paid' &&
               expired !== 'expired') ??
             'manual_paid' ??
             'captured' ? (
               <>
-                <div className="justify-end flex-col items-center cursor-pointer">
+                <div className="justify-end flex-col items-center cursor-pointer z-10">
                   <label
                     htmlFor={CodImgPix}
                     className={
-                      'badge cursor-pointer animate-pulse ' +
-                      (user?.type === 1 ? 'badge-info' : '')
+                      'btn btn-sm btn-success cursor-pointer normal-case font-normal ' +
+                      (user?.type === 1 ? 'btn-info' : '')
                     }
                   >
-                    Realizar pagamento
+                    Pagar
+                    <FontAwesomeIcon
+                      icon={faWallet}
+                      className="w-4 h-4 text-white ml-2"
+                    />
                   </label>
                 </div>
 
@@ -134,7 +148,7 @@ const ListProducts = ({
                           </div>
                           <div className="divider md:divider-horizontal"></div>
                           <div className="flex flex-col w-full justify-center gap-3">
-                            <div className="badge badge-lg badge-warning">
+                            <div className="badge badge-sm badge-warning">
                               Aguardando Pagamento
                             </div>
                             <div className="flex flex-col gap-3">
@@ -175,50 +189,7 @@ const ListProducts = ({
             ) : (
               ''
             )}
-
-            {statuspayment == 'canceled' ?? 'voided' ? (
-              <span className="badge h-auto text-center ml-12">
-                Cobrança cancelada
-              </span>
-            ) : statuspayment == 'processing' ??
-              'waiting_capture' ??
-              'partial_captured' ??
-              'failed' ? (
-              <span className="badge badge-warning h-auto text-center ml-12">
-                Processando pagamento
-              </span>
-            ) : statuspayment == 'registered' ? (
-              <span className="badge badge-warning h-auto text-center ml-12">
-                Registrado
-              </span>
-            ) : statuspayment == 'paid' ?? 'manual_paid' ?? 'captured' ? (
-              <span className="badge badge-success h-auto text-center ml-12">
-                Pagamento aprovado
-              </span>
-            ) : statuspayment == 'manual_failed' ? (
-              <span className="badge badge-error h-auto text-center ml-12">
-                Falha ao efetuar pagamento
-              </span>
-            ) : statuspayment == 'not_authorized' ? (
-              <span className="badge badge-error h-auto text-center ml-12">
-                Não autorizada
-              </span>
-            ) : statuspayment == 'with_error' ? (
-              <span className="badge badge-error h-auto text-center ml-12">
-                Com erro
-              </span>
-            ) : statuspayment == 'created' ? (
-              <span className="badge badge-warning h-auto text-center ml-12">
-                Aguardando Pagamento
-              </span>
-            ) : (
-              <span className="badge badge-warning h-auto text-center ml-12">
-                Aguardando Pagamento
-              </span>
-            )}
           </div>
-
-          <span className="hidden sm:block text-xs">{date(created)}</span>
         </div>
       </div>
       <div className="collapse-content">
@@ -267,6 +238,48 @@ const ListProducts = ({
               <h3 className="text-xl mb-2 font-bold text-center">
                 Meio de Pagamento
               </h3>
+              <div className="text-center mb-2">
+                {statuspayment == 'canceled' ?? 'voided' ? (
+                  <span className="badge h-auto text-center">
+                    Cobrança cancelada
+                  </span>
+                ) : statuspayment == 'processing' ??
+                  'waiting_capture' ??
+                  'partial_captured' ??
+                  'failed' ? (
+                  <span className="badge badge-warning badge-sm h-auto text-center">
+                    Processando pagamento
+                  </span>
+                ) : statuspayment == 'registered' ? (
+                  <span className="badge badge-warning badge-sm h-auto text-center">
+                    Registrado
+                  </span>
+                ) : statuspayment == 'paid' ?? 'manual_paid' ?? 'captured' ? (
+                  <span className="badge badge-success badge-sm h-auto text-center">
+                    Pagamento aprovado
+                  </span>
+                ) : statuspayment == 'manual_failed' ? (
+                  <span className="badge badge-error badge-sm h-auto text-center">
+                    Falha ao efetuar pagamento
+                  </span>
+                ) : statuspayment == 'not_authorized' ? (
+                  <span className="badge badge-error badge-sm h-auto text-center">
+                    Não autorizada
+                  </span>
+                ) : statuspayment == 'with_error' ? (
+                  <span className="badge badge-error badge-sm h-auto text-center">
+                    Com erro
+                  </span>
+                ) : statuspayment == 'created' ? (
+                  <span className="badge badge-warning badge-sm h-auto text-center">
+                    Aguardando Pagamento
+                  </span>
+                ) : (
+                  <span className="badge badge-warning badge-sm h-auto text-center">
+                    Aguardando Pagamento
+                  </span>
+                )}
+              </div>
               <p className="text-center">{method}</p>
               <span className="font-bold text-success text-lg mt-2 block text-center">
                 Total: R$ {moneyMask(value.toString())}
