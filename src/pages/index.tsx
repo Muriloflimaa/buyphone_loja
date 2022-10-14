@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
@@ -15,6 +15,8 @@ import MiniBanner2 from '../assets/images/miniBanner2.webp'
 import MiniBanner3 from '../assets/images/miniBanner3.webp'
 import { Carousel } from 'react-responsive-carousel'
 import { CardDepoiments } from '../components/CardDepoiment'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 interface DataProps {
   data: {
@@ -25,6 +27,20 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data }) => {
   const user = GetUseType()
   const { search } = useContext(SearchContext)
+  const [showArrow, setShowArrow] = useState(true)
+
+  useEffect(() => {
+    window.addEventListener('scroll', changeBackground)
+  }, [])
+
+  const changeBackground = () => {
+    if (window.scrollY > 300) {
+      setShowArrow(true)
+    } else {
+      setShowArrow(false)
+    }
+  }
+
   // const [currentSlide, setCurrentSlide] = useState(1)
 
   // function hotProducts(product: Element | Array<IProduct> | any) {
@@ -46,7 +62,19 @@ const Home: NextPage<DataProps> = ({ data }) => {
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
-      <div className="h-auto -mt-8">
+      <div id="main" className="h-auto -mt-8">
+        {showArrow === true ? (
+          <div className="w-full z-50 -top-6 right-6 flex justify-end items-end min-h-screen fixed">
+            <a href="#main">
+              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex relative justify-center items-center">
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  className="w-5 h-5 absolute"
+                />
+              </div>
+            </a>
+          </div>
+        ) : null}
         {/* banner para mobile */}
         <img
           className="md:hidden max-h-full"
