@@ -87,6 +87,8 @@ export default function MatchInstallment({
     } catch (error: any) {
       if (error.response.data.errors.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
+        destroyCookie(null, '@BuyPhone:CreditCardInfo')
+        router.push('/shipping/payment/credit')
         return
       }
 
@@ -115,8 +117,6 @@ export default function MatchInstallment({
       router.push('/shipping/payment')
     }
   }
-
-  console.log(matchInstallments)
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
@@ -192,10 +192,12 @@ export default function MatchInstallment({
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-2">
-            <Installments
-              setMatchInstallments={setMatchInstallments}
-              props={installments}
-            />
+            {installments && (
+              <Installments
+                setMatchInstallments={setMatchInstallments}
+                props={installments}
+              />
+            )}
 
             <div className="flex justify-end mt-4">
               <button
