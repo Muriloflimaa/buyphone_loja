@@ -19,6 +19,7 @@ import { useCart } from '../../../context/UseCartContext'
 import { GetUseType } from '../../../utils/getUserType'
 import { useRouter } from 'next/router'
 import { setCookies } from '../../../utils/useCookies'
+import { Alert } from 'react-daisyui'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -199,25 +200,26 @@ export default function credit({ address }: Address) {
                   onChange={(e) => maskCpfCnpjInput(e)}
                   maxLength={18}
                 />
-                {/* <div className="field-container">
-                  <label htmlFor="installments" className="label">
-                    Opções de Parcelamento
-                  </label>
-                  <select
-                    id="installments"
-                    className="select select-bordered w-full"
-                    defaultValue={2}
-                    {...register('installments')}
-                  >
-                    {installments?.map((res) => {
-                      return (
-                        <option key={res} value={res.length}>
-                          {res}
-                        </option>
-                      )
-                    })}
-                  </select>
-                </div> */}
+                <div className="alert alert-warning p-3 shadow-lg mt-4">
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current flex-shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    <span className="text-xs">
+                      Atenção, o CPF precisa ser do titular do cartão!
+                    </span>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col">
                 <Link href={'/shipping/payment/pix'} passHref>
