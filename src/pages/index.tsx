@@ -93,7 +93,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             </Link>
           </div>
         </div>
-        <div className="mt-10">
+        {/* <div className="mt-10 max-w-7xl">
           <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>
 
           <Carousel
@@ -112,12 +112,12 @@ const Home: NextPage<DataProps> = ({ data }) => {
             <CardMatch next={next} />
             <CardMatch next={next} />
           </Carousel>
-        </div>
-        <div className="max-w-7xl mx-auto">
+        </div> */}
+        {/* <div className="max-w-7xl mx-auto">
           <Image src={ScrapeImg} layout="responsive" quality={100} />
-        </div>
+        </div> */}
 
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <h1 className="text-4xl font-medium text-center">Mais vendidos</h1>
 
           {data.data.length > 0 ? (
@@ -202,11 +202,11 @@ const Home: NextPage<DataProps> = ({ data }) => {
               <h1>Carregando...</h1>
             </div>
           )}
-        </div>
-        <div>
-          <div className="max-w-7xl my-8 mx-auto">
+        </div> */}
+        <div className="mt-8">
+          {/* <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
-          </div>
+          </div> */}
           <h1 className="text-4xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
@@ -261,22 +261,6 @@ const Home: NextPage<DataProps> = ({ data }) => {
             )}
           </div>
         </div>
-        <Link
-          href={'https://api.whatsapp.com/send?phone=5518981367275'}
-          passHref
-        >
-          <a
-            target="_blank"
-            className="alert alert-success justify-center my-10 text-sm md:text-md max-w-7xl mx-auto text-PrimaryText bg-[#00a843]"
-          >
-            <FontAwesomeIcon
-              icon={faWhatsapp}
-              className="w-7 h-7 text-PrimaryText"
-            />
-            Não encontrou o que procura? Clique aqui para falar com o nosso
-            consultor.
-          </a>
-        </Link>
       </div>
     </>
   )

@@ -11,7 +11,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input } from '../../../components/InputElement'
 import {
   maskCpfCnpjInput,
-  maskCpfInput,
   maskCreditCard,
   maskExpirationDate,
   maskMustNumber,
@@ -25,6 +24,8 @@ import {
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons'
 import { GetUseType } from '../../../utils/getUserType'
+import { useRouter } from 'next/router'
+import { setCookies } from '../../../utils/useCookies'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -35,6 +36,7 @@ export default function credit({ address }: Address) {
   const [focus, setFocus] = useState(false)
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
+  const router = useRouter()
   const { values, somaTotal, CleanCart } = useCart()
   const user = GetUseType()
 
@@ -68,10 +70,6 @@ export default function credit({ address }: Address) {
       .typeError('Digite um código de segurança válido')
       .required('Campo código de segurança é obrigatório'),
     document: yup.string().required('O campo CPF é obrigatório'),
-    installments: yup
-      .number()
-      .typeError('Amount must be a number')
-      .required('O campo de parcelas é obrigatório'),
   })
 
   const { register, handleSubmit, formState } = useForm({
@@ -82,42 +80,16 @@ export default function credit({ address }: Address) {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    try {
-      const setDat: ProductPayment[] = []
-      values.map(async (item: ArrayProduct) => {
-        const response = {
-          product_id: item.id,
-          price: item.priceFormated,
-          qty: item.amount,
-        }
-        setDat.push(response)
-      })
-
-      const { data } = await apiStoreBeta.post(`checkout/credit-card`, {
-        ...value,
-        user_id: user.id,
-        address_id: address.id,
-        shippingPrice: 0,
-        items: setDat,
-        amount: somaTotal,
-      })
-
-      if (data.original.status === 'paid') {
-        setStateModalSuccess(true)
-        CleanCart()
-        destroyCookie(undefined, '@BuyPhone:GetCep')
-      } else {
-        setStateModalError(true)
-      }
-      console.log(data)
-    } catch (error: any) {
-      if (error.response.data.errors?.document) {
-        ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
-        return
-      }
-      console.log(error)
-      setStateModalError(true)
+    const data = {
+      ...value,
+      user_id: user.id,
+      address_id: address.id,
+      shippingPrice: 0,
+      amount: somaTotal,
     }
+
+    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 60)
+    router.push('/shipping/payment/match-installments')
   }
 
   const { errors } = formState
@@ -301,7 +273,7 @@ export default function credit({ address }: Address) {
                   onChange={(e) => maskCpfCnpjInput(e)}
                   maxLength={18}
                 />
-                <div className="field-container">
+                {/* <div className="field-container">
                   <label htmlFor="installments" className="label">
                     Opções de Parcelamento
                   </label>
@@ -311,20 +283,15 @@ export default function credit({ address }: Address) {
                     defaultValue={2}
                     {...register('installments')}
                   >
-                    <option value={1}>1x de R$0,00 (sem juros)</option>
-                    <option value={2}>2x de R$0,50 (com juros)</option>
-                    <option value={3}>3x de R$0,33 (com juros)</option>
-                    <option value={4}>4x de R$0,25 (com juros)</option>
-                    <option value={5}>5x de R$0,20 (com juros)</option>
-                    <option value={6}>6x de R$0,17 (com juros)</option>
-                    <option value={7}>7x de R$0,14 (com juros)</option>
-                    <option value={8}>8x de R$0,12 (com juros)</option>
-                    <option value={9}>9x de R$0,11 (com juros)</option>
-                    <option value={10}>10x de R$0,10 (com juros)</option>
-                    <option value={11}>11x de R$0,09 (com juros)</option>
-                    <option value={12}>12x de R$0,08 (com juros)</option>
+                    {installments?.map((res) => {
+                      return (
+                        <option key={res} value={res.length}>
+                          {res}
+                        </option>
+                      )
+                    })}
                   </select>
-                </div>
+                </div> */}
               </div>
               <div className="flex flex-col">
                 <Link href={'/shipping/payment/pix'} passHref>
