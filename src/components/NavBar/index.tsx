@@ -224,6 +224,7 @@ export default function NavBar() {
                         </ul>
                       </div>
                     )}
+
                     <div
                       className={
                         'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
@@ -231,13 +232,13 @@ export default function NavBar() {
                       }
                       onClick={() => setShowCart(!showCart)}
                     ></div>
-                    <div
-                      className={
-                        'dropdown dropdown-end  ' +
-                        (showCart ? 'opacity-100 visible' : '')
-                      }
-                    >
-                      {!notShowCart && (
+                    {!notShowCart && (
+                      <div
+                        className={
+                          'dropdown dropdown-end  ' +
+                          (showCart ? 'opacity-100 visible' : '')
+                        }
+                      >
                         <label className=" m-1">
                           <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
                             <ShoppingCartIcon
@@ -251,85 +252,85 @@ export default function NavBar() {
                                   <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                                 </span>
                               </div>
+                            ) : null}
+                          </div>
+                        </label>
+
+                        <div
+                          className={
+                            'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
+                            (showCart ? 'opacity-100 visible' : '')
+                          }
+                        >
+                          <div className="card-body">
+                            <div className="flex justify-between">
+                              <span className="text-lg uppercase">
+                                Meu Carrinho
+                              </span>
+                              <span className="font-thin text-xs">
+                                {cartSize && cartSize > 1
+                                  ? cartSize + ' itens'
+                                  : cartSize == 1
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="card-body max-h-80 overflow-y-auto gap-6">
+                            {cartSize && cartSize > 0 ? (
+                              values.map(
+                                (res) =>
+                                  res.id && (
+                                    <li className="list-none" key={res.id}>
+                                      <ProductCart
+                                        id={res.id}
+                                        amount={res.amount}
+                                        name={res.product.name}
+                                        color={res.product.color}
+                                        price={res.subTotal}
+                                        memory={res.product.memory}
+                                        image={
+                                          res.product.media[0].original_url
+                                        }
+                                      />
+                                    </li>
+                                  )
+                              )
+                            ) : (
+                              <h1>Carrinho vazio</h1>
+                            )}
+                          </div>
+                          <div className="card-body bg-base-200">
+                            {somaTotal > 0 ? (
+                              <div className="flex justify-between py-4">
+                                <span className="text-gray-500 text-lg">
+                                  Valor Total:
+                                </span>
+                                <span className="font-semibold text-lg">
+                                  R$ {moneyMask(somaTotal.toString())}
+                                </span>
+                              </div>
                             ) : (
                               ''
                             )}
+                            {cartSize && cartSize > 0 ? (
+                              <div className="card-actions justify-center">
+                                <a
+                                  onClick={() => {
+                                    setShowCart(!showCart)
+                                    router.push('/shipping')
+                                  }}
+                                  className="btn btn-success btn-block font-medium normal-case"
+                                >
+                                  Finalizar Compra
+                                </a>
+                              </div>
+                            ) : null}
                           </div>
-                        </label>
-                      )}
-
-                      <div
-                        className={
-                          'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
-                          (showCart ? 'opacity-100 visible' : '')
-                        }
-                      >
-                        <div className="card-body">
-                          <div className="flex justify-between">
-                            <span className="text-lg uppercase">
-                              Meu Carrinho
-                            </span>
-                            <span className="font-thin text-xs">
-                              {cartSize && cartSize > 1
-                                ? cartSize + ' itens'
-                                : cartSize == 1
-                                ? cartSize + ' item'
-                                : 'Carrinho está vazio'}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="card-body max-h-80 overflow-y-auto gap-6">
-                          {cartSize && cartSize > 0 ? (
-                            values.map(
-                              (res) =>
-                                res.id && (
-                                  <li className="list-none" key={res.id}>
-                                    <ProductCart
-                                      id={res.id}
-                                      amount={res.amount}
-                                      name={res.product.name}
-                                      color={res.product.color}
-                                      price={res.subTotal}
-                                      memory={res.product.memory}
-                                      image={res.product.media[0].original_url}
-                                    />
-                                  </li>
-                                )
-                            )
-                          ) : (
-                            <h1>Carrinho vazio</h1>
-                          )}
-                        </div>
-                        <div className="card-body bg-base-200">
-                          {somaTotal > 0 ? (
-                            <div className="flex justify-between py-4">
-                              <span className="text-gray-500 text-lg">
-                                Valor Total:
-                              </span>
-                              <span className="font-semibold text-lg">
-                                R$ {moneyMask(somaTotal.toString())}
-                              </span>
-                            </div>
-                          ) : (
-                            ''
-                          )}
-                          {cartSize && cartSize > 0 ? (
-                            <div className="card-actions justify-center">
-                              <a
-                                onClick={() => {
-                                  setShowCart(!showCart)
-                                  router.push('/shipping')
-                                }}
-                                className="btn btn-success btn-block font-medium normal-case"
-                              >
-                                Finalizar Compra
-                              </a>
-                            </div>
-                          ) : null}
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

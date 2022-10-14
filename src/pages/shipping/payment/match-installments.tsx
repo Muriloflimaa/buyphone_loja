@@ -72,10 +72,12 @@ export default function MatchInstallment({
         installments: matchInstallments,
       }
 
-      const data: { data: { original: { status: string } } } =
-        await apiStoreBeta.post(`checkout/credit-card`, infoData)
+      const data: { data: { status: string } } = await apiStoreBeta.post(
+        `checkout/credit-card`,
+        infoData
+      )
 
-      if (data.data.original.status === 'paid') {
+      if (data.data.status === 'paid') {
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
