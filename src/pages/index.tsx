@@ -1,5 +1,3 @@
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -16,9 +14,7 @@ import MiniBanner1 from '../assets/images/miniBanner1.webp'
 import MiniBanner2 from '../assets/images/miniBanner2.webp'
 import MiniBanner3 from '../assets/images/miniBanner3.webp'
 import { Carousel } from 'react-responsive-carousel'
-import CardMatch from '../components/CardMatch'
-import ScrapeImg from '../assets/images/scrape.webp'
-import Banner4 from '../assets/images/banner4.webp'
+import { CardDepoiments } from '../components/CardDepoiment'
 
 interface DataProps {
   data: {
@@ -27,24 +23,23 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-  const currentRefCarroussel = useRef<any>()
   const user = GetUseType()
   const { search } = useContext(SearchContext)
-  const [currentSlide, setCurrentSlide] = useState(1)
+  // const [currentSlide, setCurrentSlide] = useState(1)
 
-  function hotProducts(product: Element | Array<IProduct> | any) {
-    return product
-  }
+  // function hotProducts(product: Element | Array<IProduct> | any) {
+  //   return product
+  // }
 
-  function next() {
-    const maxCurrent = currentRefCarroussel.current?.itemsRef.length
+  // function next() {
+  //   const maxCurrent = currentRefCarroussel.current?.itemsRef.length
 
-    if (currentSlide >= maxCurrent) {
-      setCurrentSlide(1)
-      return
-    }
-    setCurrentSlide(currentSlide + 1)
-  }
+  //   if (currentSlide >= maxCurrent) {
+  //     setCurrentSlide(1)
+  //     return
+  //   }
+  //   setCurrentSlide(currentSlide + 1)
+  // }
 
   return (
     <>
@@ -59,11 +54,11 @@ const Home: NextPage<DataProps> = ({ data }) => {
           alt=""
         />
         <CarouselComponent />
-        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-2 ">
+        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 gap-1">
           <Carousel
             infiniteLoop
             autoPlay
-            interval={2500}
+            interval={3000}
             showStatus={false}
             showThumbs={false}
             showArrows={false}
@@ -79,7 +74,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
                 <Image src={MiniBanner1} quality={100}></Image>
               </a>
             </Link>
-            <Image src={MiniBanner3} quality={100}></Image>
+            <a href="#depoiments">
+              <Image src={MiniBanner3} quality={100}></Image>
+            </a>
           </Carousel>
           <div className="md:w-1/2">
             <Link
@@ -260,6 +257,48 @@ const Home: NextPage<DataProps> = ({ data }) => {
               </div>
             )}
           </div>
+        </div>
+        <div id="depoiments"></div>
+        <div className="mt-20">
+          <h1 className="text-4xl font-medium text-center mb-8">Depoimentos</h1>
+          <Carousel
+            infiniteLoop
+            autoPlay
+            interval={5000}
+            showIndicators={false}
+            showStatus={false}
+            showThumbs={false}
+            className="max-w-7xl mx-auto mb-8 "
+            renderArrowPrev={(onClickHandler, hasPrev, label) =>
+              hasPrev && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  title={label}
+                  className="btn btn-circle absolute z-10 top-[40%] left-4"
+                >
+                  ❮
+                </button>
+              )
+            }
+            renderArrowNext={(onClickHandler, hasNext, label) =>
+              hasNext && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  title={label}
+                  className="btn btn-circle absolute z-10 top-[40%] right-4"
+                >
+                  ❯
+                </button>
+              )
+            }
+          >
+            <CardDepoiments />
+            <CardDepoiments />
+            <CardDepoiments />
+            <CardDepoiments />
+          </Carousel>
         </div>
       </div>
     </>
