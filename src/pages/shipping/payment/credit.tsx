@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
-import { destroyCookie, parseCookies } from 'nookies'
+import { parseCookies } from 'nookies'
 import { useState } from 'react'
 import Card from '../../../components/Card/index'
 import { TotalPayment } from '../../../components/TotalPayment'
-import { Address, ArrayProduct, ProductPayment } from '../../../types'
+import { Address } from '../../../types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -15,14 +15,7 @@ import {
   maskExpirationDate,
   maskMustNumber,
 } from '../../../utils/masks'
-import { apiStoreBeta } from '../../../services/apiBetaConfigs'
 import { useCart } from '../../../context/UseCartContext'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from '@fortawesome/free-regular-svg-icons'
 import { GetUseType } from '../../../utils/getUserType'
 import { useRouter } from 'next/router'
 import { setCookies } from '../../../utils/useCookies'
@@ -34,10 +27,8 @@ export default function credit({ address }: Address) {
   const [code, setCode] = useState('')
   const [flag, setFlag] = useState('')
   const [focus, setFocus] = useState(false)
-  const [stateModalSuccess, setStateModalSuccess] = useState(false)
-  const [stateModalError, setStateModalError] = useState(false)
   const router = useRouter()
-  const { values, somaTotal, CleanCart } = useCart()
+  const { somaTotal } = useCart()
   const user = GetUseType()
 
   const checksFlag = (card: string) => {
@@ -98,71 +89,6 @@ export default function credit({ address }: Address) {
     <>
       <div className="max-w-7xl mx-auto grid gap-3">
         <TotalPayment />
-        {stateModalSuccess == true && (
-          <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
-            <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-              <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
-                <FontAwesomeIcon icon={faCircleCheck} className="h-20 w-h-20" />
-                <h3 className="font-bold text-2xl">Sucesso!</h3>
-              </div>
-
-              <div className="divider m-0 mt-36"></div>
-              <p className="font-bold text-lg text-success">
-                Obrigado pela sua compra!
-              </p>
-              <span className="mb-6 text-success">
-                O seu pedido foi aceito. <br />
-                Você irá receber uma notificação com os detalhes do pedido no
-                seu e-mail.
-              </span>
-
-              <Link href={'/myshopping'} passHref>
-                <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
-                  Ok
-                </button>
-              </Link>
-              <Link href={'/'} passHref>
-                <a className="link  md:mb-0 text-success">
-                  Ir para página inicial
-                </a>
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {stateModalError == true && (
-          <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
-            <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-              <div className="bg-error shadow-sm shadow-error w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
-                <FontAwesomeIcon icon={faCircleXmark} className="h-20 w-h-20" />
-                <h3 className="font-bold text-2xl">Falha!</h3>
-              </div>
-
-              <div className="divider m-0 mt-36"></div>
-              <p className="font-bold text-lg text-error">
-                Ops, ocorreu alguma falha no pagamento!
-              </p>
-              <span className="mb-6 text-error">
-                Tente novamente ou contate o nosso suporte.
-              </span>
-
-              <button
-                onClick={() => setStateModalError(false)}
-                className="btn btn-error max-w-xs text-white w-full rounded-full shadow-md shadow-error/60"
-              >
-                Tentar novamente
-              </button>
-
-              <a
-                target={'_blank'}
-                href="#link-para-suporte"
-                className="link  md:mb-0 text-error"
-              >
-                Contatar o suporte
-              </a>
-            </div>
-          </div>
-        )}
 
         <div className="flex flex-col gap-4 max-w-4xl mx-auto px-4">
           <h3 className="font-medium flex items-center gap-2">

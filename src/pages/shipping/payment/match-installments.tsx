@@ -1,12 +1,11 @@
 import {
   faCircleCheck,
   faCircleXmark,
-  faCreditCard,
 } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import Installments from '../../../components/Installments'
