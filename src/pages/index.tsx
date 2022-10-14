@@ -17,6 +17,9 @@ import { Carousel } from 'react-responsive-carousel'
 import { CardDepoiments } from '../components/CardDepoiment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import AnaImg from '../assets/images/anabrisa.jpg'
+import BrendaImg from '../assets/images/brenda.jpg'
+import BarbaraImg from '../assets/images/barbara.jpg'
 
 interface DataProps {
   data: {
@@ -64,7 +67,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
       </Head>
       <div id="main" className="h-auto -mt-8">
         {showArrow === true ? (
-          <div className="w-full z-50 -top-6 right-6 flex justify-end items-end min-h-screen fixed">
+          <div className="w-full -top-6 right-6 flex justify-end items-end min-h-screen fixed">
             <a href="#main">
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex relative justify-center items-center">
                 <FontAwesomeIcon
@@ -322,10 +325,30 @@ const Home: NextPage<DataProps> = ({ data }) => {
               )
             }
           >
-            <CardDepoiments />
-            <CardDepoiments />
-            <CardDepoiments />
-            <CardDepoiments />
+            <CardDepoiments
+              name="Anna Brisa"
+              instagram="www.instagram.com/annabrisaa"
+              linkVideo="https://www.youtube.com/embed/pMftaexP7RY"
+              image={AnaImg}
+              profissional="Digital influencer"
+              depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
+            />
+            <CardDepoiments
+              name="Brendha Crizel"
+              instagram="www.instagram.com/brendhacrizel/"
+              linkVideo="https://www.youtube.com/embed/VswfBYbeWFU"
+              image={BrendaImg}
+              profissional="Criador(a) de conteúdo digital"
+              depoiment="A BuyPhone tem o melhor preço do mercado e você pode escolher como quer pagar"
+            />
+            <CardDepoiments
+              name="Bárbara Brunca"
+              instagram="www.instagram.com/barbarabrunca/"
+              linkVideo="https://www.youtube.com/embed/OhEwSZSrRUY"
+              image={BarbaraImg}
+              profissional="Criador(a) de conteúdo digital"
+              depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
+            />
           </Carousel>
         </div>
       </div>
