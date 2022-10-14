@@ -22,7 +22,7 @@ const MyBottomNavigation = () => {
     setPos(positions[where].toString())
   }
   useEffect(() => {
-    if (router.asPath === '/rotadoslide0aqui-estadesativado') {
+    if (router.asPath === '/rota-do-slide-0-aqui-esta-desativado') {
       handleSlide(0)
       return
     }
