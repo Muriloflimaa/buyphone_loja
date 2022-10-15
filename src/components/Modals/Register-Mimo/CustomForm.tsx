@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
 import { FormEvent, useEffect, useState } from 'react';
+import { masktel1 } from '../../../utils/masks';
 import { ToastCustom } from '../../../utils/toastCustom';
-import { masktel1 } from '../../../utils/masks'
 
 interface IFormFields {
     EMAIL: string,
@@ -30,6 +31,9 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
                 'Notificação'
             )
             clearFields()
+            setCookie(null, 'LEAD', 'true', {
+                path: '/',
+            })
             router.push('/')
         }
         if (status === "error") {

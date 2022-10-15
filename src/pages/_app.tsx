@@ -19,7 +19,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
   useEffect(() => {
-    router.query.user && setCookie(null, 'USER_LEAD', 'true', {
+    const utms = {
+      utm_source: router.query.utm_source,
+      utm_medium: router.query.utm_medium,
+      utm_campaign: router.query.utm_campaign,
+    }
+    router.query.utm_source && router.query.utm_medium && router.query.utm_campaign && setCookie(null, 'UTM', JSON.stringify(utms), {
       path: '/',
     })
   }, [router])
