@@ -1,35 +1,58 @@
 import {
   faCircleCheck,
   faCircleXmark,
-  faCreditCard,
 } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
+import Installments from '../../../components/Installments'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStoreBeta } from '../../../services/apiBetaConfigs'
-import { Address, ArrayProduct, ProductPayment } from '../../../types'
+import { ArrayProduct, ProductPayment } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
 
-export default function MatchInstallments({ address }: Address) {
+interface GetInfoCreditProps {
+  GetInfoCredit: {
+    address_id: number
+    amount: number
+    card_cvv: number
+    card_holder_name: string
+    card_number: number
+    document: string
+    expiration_date: string
+    items: Array<{}>
+    shippingPrice: number
+    user_id: number
+  }
+}
+
+export default function MatchInstallment({
+  GetInfoCredit,
+}: GetInfoCreditProps) {
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const installments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  const { '@BuyPhone:GetCredit': Getcredit } = parseCookies(undefined)
+  const [installments, setInstallments] = useState<any>()
+
+  const router = useRouter()
 
   useEffect(() => {
     if (values) {
       setCartSize(values.length)
     }
   }, [values])
+
+  useEffect(() => {
+    getInstallments()
+  }, [somaTotal])
 
   async function handleCard() {
     try {
@@ -43,27 +66,31 @@ export default function MatchInstallments({ address }: Address) {
         setDat.push(response)
       })
 
-      const { data } = await apiStoreBeta.post(`checkout/credit-card`, {
-        user_id: address.user_id,
-        address_id: address.id,
-        card_id: Getcredit,
-        installments: matchInstallments,
-        shippingPrice: 0,
+      const infoData = {
+        ...GetInfoCredit,
         items: setDat,
-        amount: somaTotal,
-      })
+        installments: matchInstallments,
+      }
 
-      if (data.original.status === 'paid') {
+      const data: { data: { status: string } } = await apiStoreBeta.post(
+        `checkout/credit-card`,
+        infoData
+      )
+
+      if (data.data.status === 'paid') {
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
-        destroyCookie(null, '@BuyPhone:GetCredit')
+        destroyCookie(null, '@BuyPhone:CreditCardInfo')
       } else {
         setStateModalError(true)
+        return
       }
     } catch (error: any) {
-      if (error.response.data.errors?.document) {
+      if (error.response.data.errors.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
+        destroyCookie(null, '@BuyPhone:CreditCardInfo')
+        router.push('/shipping/payment/credit')
         return
       }
 
@@ -71,25 +98,27 @@ export default function MatchInstallments({ address }: Address) {
     }
   }
 
-  async function GetInstallments() {
-    if (somaTotal > 0) {
+  async function getInstallments() {
+    try {
       const data = {
         amount: somaTotal,
       }
-      try {
-        const response = await apiStoreBeta.get('/checkout/installments', {
-          data,
-        })
-        console.log(response)
-      } catch (error) {
-        console.log(error)
-      }
+
+      const response = await apiStoreBeta.get(`checkout/installments`, {
+        params: data,
+      })
+
+      setInstallments(response.data)
+    } catch (error) {
+      ToastCustom(
+        3000,
+        'Ocorreu algum erro para calcular as parcelas, tente novamente ou contate o suporte.',
+        'error'
+      )
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      router.push('/shipping/payment')
     }
   }
-
-  useEffect(() => {
-    GetInstallments()
-  }, [somaTotal])
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
@@ -165,26 +194,12 @@ export default function MatchInstallments({ address }: Address) {
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-2">
-            {installments.map((res) => {
-              return (
-                <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
-                  <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                    <input
-                      type="radio"
-                      onClick={(e: any) => setMatchInstallments(e.target.value)}
-                      value={res}
-                      name="radio-6"
-                      className="radio checked:bg-blue-500"
-                    />
-                    <FontAwesomeIcon
-                      icon={faCreditCard}
-                      className="w-4 h-4 ml-5"
-                    />
-                    <span className="label-text text-lg">{res}x R$1.633</span>
-                  </label>
-                </div>
-              )
-            })}
+            {installments && (
+              <Installments
+                setMatchInstallments={setMatchInstallments}
+                props={installments}
+              />
+            )}
 
             <div className="flex justify-end mt-4">
               <button
@@ -272,11 +287,12 @@ export default function MatchInstallments({ address }: Address) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
   const { '@BuyPhone:cart': cart } = parseCookies(ctx)
+  const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
 
   if (getDataUser && cart !== '[]') {
-    const address = JSON.parse(getDataUser)
+    const GetInfoCredit = JSON.parse(GetInfo)
     return {
-      props: { address },
+      props: { GetInfoCredit },
     }
   } else {
     return {

@@ -66,8 +66,17 @@ export default function CreditCheckout({ address }: Address) {
       return
     }
     if (matchCard !== null) {
-      setCookies('@BuyPhone:GetCredit', matchCard, 60 * 60)
+      const data = {
+        card_id: matchCard,
+        user_id: cards[0].user_id,
+        address_id: address.id,
+        shippingPrice: 0,
+        amount: somaTotal,
+      }
+
+      setCookies('@BuyPhone:CreditCardInfo', data, 60 * 60)
       router.push('/shipping/payment/match-installments')
+
       return
     } else {
       ToastCustom(3000, 'Escolha uma opção de cartão', 'error')
@@ -85,7 +94,7 @@ export default function CreditCheckout({ address }: Address) {
           <div className="flex flex-col w-full gap-3">
             {cards.map((res) => {
               return (
-                <div className="flex gap-2 w-full items-center">
+                <div key={res.id} className="flex gap-2 w-full items-center">
                   <FontAwesomeIcon
                     onClick={() => handleRemoveCard(res.id)}
                     icon={faTrash}

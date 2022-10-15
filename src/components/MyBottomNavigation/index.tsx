@@ -1,8 +1,4 @@
 import {
-  ArrowNarrowLeftIcon,
-  BellIcon,
-  CashIcon,
-  ChartBarIcon,
   HomeIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
@@ -26,7 +22,7 @@ const MyBottomNavigation = () => {
     setPos(positions[where].toString())
   }
   useEffect(() => {
-    if (router.asPath === '/rotadoslide0aqui-estadesativado') {
+    if (router.asPath === '/rota-do-slide-0-aqui-esta-desativado') {
       handleSlide(0)
       return
     }
@@ -66,15 +62,15 @@ const MyBottomNavigation = () => {
   }, [router.asPath])
 
   return (
-    <div className="flex justify-around items-center max-w-[1600px] fixed bottom-0 w-full h-16 p-0 bg-black md:hidden">
+    <div className="flex z-50 justify-around items-center max-w-[1600px] fixed bottom-0 w-full h-12 p-0 bg-black md:hidden">
       <div
         className={
-          'flex justify-center items-center absolute w-[151px] h-[100px] -mt-[28px] transition-all duration-300 ease-in-out bg-curved'
+          'flex justify-center items-center absolute w-[151px] h-[100px] -mt-[14px] transition-all duration-300 ease-in-out bg-curved'
         }
         style={{ transform: 'translateX(-50%)', left: `${move}` }}
       >
         <span
-          className="block rounded-[50%] h-[66px] w-[66px] transition-all ease-in-out duration-500"
+          className="block rounded-[50%] h-[56px] w-[56px] -mt-[15px] transition-all ease-in-out duration-500"
           style={{ backgroundColor: `${color}` }}
         />
       </div>

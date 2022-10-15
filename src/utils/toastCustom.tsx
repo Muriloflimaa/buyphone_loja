@@ -19,10 +19,12 @@ export const ToastCustom = (
         <div
           className={
             'alert items-start border-l-4 border-green-700 shadow-lg z-50 sm:right-2 w-80 mx-auto ' +
-            (!!alert ? 'bg-green-200 text-green-900' : 'bg-primary text-white')
+            (!!alert ? 'bg-green-200 text-green-900 ' : 'bg-primary text-white')
           }
         >
-          <div className="flex gap-3 text-white">
+          <div
+            className={'flex gap-3 ' + (state === 'error' && 'text-red-900')}
+          >
             {state === 'error' ? (
               <div className="w-10 h-10 md:w-20 md:h-w-20">
                 <Image src={ErrorImg} layout="responsive"></Image>
