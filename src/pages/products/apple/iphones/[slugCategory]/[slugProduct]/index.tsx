@@ -284,7 +284,7 @@ export default function Products({ data }: DataProps) {
                   </span>
                 </div>
               </div>
-              <div className="badge badge-success rounded-md font-bold uppercase">
+              <div className="badge badge-success rounded-md text-xs font-semibold p-3 uppercase">
                 <span className="text-white">
                   economia de{' '}
                   <span className="text-primary">
@@ -300,7 +300,7 @@ export default function Products({ data }: DataProps) {
                   </button>
                 ) : (
                   <button
-                    className="btn btn-primary text-white"
+                    className="btn btn-info px-16 text-white"
                     data-testid="add-product-button"
                     onClick={() => handleAddProduct(data.id)}
                   >
@@ -329,7 +329,7 @@ export default function Products({ data }: DataProps) {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-primary text-white normal-case"
+                        className="btn btn-info text-white normal-case"
                         type="submit"
                       >
                         Consultar
