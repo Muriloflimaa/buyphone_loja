@@ -1,8 +1,10 @@
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+import { link } from '../../services/api'
 import { GetUseType } from '../../utils/getUserType'
 import { date, moneyMask } from '../../utils/masks'
 
@@ -105,10 +107,11 @@ const ListProducts = ({
                         <div className="flex flex-col w-full md:flex-row justify-evenly">
                           <div className="text-center w-full grid gap-3">
                             <div className="card card-compact shadow w-fit mx-auto">
-                              <img
-                                src={`https://loja.buyphone.com.br/img/qrcode/${CodImgPix}.png`}
-                                alt="QRCode"
-                                className="mx-auto h-32"
+                              <Image
+                                src={`https://${link}/img/qrcode/${CodImgPix}.png`}
+                                className="mx-auto"
+                                height={128}
+                                width={128}
                               />
                             </div>
                             <h3 className="font-bold text-2xl">

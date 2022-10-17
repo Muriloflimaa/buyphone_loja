@@ -3,7 +3,7 @@ import { parseCookies } from 'nookies'
 
 const { '@BuyPhone:Token': Cookies } = parseCookies()
 
-const link = process.env.LINK_API
+export const link = 'beta-api.buyphone.com.br'
 
 export function setupAPIClient(endpoint: string) {
   const api = axios.create({

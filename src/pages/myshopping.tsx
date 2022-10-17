@@ -30,8 +30,6 @@ function MyShopping() {
   const [data, setData] = useState<DataProps>()
   const cookies = parseCookies(undefined)
 
-  console.log(data)
-
   async function GetInvoice() {
     if (cookies['@BuyPhone:User']) {
       const user = JSON.parse(cookies['@BuyPhone:User'])
@@ -45,7 +43,6 @@ function MyShopping() {
   }, [])
 
   async function handleChangePagination(page: string) {
-    console.log(page)
     try {
       const user = JSON.parse(cookies['@BuyPhone:User'])
       const { data } = await apiStore(
@@ -75,12 +72,12 @@ function MyShopping() {
                 number={pedido.id}
                 value={pedido.total}
                 method={pedido.method}
-                address={pedido.address.address}
-                city={pedido.address.city}
-                numberAddress={pedido.address.number}
-                district={pedido.address.neighborhood}
-                state={pedido.address.uf}
-                zipCode={pedido.address.postal_code}
+                address={pedido.address?.address}
+                city={pedido.address?.city}
+                numberAddress={pedido.address?.number}
+                district={pedido.address?.neighborhood}
+                state={pedido.address?.uf}
+                zipCode={pedido.address?.postal_code}
                 linkPayment={pedido.invoice?.link}
                 CodImgPix={pedido.invoice?.invoice_id}
                 brCode={pedido.invoice?.brcode}

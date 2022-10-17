@@ -1,10 +1,9 @@
 import { GetServerSidePropsContext } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { destroyCookie, parseCookies } from 'nookies'
-import { useEffect } from 'react'
+import { parseCookies } from 'nookies'
 import toast from 'react-hot-toast'
-import { useCart } from '../../../context/UseCartContext'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
 
@@ -43,10 +42,11 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
         <div className="flex flex-col w-full md:flex-row justify-evenly">
           <div className="text-center w-full grid gap-3">
             <div className="card card-compact shadow w-fit mx-auto">
-              <img
-                src={`https://loja.buyphone.com.br/img/qrcode/${pix.invoice_id}.png`}
-                alt="QRCode"
-                className="mx-auto h-32"
+              <Image
+                src={pix.qrcode}
+                width={128}
+                height={128}
+                className="mx-auto"
               />
             </div>
             <h3 className="font-bold text-2xl">
