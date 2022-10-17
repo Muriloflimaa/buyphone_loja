@@ -1,13 +1,14 @@
-import Link from 'next/link'
-import { WithSSRGuest } from '../utils/WithSSRGuest'
-import { useRouter } from 'next/router'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { ToastCustom } from '../utils/toastCustom'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 import { Input } from '../components/InputElement'
-import { maskCpfInput, masktel } from '../utils/masks'
 import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { maskCpfInput, masktel } from '../utils/masks'
+import { ToastCustom } from '../utils/toastCustom'
+import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 type SignUpFormData = {
   email: string
@@ -58,6 +59,24 @@ export default function register() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
+    const cookies = parseCookies(undefined)
+    const utms = JSON.parse(cookies.UTM)
+    const lead = JSON.parse(cookies.LEAD)
+
+    const dataUTM = {
+      email: values.email,
+      document: values.document,
+      name: values.name,
+      mobile_phone: '+55' + values.mobile_phone,
+      birthdate: values.birthdate,
+      password: values.password,
+      type: 0,
+      utm_source: utms.utm_source,
+      utm_medium: utms.utm_medium,
+      utm_campaign: utms.utm_campaign,
+      lead: lead
+    }
+
     const data = {
       email: values.email,
       document: values.document,
@@ -70,17 +89,32 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      const response = await apiStoreBeta.post('/user', data)
+      await apiStoreBeta.post('/users', dataUTM)
+      ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/login')
-      console.log(response)
     } catch (error: any) {
-      console.log(error)
+      if (error.response.status == 422 && !!error.response.data.errors.utm_campaign || !!error.response.data.errors.utm_source || !!error.response.data.errors.utm_medium) {
+        try {
+          await apiStoreBeta.post('/users', data)
+          ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
+          router.push('/login')
+        } catch (newError: any) {
+          if (newError.response.data.errors) {
+            const resposta = newError.response.data.errors
+            var MessageErrorArray = Object.keys(resposta)?.map(function (key) {
+              return [resposta[key]]
+            })
+            ToastCustom(8000, MessageErrorArray, 'error')
+            return
+          }
+        }
+      }
       if (error.response.data.errors) {
         const resposta = error.response.data.errors
-
         var MessageErrorArray = Object.keys(resposta)?.map(function (key) {
           return [resposta[key]]
         })
+
         ToastCustom(8000, MessageErrorArray, 'error')
         return
       }
