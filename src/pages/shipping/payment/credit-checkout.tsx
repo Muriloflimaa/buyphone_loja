@@ -107,7 +107,7 @@ export default function CreditCheckout({ address }: Address) {
                     <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
                       <input
                         type="radio"
-                        onClick={() => setMatchCard(res.id.toString())}
+                        onClick={() => setMatchCard(res.card_id.toString())}
                         name="radio-6"
                         className="radio checked:bg-blue-500"
                       />
