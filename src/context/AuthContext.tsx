@@ -64,7 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         cookies['@BuyPhone:Router'] !== 'undefined'
       ) {
         window.location.href = cookies['@BuyPhone:Router']
-        destroyCookie({}, '@BuyPhone:Router')
+        destroyCookie(undefined, '@BuyPhone:Router')
         return
       }
       window.location.href = '/'
@@ -95,27 +95,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       //se tiver um token expirado apenas destruir os cookies
       if (Date.now() >= decodedToken.exp * 1000) {
-        destroyCookie({}, '@BuyPhone:User')
-        destroyCookie({}, '@BuyPhone:Token')
+        destroyCookie(undefined, '@BuyPhone:User')
+        destroyCookie(undefined, '@BuyPhone:Token')
         Router.push('/')
       } else {
         //se tiver um cookies mandar para a rota de logout
         try {
           await apiStore.post('/logout')
-          destroyCookie({}, '@BuyPhone:User')
-          destroyCookie({}, '@BuyPhone:Token')
+          destroyCookie(undefined, '@BuyPhone:User')
+          destroyCookie(undefined, '@BuyPhone:Token')
           Router.push('/')
         } catch (error) {
           //se der algum erro apenas destruir os cookies
-          destroyCookie({}, '@BuyPhone:User')
-          destroyCookie({}, '@BuyPhone:Token')
+          destroyCookie(undefined, '@BuyPhone:User')
+          destroyCookie(undefined, '@BuyPhone:Token')
           Router.push('/')
         }
       }
     } else {
       //caso não tiver um cookie destruir cookies, possivelmente nao entrara nesse caso
-      destroyCookie({}, '@BuyPhone:User')
-      destroyCookie({}, '@BuyPhone:Token')
+      destroyCookie(undefined, '@BuyPhone:User')
+      destroyCookie(undefined, '@BuyPhone:Token')
       Router.push('/')
     }
   }
