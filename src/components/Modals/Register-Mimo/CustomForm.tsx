@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { ToastCustom } from '../../../utils/toastCustom';
+import { masktel1 } from '../../../utils/masks'
 
 interface IFormFields {
     EMAIL: string,
@@ -14,21 +15,13 @@ interface ICustomForm {
     onValidated: (data: IFormFields) => void
 }
 
-export default function CustomForm({ status, message, onValidated }: ICustomForm) {
+export default function CustomForm({ status, onValidated }: ICustomForm) {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
 
     useEffect(() => {
-        if (status === "sending") {
-            ToastCustom(
-                8000,
-                'Enviando dados...',
-                'warning',
-                'Notificação'
-            )
-        }
         if (status === "success") {
             ToastCustom(
                 8000,
@@ -94,7 +87,7 @@ export default function CustomForm({ status, message, onValidated }: ICustomForm
                     className="input input-bordered rounded-md w-full text-info-content"
                     onChange={e => setPhone(e.target.value)}
                     type="text"
-                    value={phone}
+                    value={masktel1(phone)}
                     placeholder="Telefone"
                     required
                 />

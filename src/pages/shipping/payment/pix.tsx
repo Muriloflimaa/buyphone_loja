@@ -1,6 +1,5 @@
 import { GetServerSidePropsContext } from 'next'
-import Link from 'next/link'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
@@ -44,13 +43,14 @@ export default function pix({ address }: Address) {
       }
       const { data } = await apiStoreBeta.post('checkout/pix', items)
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
-      destroyCookie(undefined, '@BuyPhone:GetCep')
+      destroyCookie(null, '@BuyPhone:GetCep')
+      destroyCookie(null, 'USER_LEAD')
       CleanCart()
       router.push('/shipping/payment/pix-checkout')
     } catch (error) {
       ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
       CleanCart()
-      destroyCookie(undefined, '@BuyPhone:GetCep')
+      destroyCookie(null, '@BuyPhone:GetCep')
       router.push('/')
     }
   }

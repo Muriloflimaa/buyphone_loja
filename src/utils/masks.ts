@@ -109,6 +109,13 @@ export function masktel(evt: any) {
   evt.target.value = v
 }
 
+export function masktel1(phone: string) {
+  return phone
+      .replace(/\D/g, '')
+      .replace(/^(\d{2})(\d)/g, '($1) $2')
+      .replace(/(\d)(\d{4})$/, '$1-$2')
+}
+
 export function mascaraCep(t: any, mask: string) {
   var i = t.value.length
   var saida = mask.substring(1, 0)

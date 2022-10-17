@@ -13,7 +13,7 @@ export default function RegisterMimo() {
         <>
             <input type="checkbox" id="my-modal-6" className="modal-toggle" />
             <div className={`modal glass bg-opacity-30 modal-bottom sm:modal-middle ${router.query.user === '123' && "modal-open"}`}>
-                <div className="modal-box max-w-lg flex flex-col items-center overflow-hidden">
+                <div className="modal-box max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0">
                     <div className="flex justify-center items-center relative">
                         <Image
                             src={DollarPack}

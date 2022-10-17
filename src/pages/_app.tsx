@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     router.query.user && setCookie(null, 'USER_LEAD', 'true', {
       path: '/',
     })
-  }, [])
+  }, [router])
 
   return (
     <Theme
