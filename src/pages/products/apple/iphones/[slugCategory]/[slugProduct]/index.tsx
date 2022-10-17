@@ -1,19 +1,28 @@
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faLocationDot,
+  faTruckFast,
+  faClock,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { Input } from '../../../../../../components/InputElement'
 import Rating from '../../../../../../components/Rating'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
 import { GetUseType } from '../../../../../../utils/getUserType'
-import { moneyMask } from '../../../../../../utils/masks'
+import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
-import { verificationColor } from '../../../../../../utils/verificationColors'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { ToastCustom } from '../../../../../../utils/toastCustom'
 
 interface IParams {
   params: {
@@ -26,15 +35,34 @@ interface DataProps {
   data: IProduct
 }
 
+type GetCepTypes = {
+  cep: string
+}
+
+type addressTypes = {
+  CEP: string
+  City: string
+  District: string
+  Street: string
+  UF: string
+}
+
+type shippingOnTypes = {
+  delivered_by: string
+  days: string
+}
+
 export default function Products({ data }: DataProps) {
-  const [color, setColor] = useState<string | undefined>()
+  // const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const user = GetUseType()
   const returnPrice = verificationPrice(data, user)
   const [description, setDescrition] = useState('')
+  const [address, setAddress] = useState<addressTypes>()
+  const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
 
   useEffect(() => {
-    setColor(verificationColor(data.color))
+    // setColor(verificationColor(data.color))
     if (data.description) {
       setDescrition(data.description)
     }
@@ -44,6 +72,50 @@ export default function Products({ data }: DataProps) {
 
   function handleAddProduct(id: number) {
     addProduct(id)
+  }
+
+  const getCepSchema = yup.object().shape({
+    cep: yup
+      .string()
+      .required('Campo CEP é obrigatório')
+      .min(9, 'CEP precisa ter 8 caracteres'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(getCepSchema),
+  })
+
+  const { errors } = formState
+
+  const handleCepStorage: SubmitHandler<GetCepTypes | any> = async (
+    value,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const cep = value.cep.replace('-', '')
+    try {
+      const infoShippingSend = {
+        cep: cep,
+        total: returnPrice.averagePrice,
+        qtd_items: 1,
+      }
+
+      const { data } = await apiStore.get(`addresses/cep/${cep}`)
+      const shipping = await apiStore.post(`shipping`, infoShippingSend)
+      if (data.Message === 'CEP NAO ENCONTRADO') {
+        ToastCustom(2000, 'CEP não foi encontrado', 'error')
+        return
+      }
+      setShippingOn(shipping.data)
+      setAddress(data)
+    } catch (error) {
+      ToastCustom(
+        2000,
+        'Erro no servidor, entre em contato com o suporte',
+        'error'
+      )
+    }
   }
 
   return (
@@ -131,7 +203,7 @@ export default function Products({ data }: DataProps) {
                 </h2>
               </div>
 
-              <div className="hidden md:flex gap-3 items-center">
+              <div>
                 {returnPrice.ourPrice <= 0 ? (
                   <button className="btn btn-disabled text-white">
                     Sem estoque
@@ -146,39 +218,78 @@ export default function Products({ data }: DataProps) {
                   </button>
                 )}
               </div>
-              <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014]  text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2">
-                <div className="alert items-start md:items-center bg-accent border-[1px] border-accent">
-                  <span>
-                    Frete: Grátis
-                    <span className="text-xs"> (10 a 15 dias úteis)</span>
-                  </span>
-                </div>
-                <div className="flex md:block gap-3 items-center">
-                  {returnPrice.ourPrice <= 0 ? (
-                    <button className="btn btn-disabled block md:hidden text-white">
-                      Sem estoque
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-info block md:hidden text-white"
-                      data-testid="add-product-button"
-                      onClick={() => handleAddProduct(data.id)}
-                    >
-                      Adicionar
-                    </button>
+
+              <form onSubmit={handleSubmit(handleCepStorage)}>
+                <div className="alert items-start w-full bg-accent flex flex-col border-[1px] border-[#00000014] text-info-content">
+                  <h1 className="text-base font-semibold">
+                    Calcule o frete e prazo de entrega
+                  </h1>
+                  <div className="flex flex-col md:flex-row items-start gap-2">
+                    <Input
+                      {...register('cep')}
+                      type="text"
+                      maxLength={9}
+                      placeholder="00000-000"
+                      onChange={(e) => mascaraCep(e.target, '#####-####')}
+                      error={errors.cep}
+                    />
+                    {formState.isSubmitting ? (
+                      <button className="btn loading normal-case text-white">
+                        Carregando
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary text-white normal-case"
+                        type="submit"
+                      >
+                        Consultar
+                      </button>
+                    )}
+                  </div>
+                  {address && (
+                    <div className="flex gap-2">
+                      <FontAwesomeIcon
+                        icon={faLocationDot}
+                        className="w-5 h-5"
+                      />
+                      <p>
+                        {`${address?.Street} - ${address?.City}, ${address?.UF}`}
+                      </p>
+                    </div>
+                  )}
+
+                  {shippingOn && (
+                    <div className="flex justify-between items-start w-full">
+                      <p className="flex items-center gap-2">
+                        <FontAwesomeIcon
+                          icon={faTruckFast}
+                          className="w-4 h-4"
+                        />
+                        {shippingOn?.delivered_by}
+                      </p>
+                      <div className="text-end">
+                        <p className="font-semibold flex items-center gap-2">
+                          <FontAwesomeIcon icon={faClock} className="w-4 h-4" />
+                          {`em até ${shippingOn?.days} dias úteis`}
+                        </p>
+                        <p className="text-success font-semibold">Grátis</p>
+                      </div>
+                    </div>
                   )}
                 </div>
+              </form>
 
-                <div className="alert items-start bg-accent w-full grid md:hidden">
+              <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
+                <div className="alert items-start bg-accent w-full grid ">
                   <h1 className="text-xl font-light">Descrição</h1>
 
-                  <div className="transition-all flex flex-col text-xs">
+                  <div className="transition-all flex flex-col items-start text-xs">
                     {showMore
                       ? refact(description)
                       : `${description.substring(0, 150)}` + '...'}
                   </div>
 
-                  <div className="flex flex-col w-full justify-center">
+                  <div className="flex flex-col w-full justify-center ">
                     <div className="divider w-full"></div>
                     <span
                       className="transition-all duration-500"
@@ -192,6 +303,7 @@ export default function Products({ data }: DataProps) {
             </div>
           </div>
         </div>
+
         <div className="flex-col my-5 gap-3 text-info-content hidden md:flex ">
           <div className="alert bg-accent border-[1px] border-[#00000014] hidden items-center justify-start gap-1 md:flex-col md:items-start md:flex">
             <h1 className="text-base font-medium">Descrição</h1>
