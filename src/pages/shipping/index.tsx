@@ -45,7 +45,6 @@ export default function Shipping({ userJson }: userJsonTypes) {
   const [Address, setAddress] = useState<Address[]>([])
 
   async function handleRemoveAddress(id: number) {
-    console.log(id)
     try {
       setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
       await apiStore.delete(`addresses/${id}`)
@@ -138,8 +137,8 @@ export default function Shipping({ userJson }: userJsonTypes) {
               )}
               {Address.map((ad) => {
                 return (
-                  <div className="flex gap-2 w-full items-center">
-                    <div key={ad.id} className="w-full cursor-pointer">
+                  <div key={ad.id} className="flex gap-2 w-full items-center">
+                    <div className="w-full cursor-pointer">
                       <div
                         onClick={() =>
                           handleAddressDefault({

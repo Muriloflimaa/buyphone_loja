@@ -56,12 +56,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     setData([]) //zera o array do data
     cart.map(async (item) => {
       try {
-        const data = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
+        const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
-        const returnPrice = verificationPrice(data.data.data, user) //verificando preço
+        const returnPrice = verificationPrice(data, user) //verificando preço
         const response = {
           ...item, //adicionando amount e id que está no localstorage
-          product: data.data.data, //data vem da api que é chamada
+          product: data, //data vem da api que é chamada
           priceFormated: returnPrice.ourPrice, //formatação de preços
           subTotal: returnPrice.ourPrice * item.amount, //total simples
         }
@@ -140,7 +140,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
           const addProduct = await apiStore.get(`products/${productId}`)
-          const products = addProduct.data.data
+          const products = addProduct.data
 
           ToastCustom(
             300,
