@@ -12,7 +12,6 @@ interface IFormFields {
 
 interface ICustomForm {
     status: string | null
-    message: string | Error | null
     onValidated: (data: IFormFields) => void
 }
 
