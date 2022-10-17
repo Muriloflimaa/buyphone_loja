@@ -1,6 +1,7 @@
 import {
   faCircleCheck,
   faCircleXmark,
+  faCreditCard
 } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
@@ -123,7 +124,7 @@ export default function MatchInstallment({
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
       <TotalPayment />
-      {stateModalSuccess == true && (
+      {stateModalSuccess && (
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
           <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
             <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
@@ -155,7 +156,7 @@ export default function MatchInstallment({
         </div>
       )}
 
-      {stateModalError == true && (
+      {stateModalError && (
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
           <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
             <div className="bg-error shadow-sm shadow-error w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">

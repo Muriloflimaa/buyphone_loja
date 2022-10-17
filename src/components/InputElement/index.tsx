@@ -10,10 +10,11 @@ interface InputProps
   label?: string
   error?: { message?: string | undefined }
   type?: string
+    placeholder?: string
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, type, error = null, ...rest },
+  { name, label, type, placeholder, error = null, ...rest },
   ref
 ) => {
   const [show, setShow] = useState(true)
@@ -33,6 +34,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             {...rest}
             type={type === 'password' ? (show ? type : 'text') : type}
             className="input input-bordered rounded-md !important w-full text-info-content"
+            placeholder={placeholder}
           />
           {type === 'password' ? (
             <span onClick={() => setShow(!show)}>
