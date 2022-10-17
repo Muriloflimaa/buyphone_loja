@@ -12,7 +12,7 @@ export default function RegisterMimo() {
     return (
         <>
             <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-            <div className={`modal glass bg-opacity-30 modal-bottom sm:modal-middle ${router.query.utm_source && router.query.utm_medium && router.query.utm_campaign && "modal-open"}`}>
+            <div className={`modal glass bg-opacity-30 sm:modal-middle ${router.query.utm_source && router.query.utm_medium && router.query.utm_campaign && "modal-open"}`}>
                 <div className="modal-box max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0">
                     <div className="flex justify-center items-center relative">
                         <Image
@@ -38,7 +38,7 @@ export default function RegisterMimo() {
                             <span className="text-slate-400"> na compra de qualquer iPhone!</span></h3>
                     </div>
                     <NewsletterSubscribe />
-                    <div className="absolute w-[36rem] -left-8 bottom-0 flex justify-between -z-10">
+                    <div className="absolute w-full sm:w-[36rem] sm:-left-8 bottom-0 flex justify-between -z-10">
                         <Image
                             src={LeftDollar}
                             width={200}
