@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
-import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { apiStore } from '../../../services/api'
 import { Address } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
@@ -45,7 +45,7 @@ export default function CreditCheckout({ address }: Address) {
   async function handleRemoveCard(id: number) {
     try {
       setCards((oldState) => oldState.filter((card) => card.id !== id))
-      await apiStoreBeta.delete(`cards/${id}`)
+      await apiStore.delete(`cards/${id}`)
     } catch (error) {
       return
     }
@@ -53,7 +53,7 @@ export default function CreditCheckout({ address }: Address) {
 
   async function GetCreditCard() {
     try {
-      const { data } = await apiStoreBeta.get(`cards/user/${address.user_id}`)
+      const { data } = await apiStore.get(`cards/user/${address.user_id}`)
       setCards(data)
     } catch (error) {
       console.log(error)

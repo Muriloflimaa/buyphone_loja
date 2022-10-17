@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import Link from 'next/link'
-import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { apiStore } from '../services/api'
 import { UserData } from '../types'
 
 interface DataProps {
@@ -35,7 +35,7 @@ function MyShopping() {
   async function GetInvoice() {
     if (cookies['@BuyPhone:User']) {
       const user = JSON.parse(cookies['@BuyPhone:User'])
-      const { data } = await apiStoreBeta(`orders/user/${user?.id}`)
+      const { data } = await apiStore(`orders/user/${user?.id}`)
       setData(data)
     }
   }
@@ -48,7 +48,7 @@ function MyShopping() {
     console.log(page)
     try {
       const user = JSON.parse(cookies['@BuyPhone:User'])
-      const { data } = await apiStoreBeta(
+      const { data } = await apiStore(
         `orders/user/${user?.id}?page=${page.replace(
           `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
           ''

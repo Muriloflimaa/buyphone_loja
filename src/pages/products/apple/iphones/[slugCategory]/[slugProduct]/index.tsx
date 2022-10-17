@@ -7,8 +7,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Rating from '../../../../../../components/Rating'
 import { useCart } from '../../../../../../context/UseCartContext'
-import { apiStoreBeta } from '../../../../../../services/apiBetaConfigs'
-import { apiPedidos } from '../../../../../../services/apiClient'
+import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
 import { GetUseType } from '../../../../../../utils/getUserType'
 import { moneyMask } from '../../../../../../utils/masks'
@@ -219,7 +218,7 @@ export default function Products({ data }: DataProps) {
 
 export const getStaticProps = async ({ params }: IParams) => {
   try {
-    const data = await apiStoreBeta.get(
+    const data = await apiStore.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
     return {
@@ -235,7 +234,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStoreBeta.get(`products/?per_page=200&page=1`)
+    const { data } = await apiStore.get(`products/?per_page=200&page=1`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {

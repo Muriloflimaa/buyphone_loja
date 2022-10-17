@@ -2,11 +2,10 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
-import { apiPedidos } from '../services/apiClient'
 import { ICategory, IProduct } from '../types'
 import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -20,6 +19,7 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
+import { apiStore } from '../services/api'
 
 interface DataProps {
   data: {
@@ -256,7 +256,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         averagePrice={returnPrice.averagePrice}
                         slug={products.slug}
                         slugCategory={category.slug}
-                        image={products.media[0].original_url}
+                        image={
+                          'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
+                        }
                         memory={products.memory}
                       />
                     )
@@ -358,7 +360,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
-    const { data } = await apiPedidos.get(`categories/`)
+    const { data } = await apiStore.get(`categories/`)
     return {
       props: {
         data,

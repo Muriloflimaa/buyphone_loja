@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { ToastCustom } from '../utils/toastCustom'
 import { Input } from '../components/InputElement'
 import { maskCpfInput, masktel } from '../utils/masks'
-import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { apiStore } from '../services/api'
 
 type SignUpFormData = {
   email: string
@@ -70,11 +70,9 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      const response = await apiStoreBeta.post('/user', data)
+      const response = await apiStore.post('/user', data)
       router.push('/login')
-      console.log(response)
     } catch (error: any) {
-      console.log(error)
       if (error.response.data.errors) {
         const resposta = error.response.data.errors
 

@@ -3,11 +3,10 @@ import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
-import { apiPedidos } from '../../../../../services/apiClient'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
-import { apiStoreBeta } from '../../../../../services/apiBetaConfigs'
+import { apiStore } from '../../../../../services/api'
 
 interface DataProps {
   data: ICategory
@@ -100,7 +99,7 @@ export default function Products({ data }: DataProps) {
 
 export const getStaticProps = async ({ params }: IParams) => {
   try {
-    const { data } = await apiStoreBeta.get(`categories/${params.slugCategory}`)
+    const { data } = await apiStore.get(`categories/${params.slugCategory}`)
     return {
       props: {
         data,
@@ -118,7 +117,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export async function getStaticPaths() {
   try {
-    const { data } = await apiStoreBeta.get(`categories/`)
+    const { data } = await apiStore.get(`categories/`)
 
     const paths = data.data.map((category: ICategory) => {
       return {

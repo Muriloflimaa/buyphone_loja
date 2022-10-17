@@ -1,10 +1,9 @@
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
-import { faCircleCheck, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
+import { faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import styles from '../../../styles/styles.module.scss'
-import Client from '../../assets/images/client_lyvia.webp'
 
 export interface StaticImageData {
   src: string

@@ -18,7 +18,7 @@ import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
-import { apiPedidos } from '../../services/apiClient'
+import { apiStore } from '../../services/api'
 import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
@@ -48,8 +48,8 @@ export default function NavBar() {
   useEffect(() => {
     async function Data() {
       try {
-        const DATA = await apiPedidos.get(`categories/`)
-        setDataApi(DATA.data)
+        const { data } = await apiStore.get(`categories/`)
+        setDataApi(data.data)
       } catch (error) {
         setDataApi(null)
       }
@@ -361,15 +361,15 @@ export default function NavBar() {
               >
                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                   <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                    {dataApi?.data?.length > 0 && (
+                    {dataApi?.length > 0 && (
                       <li>
                         <Link href={'/'}>
                           <a>Todos</a>
                         </Link>
                       </li>
                     )}
-                    {dataApi?.data?.length > 0 ? (
-                      dataApi.data.map((category: any) => (
+                    {dataApi?.length > 0 ? (
+                      dataApi?.map((category: any) => (
                         <li key={category.id}>
                           <Link
                             href={`/products/apple/iphones/${category.slug}`}
@@ -508,8 +508,8 @@ export default function NavBar() {
                 <span className="text-info-content text-base">Produtos</span>
               </div>
               <div className="collapse-content flex flex-col overflow-auto gap-2 h-auto">
-                {dataApi?.data.length > 0 ? (
-                  dataApi.data.map((category: any) => (
+                {dataApi?.length > 0 ? (
+                  dataApi?.map((category: any) => (
                     <label
                       htmlFor="my-drawer"
                       key={category.id}

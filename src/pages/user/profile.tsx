@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useState } from 'react'
-import { apiLogin } from '../../services/apiLogin'
 import { UserData } from '../../types'
 import jwt_decode from 'jwt-decode'
 import { GetServerSidePropsContext } from 'next'
@@ -10,7 +9,7 @@ import * as yup from 'yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Input } from '../../components/InputElement'
-import { apiStoreBeta } from '../../services/apiBetaConfigs'
+import { apiStore } from '../../services/api'
 import { masktel } from '../../utils/masks'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
@@ -63,7 +62,7 @@ export default function profile({ data }: user) {
     }
 
     try {
-      await apiStoreBeta.put(`/users/${data.id}`, value)
+      await apiStore.put(`/users/${data.id}`, value)
       ToastCustom(3000, 'Dados alterados com sucesso', 'success', 'Notificação')
     } catch (error: any) {
       if (error.response.data.errors.email) {
@@ -113,10 +112,7 @@ export default function profile({ data }: user) {
       }
 
       try {
-        const response = await apiStoreBeta.put(
-          `/users/${data.id}`,
-          userPasswords
-        )
+        const response = await apiStore.put(`/users/${data.id}`, userPasswords)
         console.log(response)
         ToastCustom(2000, 'Senha alterada com sucesso', 'success')
         await new Promise((resolve) => setTimeout(resolve, 2000))

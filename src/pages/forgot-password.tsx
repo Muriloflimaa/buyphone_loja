@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
 import { Input } from '../components/InputElement'
-import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { apiStore } from '../services/api'
 import { ToastCustom } from '../utils/toastCustom'
 
 type ForgoutFormData = {
@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
-      await apiStoreBeta.post('forgot-password', values)
+      await apiStore.post('forgot-password', values)
       ToastCustom(
         4000,
         'Enviamos um link para recuperação de senha no seu e-mail.',
