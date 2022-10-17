@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { apiStoreBeta } from '../../services/apiBetaConfigs'
+import { apiStore } from '../../services/api'
 import { GetUseType } from '../../utils/getUserType'
 import toast from 'react-hot-toast'
 import { TotalPayment } from '../../components/TotalPayment'
@@ -75,7 +75,7 @@ export default function address({ cepJson }: CepJsonProps) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     try {
-      const { data } = await apiStoreBeta.post(`addresses`, {
+      const { data } = await apiStore.post(`addresses`, {
         ...values,
         user_id: user.id,
         postal_code: cepJson.CEP ?? cepJson.postal_code,

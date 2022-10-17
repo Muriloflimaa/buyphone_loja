@@ -4,7 +4,7 @@ import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { useCart } from '../../../context/UseCartContext'
-import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { apiStore } from '../../../services/api'
 import { Address, ProductPayment } from '../../../types'
 import { GetUseType } from '../../../utils/getUserType'
 import { moneyMask } from '../../../utils/masks'
@@ -41,7 +41,7 @@ export default function pix({ address }: Address) {
         amount: somaTotal,
         items: setDat,
       }
-      const { data } = await apiStoreBeta.post('checkout/pix', items)
+      const { data } = await apiStore.post('checkout/pix', items)
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
       destroyCookie(null, '@BuyPhone:GetCep')
       destroyCookie(null, 'USER_LEAD')

@@ -13,7 +13,7 @@ import Installments from '../../../components/Installments'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
-import { apiStoreBeta } from '../../../services/apiBetaConfigs'
+import { apiStore } from '../../../services/api'
 import { ArrayProduct, ProductPayment } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
@@ -73,7 +73,7 @@ export default function MatchInstallment({
         installments: matchInstallments,
       }
 
-      const data: { data: { status: string } } = await apiStoreBeta.post(
+      const data: { data: { status: string } } = await apiStore.post(
         `checkout/credit-card`,
         infoData
       )
@@ -105,7 +105,7 @@ export default function MatchInstallment({
         amount: somaTotal,
       }
 
-      const response = await apiStoreBeta.get(`checkout/installments`, {
+      const response = await apiStore.get(`checkout/installments`, {
         params: data,
       })
 

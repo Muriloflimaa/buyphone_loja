@@ -12,7 +12,7 @@ import Parc2Svg from '../../assets/images/image28.svg'
 import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
-import { apiPedidos } from '../../services/apiClient'
+import { apiStore } from '../../services/api'
 
 export default function Footer() {
   const [dataApi, setDataApi] = useState<Array<{}> | undefined>()
@@ -20,8 +20,8 @@ export default function Footer() {
   useEffect(() => {
     async function Data() {
       try {
-        const DATA = await apiPedidos.get(`categories/`)
-        setDataApi(DATA.data.data)
+        const { data } = await apiStore.get(`categories/`)
+        setDataApi(data.data)
       } catch (error) {
         setDataApi(undefined)
       }

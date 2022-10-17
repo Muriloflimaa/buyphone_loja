@@ -1,11 +1,10 @@
 import Router from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import { createContext, ReactNode, useState } from 'react'
-import { apiLogin } from '../services/apiLogin'
 import jwt_decode from 'jwt-decode'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
-import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { apiStore } from '../services/api'
 
 type SignInCredentials = {
   email: string
@@ -39,7 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await apiStoreBeta.post('/login', {
+      const response = await apiStore.post('/login', {
         email,
         password,
       })
@@ -102,7 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         //se tiver um cookies mandar para a rota de logout
         try {
-          await apiStoreBeta.post('/logout')
+          await apiStore.post('/logout')
           destroyCookie({}, '@BuyPhone:User')
           destroyCookie({}, '@BuyPhone:Token')
           Router.push('/')

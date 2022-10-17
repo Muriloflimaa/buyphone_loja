@@ -1,16 +1,12 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ProductCart from '../components/ProductCart'
 import { useCart } from '../context/UseCartContext'
 import { ArrayProduct } from '../types'
-import { GetUseType } from '../utils/getUserType'
 import { moneyMask } from '../utils/masks'
 
 export default function Cart() {
-  const { cart, CleanCart, values, somaTotal } = useCart()
-  const user = GetUseType()
-  const router = useRouter()
+  const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
-import { apiStoreBeta } from '../../services/apiBetaConfigs'
+import { apiStore } from '../../services/api'
 import { setCookies } from '../../utils/useCookies'
 import { TotalPayment } from '../../components/TotalPayment'
 import { faMap } from '@fortawesome/free-regular-svg-icons'
@@ -45,10 +45,9 @@ export default function Shipping({ userJson }: userJsonTypes) {
   const [Address, setAddress] = useState<Address[]>([])
 
   async function handleRemoveAddress(id: number) {
-    console.log(id)
     try {
       setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
-      await apiStoreBeta.delete(`addresses/${id}`)
+      await apiStore.delete(`addresses/${id}`)
     } catch (error) {
       return
     }
@@ -59,7 +58,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
   }, [])
 
   const getAddress = async () => {
-    const userAddress = await apiStoreBeta.get(`addresses/user/${userJson.id}`)
+    const userAddress = await apiStore.get(`addresses/user/${userJson.id}`)
     setAddress(userAddress.data)
   }
 
@@ -85,7 +84,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const cep = value.cep.replace('-', '')
     try {
-      const response = await apiStoreBeta.get(`addresses/cep/${cep}`)
+      const response = await apiStore.get(`addresses/cep/${cep}`)
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
         return
@@ -138,8 +137,8 @@ export default function Shipping({ userJson }: userJsonTypes) {
               )}
               {Address.map((ad) => {
                 return (
-                  <div className="flex gap-2 w-full items-center">
-                    <div key={ad.id} className="w-full cursor-pointer">
+                  <div key={ad.id} className="flex gap-2 w-full items-center">
+                    <div className="w-full cursor-pointer">
                       <div
                         onClick={() =>
                           handleAddressDefault({

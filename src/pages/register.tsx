@@ -5,7 +5,7 @@ import { parseCookies } from 'nookies'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { Input } from '../components/InputElement'
-import { apiStoreBeta } from '../services/apiBetaConfigs'
+import { apiStore } from '../services/api'
 import { maskCpfInput, masktel } from '../utils/masks'
 import { ToastCustom } from '../utils/toastCustom'
 import { WithSSRGuest } from '../utils/WithSSRGuest'
@@ -89,13 +89,13 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      await apiStoreBeta.post('/users', dataUTM)
+      await apiStore.post('/users', dataUTM)
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/login')
     } catch (error: any) {
       if (error.response.status == 422 && !!error.response.data.errors.utm_campaign || !!error.response.data.errors.utm_source || !!error.response.data.errors.utm_medium) {
         try {
-          await apiStoreBeta.post('/users', data)
+          await apiStore.post('/users', data)
           ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
           router.push('/login')
         } catch (newError: any) {

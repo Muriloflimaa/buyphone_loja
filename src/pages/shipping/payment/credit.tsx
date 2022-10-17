@@ -19,7 +19,6 @@ import { useCart } from '../../../context/UseCartContext'
 import { GetUseType } from '../../../utils/getUserType'
 import { useRouter } from 'next/router'
 import { setCookies } from '../../../utils/useCookies'
-import { Alert } from 'react-daisyui'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
