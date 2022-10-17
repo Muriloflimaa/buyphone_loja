@@ -2,17 +2,15 @@ import {
   faChevronLeft,
   faLocationDot,
   faTruckFast,
-  faClock,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ChevronDownIcon, ShareIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Input } from '../../../../../../components/InputElement'
-import Rating from '../../../../../../components/Rating'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
@@ -70,7 +68,7 @@ export default function Products({ data }: DataProps) {
   const [url, setUrl] = useState('')
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
-    (returnPrice.averagePrice / returnPrice.ourPrice - 1) *
+    (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
 
@@ -125,6 +123,7 @@ export default function Products({ data }: DataProps) {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
       }
+      console.log(data)
       setShippingOn(shipping.data)
       setAddress(data)
     } catch (error) {
@@ -250,10 +249,10 @@ export default function Products({ data }: DataProps) {
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
-                <div className="flex items-center  mt-2 text-xs">
+                {/* <div className="flex items-center  mt-2 text-xs">
                   <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
                   <p>4.9 (1234) comentários</p>
-                </div>
+                </div> */}
               </div>
 
               <div>
@@ -281,11 +280,11 @@ export default function Products({ data }: DataProps) {
                       : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
                   </h2>
                   <span className="badge rounded-md badge-warning text-primary font-bold">
-                    - {resultDiscountPercent} %
+                    - {resultDiscountPercent}%
                   </span>
                 </div>
               </div>
-              <div className="badge badge-warning rounded-md font-bold uppercase">
+              <div className="badge badge-success rounded-md font-bold uppercase">
                 <span className="text-white">
                   economia de{' '}
                   <span className="text-primary">
@@ -345,7 +344,9 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street} - ${address?.City}, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
