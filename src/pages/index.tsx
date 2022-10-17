@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useRef, useState } from 'react'
 import CarouselComponent from '../components/Carousel'
+import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
 import { apiPedidos } from '../services/apiClient'
@@ -62,6 +63,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
   return (
     <>
+      <RegisterMimo />
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>

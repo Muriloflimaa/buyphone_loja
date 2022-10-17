@@ -1568,11 +1568,6 @@ jwt-decode@*, jwt-decode@^3.1.2:
   resolved "https://registry.npmjs.org/jwt-decode/-/jwt-decode-3.1.2.tgz"
   integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
 
-lesca-react-scratch-card@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/lesca-react-scratch-card/-/lesca-react-scratch-card-1.0.3.tgz"
-  integrity sha512-l8WAethDRvUTVFkw+VTkWN5SPg6B8xy3NITuMougmPCwDzzQkP61prz+WnuNvDpZGSzY5qBGnJ0TVRFJb3ohbQ==
-
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.npmjs.org/levn/-/levn-0.4.1.tgz"
