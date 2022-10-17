@@ -1,7 +1,7 @@
 import {
   faCircleCheck,
   faCircleXmark,
-  faCreditCard
+  faCreditCard,
 } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
@@ -128,11 +128,14 @@ export default function MatchInstallment({
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
           <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
             <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
-              <FontAwesomeIcon icon={faCircleCheck} className="h-20 w-h-20" />
-              <h3 className="font-bold text-2xl">Sucesso!</h3>
+              <FontAwesomeIcon
+                icon={faCircleCheck}
+                className="h-20 w-h-20 mx-auto"
+              />
+              <h3 className="font-bold text-2xl mt-3">Sucesso!</h3>
             </div>
 
-            <div className="divider m-0 mt-36"></div>
+            <div className="m-0 mt-44"></div>
             <p className="font-bold text-lg text-success">
               Obrigado pela sua compra!
             </p>
