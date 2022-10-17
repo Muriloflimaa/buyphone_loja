@@ -3,9 +3,10 @@ import {
   faLocationDot,
   faTruckFast,
   faClock,
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, ShareIcon, StarIcon } from '@heroicons/react/solid'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -23,6 +24,11 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
+import {
+  faFacebook,
+  faTwitter,
+  faWhatsapp,
+} from '@fortawesome/free-brands-svg-icons'
 
 interface IParams {
   params: {
@@ -55,13 +61,21 @@ type shippingOnTypes = {
 export default function Products({ data }: DataProps) {
   // const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
+  const [onShare, setOnShare] = useState(false)
   const user = GetUseType()
   const returnPrice = verificationPrice(data, user)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
+  const [url, setUrl] = useState('')
+  const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
+  const resultDiscountPercent = (
+    (returnPrice.averagePrice / returnPrice.ourPrice - 1) *
+    100
+  ).toFixed(1)
 
   useEffect(() => {
+    geturl()
     // setColor(verificationColor(data.color))
     if (data.description) {
       setDescrition(data.description)
@@ -72,6 +86,10 @@ export default function Products({ data }: DataProps) {
 
   function handleAddProduct(id: number) {
     addProduct(id)
+  }
+
+  function geturl() {
+    setUrl(window.location.href.toString())
   }
 
   const getCepSchema = yup.object().shape({
@@ -156,14 +174,74 @@ export default function Products({ data }: DataProps) {
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
-          <div className="w-full h-full flex justify-center col-span-2">
+          <div className="w-full h-full flex justify-start col-span-2 relative">
             <Image
               src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
               layout="fixed"
               width="260"
               height="350"
               priority={true}
-            ></Image>
+            />
+            <div className="absolute right-6">
+              <div className="flex flex-col">
+                <div
+                  onClick={() => setOnShare(!onShare)}
+                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+                    />
+                  </svg>
+                </div>
+
+                <div
+                  className={
+                    'transition-all duration-300 flex-col ' +
+                    (!onShare ? 'opacity-0 hidden' : 'flex opacity-100')
+                  }
+                >
+                  <a
+                    href={`https://web.whatsapp.com/send?text=${url}`}
+                    target={'_blank'}
+                  >
+                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                      <FontAwesomeIcon icon={faWhatsapp} className="w-6 h-6" />
+                    </div>
+                  </a>
+                  <a href={`mailto:?subject=${url}`} target={'_blank'}>
+                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                      <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6" />
+                    </div>
+                  </a>
+                  <a
+                    href={`https://www.facebook.com/sharer.php?u=${url}`}
+                    target={'_blank'}
+                  >
+                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                      <FontAwesomeIcon icon={faFacebook} className="w-6 h-6" />
+                    </div>
+                  </a>
+                  <a
+                    href={`https://twitter.com/share?url=${url}`}
+                    target={'_blank'}
+                  >
+                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                      <FontAwesomeIcon icon={faTwitter} className="w-6 h-6" />
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-5">
@@ -196,11 +274,24 @@ export default function Products({ data }: DataProps) {
                     ? 'Sem estoque'
                     : 'R$' + moneyMask(returnPrice.averagePrice.toString())}
                 </h1>
-                <h2 className="text-2xl font-bold">
-                  {returnPrice.ourPrice <= 0
-                    ? 'Sem estoque'
-                    : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
-                </h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-2xl font-bold">
+                    {returnPrice.ourPrice <= 0
+                      ? 'Sem estoque'
+                      : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
+                  </h2>
+                  <span className="badge rounded-md badge-warning text-primary font-bold">
+                    - {resultDiscountPercent} %
+                  </span>
+                </div>
+              </div>
+              <div className="badge badge-warning rounded-md font-bold uppercase">
+                <span className="text-white">
+                  economia de{' '}
+                  <span className="text-primary">
+                    R$ {moneyMask(resultDiscount.toString())}
+                  </span>
+                </span>
               </div>
 
               <div>
@@ -246,36 +337,31 @@ export default function Products({ data }: DataProps) {
                       </button>
                     )}
                   </div>
-                  {address && (
-                    <div className="flex gap-2">
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        className="w-5 h-5"
-                      />
-                      <p>
-                        {`${address?.Street} - ${address?.City}, ${address?.UF}`}
-                      </p>
-                    </div>
-                  )}
-
-                  {shippingOn && (
-                    <div className="flex justify-between items-start w-full">
-                      <p className="flex items-center gap-2">
+                  <div className="flex flex-col items-start md:text-xs">
+                    {address && (
+                      <div className="flex items-center gap-2">
                         <FontAwesomeIcon
-                          icon={faTruckFast}
+                          icon={faLocationDot}
                           className="w-4 h-4"
                         />
-                        {shippingOn?.delivered_by}
-                      </p>
-                      <div className="text-end">
-                        <p className="font-semibold flex items-center gap-2">
-                          <FontAwesomeIcon icon={faClock} className="w-4 h-4" />
-                          {`em até ${shippingOn?.days} dias úteis`}
+                        <p>
+                          {`${address?.Street} - ${address?.City}, ${address?.UF}`}
                         </p>
-                        <p className="text-success font-semibold">Grátis</p>
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                    {shippingOn && (
+                      <div className="flex justify-between items-start w-full text-success">
+                        <p className="flex items-center gap-2">
+                          <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-4 h-4"
+                          />
+                          {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </form>
 
@@ -312,7 +398,7 @@ export default function Products({ data }: DataProps) {
             {description ? refact(description) : 'Sem descrição'}
           </div>
         </div>
-        <div className="flex-col my-5 gap-3 text-info-content flex">
+        {/* <div className="flex-col my-5 gap-3 text-info-content flex">
           <div className="alert bg-accent border-[1px] border-[#00000014] items-center justify-start gap-1 md:flex-col md:items-start md:flex">
             <h1 className="text-base font-medium">
               Avaliações de clientes
@@ -322,7 +408,7 @@ export default function Products({ data }: DataProps) {
             </h1>
           </div>
           <Rating />
-        </div>
+        </div> */}
       </div>
     </>
   )
