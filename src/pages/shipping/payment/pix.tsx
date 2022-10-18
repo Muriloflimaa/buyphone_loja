@@ -49,10 +49,9 @@ export default function pix({ address }: Address) {
       router.push('/shipping/payment/pix-checkout')
     } catch (error) {
       ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
-      // CleanCart()
-      // destroyCookie(null, '@BuyPhone:GetCep')
-      // router.push('/')
-      console.log(error)
+      CleanCart()
+      destroyCookie(null, '@BuyPhone:GetCep')
+      router.push('/')
     }
   }
 
