@@ -231,13 +231,13 @@ export default function Products({ data }: DataProps) {
             </div>
           </div>
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <div>
-                <h1 className="text-2xl">
+                <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
-                <span className="badge badge-success rounded-md text-xs font-medium p-3 uppercase text-black">
+                <span className="badge bg-[#E9A745] border-transparent rounded-md text-xs font-medium p-3 mt-2 uppercase text-black">
                   PARCELAMENTO EM ATÉ 12X
                 </span>
 
@@ -248,12 +248,12 @@ export default function Products({ data }: DataProps) {
               </div>
 
               <div>
-                <h1 className="text-2xl">Especificações</h1>
-                <div className="flex gap-3 mt-2">
-                  <span className="badge p-3 bg-transparent border border-info-content text-info-content">
+                <h1 className="text-xl">Especificações</h1>
+                <div className="flex gap-4 mt-2">
+                  <span className="badge p-4 rounded-xl bg-transparent border border-info-content text-info-content">
                     {data.memory}
                   </span>
-                  <span className="badge p-3 bg-transparent border border-info-content text-info-content">
+                  <span className="badge p-4 rounded-xl bg-transparent border border-info-content text-info-content">
                     {data.color}
                   </span>
                 </div>
@@ -266,13 +266,13 @@ export default function Products({ data }: DataProps) {
                     : 'R$' + moneyMask(returnPrice.averagePrice.toString())}
                 </h1>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-3xl font-bold">
                     {returnPrice.ourPrice <= 0
                       ? 'Sem estoque'
                       : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
                   </h2>
-                  <span className="badge bg-transparent border-[2px] border-[#989898] rounded-md badge-warning text-base-300 font-medium">
-                    -{resultDiscountPercent}%
+                  <span className="badge py-3 px-[7px] bg-transparent border-[2px] border-[#989898] rounded-md badge-warning text-base-300 font-medium">
+                    -{resultDiscountPercent.replace('.0', '')}%
                   </span>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function Products({ data }: DataProps) {
                   </button>
                 ) : (
                   <button
-                    className="btn bg-[#459C4E] w-full text-white"
+                    className="btn border-transparent bg-[#459C4E] w-full text-white"
                     data-testid="add-product-button"
                     onClick={() => handleAddProduct(data.id)}
                   >
