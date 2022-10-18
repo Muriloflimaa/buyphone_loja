@@ -73,8 +73,8 @@ const ListProducts = ({
             {(method === 'PIX' &&
               statuspayment !== 'paid' &&
               expired !== 'expired') ??
-            'manual_paid' ??
-            'captured' ? (
+              'manual_paid' ??
+              'captured' ? (
               <>
                 <div className="justify-end flex-col items-center cursor-pointer z-10">
                   <label
@@ -278,7 +278,10 @@ const ListProducts = ({
                   </span>
                 )}
               </div>
-              <p className="text-center">{method}</p>
+              <p className="text-center">
+                {method === 'credit' && 'Crédito'}
+                {method === 'custom' && 'Personalizado'}
+              </p>
               <span className="font-bold text-success text-lg mt-2 block text-center">
                 Total: R$ {moneyMask(value.toString())}
               </span>
