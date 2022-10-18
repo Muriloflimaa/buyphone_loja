@@ -72,7 +72,10 @@ const Home: NextPage<DataProps> = ({ data }) => {
           <div className="w-full fixed z-50 bottom-24 ml-[93%] md:ml-[95%] md:bottom-12 ">
             <a onClick={() => router.push('/')}>
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
-                <FontAwesomeIcon icon={faChevronUp} className="w-5 h-5" />
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  className="w-5 h-5 text-primary"
+                />
               </div>
             </a>
           </div>
