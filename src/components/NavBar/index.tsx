@@ -43,8 +43,6 @@ export default function NavBar() {
     }
   }, [cart])
 
-  console.log(dataApi)
-
   useEffect(() => {
     async function Data() {
       try {

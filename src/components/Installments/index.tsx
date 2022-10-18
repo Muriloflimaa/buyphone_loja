@@ -3,24 +3,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface InstallmentsProps {
   props: {
-    1: number
-    2: number
-    3: number
-    4: number
-    5: number
-    6: number
-    7: number
-    8: number
-    9: number
-    10: number
-    11: number
-    12: number
+    1: number | string
+    2: number | string
+    3: number | string
+    4: number | string
+    5: number | string
+    6: number | string
+    7: number | string
+    8: number | string
+    9: number | string
+    10: number | string
+    11: number | string
+    12: number | string
   }
-  setMatchInstallments: (props: number) => void
+  setMatchInstallments: (props: any) => void
 }
 
 const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
-  console.log(props, setMatchInstallments)
   return (
     <>
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
