@@ -69,13 +69,10 @@ const Home: NextPage<DataProps> = ({ data }) => {
       </Head>
       <div id="main" className="h-auto -mt-8">
         {showArrow === true ? (
-          <div className="w-full -top-6 z-20 right-6 flex justify-end items-end min-h-screen fixed">
+          <div className="w-full fixed z-50 bottom-24 ml-[93%] md:ml-[95%] md:bottom-12 ">
             <a href="#main">
-              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex relative justify-center items-center">
-                <FontAwesomeIcon
-                  icon={faChevronUp}
-                  className="w-5 h-5 absolute"
-                />
+              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
+                <FontAwesomeIcon icon={faChevronUp} className="w-5 h-5" />
               </div>
             </a>
           </div>
