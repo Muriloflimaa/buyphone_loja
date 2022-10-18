@@ -176,10 +176,10 @@ export default function NavBar() {
                         </a>
                       </Link>
                     ) : (
-                      <div className="hidden sm:inline-block dropdown dropdown-end">
+                      <div className="hidden sm:inline-block dropdown dropdown-end px-2">
                         <label
                           tabIndex={0}
-                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
+                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 h-auto py-2 rounded-full text-base-100 flex-row gap-2 pr-1"
                         >
                           <span className="normal-case text-white">
                             Olá, {UniqueName(userData?.name)}

@@ -20,6 +20,7 @@ import AnaImg from '../assets/images/anabrisa.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import { apiStore } from '../services/api'
+import { useRouter } from 'next/router'
 
 interface DataProps {
   data: {
@@ -29,6 +30,7 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data }) => {
   const { search } = useContext(SearchContext)
+  const router = useRouter()
   const [showArrow, setShowArrow] = useState(true)
 
   useEffect(() => {
@@ -65,10 +67,10 @@ const Home: NextPage<DataProps> = ({ data }) => {
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
-      <div id="main" className="h-auto -mt-8">
+      <div className="h-auto -mt-8">
         {showArrow === true ? (
           <div className="w-full fixed z-50 bottom-24 ml-[93%] md:ml-[95%] md:bottom-12 ">
-            <a href="#main">
+            <a onClick={() => router.push('/')}>
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
                 <FontAwesomeIcon icon={faChevronUp} className="w-5 h-5" />
               </div>
