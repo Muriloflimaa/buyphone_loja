@@ -15,7 +15,6 @@ const CarouselComponent = () => {
         showIndicators={false}
         showStatus={false}
         showThumbs={false}
-        showArrows={false}
       >
         <Image src={Banner1} layout="responsive" quality={100} />
 
