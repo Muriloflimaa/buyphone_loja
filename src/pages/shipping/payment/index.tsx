@@ -6,10 +6,18 @@ import { ArrayProduct } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { PersistentLogin } from '../../../utils/PersistentLogin'
 
+interface dataProps {
+  preco: string | number
+  quantidade: number
+  nome: string
+  cor: string
+  memoria: string
+}
+
 export default function payment() {
   const { values } = useCart()
 
-  const setDat: any[] = []
+  const setDat: dataProps[] = []
   values.map(async (item: ArrayProduct) => {
     const response = {
       preco: moneyMask(item.priceFormated.toString()),
