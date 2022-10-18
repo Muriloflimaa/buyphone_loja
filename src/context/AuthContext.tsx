@@ -83,7 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         destroyCookie(undefined, '@BuyPhone:Router')
         return
       }
-      Router.push('/')
+      window.location.href = '/'
     } catch (error: any) {
       if (error.response.data.message === 'Unauthorized.') {
         ToastCustom(

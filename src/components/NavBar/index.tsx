@@ -166,12 +166,14 @@ export default function NavBar() {
                   <div className="md:flex justify-end items-center gap-5 w-full hidden ">
                     {!isUser ? (
                       <Link href={'/login'} passHref>
-                        <div className="flex justify-end flex-col items-center cursor-pointer">
-                          <FontAwesomeIcon
-                            icon={faCircleUser}
-                            className="w-7 h-7 text-PrimaryText"
-                          />
-                        </div>
+                        <a>
+                          <div className="flex justify-end flex-col items-center cursor-pointer">
+                            <FontAwesomeIcon
+                              icon={faCircleUser}
+                              className="w-7 h-7 text-PrimaryText"
+                            />
+                          </div>
+                        </a>
                       </Link>
                     ) : (
                       <div className="hidden sm:inline-block dropdown dropdown-end">
