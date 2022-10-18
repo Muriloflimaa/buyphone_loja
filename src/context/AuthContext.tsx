@@ -4,16 +4,11 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
 import { apiStore } from '../services/api'
+import { IUser } from '../types'
 
 type SignInCredentials = {
   email: string
   password: string
-}
-
-type UserDataType = {
-  type: number
-  name: string
-  profile_photo_url: string
 }
 
 type AuthContextData = {
@@ -21,7 +16,7 @@ type AuthContextData = {
   signOut: Function
   user: string | undefined | number
   isUser: boolean
-  userData: UserDataType
+  userData: IUser | null
 }
 
 type AuthProviderProps = {
@@ -34,7 +29,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
   const [isUser, setIsUser] = useState(false)
 
-  const [userData, setUserData] = useState<any>(() => {
+  const [userData, setUserData] = useState<IUser | null>(() => {
     // Verificando se existe user nos cookies
 
     if (user) {
