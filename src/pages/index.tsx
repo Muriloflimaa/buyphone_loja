@@ -1,26 +1,26 @@
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
+import { Carousel } from 'react-responsive-carousel'
+import AnaImg from '../assets/images/anabrisa.jpg'
+import BarbaraImg from '../assets/images/barbara.jpg'
+import BrendaImg from '../assets/images/brenda.jpg'
+import MiniBanner1 from '../assets/images/miniBanner1.webp'
+import MiniBanner2 from '../assets/images/miniBanner2.webp'
+import MiniBanner3 from '../assets/images/miniBanner3.webp'
+import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
+import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
-import MiniBanner1 from '../assets/images/miniBanner1.webp'
-import MiniBanner2 from '../assets/images/miniBanner2.webp'
-import MiniBanner3 from '../assets/images/miniBanner3.webp'
-import { Carousel } from 'react-responsive-carousel'
-import { CardDepoiments } from '../components/CardDepoiment'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import AnaImg from '../assets/images/anabrisa.jpg'
-import BrendaImg from '../assets/images/brenda.jpg'
-import BarbaraImg from '../assets/images/barbara.jpg'
-import { apiStore } from '../services/api'
-import { useRouter } from 'next/router'
 
 interface DataProps {
   data: {
@@ -299,7 +299,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           <Carousel
             infiniteLoop
             autoPlay
-            interval={3000}
+            interval={5000}
             showIndicators={false}
             showStatus={false}
             showThumbs={false}
