@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
-import { useEffect } from 'react'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { useCart } from '../../../context/UseCartContext'
-import { ArrayProduct, ProductPayment } from '../../../types'
+import { ArrayProduct } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { PersistentLogin } from '../../../utils/PersistentLogin'
 
