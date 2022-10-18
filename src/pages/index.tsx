@@ -237,7 +237,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           {/* <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
           </div> */}
-          <h1 className="text-4xl font-medium text-center mb-8">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
 
@@ -293,7 +293,9 @@ const Home: NextPage<DataProps> = ({ data }) => {
         </div>
         <div id="depoiments"></div>
         <div className="mt-20">
-          <h1 className="text-4xl font-medium text-center mb-8">Depoimentos</h1>
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Depoimentos
+          </h1>
           <Carousel
             infiniteLoop
             autoPlay
