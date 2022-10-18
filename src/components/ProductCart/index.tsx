@@ -101,7 +101,7 @@ const ProductCart = ({
                 data-testid="remove-product"
                 onClick={() => handleRemoveProduct(id, name, color, memory)}
               >
-                <TrashIcon className="h-4 w-4 " />
+                <TrashIcon className="h-4 w-4 text-red-600" />
               </button>
             </div>
           )}
