@@ -296,7 +296,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           <Carousel
             infiniteLoop
             autoPlay
-            interval={5000}
+            interval={3000}
             showIndicators={false}
             showStatus={false}
             showThumbs={false}
@@ -307,7 +307,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] left-4"
+                  className="btn btn-circle absolute z-10 top-[40%] left-4 hidden md:inline-flex"
                 >
                   ❮
                 </button>
@@ -319,7 +319,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] right-4"
+                  className="btn btn-circle absolute z-10 top-[40%] right-4 hidden md:inline-flex"
                 >
                   ❯
                 </button>
