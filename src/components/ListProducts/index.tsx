@@ -11,15 +11,15 @@ import { date, moneyMask } from '../../utils/masks'
 interface ListProductsProps {
   created: string
   statuspayment: string
-  number: number
+  number: number | string | null
   value: number
   method: string
   address: string
   city: string
-  numberAddress: string
+  numberAddress: string | null | number
   district: string
   state: string
-  zipCode: number
+  zipCode: number | null | string
   linkPayment: string
   CodImgPix: string
   brCode: string

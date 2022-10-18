@@ -4,11 +4,11 @@ import ListProducts from '../components/ListProducts'
 import { PersistentLogin } from '../utils/PersistentLogin'
 import Link from 'next/link'
 import { apiStore } from '../services/api'
-import { UserData } from '../types'
+import { IInvoice, UserData } from '../types'
 
 interface DataProps {
   current_page: number
-  data: Array<UserData>
+  data: Array<PedidosProps>
   first_page_url: string
   from: number
   last_page: number
@@ -24,6 +24,34 @@ interface DataProps {
   prev_page_url: null | number
   to: number
   total: number
+}
+
+interface PedidosProps {
+  address: {
+    address: string
+    city: string
+    complement: string | null
+    created_at: string
+    id: number
+    neighborhood: string
+    number: number
+    postal_code: string | null
+    uf: string
+    updated_at: string
+    user_id: number
+  }
+  address_id: number
+  created_at: string
+  id: number
+  invoice: IInvoice
+  invoice_id: number
+  method: string
+  total: number
+  updated_at: string
+  user_id: number
+  utm_campaign: null
+  utm_medium: null
+  utm_source: null
 }
 
 function MyShopping() {
@@ -64,7 +92,7 @@ function MyShopping() {
       </h1>
       <div className="grid border rounded-md border-b-0">
         {data && data?.data.length >= 0 ? (
-          data?.data.map((pedido: any) => (
+          data?.data.map((pedido) => (
             <React.Fragment key={pedido.id}>
               <ListProducts
                 created={pedido.created_at}
