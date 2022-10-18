@@ -32,6 +32,21 @@ interface GetInfoCreditProps {
   }
 }
 
+interface installmentsProps {
+  1: number | string
+  2: number | string
+  3: number | string
+  4: number | string
+  5: number | string
+  6: number | string
+  7: number | string
+  8: number | string
+  9: number | string
+  10: number | string
+  11: number | string
+  12: number | string
+}
+
 export default function MatchInstallment({
   GetInfoCredit,
 }: GetInfoCreditProps) {
@@ -40,7 +55,7 @@ export default function MatchInstallment({
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const [installments, setInstallments] = useState<any>()
+  const [installments, setInstallments] = useState<installmentsProps>()
 
   const router = useRouter()
 

@@ -12,6 +12,7 @@ export default function Terms() {
         <span className="bg-gray-400"></span>
         <span className="bg-pink-200"></span>
         <span className="bg-amber-100"></span>
+        <span className="bg-info-discont-2 text-info-discount"></span>
       </div>
       <h1>TERMOS DE USO DA BUYPHONE</h1>
       <p>Última Atualização: 27 de outubro de 2021</p>

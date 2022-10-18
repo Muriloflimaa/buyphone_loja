@@ -11,15 +11,15 @@ import { date, moneyMask } from '../../utils/masks'
 interface ListProductsProps {
   created: string
   statuspayment: string
-  number: number
+  number: number | string | null
   value: number
   method: string
   address: string
   city: string
-  numberAddress: string
+  numberAddress: string | null | number
   district: string
   state: string
-  zipCode: number
+  zipCode: number | null | string
   linkPayment: string
   CodImgPix: string
   brCode: string
@@ -108,7 +108,7 @@ const ListProducts = ({
                           <div className="text-center w-full grid gap-3">
                             <div className="card card-compact shadow w-fit mx-auto">
                               <Image
-                                src={`https://${link}/img/qrcode/${CodImgPix}.png`}
+                                src={`${link}/img/qrcode/${CodImgPix}.png`}
                                 className="mx-auto"
                                 height={128}
                                 width={128}

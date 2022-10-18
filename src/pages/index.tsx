@@ -8,7 +8,6 @@ import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
 import { ICategory, IProduct } from '../types'
-import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
 import MiniBanner1 from '../assets/images/miniBanner1.webp'
 import MiniBanner2 from '../assets/images/miniBanner2.webp'
@@ -21,6 +20,7 @@ import AnaImg from '../assets/images/anabrisa.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import { apiStore } from '../services/api'
+import { useRouter } from 'next/router'
 
 interface DataProps {
   data: {
@@ -29,8 +29,8 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-  const user = GetUseType()
   const { search } = useContext(SearchContext)
+  const router = useRouter()
   const [showArrow, setShowArrow] = useState(true)
 
   useEffect(() => {
@@ -67,14 +67,14 @@ const Home: NextPage<DataProps> = ({ data }) => {
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
-      <div id="main" className="h-auto -mt-8">
+      <div className="h-auto -mt-8">
         {showArrow === true ? (
-          <div className="w-full -top-6 right-6 flex justify-end items-end min-h-screen fixed">
-            <a href="#main">
-              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex relative justify-center items-center">
+          <div className="w-full fixed z-50 bottom-24 ml-[93%] md:ml-[95%] md:bottom-12 ">
+            <a onClick={() => router.push('/')}>
+              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
                 <FontAwesomeIcon
                   icon={faChevronUp}
-                  className="w-5 h-5 absolute"
+                  className="w-5 h-5 text-primary"
                 />
               </div>
             </a>
@@ -87,7 +87,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           alt=""
         />
         <CarouselComponent />
-        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 gap-1">
+        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-3 md:mt-1 gap-1">
           <Carousel
             infiniteLoop
             autoPlay
@@ -96,7 +96,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             showThumbs={false}
             showArrows={false}
             showIndicators={false}
-            className="md:w-1/2"
+            className="md:w-1/2 m-0 p-0"
           >
             <Link
               className="cursor-pointer"
@@ -185,7 +185,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             >
               {data.data.map((category) =>
                 hotProducts(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <div className="my-10">
@@ -237,7 +237,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
           {/* <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
           </div> */}
-          <h1 className="text-4xl font-medium text-center mb-8">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
 
@@ -245,7 +245,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             {data?.data.length > 0 ? (
               data.data.map((category) =>
                 search(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <ProductCard
@@ -258,9 +258,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         averagePrice={returnPrice.averagePrice}
                         slug={products.slug}
                         slugCategory={category.slug}
-                        image={
-                          'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
-                        }
+                        image={products.media[0].original_url}
                         memory={products.memory}
                       />
                     )
@@ -295,11 +293,13 @@ const Home: NextPage<DataProps> = ({ data }) => {
         </div>
         <div id="depoiments"></div>
         <div className="mt-20">
-          <h1 className="text-4xl font-medium text-center mb-8">Depoimentos</h1>
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Depoimentos
+          </h1>
           <Carousel
             infiniteLoop
             autoPlay
-            interval={5000}
+            interval={3000}
             showIndicators={false}
             showStatus={false}
             showThumbs={false}
@@ -310,7 +310,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] left-4"
+                  className="btn btn-circle absolute z-10 top-[40%] left-4 hidden md:inline-flex"
                 >
                   ❮
                 </button>
@@ -322,7 +322,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] right-4"
+                  className="btn btn-circle absolute z-10 top-[40%] right-4 hidden md:inline-flex"
                 >
                   ❯
                 </button>
