@@ -279,8 +279,9 @@ const ListProducts = ({
                 )}
               </div>
               <p className="text-center">
-                {method === 'credit' && 'Crédito'}
-                {method === 'custom' && 'Personalizado'}
+                {method === 'PIX' && 'PIX'}
+                {method === 'CREDIT' && 'Crédito'}
+                {method === 'CUSTOM' && 'Personalizado'}
               </p>
               <span className="font-bold text-success text-lg mt-2 block text-center">
                 Total: R$ {moneyMask(value.toString())}
