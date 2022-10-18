@@ -1,7 +1,26 @@
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const Installments = ({ props, setMatchInstallments }: any) => {
+interface InstallmentsProps {
+  props: {
+    1: number
+    2: number
+    3: number
+    4: number
+    5: number
+    6: number
+    7: number
+    8: number
+    9: number
+    10: number
+    11: number
+    12: number
+  }
+  setMatchInstallments: (props: number) => void
+}
+
+const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
+  console.log(props, setMatchInstallments)
   return (
     <>
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">

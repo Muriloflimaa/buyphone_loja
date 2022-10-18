@@ -19,6 +19,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
+import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
@@ -32,7 +33,7 @@ export default function NavBar() {
   const [isOn, setIsOn] = useState(false)
   const [showCart, setShowCart] = useState(false)
   const { changeState } = useContext(SearchContext)
-  const [dataApi, setDataApi] = useState<any>()
+  const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
 
@@ -41,6 +42,8 @@ export default function NavBar() {
       setCartSize(cart.length)
     }
   }, [cart])
+
+  console.log(dataApi)
 
   useEffect(() => {
     async function Data() {
@@ -352,15 +355,15 @@ export default function NavBar() {
               >
                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                   <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                    {dataApi?.length > 0 && (
+                    {dataApi && dataApi?.length > 0 && (
                       <li>
                         <Link href={'/'}>
                           <a>Todos</a>
                         </Link>
                       </li>
                     )}
-                    {dataApi?.length > 0 ? (
-                      dataApi?.map((category: any) => (
+                    {dataApi && dataApi?.length > 0 ? (
+                      dataApi?.map((category) => (
                         <li key={category.id}>
                           <Link
                             href={`/products/apple/iphones/${category.slug}`}
@@ -499,8 +502,8 @@ export default function NavBar() {
                 <span className="text-info-content text-base">Produtos</span>
               </div>
               <div className="collapse-content flex flex-col overflow-auto gap-2 h-auto">
-                {dataApi?.length > 0 ? (
-                  dataApi?.map((category: any) => (
+                {dataApi && dataApi?.length > 0 ? (
+                  dataApi?.map((category) => (
                     <label
                       htmlFor="my-drawer"
                       key={category.id}
