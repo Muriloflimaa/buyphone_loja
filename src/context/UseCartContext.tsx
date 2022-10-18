@@ -26,7 +26,12 @@ interface UpdateProductAmount {
 interface CartContextData {
   cart: Product[]
   addProduct: (productId: number) => Promise<void>
-  removeProduct: (productId: number) => void
+  removeProduct: (
+    productId: number,
+    name: string,
+    color: string,
+    memory: string
+  ) => void
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void
   CleanCart: () => void
   values: ArrayProduct[]
@@ -202,7 +207,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
    *
    *
    */
-  const removeProduct = (productId: number) => {
+  const removeProduct = (
+    productId: number,
+    name: string,
+    color: string,
+    memory: string
+  ) => {
     try {
       const updatedCart = [...cart]
       const productIndex = updatedCart.findIndex(
@@ -211,6 +221,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       if (productIndex >= 0) {
         updatedCart.splice(productIndex, 1)
         setCart(updatedCart)
+        ToastCustom(
+          300,
+          `${name} ${color} - ${memory.toUpperCase()} removido do carrinho!`,
+          'error',
+          'Notificação'
+        )
       } else {
         throw Error()
       }

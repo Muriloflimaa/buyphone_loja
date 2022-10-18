@@ -66,9 +66,7 @@ export default function Products({ data }: DataProps) {
                     idCategory={products.id}
                     slug={products.slug}
                     slugCategory={data.slug}
-                    image={
-                      'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
-                    }
+                    image={products.media[0].original_url}
                     memory={products.memory}
                   />
                 </React.Fragment>

@@ -58,8 +58,13 @@ const ProductCart = ({
     })
   } //remove 1 amount do produto
 
-  function handleRemoveProduct(productId: number) {
-    removeProduct(productId)
+  function handleRemoveProduct(
+    productId: number,
+    name: string,
+    color: string,
+    memory: string
+  ) {
+    removeProduct(productId, name, color, memory)
   } //remove produto do carrinho
 
   return (
@@ -94,7 +99,7 @@ const ProductCart = ({
               <button
                 type="button"
                 data-testid="remove-product"
-                onClick={() => handleRemoveProduct(id)}
+                onClick={() => handleRemoveProduct(id, name, color, memory)}
               >
                 <TrashIcon className="h-4 w-4 " />
               </button>

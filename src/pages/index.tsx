@@ -258,9 +258,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         averagePrice={returnPrice.averagePrice}
                         slug={products.slug}
                         slugCategory={category.slug}
-                        image={
-                          'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
-                        }
+                        image={products.media[0].original_url}
                         memory={products.memory}
                       />
                     )

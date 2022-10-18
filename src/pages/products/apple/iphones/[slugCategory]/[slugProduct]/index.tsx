@@ -57,6 +57,7 @@ type shippingOnTypes = {
 }
 
 export default function Products({ data }: DataProps) {
+  console.log(data)
   // const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
@@ -153,28 +154,16 @@ export default function Products({ data }: DataProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
+            {data.media.map((res) => {
+              return <Image src={res.original_url} width={60} height={75} />
+            })}
 
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
           <div className="w-full h-full flex justify-start col-span-2 relative">
             <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
+              src={data.media[0].original_url}
               layout="fixed"
               width="260"
               height="350"
@@ -248,6 +237,10 @@ export default function Products({ data }: DataProps) {
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
+                <span className="badge badge-success rounded-md text-xs font-medium p-3 uppercase text-black">
+                  PARCELAMENTO EM ATÉ 12X
+                </span>
+
                 {/* <div className="flex items-center  mt-2 text-xs">
                   <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
                   <p>4.9 (1234) comentários</p>
@@ -278,15 +271,15 @@ export default function Products({ data }: DataProps) {
                       ? 'Sem estoque'
                       : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
                   </h2>
-                  <span className="badge rounded-md badge-warning text-primary font-bold">
-                    - {resultDiscountPercent}%
+                  <span className="badge bg-transparent border-[2px] border-[#989898] rounded-md badge-warning text-base-300 font-medium">
+                    -{resultDiscountPercent}%
                   </span>
                 </div>
               </div>
-              <div className="badge badge-success rounded-md text-xs font-semibold p-3 uppercase">
-                <span className="text-white">
+              <div className="badge bg-transparent border-[2px] border-[#989898] rounded-md text-xs font-semibold p-3 uppercase">
+                <span className="text-neutral-content">
                   economia de{' '}
-                  <span className="text-primary">
+                  <span className="text-base-300">
                     R$ {moneyMask(resultDiscount.toString())}
                   </span>
                 </span>
@@ -299,17 +292,17 @@ export default function Products({ data }: DataProps) {
                   </button>
                 ) : (
                   <button
-                    className="btn btn-info px-16 text-white"
+                    className="btn bg-[#459C4E] w-full text-white"
                     data-testid="add-product-button"
                     onClick={() => handleAddProduct(data.id)}
                   >
-                    Adicionar
+                    Adicionar ao carrinho
                   </button>
                 )}
               </div>
 
               <form onSubmit={handleSubmit(handleCepStorage)}>
-                <div className="alert items-start w-full bg-accent flex flex-col border-[1px] border-[#00000014] text-info-content">
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
                   <h1 className="text-base font-semibold">
                     Calcule o frete e prazo de entrega
                   </h1>
