@@ -5,7 +5,7 @@ import {
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
