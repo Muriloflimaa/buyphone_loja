@@ -14,7 +14,6 @@ import { Input } from '../../../../../../components/InputElement'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
-import { GetUseType } from '../../../../../../utils/getUserType'
 import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
@@ -57,8 +56,6 @@ type shippingOnTypes = {
 }
 
 export default function Products({ data }: DataProps) {
-  console.log(data)
-  // const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
   const returnPrice = verificationPrice(data)
@@ -154,21 +151,24 @@ export default function Products({ data }: DataProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
-            {data.media.map((res) => {
-              return <Image src={res.original_url} width={60} height={75} />
-            })}
+            {data.media &&
+              data.media.map((res) => {
+                return <Image src={res.original_url} width={60} height={75} />
+              })}
 
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
           <div className="w-full h-full flex justify-start col-span-2 relative">
-            <Image
-              src={data.media[0].original_url}
-              layout="fixed"
-              width="260"
-              height="350"
-              priority={true}
-            />
+            {data.media && (
+              <Image
+                src={data.media[0].original_url}
+                layout="fixed"
+                width="260"
+                height="350"
+                priority={true}
+              />
+            )}
             <div className="absolute right-6">
               <div className="flex flex-col">
                 <div
