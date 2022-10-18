@@ -10,9 +10,9 @@ import { ArrayProduct, Product } from '../types'
 import { useLocalStorage } from '../utils/useLocalStorage'
 import { ToastCustom } from '../utils/toastCustom'
 import { verificationPrice } from '../utils/verificationPrice'
-import { GetUseType } from '../utils/getUserType'
 import { setCookies } from '../utils/useCookies'
 import { apiStore } from '../services/api'
+import { parseCookies } from 'nookies'
 
 interface CartProviderProps {
   children: ReactNode
@@ -40,7 +40,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
   const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
-  const user = GetUseType()
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
 
   const [cart, setCart] = useState<Product[]>(() => {
     // Verificando se existe no localstorage o carrinho
@@ -53,21 +54,42 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   })
 
   useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
+
+  useEffect(() => {
     setData([]) //zera o array do data
     cart.map(async (item) => {
       try {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
-        const returnPrice = verificationPrice(data, user) //verificando preço
+        const discount =
+          !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+        const itens = [
+          data.price,
+          data.magalu_price,
+          data.americanas_price,
+          data.casasbahia_price,
+          data.ponto_price,
+        ]
+        const filteredItens = itens.filter((item) => item)
+        const averagePrice =
+          filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+        const discountPrice = Math.round(averagePrice * (discount / 100))
+        const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
         const response = {
           ...item, //adicionando amount e id que está no localstorage
           product: data, //data vem da api que é chamada
-          priceFormated: returnPrice.ourPrice, //formatação de preços
-          subTotal: returnPrice.ourPrice * item.amount, //total simples
+          priceFormated: ourPrice, //formatação de preços
+          subTotal: ourPrice * item.amount, //total simples
         }
 
         setData((data) => [...data, response]) //gravando response no state
       } catch (error) {
+        console.log(error)
         CleanCart()
       }
     })

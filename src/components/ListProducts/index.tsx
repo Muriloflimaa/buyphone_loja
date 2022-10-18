@@ -108,7 +108,7 @@ const ListProducts = ({
                           <div className="text-center w-full grid gap-3">
                             <div className="card card-compact shadow w-fit mx-auto">
                               <Image
-                                src={`https://${link}/img/qrcode/${CodImgPix}.png`}
+                                src={`${link}/img/qrcode/${CodImgPix}.png`}
                                 className="mx-auto"
                                 height={128}
                                 width={128}

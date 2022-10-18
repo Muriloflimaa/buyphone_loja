@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { setCookie } from 'nookies'
-import { useEffect } from 'react'
+import { parseCookies, setCookie } from 'nookies'
+import { useEffect, useState } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
@@ -12,10 +12,10 @@ import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
 import { SearchProvider } from '../context/SearchContext'
 import { CartProvider } from '../context/UseCartContext'
-import { GetUseType } from '../utils/getUserType'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const userData = GetUseType()
+  const { '@BuyPhone:User': user } = parseCookies(undefined)
+  const [isUser, setIsUser] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -24,23 +24,34 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       utm_medium: router.query.utm_medium,
       utm_campaign: router.query.utm_campaign,
     }
-    router.query.utm_source && router.query.utm_medium && router.query.utm_campaign && setCookie(null, 'UTM', JSON.stringify(utms), {
-      path: '/',
-    })
+    router.query.utm_source &&
+      router.query.utm_medium &&
+      router.query.utm_campaign &&
+      setCookie(null, 'UTM', JSON.stringify(utms), {
+        path: '/',
+      })
   }, [router])
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user]) //realiza verificacao de user para nao dar erro de renderização
 
   return (
     <Theme
-      dataTheme={`${userData?.type === 1 ? 'dark' : 'light'}`}
+      dataTheme={`${
+        !!isUser && user && JSON.parse(user).type === 1 ? 'dark' : 'light'
+      }`}
       className="bg-base-100"
     >
       <Toaster position="top-right" reverseOrder={false} />
       <AuthProvider>
         {router.route === `/login` ||
-          router.route === `/register` ||
-          router.route === `/terms` ||
-          router.route === `/politics` ||
-          router.route === `/forgot-password` ? (
+        router.route === `/register` ||
+        router.route === `/terms` ||
+        router.route === `/politics` ||
+        router.route === `/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>

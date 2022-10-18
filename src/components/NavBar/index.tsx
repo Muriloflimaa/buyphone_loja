@@ -19,20 +19,17 @@ import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
-import { GetUseType } from '../../utils/getUserType'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 export default function NavBar() {
-  const { isAuthenticated, signOut } = useContext(AuthContext)
+  const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
-  const [isUser, setIsUser] = useState(false)
-  const user = GetUseType()
   const [showCart, setShowCart] = useState(false)
   const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<any>()
@@ -56,14 +53,6 @@ export default function NavBar() {
     }
     Data()
   }, [])
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setIsUser(false)
-    } else {
-      setIsUser(true)
-    }
-  }, [isAuthenticated]) //ve se o usuario esta logado
 
   useEffect(() => {
     if (
@@ -191,7 +180,7 @@ export default function NavBar() {
                           className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
                         >
                           <span className="normal-case text-white">
-                            Olá, {UniqueName(user?.name)}
+                            Olá, {UniqueName(userData?.name)}
                           </span>
                           <FontAwesomeIcon
                             icon={faCircleUser}
@@ -443,7 +432,7 @@ export default function NavBar() {
                     <UserCircleIcon className="w-10 h-10" />
                   ) : (
                     <img
-                      src={user?.profile_photo_url}
+                      src={userData?.profile_photo_url}
                       alt="Foto do Usuário"
                       width={40}
                       height={40}
@@ -451,13 +440,13 @@ export default function NavBar() {
                     />
                   )}
                 </div>
-                {isUser ? (
+                {!!isUser ? (
                   <div className="flex flex-col pl-6">
                     <h1 className="text-xl font-semibold text-info-content">
-                      {FirstAllUpper(user?.name)}
+                      {FirstAllUpper(userData?.name)}
                     </h1>
                     <h2 className="text-info-content">
-                      {user?.type == 1 ? 'Revendedor' : 'Consumidor'}
+                      {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
                     </h2>
                   </div>
                 ) : (

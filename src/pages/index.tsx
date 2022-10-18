@@ -8,7 +8,6 @@ import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
 import { ICategory, IProduct } from '../types'
-import { GetUseType } from '../utils/getUserType'
 import { verificationPrice } from '../utils/verificationPrice'
 import MiniBanner1 from '../assets/images/miniBanner1.webp'
 import MiniBanner2 from '../assets/images/miniBanner2.webp'
@@ -29,7 +28,6 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data }) => {
-  const user = GetUseType()
   const { search } = useContext(SearchContext)
   const [showArrow, setShowArrow] = useState(true)
 
@@ -182,7 +180,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             >
               {data.data.map((category) =>
                 hotProducts(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <div className="my-10">
@@ -242,7 +240,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             {data?.data.length > 0 ? (
               data.data.map((category) =>
                 search(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <ProductCard
