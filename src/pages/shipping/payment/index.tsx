@@ -1,9 +1,27 @@
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
+import { useEffect } from 'react'
 import { TotalPayment } from '../../../components/TotalPayment'
+import { useCart } from '../../../context/UseCartContext'
+import { ArrayProduct, ProductPayment } from '../../../types'
+import { moneyMask } from '../../../utils/masks'
 import { PersistentLogin } from '../../../utils/PersistentLogin'
 
 export default function payment() {
+  const { values } = useCart()
+
+  const setDat: any[] = []
+  values.map(async (item: ArrayProduct) => {
+    const response = {
+      preco: moneyMask(item.priceFormated.toString()),
+      quantidade: item.amount,
+      nome: item.product.name,
+      cor: item.product.color,
+      memoria: item.product.memory,
+    }
+    setDat.push(response)
+  })
+
   return (
     <>
       <div className="max-w-7xl mx-auto grid gap-3">
@@ -56,7 +74,9 @@ export default function payment() {
                 </div>
                 <div>
                   <a
-                    href="https://loja.buyphone.com.br/payment/custom"
+                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1!%20Eu%20gostaria%20de%20saber%20mais%20sobre%20o%20m%C3%A9todo%20de%20pagamento%20personalizado.%20Meu%20Carrinho:%20${
+                      setDat && JSON.stringify(setDat)
+                    }`}
                     target="_blank"
                     className="btn btn-outline w-full justify-between"
                   >
