@@ -319,7 +319,7 @@ export default function Products({ data }: DataProps) {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-info text-white normal-case"
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
                         type="submit"
                       >
                         Consultar
