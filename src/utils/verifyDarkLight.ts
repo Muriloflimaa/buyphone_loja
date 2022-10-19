@@ -1,4 +1,4 @@
-export function LightOrDark(black?: any, user?: any, isUser?: any) {
+export function LightOrDark(black?: string, user?: string, isUser?: boolean) {
   if (black === 'true' || (!!isUser && user && JSON.parse(user).type === 1)) {
     return true
   } else {
