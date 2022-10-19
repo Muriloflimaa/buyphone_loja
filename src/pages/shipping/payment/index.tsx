@@ -43,7 +43,7 @@ export default function payment() {
               <div className="grid gap-8">
                 <div>
                   <Link href={'/shipping/payment/pix'}>
-                    <a className="btn btn-outline w-full justify-between">
+                    <a className="btn btn-info text-white w-full justify-between">
                       <span>Pix</span>
                       <svg
                         className="h-6 w-6 fill-current md:h-8 md:w-8"
@@ -62,7 +62,7 @@ export default function payment() {
                 </div>
                 <div>
                   <Link href={'/shipping/payment/credit-checkout'}>
-                    <a className="btn btn-outline w-full justify-between">
+                    <a className="btn btn-info text-white w-full justify-between">
                       <span>Cartão de crédito</span>
                       <svg
                         className="h-6 w-6 fill-current md:h-8 md:w-8"
@@ -81,10 +81,11 @@ export default function payment() {
                 </div>
                 <div>
                   <a
-                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1!%20Eu%20gostaria%20de%20saber%20mais%20sobre%20o%20m%C3%A9todo%20de%20pagamento%20personalizado.%20Meu%20Carrinho:%20${setDat && JSON.stringify(setDat)
-                      }`}
+                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1!%20Eu%20gostaria%20de%20saber%20mais%20sobre%20o%20m%C3%A9todo%20de%20pagamento%20personalizado.%20Meu%20Carrinho:%20${
+                      setDat && JSON.stringify(setDat)
+                    }`}
                     target="_blank"
-                    className="btn btn-outline w-full justify-between"
+                    className="btn btn-info text-white w-full justify-between"
                   >
                     <span>Personalizado</span>
                     <svg

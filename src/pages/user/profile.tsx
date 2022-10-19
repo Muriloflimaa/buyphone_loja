@@ -213,9 +213,11 @@ export default function profile({ data }: user) {
             </div>
             <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
               {formState.isSubmitting ? (
-                <button className="btn normal-case loading">Carregando</button>
+                <button className="btn btn-info text-white loading">
+                  Carregando
+                </button>
               ) : (
-                <button type="submit" className="btn normal-case">
+                <button type="submit" className="btn btn-info text-white">
                   Salvar
                 </button>
               )}
@@ -285,7 +287,10 @@ export default function profile({ data }: user) {
             </div>
           </div>
           <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-            <button onClick={() => AlterPassword()} className="btn normal-case">
+            <button
+              onClick={() => AlterPassword()}
+              className="btn btn-info text-white"
+            >
               Salvar
             </button>
           </div>

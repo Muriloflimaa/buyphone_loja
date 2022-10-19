@@ -112,7 +112,7 @@ const ProductCard = ({
         </div>
         <div className="card-actions flex-col items-center">
           <button
-            className="btn btn-primary upper-case text-xs md:text-md py-0"
+            className="btn btn-info text-white w-full upper-case text-xs md:text-md py-0"
             data-testid="add-product-button"
             onClick={() => handleAddProduct(id)}
           >

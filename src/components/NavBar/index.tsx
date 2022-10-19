@@ -8,7 +8,7 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -263,8 +263,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -308,15 +308,15 @@ export default function NavBar() {
                             )}
                             {cartSize && cartSize > 0 ? (
                               <div className="card-actions justify-center">
-                                <a
+                                <button
                                   onClick={() => {
                                     setShowCart(!showCart)
                                     router.push('/shipping')
                                   }}
-                                  className="btn btn-success btn-block font-medium normal-case"
+                                  className="btn border-transparent bg-success w-full text-white"
                                 >
                                   Finalizar Compra
-                                </a>
+                                </button>
                               </div>
                             ) : null}
                           </div>

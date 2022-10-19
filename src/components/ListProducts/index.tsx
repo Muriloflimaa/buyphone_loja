@@ -73,8 +73,8 @@ const ListProducts = ({
             {(method === 'PIX' &&
               statuspayment !== 'paid' &&
               expired !== 'expired') ??
-              'manual_paid' ??
-              'captured' ? (
+            'manual_paid' ??
+            'captured' ? (
               <>
                 <div className="justify-end flex-col items-center cursor-pointer z-10">
                   <label
@@ -120,25 +120,13 @@ const ListProducts = ({
                             <div className="grid gap-2">
                               <a
                                 onClick={() => copyToClipBoard(`${brCode}`)}
-                                className={
-                                  'btn font-bold normal-case ' +
-                                  (user?.type === 1
-                                    ? 'btn-info bg-white text-black hover:opacity-80'
-                                    : 'btn-primary')
-                                }
+                                className="btn btn-info text-white"
                               >
                                 Copiar QRCode
                               </a>
 
                               <Link href={pdf}>
-                                <a
-                                  className={
-                                    'btn font-bold normal-case ' +
-                                    (user?.type === 1
-                                      ? 'btn-info bg-white text-black hover:opacity-80'
-                                      : 'btn-primary')
-                                  }
-                                >
+                                <a className="btn btn-info text-white">
                                   Baixar PDF
                                 </a>
                               </Link>
@@ -163,12 +151,7 @@ const ListProducts = ({
                               </div>
                             </div>
                             <a
-                              className={
-                                'btn font-bold normal-case ' +
-                                (user?.type === 1
-                                  ? 'btn-info bg-white text-black hover:opacity-80'
-                                  : 'btn-primary')
-                              }
+                              className="btn btn-info text-white"
                               onClick={() => router.push('/myshopping')}
                             >
                               Verificar Pagamento

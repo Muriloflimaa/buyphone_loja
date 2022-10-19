@@ -103,11 +103,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await apiStore.post('/logout')
       destroyCookie(undefined, '@BuyPhone:User')
       destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
       setUserData(null)
       Router.push('/')
     } catch (error) {
       destroyCookie(undefined, '@BuyPhone:User')
       destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
       setUserData(null)
       Router.push('/')
     }

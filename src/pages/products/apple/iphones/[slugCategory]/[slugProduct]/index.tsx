@@ -1,11 +1,13 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
-  faChevronLeft, faEnvelope, faLocationDot,
-  faTruckFast
+  faChevronLeft,
+  faEnvelope,
+  faLocationDot,
+  faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -236,7 +238,8 @@ export default function Products({ data }: DataProps) {
                 </h1>
 
                 <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
-                  PARCELAMENTO EM&nbsp;<span className="text-[#CF9836]">ATÉ 12X</span>
+                  PARCELAMENTO EM&nbsp;
+                  <span className="text-[#CF9836]">ATÉ 12X</span>
                 </span>
 
                 {/* <div className="flex items-center  mt-2 text-xs">
@@ -290,7 +293,7 @@ export default function Products({ data }: DataProps) {
                   </button>
                 ) : (
                   <button
-                    className="btn border-transparent bg-[#459C4E] w-full text-white"
+                    className="btn border-transparent bg-success w-full text-white"
                     data-testid="add-product-button"
                     onClick={() => handleAddProduct(data.id)}
                   >
@@ -334,8 +337,9 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}

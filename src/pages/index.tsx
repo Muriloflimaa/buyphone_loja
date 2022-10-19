@@ -310,7 +310,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] left-4 hidden md:inline-flex"
+                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] left-4 hidden md:inline-flex"
                 >
                   ❮
                 </button>
@@ -322,7 +322,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] right-4 hidden md:inline-flex"
+                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] right-4 hidden md:inline-flex"
                 >
                   ❯
                 </button>
