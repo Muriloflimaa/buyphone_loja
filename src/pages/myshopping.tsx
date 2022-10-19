@@ -74,10 +74,15 @@ function MyShopping() {
     try {
       const user = JSON.parse(cookies['@BuyPhone:User'])
       const { data } = await apiStore(
-        `orders/user/${user?.id}?page=${page.replace(
-          `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-          ''
-        )}`
+        `orders/user/${user?.id}?page=${page
+          .replace(
+            `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+            ''
+          )
+          .replace(
+            `https://api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+            ''
+          )}`
       )
       setData(data)
     } catch (error) {}

@@ -54,6 +54,7 @@ const ListProducts = ({
   const router = useRouter()
   const user = GetUseType()
   const [shippingDays, setShippingDays] = useState<shippingOnTypes>()
+  const [image, setImage] = useState()
 
   const copyToClipBoard = async (copyMe: string) => {
     try {
@@ -66,6 +67,7 @@ const ListProducts = ({
 
   useEffect(() => {
     getShippingDays()
+    handleChangePagination()
   }, [])
 
   async function getShippingDays() {
@@ -81,6 +83,13 @@ const ListProducts = ({
     } catch (error) {
       setShippingDays(undefined)
     }
+  }
+
+  async function handleChangePagination() {
+    try {
+      const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
+      setImage(data.qrcode)
+    } catch (error) {}
   }
 
   return (
@@ -133,12 +142,14 @@ const ListProducts = ({
                         <div className="flex flex-col w-full md:flex-row justify-evenly">
                           <div className="text-center w-full grid gap-3">
                             <div className="card card-compact shadow w-fit mx-auto">
-                              <Image
-                                src={`${link}/img/qrcode/${CodImgPix}.png`}
-                                className="mx-auto"
-                                height={128}
-                                width={128}
-                              />
+                              {image && (
+                                <Image
+                                  src={image}
+                                  className="mx-auto"
+                                  height={128}
+                                  width={128}
+                                />
+                              )}
                             </div>
                             <h3 className="font-bold text-2xl">
                               Valor: R$ {moneyMask(value.toString())}
@@ -207,7 +218,7 @@ const ListProducts = ({
               'step ' +
               (expired === 'paid' ?? 'manual_paid' ?? 'captured'
                 ? 'step-success'
-                : '')
+                : 'step-neutral')
             }
           >
             <span
@@ -223,7 +234,9 @@ const ListProducts = ({
             </span>
           </li>
           <li
-            className={'step ' + (expired === 'packed' ? 'step-success' : '')}
+            className={
+              'step ' + (expired === 'packed' ? 'step-success' : 'step-neutral')
+            }
           >
             <span className={expired !== 'packed' ? 'opacity-50' : ''}>
               Produto conferido
@@ -231,7 +244,7 @@ const ListProducts = ({
               aguardando coleta
             </span>
           </li>
-          <li className="step">
+          <li className="step step-neutral">
             <span className="opacity-50">Produto enviado</span>
           </li>
         </ul>
