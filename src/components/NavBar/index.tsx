@@ -13,29 +13,27 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
-import { GetUseType } from '../../utils/getUserType'
+import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
 
 export default function NavBar() {
-  const { isAuthenticated, signOut } = useContext(AuthContext)
+  const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
-  const [isUser, setIsUser] = useState(false)
-  const user = GetUseType()
   const [showCart, setShowCart] = useState(false)
   const { changeState } = useContext(SearchContext)
-  const [dataApi, setDataApi] = useState<any>()
+  const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
 
@@ -56,14 +54,6 @@ export default function NavBar() {
     }
     Data()
   }, [])
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setIsUser(false)
-    } else {
-      setIsUser(true)
-    }
-  }, [isAuthenticated]) //ve se o usuario esta logado
 
   useEffect(() => {
     if (
@@ -134,7 +124,7 @@ export default function NavBar() {
                       type="search"
                       name="search-form"
                       id="search-form"
-                      className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-[#4a3e865b]"
+                      className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-base-200"
                       placeholder="Pesquisa..."
                       onClick={() =>
                         router.asPath !== '/' ? router.push('/') : null
@@ -177,21 +167,23 @@ export default function NavBar() {
                   <div className="md:flex justify-end items-center gap-5 w-full hidden ">
                     {!isUser ? (
                       <Link href={'/login'} passHref>
-                        <div className="flex justify-end flex-col items-center cursor-pointer">
-                          <FontAwesomeIcon
-                            icon={faCircleUser}
-                            className="w-7 h-7 text-PrimaryText"
-                          />
-                        </div>
+                        <a>
+                          <div className="flex justify-end flex-col items-center cursor-pointer">
+                            <FontAwesomeIcon
+                              icon={faCircleUser}
+                              className="w-7 h-7 text-PrimaryText"
+                            />
+                          </div>
+                        </a>
                       </Link>
                     ) : (
-                      <div className="hidden sm:inline-block dropdown dropdown-end">
+                      <div className="hidden sm:inline-block dropdown dropdown-end px-2">
                         <label
                           tabIndex={0}
-                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 rounded-full text-base-100 flex-row gap-2 pr-1"
+                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 h-auto py-2 rounded-full text-base-100 flex-row gap-2 pr-1"
                         >
                           <span className="normal-case text-white">
-                            Olá, {UniqueName(user?.name)}
+                            Olá, {UniqueName(userData?.name)}
                           </span>
                           <FontAwesomeIcon
                             icon={faCircleUser}
@@ -316,15 +308,15 @@ export default function NavBar() {
                             )}
                             {cartSize && cartSize > 0 ? (
                               <div className="card-actions justify-center">
-                                <a
+                                <button
                                   onClick={() => {
                                     setShowCart(!showCart)
                                     router.push('/shipping')
                                   }}
-                                  className="btn btn-success btn-block font-medium normal-case"
+                                  className="btn border-transparent bg-success w-full text-white"
                                 >
                                   Finalizar Compra
-                                </a>
+                                </button>
                               </div>
                             ) : null}
                           </div>
@@ -345,7 +337,7 @@ export default function NavBar() {
                   type="input"
                   name="search-form"
                   id="search-form"
-                  className="input input-bordered rounded-none w-full text-white bg-primary"
+                  className="input input-bordered rounded-none w-full text-white bg-base-200"
                   placeholder="Pesquisa..."
                   onClick={() =>
                     router.asPath !== '/' ? router.push('/') : null
@@ -361,15 +353,15 @@ export default function NavBar() {
               >
                 <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                   <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                    {dataApi?.length > 0 && (
+                    {dataApi && dataApi?.length > 0 && (
                       <li>
                         <Link href={'/'}>
-                          <a>Todos</a>
+                          <a>Início</a>
                         </Link>
                       </li>
                     )}
-                    {dataApi?.length > 0 ? (
-                      dataApi?.map((category: any) => (
+                    {dataApi && dataApi?.length > 0 ? (
+                      dataApi?.map((category) => (
                         <li key={category.id}>
                           <Link
                             href={`/products/apple/iphones/${category.slug}`}
@@ -443,7 +435,7 @@ export default function NavBar() {
                     <UserCircleIcon className="w-10 h-10" />
                   ) : (
                     <img
-                      src={user?.profile_photo_url}
+                      src={userData?.profile_photo_url}
                       alt="Foto do Usuário"
                       width={40}
                       height={40}
@@ -451,13 +443,13 @@ export default function NavBar() {
                     />
                   )}
                 </div>
-                {isUser ? (
+                {!!isUser ? (
                   <div className="flex flex-col pl-6">
                     <h1 className="text-xl font-semibold text-info-content">
-                      {FirstAllUpper(user?.name)}
+                      {FirstAllUpper(userData?.name)}
                     </h1>
                     <h2 className="text-info-content">
-                      {user?.type == 1 ? 'Revendedor' : 'Consumidor'}
+                      {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
                     </h2>
                   </div>
                 ) : (
@@ -508,8 +500,8 @@ export default function NavBar() {
                 <span className="text-info-content text-base">Produtos</span>
               </div>
               <div className="collapse-content flex flex-col overflow-auto gap-2 h-auto">
-                {dataApi?.length > 0 ? (
-                  dataApi?.map((category: any) => (
+                {dataApi && dataApi?.length > 0 ? (
+                  dataApi?.map((category) => (
                     <label
                       htmlFor="my-drawer"
                       key={category.id}

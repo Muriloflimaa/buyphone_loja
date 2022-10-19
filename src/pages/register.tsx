@@ -74,7 +74,7 @@ export default function register() {
       utm_source: utms.utm_source,
       utm_medium: utms.utm_medium,
       utm_campaign: utms.utm_campaign,
-      lead: lead
+      lead: lead,
     }
 
     const data = {
@@ -93,7 +93,12 @@ export default function register() {
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/login')
     } catch (error: any) {
-      if (error.response.status == 422 && !!error.response.data.errors.utm_campaign || !!error.response.data.errors.utm_source || !!error.response.data.errors.utm_medium) {
+      if (
+        (error.response.status == 422 &&
+          !!error.response.data.errors.utm_campaign) ||
+        !!error.response.data.errors.utm_source ||
+        !!error.response.data.errors.utm_medium
+      ) {
         try {
           await apiStore.post('/users', data)
           ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
@@ -200,12 +205,12 @@ export default function register() {
           </div>
         </label>
         {formState.isSubmitting ? (
-          <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+          <button className="btn btn-info loading normal-case py-4 text-white flex justify-center w-full bg-buyphone shadow-md border-0">
             Carregando
           </button>
         ) : (
           <button
-            className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+            className="btn btn-info normal-case py-4 text-white flex justify-center w-full shadow-md border-0"
             type="submit"
           >
             Registrar

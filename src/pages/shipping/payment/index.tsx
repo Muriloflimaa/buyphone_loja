@@ -6,10 +6,18 @@ import { ArrayProduct } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { PersistentLogin } from '../../../utils/PersistentLogin'
 
+interface dataProps {
+  preco: string | number
+  quantidade: number
+  nome: string
+  cor: string
+  memoria: string
+}
+
 export default function payment() {
   const { values } = useCart()
 
-  const setDat: any[] = []
+  const setDat: dataProps[] = []
   values.map(async (item: ArrayProduct) => {
     const response = {
       preco: moneyMask(item.priceFormated.toString()),
@@ -35,7 +43,7 @@ export default function payment() {
               <div className="grid gap-8">
                 <div>
                   <Link href={'/shipping/payment/pix'}>
-                    <a className="btn btn-outline w-full justify-between">
+                    <a className="btn btn-info text-white w-full justify-between">
                       <span>Pix</span>
                       <svg
                         className="h-6 w-6 fill-current md:h-8 md:w-8"
@@ -48,13 +56,13 @@ export default function payment() {
                       </svg>
                     </a>
                   </Link>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Com o pix à vista você paga muito mais barato!
+                  <span className=" mt-2 block text-xs font-normal">
+                    • Com o pix à vista você paga muito mais barato!
                   </span>
                 </div>
                 <div>
                   <Link href={'/shipping/payment/credit-checkout'}>
-                    <a className="btn btn-outline w-full justify-between">
+                    <a className="btn btn-info text-white w-full justify-between">
                       <span>Cartão de crédito</span>
                       <svg
                         className="h-6 w-6 fill-current md:h-8 md:w-8"
@@ -67,8 +75,8 @@ export default function payment() {
                       </svg>
                     </a>
                   </Link>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Parcele em até 12x no cartão de crédito
+                  <span className="mt-2 block text-xs font-normal">
+                    • Parcele em até 12x no cartão de crédito
                   </span>
                 </div>
                 <div>
@@ -77,7 +85,7 @@ export default function payment() {
                       setDat && JSON.stringify(setDat)
                     }`}
                     target="_blank"
-                    className="btn btn-outline w-full justify-between"
+                    className="btn btn-info text-white w-full justify-between"
                   >
                     <span>Personalizado</span>
                     <svg
@@ -90,8 +98,8 @@ export default function payment() {
                       <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
                     </svg>
                   </a>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Nesta forma de pagamento você poderá dar uma entrada no
+                  <span className="mt-2 block text-xs font-normal">
+                    • Nesta forma de pagamento você poderá dar uma entrada no
                     Pix e parcelar o restante. Assim você economiza no valor
                     final da compra!
                   </span>

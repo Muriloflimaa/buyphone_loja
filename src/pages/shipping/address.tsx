@@ -14,6 +14,8 @@ import React, { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { Input } from '../../components/InputElement'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
 interface CepJsonProps {
   cepJson: {
@@ -84,7 +86,6 @@ export default function address({ cepJson }: CepJsonProps) {
       setCookies('@BuyPhone:GetCep', data, 60 * 60)
       router.push('/shipping/payment')
     } catch (error) {
-      console.log(error)
       toast.error('Erro no servidor, entre em contato com o suporte')
     }
   }
@@ -142,8 +143,12 @@ export default function address({ cepJson }: CepJsonProps) {
               />
               <div className="flex justify-end">
                 <div className="form-control max-w-fit mt-4">
-                  <button type="submit" className="btn btn-info font-medium">
-                    Avançar
+                  <button
+                    type="submit"
+                    className="btn btn-info text-white self-end"
+                  >
+                    Avançar{' '}
+                    <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
                   </button>
                 </div>
               </div>

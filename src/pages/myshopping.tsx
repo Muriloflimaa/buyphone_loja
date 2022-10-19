@@ -1,14 +1,14 @@
+import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
-import { PersistentLogin } from '../utils/PersistentLogin'
-import Link from 'next/link'
 import { apiStore } from '../services/api'
-import { UserData } from '../types'
+import { IInvoice } from '../types'
+import { PersistentLogin } from '../utils/PersistentLogin'
 
 interface DataProps {
   current_page: number
-  data: Array<UserData>
+  data: Array<PedidosProps>
   first_page_url: string
   from: number
   last_page: number
@@ -24,6 +24,34 @@ interface DataProps {
   prev_page_url: null | number
   to: number
   total: number
+}
+
+interface PedidosProps {
+  address: {
+    address: string
+    city: string
+    complement: string | null
+    created_at: string
+    id: number
+    neighborhood: string
+    number: number
+    postal_code: string | null
+    uf: string
+    updated_at: string
+    user_id: number
+  }
+  address_id: number
+  created_at: string
+  id: number
+  invoice: IInvoice
+  invoice_id: number
+  method: string
+  total: number
+  updated_at: string
+  user_id: number
+  utm_campaign: null
+  utm_medium: null
+  utm_source: null
 }
 
 function MyShopping() {
@@ -46,15 +74,18 @@ function MyShopping() {
     try {
       const user = JSON.parse(cookies['@BuyPhone:User'])
       const { data } = await apiStore(
-        `orders/user/${user?.id}?page=${page.replace(
-          `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-          ''
-        )}`
+        `orders/user/${user?.id}?page=${page
+          .replace(
+            `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+            ''
+          )
+          .replace(
+            `https://api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+            ''
+          )}`
       )
       setData(data)
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   return (
@@ -64,28 +95,30 @@ function MyShopping() {
       </h1>
       <div className="grid border rounded-md border-b-0">
         {data && data?.data.length >= 0 ? (
-          data?.data.map((pedido: any) => (
-            <React.Fragment key={pedido.id}>
-              <ListProducts
-                created={pedido.created_at}
-                statuspayment={pedido.invoice?.status}
-                number={pedido.id}
-                value={pedido.total}
-                method={pedido.method}
-                address={pedido.address?.address}
-                city={pedido.address?.city}
-                numberAddress={pedido.address?.number}
-                district={pedido.address?.neighborhood}
-                state={pedido.address?.uf}
-                zipCode={pedido.address?.postal_code}
-                linkPayment={pedido.invoice?.link}
-                CodImgPix={pedido.invoice?.invoice_id}
-                brCode={pedido.invoice?.brcode}
-                pdf={pedido.invoice?.pdf}
-                expired={pedido.invoice?.status}
-              />
-            </React.Fragment>
-          ))
+          data?.data.map((pedido) => {
+            return (
+              <React.Fragment key={pedido.id}>
+                <ListProducts
+                  created={pedido.created_at}
+                  statuspayment={pedido.invoice?.status}
+                  number={pedido.id}
+                  value={pedido.total}
+                  method={pedido.method}
+                  address={pedido.address?.address}
+                  city={pedido.address?.city}
+                  numberAddress={pedido.address?.number}
+                  district={pedido.address?.neighborhood}
+                  state={pedido.address?.uf}
+                  zipCode={pedido.address?.postal_code}
+                  linkPayment={pedido.invoice?.link}
+                  CodImgPix={pedido.invoice?.invoice_id}
+                  brCode={pedido.invoice?.brcode}
+                  pdf={pedido.invoice?.pdf}
+                  expired={pedido.invoice?.status}
+                />
+              </React.Fragment>
+            )
+          })
         ) : data && data.data.length <= 0 ? (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
             <img
@@ -128,13 +161,14 @@ function MyShopping() {
         <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
           {data?.links.map((link) => (
             <button
-              onClick={() =>
+              onClick={() => {
                 handleChangePagination(
                   link.label
                     .replace('&laquo; Previous', link.url)
                     .replace('Next &raquo;', link.url)
                 )
-              }
+                window.scrollTo(0, 0)
+              }}
               className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
                 link.active === true ? 'btn-disabled' : ''
               }`}

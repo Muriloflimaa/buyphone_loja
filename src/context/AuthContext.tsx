@@ -1,26 +1,22 @@
 import Router from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
-import { createContext, ReactNode, useState } from 'react'
-import jwt_decode from 'jwt-decode'
+import { createContext, ReactNode, useEffect, useState } from 'react'
+import { apiStore } from '../services/api'
+import { IUser } from '../types'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
-import { apiStore } from '../services/api'
 
 type SignInCredentials = {
   email: string
   password: string
 }
 
-type UserDataType = {
-  type: number
-}
-
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>
   signOut: Function
   user: string | undefined | number
-  isAuthenticated: boolean
-  userData: UserDataType | undefined
+  isUser: boolean
+  userData: IUser | null
 }
 
 type AuthProviderProps = {
@@ -31,10 +27,25 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
+  const [isUser, setIsUser] = useState(false)
 
-  const [userData, setUserData] = useState<UserDataType | undefined>()
+  const [userData, setUserData] = useState<IUser | null>(() => {
+    // Verificando se existe user nos cookies
 
-  const isAuthenticated = !!user
+    if (user) {
+      //Se existir configurar o useData
+      return JSON.parse(user)
+    }
+    return null
+  })
+
+  useEffect(() => {
+    if (userData === null) {
+      setIsUser(false)
+    } else {
+      setIsUser(true)
+    }
+  }, [userData]) //useEffect para previnir erro de renderização
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -74,7 +85,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
           3000,
           'Senha ou email incorreto(s). Tente novamente.',
           'error',
-          'Notificação'
+          'Que pena...'
+        )
+        return
+      }
+      if (error.response.data.message === 'The selected email is invalid.') {
+        ToastCustom(
+          3000,
+          'E-mail inválido ou inexistente.',
+          'error',
+          'Que pena...'
         )
         return
       }
@@ -82,48 +102,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
         3000,
         'Ocorreu um erro para realizar o login, contate o suporte.',
         'error',
-        'Notificação'
+        'Que pena...'
       )
     }
   }
 
   async function signOut() {
-    const cookies = parseCookies(undefined)
-
-    if (cookies['@BuyPhone:Token']) {
-      const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-
-      //se tiver um token expirado apenas destruir os cookies
-      if (Date.now() >= decodedToken.exp * 1000) {
-        destroyCookie(undefined, '@BuyPhone:User')
-        destroyCookie(undefined, '@BuyPhone:Token')
-        Router.push('/')
-      } else {
-        //se tiver um cookies mandar para a rota de logout
-        try {
-          await apiStore.post('/logout')
-          destroyCookie(undefined, '@BuyPhone:User')
-          destroyCookie(undefined, '@BuyPhone:Token')
-          Router.push('/')
-        } catch (error) {
-          //se der algum erro apenas destruir os cookies
-          destroyCookie(undefined, '@BuyPhone:User')
-          destroyCookie(undefined, '@BuyPhone:Token')
-          Router.push('/')
-        }
-      }
-    } else {
-      //caso não tiver um cookie destruir cookies, possivelmente nao entrara nesse caso
+    try {
+      await apiStore.post('/logout')
       destroyCookie(undefined, '@BuyPhone:User')
       destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
+      setUserData(null)
+      Router.push('/')
+    } catch (error) {
+      destroyCookie(undefined, '@BuyPhone:User')
+      destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
+      setUserData(null)
       Router.push('/')
     }
   }
 
   return (
-    <AuthContext.Provider
-      value={{ signIn, signOut, isAuthenticated, user, userData }}
-    >
+    <AuthContext.Provider value={{ signIn, signOut, user, userData, isUser }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,32 +1,31 @@
 import {
-  faChevronLeft,
-  faLocationDot,
-  faTruckFast,
-  faEnvelope,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { Input } from '../../../../../../components/InputElement'
-import { useCart } from '../../../../../../context/UseCartContext'
-import { apiStore } from '../../../../../../services/api'
-import { IProduct } from '../../../../../../types'
-import { GetUseType } from '../../../../../../utils/getUserType'
-import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
-import { refact } from '../../../../../../utils/RefctDescript'
-import { verificationPrice } from '../../../../../../utils/verificationPrice'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { ToastCustom } from '../../../../../../utils/toastCustom'
-import {
   faFacebook,
   faTwitter,
   faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
+import {
+  faChevronLeft,
+  faEnvelope,
+  faLocationDot,
+  faTruckFast,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ChevronDownIcon } from '@heroicons/react/solid'
+import { yupResolver } from '@hookform/resolvers/yup'
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { Input } from '../../../../../../components/InputElement'
+import { useCart } from '../../../../../../context/UseCartContext'
+import { apiStore } from '../../../../../../services/api'
+import { IProduct } from '../../../../../../types'
+import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
+import { refact } from '../../../../../../utils/RefctDescript'
+import { ToastCustom } from '../../../../../../utils/toastCustom'
+import { verificationPrice } from '../../../../../../utils/verificationPrice'
 
 interface IParams {
   params: {
@@ -57,11 +56,9 @@ type shippingOnTypes = {
 }
 
 export default function Products({ data }: DataProps) {
-  // const [color, setColor] = useState<string | undefined>()
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
-  const user = GetUseType()
-  const returnPrice = verificationPrice(data, user)
+  const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
@@ -123,7 +120,6 @@ export default function Products({ data }: DataProps) {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
       }
-      console.log(data)
       setShippingOn(shipping.data)
       setAddress(data)
     } catch (error) {
@@ -154,33 +150,24 @@ export default function Products({ data }: DataProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              width={60}
-              height={75}
-            />
+            {data.media &&
+              data.media.map((res) => {
+                return <Image src={res.original_url} width={60} height={75} />
+              })}
 
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
           <div className="w-full h-full flex justify-start col-span-2 relative">
-            <Image
-              src={'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'}
-              layout="fixed"
-              width="260"
-              height="350"
-              priority={true}
-            />
+            {data.media && (
+              <Image
+                src={data.media[0].original_url}
+                layout="fixed"
+                width="260"
+                height="350"
+                priority={true}
+              />
+            )}
             <div className="absolute right-6">
               <div className="flex flex-col">
                 <div
@@ -243,11 +230,16 @@ export default function Products({ data }: DataProps) {
             </div>
           </div>
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <div>
-                <h1 className="text-2xl">
+                <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
+
+                <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
+                  PARCELAMENTO EM&nbsp;
+                  <span className="text-[#CF9836]">ATÉ 12X</span>
+                </span>
 
                 {/* <div className="flex items-center  mt-2 text-xs">
                   <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
@@ -256,12 +248,12 @@ export default function Products({ data }: DataProps) {
               </div>
 
               <div>
-                <h1 className="text-2xl">Especificações</h1>
-                <div className="flex gap-3 mt-2">
-                  <span className="badge p-3 bg-transparent border border-info-content text-info-content">
+                <h1 className="text-xl">Especificações</h1>
+                <div className="flex gap-4 mt-2">
+                  <span className="badge p-4 rounded-xl bg-transparent border border-info-content text-info-content">
                     {data.memory}
                   </span>
-                  <span className="badge p-3 bg-transparent border border-info-content text-info-content">
+                  <span className="badge p-4 rounded-xl bg-transparent border border-info-content text-info-content">
                     {data.color}
                   </span>
                 </div>
@@ -271,23 +263,23 @@ export default function Products({ data }: DataProps) {
                 <h1 className="opacity-80 line-through decoration-red-600">
                   {returnPrice.ourPrice <= 0
                     ? 'Sem estoque'
-                    : 'R$' + moneyMask(returnPrice.averagePrice.toString())}
+                    : 'R$ ' + moneyMask(returnPrice.averagePrice.toString())}
                 </h1>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-3xl font-bold">
                     {returnPrice.ourPrice <= 0
                       ? 'Sem estoque'
-                      : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
+                      : 'R$ ' + moneyMask(returnPrice.ourPrice.toString())}
                   </h2>
-                  <span className="badge rounded-md badge-warning text-primary font-bold">
-                    - {resultDiscountPercent}%
+                  <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
+                    -{resultDiscountPercent.replace('.0', '')}%
                   </span>
                 </div>
               </div>
-              <div className="badge badge-success rounded-md text-xs font-semibold p-3 uppercase">
-                <span className="text-white">
+              <div className="badge border-transparent bg-[#D5FDC7] rounded-xl text-xs font-semibold p-3 uppercase">
+                <span className="text-[#8DC679]">
                   economia de{' '}
-                  <span className="text-primary">
+                  <span className="text-[#327434]">
                     R$ {moneyMask(resultDiscount.toString())}
                   </span>
                 </span>
@@ -300,17 +292,17 @@ export default function Products({ data }: DataProps) {
                   </button>
                 ) : (
                   <button
-                    className="btn btn-info px-16 text-white"
+                    className="btn border-transparent bg-success w-full text-white"
                     data-testid="add-product-button"
                     onClick={() => handleAddProduct(data.id)}
                   >
-                    Adicionar
+                    Adicionar ao carrinho
                   </button>
                 )}
               </div>
 
               <form onSubmit={handleSubmit(handleCepStorage)}>
-                <div className="alert items-start w-full bg-accent flex flex-col border-[1px] border-[#00000014] text-info-content">
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
                   <h1 className="text-base font-semibold">
                     Calcule o frete e prazo de entrega
                   </h1>
@@ -329,7 +321,7 @@ export default function Products({ data }: DataProps) {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-info text-white normal-case"
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
                         type="submit"
                       >
                         Consultar

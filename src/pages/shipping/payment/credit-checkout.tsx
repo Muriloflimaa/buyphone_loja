@@ -1,5 +1,5 @@
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
@@ -56,7 +56,7 @@ export default function CreditCheckout({ address }: Address) {
       const { data } = await apiStore.get(`cards/user/${address.user_id}`)
       setCards(data)
     } catch (error) {
-      console.log(error)
+      setCards([])
     }
   }
 
@@ -149,10 +149,12 @@ export default function CreditCheckout({ address }: Address) {
               <button
                 onClick={handleCard}
                 className={
-                  'btn text-white ' + (!matchCard ? 'btn-disabled' : 'btn-info')
+                  'btn self-end text-white ' +
+                  (!matchCard ? 'btn-disabled' : 'btn-info')
                 }
               >
-                Continuar
+                Avançar{' '}
+                <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
               </button>
             </div>
           </div>

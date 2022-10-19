@@ -1,18 +1,18 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
-import { useState } from 'react'
-import { UserData } from '../../types'
 import jwt_decode from 'jwt-decode'
 import { GetServerSidePropsContext } from 'next'
-import { ToastCustom } from '../../utils/toastCustom'
+import { useRouter } from 'next/router'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import * as yup from 'yup'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { Input } from '../../components/InputElement'
 import { apiStore } from '../../services/api'
+import { UserData } from '../../types'
 import { masktel } from '../../utils/masks'
-import toast from 'react-hot-toast'
-import { useRouter } from 'next/router'
+import { ToastCustom } from '../../utils/toastCustom'
 
 type SignInFormData = {
   nome: string
@@ -113,7 +113,7 @@ export default function profile({ data }: user) {
 
       try {
         const response = await apiStore.put(`/users/${data.id}`, userPasswords)
-        console.log(response)
+
         ToastCustom(2000, 'Senha alterada com sucesso', 'success')
         await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -133,7 +133,7 @@ export default function profile({ data }: user) {
 
   return (
     <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-      <div className="md: grid md:grid-cols-3 md:gap-6">
+      <div className="md: grid md:grid-cols-3 md:gap-6 mb-10">
         <div className="md:col-span-1 flex justify-between">
           <div className="px-4 sm:px-0">
             <h3 className="text-lg font-medium text-neutral-100">
@@ -213,9 +213,11 @@ export default function profile({ data }: user) {
             </div>
             <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
               {formState.isSubmitting ? (
-                <button className="btn normal-case loading">Carregando</button>
+                <button className="btn btn-info text-white loading">
+                  Carregando
+                </button>
               ) : (
-                <button type="submit" className="btn normal-case">
+                <button type="submit" className="btn btn-info text-white">
                   Salvar
                 </button>
               )}
@@ -285,7 +287,10 @@ export default function profile({ data }: user) {
             </div>
           </div>
           <div className="flex items-center justify-end px-4 py-3 bg-base-200/50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-            <button onClick={() => AlterPassword()} className="btn normal-case">
+            <button
+              onClick={() => AlterPassword()}
+              className="btn btn-info text-white"
+            >
               Salvar
             </button>
           </div>

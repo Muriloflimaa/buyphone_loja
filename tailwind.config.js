@@ -23,6 +23,7 @@ module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/utils/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -48,6 +49,8 @@ module.exports = {
           success: '#00A944',
           accent: '#ffffff',
           error: '#E26C6C',
+          // 'base-300': '#004907',
+          'neutral-content': '#00000073',
           'info-content': '#201942',
           '--glass-blur': '20px',
         },
@@ -61,6 +64,8 @@ module.exports = {
           info: '#0E9AFF',
           success: '#00A944',
           error: '#E26C6C',
+          'base-300': '#459C4E',
+          'neutral-content': '#D2D2D2',
           'info-content': '#FFFFFF',
           '--glass-blur': '20px',
         },

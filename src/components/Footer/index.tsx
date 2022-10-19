@@ -38,16 +38,18 @@ export default function Footer() {
           </h3>
           <ul className="text-info-content gap-1 opacity-90">
             {dataApi ? (
-              dataApi.map((category: ICategory | any) => (
-                <li key={category.id}>
-                  <Link
-                    href={`/products/apple/iphones/${category.slug}`}
-                    passHref
-                  >
-                    <a className="w-max">{category.name}</a>
-                  </Link>
-                </li>
-              ))
+              dataApi.map((category: ICategory | any) => {
+                return (
+                  <li key={category.id}>
+                    <Link
+                      href={`/products/apple/iphones/${category.slug}`}
+                      passHref
+                    >
+                      <a className="w-max">{category.name}</a>
+                    </Link>
+                  </li>
+                )
+              })
             ) : (
               <li>
                 <div className="flex gap-3">

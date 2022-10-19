@@ -1,11 +1,11 @@
-import { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
-import { WithSSRGuest } from '../utils/WithSSRGuest'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
+import { useContext } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 import { Input } from '../components/InputElement'
+import { AuthContext } from '../context/AuthContext'
+import { WithSSRGuest } from '../utils/WithSSRGuest'
 
 type SignInFormData = {
   email: string
@@ -72,12 +72,12 @@ export default function login() {
             </Link>
           </div>
           {formState.isSubmitting ? (
-            <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+            <button className="btn loading upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0">
               Carregando
             </button>
           ) : (
             <button
-              className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+              className="btn upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0"
               type="submit"
             >
               Entrar

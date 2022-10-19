@@ -1,35 +1,55 @@
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
+import { Carousel } from 'react-responsive-carousel'
+import AnaImg from '../assets/images/anabrisa.jpg'
+import BarbaraImg from '../assets/images/barbara.jpg'
+import BrendaImg from '../assets/images/brenda.jpg'
+import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { SearchContext } from '../context/SearchContext'
-import { ICategory, IProduct } from '../types'
-import { GetUseType } from '../utils/getUserType'
-import { verificationPrice } from '../utils/verificationPrice'
-import MiniBanner1 from '../assets/images/miniBanner1.webp'
-import MiniBanner2 from '../assets/images/miniBanner2.webp'
-import MiniBanner3 from '../assets/images/miniBanner3.webp'
-import { Carousel } from 'react-responsive-carousel'
-import { CardDepoiments } from '../components/CardDepoiment'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import AnaImg from '../assets/images/anabrisa.jpg'
-import BrendaImg from '../assets/images/brenda.jpg'
-import BarbaraImg from '../assets/images/barbara.jpg'
 import { apiStore } from '../services/api'
+import { ICategory, IProduct } from '../types'
+import { verificationPrice } from '../utils/verificationPrice'
+
+//banner desktop----------
+//light
+import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
+import Banner2DesktopLight from '../assets/images/banner2desktoplight.webp'
+import Banner3DesktopLight from '../assets/images/banner3desktoplight.webp'
+//dark
+import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
+import Banner2DesktopDark from '../assets/images/banner2desktopdark.webp'
+import Banner3DesktopDark from '../assets/images/banner3desktopdark.webp'
+
+//banner desktop-----------
+//light
+import Banner1MobileLight from '../assets/images/banner1mobilelight.webp'
+import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
+import Banner3MobileLight from '../assets/images/banner3mobilelight.webp'
+//dark
+import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
+import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
+import Banner3MobileDark from '../assets/images/banner3mobiledark.webp'
+
+import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
+import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
+import BannerDepoiments from '../assets/images/depoiments.webp'
 
 interface DataProps {
   data: {
     data: Array<ICategory>
   }
+  darkOrLigth: boolean
 }
 
-const Home: NextPage<DataProps> = ({ data }) => {
-  const user = GetUseType()
+const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const { search } = useContext(SearchContext)
   const [showArrow, setShowArrow] = useState(true)
 
@@ -63,61 +83,66 @@ const Home: NextPage<DataProps> = ({ data }) => {
 
   return (
     <>
+      <div id="home" className="absolute -mt-32"></div>
       <RegisterMimo />
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
-      <div id="main" className="h-auto -mt-8">
+      <div className="h-auto -mt-8">
         {showArrow === true ? (
           <div className="w-full fixed z-50 bottom-24 ml-[93%] md:ml-[95%] md:bottom-12 ">
-            <a href="#main">
+            <a href="#home">
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
-                <FontAwesomeIcon icon={faChevronUp} className="w-5 h-5" />
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  className="w-5 h-5 text-primary"
+                />
               </div>
             </a>
           </div>
         ) : null}
-        {/* banner para mobile */}
-        <img
-          className="md:hidden max-h-full"
-          src="https://loja.buyphone.com.br/img/banner-full1.webp"
-          alt=""
-        />
-        <CarouselComponent />
-        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 gap-1">
-          <Carousel
-            infiniteLoop
-            autoPlay
-            interval={3000}
-            showStatus={false}
-            showThumbs={false}
-            showArrows={false}
-            showIndicators={false}
-            className="md:w-1/2"
-          >
+        <div className="block md:hidden">
+          <CarouselComponent
+            image={
+              !!darkOrLigth
+                ? [Banner1MobileDark, Banner2MobileDark, Banner3MobileDark]
+                : [Banner1MobileLight, Banner2MobileLight, Banner3MobileLight]
+            }
+          />
+        </div>
+        <div className="md:block hidden">
+          <CarouselComponent
+            image={
+              !!darkOrLigth
+                ? [Banner1DesktopDark, Banner2DesktopDark, Banner3DesktopDark]
+                : [
+                    Banner1DesktopLight,
+                    Banner2DesktopLight,
+                    Banner3DesktopLight,
+                  ]
+            }
+          />
+        </div>
+
+        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-3 md:mt-1 gap-1">
+          <div className="md:w-1/2">
             <Link
               className="cursor-pointer"
               href={'/products/apple/iphones/iphone-13-pro'}
               passHref
             >
               <a>
-                <Image src={MiniBanner1} quality={100}></Image>
+                <Image
+                  src={!!darkOrLigth ? BannerIphone13Dark : BannerIphone13Light}
+                  quality={100}
+                ></Image>
               </a>
             </Link>
-            <a href="#depoiments">
-              <Image src={MiniBanner3} quality={100}></Image>
-            </a>
-          </Carousel>
+          </div>
           <div className="md:w-1/2">
-            <Link
-              className="cursor-pointer"
-              href={'/products/apple/iphones/iphone-12-pro'}
-              passHref
-            >
-              <a>
-                <Image src={MiniBanner2} quality={100}></Image>
-              </a>
-            </Link>
+            <a href="#depoiments">
+              <Image src={BannerDepoiments} quality={100}></Image>
+            </a>
           </div>
         </div>
         {/* <div className="mt-10 max-w-7xl">
@@ -182,7 +207,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             >
               {data.data.map((category) =>
                 hotProducts(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <div className="my-10">
@@ -234,15 +259,15 @@ const Home: NextPage<DataProps> = ({ data }) => {
           {/* <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
           </div> */}
-          <h1 className="text-4xl font-medium text-center mb-8">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
 
-          <div className="grid  grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
+          <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
                 search(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products, user)
+                  const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
                       <ProductCard
@@ -255,9 +280,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                         averagePrice={returnPrice.averagePrice}
                         slug={products.slug}
                         slugCategory={category.slug}
-                        image={
-                          'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
-                        }
+                        image={products.media[0].original_url}
                         memory={products.memory}
                       />
                     )
@@ -292,11 +315,13 @@ const Home: NextPage<DataProps> = ({ data }) => {
         </div>
         <div id="depoiments"></div>
         <div className="mt-20">
-          <h1 className="text-4xl font-medium text-center mb-8">Depoimentos</h1>
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Depoimentos
+          </h1>
           <Carousel
             infiniteLoop
             autoPlay
-            interval={3000}
+            interval={5000}
             showIndicators={false}
             showStatus={false}
             showThumbs={false}
@@ -307,7 +332,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] left-4 hidden md:inline-flex"
+                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] left-4"
                 >
                   ❮
                 </button>
@@ -319,7 +344,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle absolute z-10 top-[40%] right-4 hidden md:inline-flex"
+                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] right-4"
                 >
                   ❯
                 </button>
