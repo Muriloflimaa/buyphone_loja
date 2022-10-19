@@ -12,10 +12,10 @@ const CarouselComponent = (image: imageProps) => {
       <Carousel
         infiniteLoop
         autoPlay
-        interval={3000}
         showIndicators={false}
         showStatus={false}
         showThumbs={false}
+        swipeable={false}
       >
         {image.image.map((res) => {
           return (
