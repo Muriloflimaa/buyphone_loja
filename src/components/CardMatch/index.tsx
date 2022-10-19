@@ -77,18 +77,18 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         >
           <Image src={GosteiImg} layout="fixed" />
         </div>
-        <div className="w-[80%]">
+        <div className="w-[80%] mx-auto md:mx-0">
           <figure>
             <Image src={data.media[0].original_url} width={250} height={300} />
           </figure>
         </div>
       </div>
 
-      <div className="card-body pt-4 items-start w-full">
+      <div className="card-body pt-4 md:items-start items-center w-full">
         <h1 className="font-normal text-xl md:text-2xl text-start">
           {data.name}
         </h1>
-        <div className="flex flex-col gap-5 items-start">
+        <div className="flex flex-col gap-5 md:items-start items-center">
           <div>
             <h1 className="md:text-xl">Especificações</h1>
             <div className="flex gap-3 md:mt-2 text-xs">
