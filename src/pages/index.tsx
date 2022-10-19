@@ -159,9 +159,13 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
           <Carousel
             ref={currentRefCarroussel}
+            swipeable={false}
             showIndicators={false}
+            swipeScrollTolerance={3000}
             showStatus={false}
             showThumbs={false}
+            showArrows={false}
+            emulateTouch={false}
             infiniteLoop={true}
             centerSlidePercentage={80}
             centerMode={true}
