@@ -63,7 +63,7 @@ const ListProducts = ({
       toast.error('erro ao copiar o link')
     }
   }
-  console.log(expired)
+
   useEffect(() => {
     getShippingDays()
   }, [])
@@ -79,7 +79,7 @@ const ListProducts = ({
       const { data } = await apiStore.post(`shipping`, infoShippingSend)
       setShippingDays(data)
     } catch (error) {
-      console.log(error)
+      setShippingDays(undefined)
     }
   }
 
@@ -202,19 +202,36 @@ const ListProducts = ({
       <div className="collapse-content">
         <div className="py-2"></div>
         <ul className="steps mx-auto w-full">
-          <li className="step step-success">
-            Processando
-            <br />
-            pedido
+          <li
+            className={
+              'step ' +
+              (expired === 'paid' ?? 'manual_paid' ?? 'captured'
+                ? 'step-success'
+                : '')
+            }
+          >
+            <span
+              className={
+                expired !== 'paid' ?? 'manual_paid' ?? 'captured'
+                  ? 'opacity-50'
+                  : ''
+              }
+            >
+              Processando
+              <br />
+              pedido
+            </span>
           </li>
-          <li className="step step-success">
-            <span className="opacity-50">
+          <li
+            className={'step ' + (expired === 'packed' ? 'step-success' : '')}
+          >
+            <span className={expired !== 'packed' ? 'opacity-50' : ''}>
               Produto conferido
               <br />
               aguardando coleta
             </span>
           </li>
-          <li className="step step-success">
+          <li className="step">
             <span className="opacity-50">Produto enviado</span>
           </li>
         </ul>
