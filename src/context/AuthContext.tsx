@@ -80,10 +80,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       window.location.href = '/'
     } catch (error: any) {
+      console.log(error)
       if (error.response.data.message === 'Unauthorized.') {
         ToastCustom(
           3000,
           'Senha ou email incorreto(s). Tente novamente.',
+          'error',
+          'Que pena...'
+        )
+        return
+      }
+      if (error.response.data.message === 'The selected email is invalid.') {
+        ToastCustom(
+          3000,
+          'E-mail inválido ou inexistente.',
           'error',
           'Que pena...'
         )
