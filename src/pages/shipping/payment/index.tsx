@@ -56,8 +56,8 @@ export default function payment() {
                       </svg>
                     </a>
                   </Link>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Com o pix à vista você paga muito mais barato!
+                  <span className=" mt-2 block text-xs font-normal">
+                    • Com o pix à vista você paga muito mais barato!
                   </span>
                 </div>
                 <div>
@@ -75,15 +75,14 @@ export default function payment() {
                       </svg>
                     </a>
                   </Link>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Parcele em até 12x no cartão de crédito
+                  <span className="mt-2 block text-xs font-normal">
+                    • Parcele em até 12x no cartão de crédito
                   </span>
                 </div>
                 <div>
                   <a
-                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1!%20Eu%20gostaria%20de%20saber%20mais%20sobre%20o%20m%C3%A9todo%20de%20pagamento%20personalizado.%20Meu%20Carrinho:%20${
-                      setDat && JSON.stringify(setDat)
-                    }`}
+                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1!%20Eu%20gostaria%20de%20saber%20mais%20sobre%20o%20m%C3%A9todo%20de%20pagamento%20personalizado.%20Meu%20Carrinho:%20${setDat && JSON.stringify(setDat)
+                      }`}
                     target="_blank"
                     className="btn btn-outline w-full justify-between"
                   >
@@ -98,8 +97,8 @@ export default function payment() {
                       <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
                     </svg>
                   </a>
-                  <span className="text-neutral/80 mt-2 block text-xs font-normal">
-                    * Nesta forma de pagamento você poderá dar uma entrada no
+                  <span className="mt-2 block text-xs font-normal">
+                    • Nesta forma de pagamento você poderá dar uma entrada no
                     Pix e parcelar o restante. Assim você economiza no valor
                     final da compra!
                   </span>
