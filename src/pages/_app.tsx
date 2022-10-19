@@ -41,7 +41,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Theme
       dataTheme={`${
-        !!isUser && user && JSON.parse(user).type === 1 ? 'dark' : 'light'
+        !!process.env.NEXT_PUBLIC_BLACK_FRIDAY
+          ? 'dark'
+          : !!isUser && user && JSON.parse(user).type === 1
+          ? 'dark'
+          : 'light'
       }`}
       className="bg-base-100"
     >

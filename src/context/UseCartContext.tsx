@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -69,8 +69,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       try {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
-        const discount =
-          !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+        const discount = !!process.env.NEXT_PUBLIC_BLACK_FRIDAY
+          ? 12.5
+          : !!isUser && user && JSON.parse(user)?.type === 1
+          ? 12.5
+          : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -170,7 +173,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             3000,
-            `${products?.name} ${products?.color
+            `${products?.name} ${
+              products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Notificação'
