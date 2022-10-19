@@ -1,4 +1,4 @@
-export const UniqueName = (props: string) => {
+export const UniqueName = (props: any) => {
   if (props) {
     const palavras = props.split(' ')
 
@@ -6,7 +6,7 @@ export const UniqueName = (props: string) => {
   }
 }
 
-export const FirstAllUpper = (props: string) => {
+export const FirstAllUpper = (props: any) => {
   if (props) {
     const palavras = props.split(' ')
 
@@ -19,7 +19,7 @@ export const FirstAllUpper = (props: string) => {
   return
 }
 
-const FirstUpper = (str: string) => {
+const FirstUpper = (str: any) => {
   if (typeof str !== 'string') {
     return ''
   }
