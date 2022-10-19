@@ -4,14 +4,11 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
-import MiniBanner1 from '../assets/images/miniBanner1.webp'
-import MiniBanner2 from '../assets/images/depoiments.webp'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -41,6 +38,10 @@ import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 import Banner3MobileDark from '../assets/images/banner3mobiledark.webp'
 
+import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
+import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
+import BannerDepoiments from '../assets/images/depoiments.webp'
+
 interface DataProps {
   data: {
     data: Array<ICategory>
@@ -50,7 +51,6 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const { search } = useContext(SearchContext)
-  const router = useRouter()
   const [showArrow, setShowArrow] = useState(true)
 
   useEffect(() => {
@@ -101,8 +101,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             </a>
           </div>
         ) : null}
-        {/* banner para mobile */}
-
         <div className="block md:hidden">
           <CarouselComponent
             image={
@@ -134,13 +132,16 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               passHref
             >
               <a>
-                <Image src={MiniBanner1} quality={100}></Image>
+                <Image
+                  src={!!darkOrLigth ? BannerIphone13Dark : BannerIphone13Light}
+                  quality={100}
+                ></Image>
               </a>
             </Link>
           </div>
           <div className="md:w-1/2">
             <a href="#depoiments">
-              <Image src={MiniBanner2} quality={100}></Image>
+              <Image src={BannerDepoiments} quality={100}></Image>
             </a>
           </div>
         </div>
