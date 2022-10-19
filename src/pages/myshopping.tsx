@@ -92,28 +92,30 @@ function MyShopping() {
       </h1>
       <div className="grid border rounded-md border-b-0">
         {data && data?.data.length >= 0 ? (
-          data?.data.map((pedido) => (
-            <React.Fragment key={pedido.id}>
-              <ListProducts
-                created={pedido.created_at}
-                statuspayment={pedido.invoice?.status}
-                number={pedido.id}
-                value={pedido.total}
-                method={pedido.method}
-                address={pedido.address?.address}
-                city={pedido.address?.city}
-                numberAddress={pedido.address?.number}
-                district={pedido.address?.neighborhood}
-                state={pedido.address?.uf}
-                zipCode={pedido.address?.postal_code}
-                linkPayment={pedido.invoice?.link}
-                CodImgPix={pedido.invoice?.invoice_id}
-                brCode={pedido.invoice?.brcode}
-                pdf={pedido.invoice?.pdf}
-                expired={pedido.invoice?.status}
-              />
-            </React.Fragment>
-          ))
+          data?.data.map((pedido) => {
+            return (
+              <React.Fragment key={pedido.id}>
+                <ListProducts
+                  created={pedido.created_at}
+                  statuspayment={pedido.invoice?.status}
+                  number={pedido.id}
+                  value={pedido.total}
+                  method={pedido.method}
+                  address={pedido.address?.address}
+                  city={pedido.address?.city}
+                  numberAddress={pedido.address?.number}
+                  district={pedido.address?.neighborhood}
+                  state={pedido.address?.uf}
+                  zipCode={pedido.address?.postal_code}
+                  linkPayment={pedido.invoice?.link}
+                  CodImgPix={pedido.invoice?.invoice_id}
+                  brCode={pedido.invoice?.brcode}
+                  pdf={pedido.invoice?.pdf}
+                  expired={pedido.invoice?.status}
+                />
+              </React.Fragment>
+            )
+          })
         ) : data && data.data.length <= 0 ? (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
             <img
@@ -163,10 +165,10 @@ function MyShopping() {
                     .replace('Next &raquo;', link.url)
                 )
                 window.scrollTo(0, 0)
-              }
-              }
-              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${link.active === true ? 'btn-disabled' : ''
-                }`}
+              }}
+              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
+                link.active === true ? 'btn-disabled' : ''
+              }`}
             >
               {link.label
                 .replace('&laquo; Previous', 'Anterior')

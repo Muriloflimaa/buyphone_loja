@@ -1,10 +1,11 @@
-import { faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faTruckFast, faWallet } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { link } from '../../services/api'
+import { apiStore, link } from '../../services/api'
 import { GetUseType } from '../../utils/getUserType'
 import { date, moneyMask } from '../../utils/masks'
 
@@ -27,6 +28,11 @@ interface ListProductsProps {
   expired: string
 }
 
+type shippingOnTypes = {
+  delivered_by: string
+  days: string
+}
+
 const ListProducts = ({
   created,
   statuspayment,
@@ -47,6 +53,7 @@ const ListProducts = ({
 }: ListProductsProps) => {
   const router = useRouter()
   const user = GetUseType()
+  const [shippingDays, setShippingDays] = useState<shippingOnTypes>()
 
   const copyToClipBoard = async (copyMe: string) => {
     try {
@@ -54,6 +61,25 @@ const ListProducts = ({
       toast.success('link copiado com sucesso')
     } catch (err) {
       toast.error('erro ao copiar o link')
+    }
+  }
+  console.log(expired)
+  useEffect(() => {
+    getShippingDays()
+  }, [])
+
+  async function getShippingDays() {
+    try {
+      const infoShippingSend = {
+        cep: zipCode,
+        total: value,
+        qtd_items: 1,
+      }
+
+      const { data } = await apiStore.post(`shipping`, infoShippingSend)
+      setShippingDays(data)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -176,19 +202,19 @@ const ListProducts = ({
       <div className="collapse-content">
         <div className="py-2"></div>
         <ul className="steps mx-auto w-full">
-          <li className="step">
+          <li className="step step-success">
             Processando
             <br />
             pedido
           </li>
-          <li className="step">
+          <li className="step step-success">
             <span className="opacity-50">
               Produto conferido
               <br />
               aguardando coleta
             </span>
           </li>
-          <li className="step">
+          <li className="step step-success">
             <span className="opacity-50">Produto enviado</span>
           </li>
         </ul>
@@ -210,9 +236,17 @@ const ListProducts = ({
               <h3 className="text-xl mb-2 font-bold text-center">
                 Prazo de entrega
               </h3>
-              <p className="text-center">
-                de 10 a 15 dias úteis em todos os produtos.
-              </p>
+              <div className="flex justify-between text-center w-full text-success">
+                <p>
+                  <FontAwesomeIcon
+                    icon={faTruckFast}
+                    className="w-4 h-4 mr-2"
+                  />
+                  {`Chegará grátis em até ${
+                    shippingDays?.days ? shippingDays?.days : '10 à 15 '
+                  } dias úteis`}
+                </p>
+              </div>
             </div>
             <div className="divider md:divider-horizontal">🔥</div>
             <div className="md:w-1/3">
