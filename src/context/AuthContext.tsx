@@ -1,10 +1,10 @@
 import Router from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { ToastCustom } from '../utils/toastCustom'
-import { setCookies } from '../utils/useCookies'
 import { apiStore } from '../services/api'
 import { IUser } from '../types'
+import { ToastCustom } from '../utils/toastCustom'
+import { setCookies } from '../utils/useCookies'
 
 type SignInCredentials = {
   email: string
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           3000,
           'Senha ou email incorreto(s). Tente novamente.',
           'error',
-          'Notificação'
+          'Que pena...'
         )
         return
       }
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         3000,
         'Ocorreu um erro para realizar o login, contate o suporte.',
         'error',
-        'Notificação'
+        'Que pena...'
       )
     }
   }

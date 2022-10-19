@@ -241,7 +241,7 @@ const Home: NextPage<DataProps> = ({ data }) => {
             Todos os produtos!
           </h1>
 
-          <div className="grid  grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
+          <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
                 search(category.products).map((products: IProduct) => {
