@@ -132,22 +132,7 @@ export default function credit({ address }: Address) {
               </svg>
             </div>
             <div className="divider">Informações de Pagamento</div>
-            <Link href={'/shipping/payment/pix'} passHref>
-              <a className="alert border-2 border-warning my-2 md:mt-5 md:flex flex-row justify-start">
-                <FontAwesomeIcon
-                  icon={faLightbulb}
-                  className="w-6 h-6 text-warning"
-                />
-                <div className="flex flex-col items-start text-xs text-warning">
-                  <strong>Economize no valor final da compra!</strong>
-                  <span>
-                    Clique aqui para realizar o pagamento de forma
-                    personalizada, com um pix de entrada, diminuindo o valor
-                    final do parcelamento!
-                  </span>
-                </div>
-              </a>
-            </Link>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Input
