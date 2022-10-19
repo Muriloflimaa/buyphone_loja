@@ -56,7 +56,7 @@ export default function CreditCheckout({ address }: Address) {
       const { data } = await apiStore.get(`cards/user/${address.user_id}`)
       setCards(data)
     } catch (error) {
-      console.log(error)
+      setCards([])
     }
   }
 

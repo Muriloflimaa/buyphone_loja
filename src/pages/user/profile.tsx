@@ -113,7 +113,7 @@ export default function profile({ data }: user) {
 
       try {
         const response = await apiStore.put(`/users/${data.id}`, userPasswords)
-        console.log(response)
+
         ToastCustom(2000, 'Senha alterada com sucesso', 'success')
         await new Promise((resolve) => setTimeout(resolve, 2000))
 

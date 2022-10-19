@@ -98,7 +98,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         setData((data) => [...data, response]) //gravando response no state
       } catch (error) {
-        console.log(error)
         CleanCart()
       }
     })

@@ -80,7 +80,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       window.location.href = '/'
     } catch (error: any) {
-      console.log(error)
       if (error.response.data.message === 'Unauthorized.') {
         ToastCustom(
           3000,

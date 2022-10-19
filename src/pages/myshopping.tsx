@@ -80,9 +80,7 @@ function MyShopping() {
         )}`
       )
       setData(data)
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   return (

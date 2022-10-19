@@ -120,7 +120,6 @@ export default function Products({ data }: DataProps) {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
       }
-      console.log(data)
       setShippingOn(shipping.data)
       setAddress(data)
     } catch (error) {
