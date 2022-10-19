@@ -24,7 +24,7 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
     useEffect(() => {
         if (status === "success") {
             ToastCustom(
-                8000,
+                3000,
                 'Cadastrado com sucesso!',
                 'success',
                 'Notificação'
@@ -37,10 +37,10 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
         }
         if (status === "error") {
             ToastCustom(
-                8000,
+                3000,
                 'Erro ao cadastrar!',
                 'error',
-                'Notificação'
+                'Que pena...'
             )
         }
     }, [status])

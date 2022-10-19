@@ -8,12 +8,12 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
@@ -124,7 +124,7 @@ export default function NavBar() {
                       type="search"
                       name="search-form"
                       id="search-form"
-                      className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-[#4a3e865b]"
+                      className="input input-bordered rounded-md hidden md:flex !important w-full text-white bg-base-200"
                       placeholder="Pesquisa..."
                       onClick={() =>
                         router.asPath !== '/' ? router.push('/') : null
@@ -263,8 +263,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                  ? cartSize + ' item'
-                                  : 'Carrinho está vazio'}
+                                    ? cartSize + ' item'
+                                    : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -337,7 +337,7 @@ export default function NavBar() {
                   type="input"
                   name="search-form"
                   id="search-form"
-                  className="input input-bordered rounded-none w-full text-white bg-primary"
+                  className="input input-bordered rounded-none w-full text-white bg-base-200"
                   placeholder="Pesquisa..."
                   onClick={() =>
                     router.asPath !== '/' ? router.push('/') : null
@@ -356,7 +356,7 @@ export default function NavBar() {
                     {dataApi && dataApi?.length > 0 && (
                       <li>
                         <Link href={'/'}>
-                          <a>Todos</a>
+                          <a>Início</a>
                         </Link>
                       </li>
                     )}

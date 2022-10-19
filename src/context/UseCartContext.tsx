@@ -1,18 +1,17 @@
+import { parseCookies } from 'nookies'
 import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
-import { ArrayProduct, Product } from '../types'
-import { useLocalStorage } from '../utils/useLocalStorage'
-import { ToastCustom } from '../utils/toastCustom'
-import { verificationPrice } from '../utils/verificationPrice'
-import { setCookies } from '../utils/useCookies'
 import { apiStore } from '../services/api'
-import { parseCookies } from 'nookies'
+import { ArrayProduct, Product } from '../types'
+import { ToastCustom } from '../utils/toastCustom'
+import { setCookies } from '../utils/useCookies'
+import { useLocalStorage } from '../utils/useLocalStorage'
 
 interface CartProviderProps {
   children: ReactNode
@@ -170,9 +169,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           const products = addProduct.data
 
           ToastCustom(
-            300,
-            `${products?.name} ${
-              products?.color
+            3000,
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Notificação'
@@ -197,7 +195,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         3000,
         'Não adicione tantos produtos ao mesmo tempo',
         'error',
-        'Notificação'
+        'Que pena...'
       )
     }
   }
@@ -222,10 +220,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         updatedCart.splice(productIndex, 1)
         setCart(updatedCart)
         ToastCustom(
-          300,
+          3000,
           `${name} ${color} - ${memory.toUpperCase()} removido do carrinho!`,
           'error',
-          'Notificação'
+          'Que pena...'
         )
       } else {
         throw Error()
@@ -264,10 +262,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
     } catch {
       ToastCustom(
-        2000,
+        3000,
         'Erro na alteração de quantidade do produto',
         'error',
-        'Notificação'
+        'Que pena...'
       )
       CleanCart()
     }

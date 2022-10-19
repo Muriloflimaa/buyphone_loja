@@ -1,31 +1,29 @@
 import {
-  faChevronLeft,
-  faLocationDot,
-  faTruckFast,
-  faEnvelope,
+  faFacebook,
+  faTwitter,
+  faWhatsapp
+} from '@fortawesome/free-brands-svg-icons'
+import {
+  faChevronLeft, faEnvelope, faLocationDot,
+  faTruckFast
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 import { Input } from '../../../../../../components/InputElement'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
 import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
-import { verificationPrice } from '../../../../../../utils/verificationPrice'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
-import {
-  faFacebook,
-  faTwitter,
-  faWhatsapp,
-} from '@fortawesome/free-brands-svg-icons'
+import { verificationPrice } from '../../../../../../utils/verificationPrice'
 
 interface IParams {
   params: {
@@ -237,8 +235,8 @@ export default function Products({ data }: DataProps) {
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
-                <span className="badge bg-[#E9A745] border-transparent rounded-md text-xs font-medium p-3 mt-2 uppercase text-black">
-                  PARCELAMENTO EM ATÉ 12X
+                <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
+                  PARCELAMENTO EM&nbsp;<span className="text-[#CF9836]">ATÉ 12X</span>
                 </span>
 
                 {/* <div className="flex items-center  mt-2 text-xs">
@@ -263,23 +261,23 @@ export default function Products({ data }: DataProps) {
                 <h1 className="opacity-80 line-through decoration-red-600">
                   {returnPrice.ourPrice <= 0
                     ? 'Sem estoque'
-                    : 'R$' + moneyMask(returnPrice.averagePrice.toString())}
+                    : 'R$ ' + moneyMask(returnPrice.averagePrice.toString())}
                 </h1>
                 <div className="flex items-center gap-2">
                   <h2 className="text-3xl font-bold">
                     {returnPrice.ourPrice <= 0
                       ? 'Sem estoque'
-                      : 'R$' + moneyMask(returnPrice.ourPrice.toString())}
+                      : 'R$ ' + moneyMask(returnPrice.ourPrice.toString())}
                   </h2>
-                  <span className="badge py-3 px-[7px] bg-transparent border-[2px] border-[#989898] rounded-md badge-warning text-base-300 font-medium">
+                  <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
                     -{resultDiscountPercent.replace('.0', '')}%
                   </span>
                 </div>
               </div>
-              <div className="badge bg-transparent border-[2px] border-[#989898] rounded-md text-xs font-semibold p-3 uppercase">
-                <span className="text-neutral-content">
+              <div className="badge border-transparent bg-[#D5FDC7] rounded-xl text-xs font-semibold p-3 uppercase">
+                <span className="text-[#8DC679]">
                   economia de{' '}
-                  <span className="text-base-300">
+                  <span className="text-[#327434]">
                     R$ {moneyMask(resultDiscount.toString())}
                   </span>
                 </span>
@@ -321,7 +319,7 @@ export default function Products({ data }: DataProps) {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-info text-white normal-case"
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
                         type="submit"
                       >
                         Consultar
@@ -336,9 +334,8 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${
-                            address?.City
-                          }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${address?.City
+                            }, ${address?.UF}`}
                         </p>
                       </div>
                     )}

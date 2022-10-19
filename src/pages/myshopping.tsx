@@ -1,10 +1,10 @@
+import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
-import { PersistentLogin } from '../utils/PersistentLogin'
-import Link from 'next/link'
 import { apiStore } from '../services/api'
-import { IInvoice, UserData } from '../types'
+import { IInvoice } from '../types'
+import { PersistentLogin } from '../utils/PersistentLogin'
 
 interface DataProps {
   current_page: number
@@ -156,16 +156,17 @@ function MyShopping() {
         <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
           {data?.links.map((link) => (
             <button
-              onClick={() =>
+              onClick={() => {
                 handleChangePagination(
                   link.label
                     .replace('&laquo; Previous', link.url)
                     .replace('Next &raquo;', link.url)
                 )
+                window.scrollTo(0, 0)
               }
-              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
-                link.active === true ? 'btn-disabled' : ''
-              }`}
+              }
+              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${link.active === true ? 'btn-disabled' : ''
+                }`}
             >
               {link.label
                 .replace('&laquo; Previous', 'Anterior')
