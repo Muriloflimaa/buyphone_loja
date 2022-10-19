@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
@@ -41,6 +41,7 @@ import Banner3MobileDark from '../assets/images/banner3mobiledark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
+import CardMatch from '../components/CardMatch'
 
 interface DataProps {
   data: {
@@ -51,10 +52,15 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const { search } = useContext(SearchContext)
+  const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
+  const currentRefCarroussel = useRef<any>()
   const [showArrow, setShowArrow] = useState(true)
-
   useEffect(() => {
     window.addEventListener('scroll', changeBackground)
+  }, [])
+
+  useEffect(() => {
+    getProductsMatch()
   }, [])
 
   const changeBackground = () => {
@@ -65,21 +71,24 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     }
   }
 
-  // const [currentSlide, setCurrentSlide] = useState(1)
+  async function getProductsMatch() {
+    try {
+      const { data } = await apiStore.get(`carousel`)
+      setProductsMatch(data)
+    } catch (error) {}
+  }
 
-  // function hotProducts(product: Element | Array<IProduct> | any) {
-  //   return product
-  // }
+  const [currentSlide, setCurrentSlide] = useState(1)
 
-  // function next() {
-  //   const maxCurrent = currentRefCarroussel.current?.itemsRef.length
+  function next() {
+    const maxCurrent = currentRefCarroussel.current?.itemsRef.length
 
-  //   if (currentSlide >= maxCurrent) {
-  //     setCurrentSlide(1)
-  //     return
-  //   }
-  //   setCurrentSlide(currentSlide + 1)
-  // }
+    if (currentSlide >= maxCurrent) {
+      setCurrentSlide(1)
+      return
+    }
+    setCurrentSlide(currentSlide + 1)
+  }
 
   return (
     <>
@@ -145,7 +154,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             </a>
           </div>
         </div>
-        {/* <div className="mt-10 max-w-7xl">
+        <div className="mt-10">
           <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>
 
           <Carousel
@@ -158,13 +167,12 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             centerMode={true}
             selectedItem={currentSlide}
           >
-            <CardMatch next={next} />
-            <CardMatch next={next} />
-            <CardMatch next={next} />
-            <CardMatch next={next} />
-            <CardMatch next={next} />
+            {productsMatch &&
+              productsMatch.map((res) => {
+                return <CardMatch key={res.id} data={res} next={next} />
+              })}
           </Carousel>
-        </div> */}
+        </div>
         {/* <div className="max-w-7xl mx-auto">
           <Image src={ScrapeImg} layout="responsive" quality={100} />
         </div> */}
@@ -385,6 +393,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     const { data } = await apiStore.get(`categories/`)
+
     return {
       props: {
         data,
