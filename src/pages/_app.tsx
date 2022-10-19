@@ -41,7 +41,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Theme
       dataTheme={`${
-        !!process.env.NEXT_PUBLIC_BLACK_FRIDAY
+        process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
           ? 'dark'
           : !!isUser && user && JSON.parse(user).type === 1
           ? 'dark'

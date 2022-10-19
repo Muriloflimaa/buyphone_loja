@@ -12,11 +12,13 @@ export const verificationPrice = (products: IProduct) => {
     }
   }, [user]) //atualiza o state para nao dar erro de renderizacao
 
-  const discount = !!process.env.NEXT_PUBLIC_BLACK_FRIDAY
-    ? 12.5
-    : !!isUser && user && JSON.parse(user)?.type === 1
-    ? 12.5
-    : 7 //calcula o disconto
+  const discount =
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+      ? 12.5
+      : !!isUser && user && JSON.parse(user)?.type === 1
+      ? 12.5
+      : 7 //calcula o disconto
   const itens = [
     products.price,
     products.magalu_price,
