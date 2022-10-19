@@ -10,7 +10,7 @@ interface InputProps
   label?: string
   error?: { message?: string | undefined }
   type?: string
-    placeholder?: string
+  placeholder?: string
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
@@ -37,7 +37,10 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             placeholder={placeholder}
           />
           {type === 'password' ? (
-            <span onClick={() => setShow(!show)}>
+            <span
+              className="bg-primary text-white"
+              onClick={() => setShow(!show)}
+            >
               {show ? (
                 <EyeOffIcon className="w-4 h-4" />
               ) : (
