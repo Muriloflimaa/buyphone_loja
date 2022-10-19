@@ -152,18 +152,20 @@ export default function pix({ address }: Address) {
               </div>
             </div>
           </div>
-          <div className="fixed bottom-[-10px] mb-20 md:mb-4 right-1 text-primary-content card card-compact glass w-[98%] md:w-80 z-50">
-            <div className="card-body bg-primary/90">
-              <div className="flex justify-between gap-4 w-full text-xl">
-                <span>Total</span>
-                <span> R$ {moneyMask(somaTotal.toString())}</span>
+          <div className="w-full flex justify-center z-50">
+            <div className="fixed bottom-[-10px] mb-20 md:mb-4 text-primary-content card card-compact glass w-[98%] md:w-80 z-50">
+              <div className="card-body bg-primary/90 ">
+                <div className="flex gap-4 w-full text-xl">
+                  <span>Total</span>
+                  <span> R$ {moneyMask(somaTotal.toString())}</span>
+                </div>
+                <a
+                  onClick={() => handlePayment()}
+                  className="flex btn btn-info text-white w-full"
+                >
+                  Finalizar Compra
+                </a>
               </div>
-              <a
-                onClick={() => handlePayment()}
-                className="flex btn btn-success w-full"
-              >
-                Finalizar Compra
-              </a>
             </div>
           </div>
         </div>

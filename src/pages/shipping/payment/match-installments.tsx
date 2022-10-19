@@ -2,6 +2,7 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
@@ -223,11 +224,12 @@ export default function MatchInstallment({
               <button
                 onClick={handleCard}
                 className={
-                  'btn text-white ' +
+                  'btn self-end text-white ' +
                   (matchInstallments ? 'btn-info' : 'btn-disabled')
                 }
               >
-                Continuar
+                Avançar{' '}
+                <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -55,27 +55,13 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
             <div className="grid gap-2">
               <a
                 onClick={() => copyToClipBoard(`${pix.brcode}`)}
-                className={
-                  'btn font-bold normal-case ' +
-                  (user?.type === 1
-                    ? 'btn-info bg-white text-black hover:opacity-80'
-                    : 'btn-primary')
-                }
+                className="btn btn-info text-white"
               >
                 Copiar QRCode
               </a>
 
               <Link href={pix?.pdf ?? ''}>
-                <a
-                  className={
-                    'btn font-bold normal-case ' +
-                    (user?.type === 1
-                      ? 'btn-info bg-white text-black hover:opacity-80'
-                      : 'btn-primary')
-                  }
-                >
-                  Baixar PDF
-                </a>
+                <a className="btn btn-info text-white">Baixar PDF</a>
               </Link>
             </div>
           </div>
@@ -97,12 +83,7 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
               </div>
             </div>
             <a
-              className={
-                'btn font-bold normal-case ' +
-                (user?.type === 1
-                  ? 'btn-info bg-white text-black hover:opacity-80'
-                  : 'btn-primary')
-              }
+              className="btn btn-info text-white"
               onClick={() => router.push('/myshopping')}
             >
               Verificar Pagamento

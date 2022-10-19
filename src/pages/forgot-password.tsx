@@ -72,12 +72,12 @@ export default function ForgotPassword() {
         />
 
         {formState.isSubmitting ? (
-          <button className="btn loading normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0">
+          <button className="btn btn-info text-white loading normal-case py-4 flex justify-center w-full shadow-md border-0">
             Carregando
           </button>
         ) : (
           <button
-            className="btn normal-case py-4 text-PrimaryText flex justify-center w-full bg-buyphone shadow-md border-0"
+            className="btn btn-info text-white normal-case py-4 flex justify-center w-full shadow-md border-0"
             type="submit"
           >
             Redefinir senha

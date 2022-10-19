@@ -12,6 +12,7 @@ import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
 import { SearchProvider } from '../context/SearchContext'
 import { CartProvider } from '../context/UseCartContext'
+import { LightOrDark } from '../utils/verifyDarkLight'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
@@ -38,10 +39,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [user]) //realiza verificacao de user para nao dar erro de renderização
 
+  LightOrDark(process.env.NEXT_PUBLIC_BLACK_FRIDAY, user, isUser)
+
   return (
     <Theme
       dataTheme={`${
-        !!isUser && user && JSON.parse(user).type === 1 ? 'dark' : 'light'
+        process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+          ? 'dark'
+          : !!isUser && user && JSON.parse(user).type === 1
+          ? 'dark'
+          : 'light'
       }`}
       className="bg-base-100"
     >
@@ -61,7 +69,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               <CartProvider>
                 <NavBar />
                 <div className="py-12 md:py-20"></div>
-                <Component {...pageProps} />
+                <Component
+                  {...pageProps}
+                  darkOrLigth={LightOrDark(
+                    process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+                    user,
+                    isUser
+                  )}
+                />
                 <Footer />
               </CartProvider>
               <MyBottomNavigation />

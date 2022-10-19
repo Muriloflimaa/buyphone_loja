@@ -89,6 +89,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         )
         return
       }
+      if (error.response.data.message === 'The selected email is invalid.') {
+        ToastCustom(
+          3000,
+          'E-mail inválido ou inexistente.',
+          'error',
+          'Que pena...'
+        )
+        return
+      }
       ToastCustom(
         3000,
         'Ocorreu um erro para realizar o login, contate o suporte.',
@@ -103,11 +112,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await apiStore.post('/logout')
       destroyCookie(undefined, '@BuyPhone:User')
       destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
       setUserData(null)
       Router.push('/')
     } catch (error) {
       destroyCookie(undefined, '@BuyPhone:User')
       destroyCookie(undefined, '@BuyPhone:Token')
+      destroyCookie({}, '@BuyPhone:User')
+      destroyCookie({}, '@BuyPhone:Token')
       setUserData(null)
       Router.push('/')
     }
