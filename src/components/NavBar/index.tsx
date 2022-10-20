@@ -124,11 +124,8 @@ export default function NavBar() {
                       type="search"
                       name="search-form"
                       id="search-form"
-                      className="input input-bordered rounded-md hidden !important w-full text-white bg-base-200"
+                      className="input input-bordered rounded-md !important w-full text-white bg-base-200"
                       placeholder="Pesquisa..."
-                      onClick={() =>
-                        router.asPath !== '/' ? router.push('/') : null
-                      }
                       onChange={(e) => changeState(e.target.value)}
                     />
 

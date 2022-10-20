@@ -17,6 +17,7 @@ import { SearchContext } from '../context/SearchContext'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
+import Banner4 from '../assets/images/banner4.webp'
 
 //banner desktop----------
 //light
@@ -176,100 +177,11 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               })}
           </Carousel>
         </div>
-        {/* <div className="max-w-7xl mx-auto">
-          <Image src={ScrapeImg} layout="responsive" quality={100} />
-        </div> */}
 
-        {/* <div className="mt-10">
-          <h1 className="text-4xl font-medium text-center">Mais vendidos</h1>
-
-          {data.data.length > 0 ? (
-            <Carousel
-              centerMode={true}
-              showIndicators={false}
-              showStatus={false}
-              showThumbs={false}
-              centerSlidePercentage={26}
-              infiniteLoop={true}
-              renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                hasPrev && (
-                  <button
-                    type="button"
-                    onClick={onClickHandler}
-                    title={label}
-                    className="btn btn-circle absolute z-10 top-[50%] left-4"
-                  >
-                    ❮
-                  </button>
-                )
-              }
-              renderArrowNext={(onClickHandler, hasNext, label) =>
-                hasNext && (
-                  <button
-                    type="button"
-                    onClick={onClickHandler}
-                    title={label}
-                    className="btn btn-circle absolute z-10 top-[50%] right-4"
-                  >
-                    ❯
-                  </button>
-                )
-              }
-            >
-              {data.data.map((category) =>
-                hotProducts(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products)
-                  return (
-                    returnPrice.ourPrice > 0 && (
-                      <div className="my-10">
-                        <ProductCard
-                          key={products.id}
-                          id={products.id}
-                          name={products.name}
-                          idCategory={category.id}
-                          colorPhone={products.color}
-                          price={returnPrice.ourPrice}
-                          averagePrice={returnPrice.averagePrice}
-                          slug={products.slug}
-                          slugCategory={category.slug}
-                          image={products.media[0].original_url}
-                          memory={products.memory}
-                        />
-                      </div>
-                    )
-                  )
-                })
-              )}
-            </Carousel>
-          ) : (
-            <div className="flex gap-3 justify-center">
-              <svg
-                className="animate-spin h-5 w-5 text-black"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <h1>Carregando...</h1>
-            </div>
-          )}
-        </div> */}
         <div className="mt-8">
-          {/* <div className="max-w-7xl my-8 mx-auto">
+          <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
-          </div> */}
+          </div>
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
@@ -277,7 +189,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
-                search(category.products).map((products: IProduct) => {
+                category.products.map((products: IProduct) => {
                   const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
