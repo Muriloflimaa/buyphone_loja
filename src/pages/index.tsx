@@ -52,10 +52,11 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
-  const { search } = useContext(SearchContext)
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
-  const currentRefCarroussel = useRef<any>()
   const [showArrow, setShowArrow] = useState(true)
+  const { search } = useContext(SearchContext)
+  const currentRefCarroussel = useRef<any>()
+
   useEffect(() => {
     window.addEventListener('scroll', changeBackground)
   }, [])
@@ -93,7 +94,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   return (
     <>
-      <div id="home" className="absolute -mt-32"></div>
+      <div id="home"></div>
       <RegisterMimo />
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
@@ -101,7 +102,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
       <div className="h-auto -mt-8">
         {showArrow === true ? (
           <div className="w-full fixed z-50 bottom-24 ml-[85%] md:ml-[95%] md:bottom-12 ">
-            <a href="#home">
+            <a onClick={() => scroll(0, 100)} href="#home">
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
                 <FontAwesomeIcon
                   icon={faChevronUp}
@@ -189,7 +190,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
-                category.products.map((products: IProduct) => {
+                search(category.products).map((products: IProduct) => {
                   const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
