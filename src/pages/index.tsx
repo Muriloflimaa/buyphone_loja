@@ -54,7 +54,6 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const [showArrow, setShowArrow] = useState(true)
-  const { search } = useContext(SearchContext)
   const currentRefCarroussel = useRef<any>()
 
   useEffect(() => {
@@ -190,7 +189,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
-                search(category.products).map((products: IProduct) => {
+                category.products.map((products: IProduct) => {
                   const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (

@@ -25,9 +25,17 @@ import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 interface NavBarProps {
   children: ReactElement
+}
+
+type SearchFormData = {
+  searchMobile: string
+  searchDesktop: string
 }
 
 export default function NavBar({ children }: NavBarProps) {
@@ -37,7 +45,6 @@ export default function NavBar({ children }: NavBarProps) {
   const [cartSize, setCartSize] = useState<number>()
   const [isOn, setIsOn] = useState(false)
   const [showCart, setShowCart] = useState(false)
-  const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
@@ -77,6 +84,31 @@ export default function NavBar({ children }: NavBarProps) {
       setNotShowCart(false)
     }
   }, [router.asPath])
+
+  const SearchSchema = yup.object().shape({
+    searchMobile: yup.string(),
+    searchDesktop: yup.string(),
+  })
+
+  const { register, handleSubmit } = useForm({
+    resolver: yupResolver(SearchSchema),
+  })
+
+  const handleSearch: SubmitHandler<SearchFormData | any> = async (
+    values,
+    event
+  ) => {
+    event?.preventDefault()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    if (values.searchMobile !== '') {
+      router.push(`/search-result/${values.searchMobile}`)
+    }
+    if (values.searchDesktop !== '') {
+      router.push(`/search-result/${values.searchDesktop}`)
+    }
+    //
+    console.log(values)
+  }
 
   return (
     <>
@@ -133,14 +165,24 @@ export default function NavBar({ children }: NavBarProps) {
                           </a>
                         </Link>
                       </div>
-                      <input
-                        type="search"
-                        name="search-form"
-                        id="search-form"
-                        className="input input-bordered rounded-md hidden md:block !important w-full text-white bg-base-200"
-                        placeholder="Pesquisa..."
-                        onChange={(e) => changeState(e.target.value)}
-                      />
+
+                      <form
+                        onSubmit={handleSubmit(handleSearch)}
+                        className="relative flex"
+                      >
+                        <input
+                          {...register('searchDesktop')}
+                          type="text"
+                          className="input rounded-md hidden md:block w-full text-white bg-base-200"
+                          placeholder="Pesquisa..."
+                        />
+                        <button
+                          type="submit"
+                          className="absolute right-4 top-4"
+                        >
+                          <SearchIcon className="h-5 w-5 text-PrimaryText hidden md:block" />
+                        </button>
+                      </form>
                     </div>
                     <div className="navbar-end flex justify-end md:w-auto">
                       <div className="block md:hidden">
@@ -322,21 +364,24 @@ export default function NavBar({ children }: NavBarProps) {
                 <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
                 <div
                   className={
-                    'z-50 w-full h-12 transition-all duration-300 fixed flex md:hidden ' +
-                    (showSearch === false ? '-mt-[120px]' : 'mt-0')
+                    'z-50 w-full transition-all duration-300 fixed md:hidden flex flex-col gap-3 ' +
+                    (showSearch === false ? '-mt-[250px]' : 'mt-0')
                   }
                 >
-                  <input
-                    type="input"
-                    name="search-form"
-                    id="search-form"
-                    className="input input-bordered rounded-none w-full text-white bg-base-200 block md:hidden"
-                    placeholder="Pesquisa..."
-                    onClick={() =>
-                      router.asPath !== '/' ? router.push('/') : null
-                    }
-                    onChange={(e) => changeState(e.target.value)}
-                  />
+                  <form
+                    onSubmit={handleSubmit(handleSearch)}
+                    className="relative flex"
+                  >
+                    <input
+                      {...register('searchMobile')}
+                      type="text"
+                      className="input rounded-none w-full text-white bg-base-200 block md:hidden px-4"
+                      placeholder="Pesquisa..."
+                    />
+                    <button type="submit">
+                      <SearchIcon className="h-5 w-5 text-PrimaryText absolute right-4 top-4" />
+                    </button>
+                  </form>
                 </div>
                 <div
                   className={
