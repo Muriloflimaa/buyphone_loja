@@ -7,14 +7,23 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useCart } from '../../context/UseCartContext'
 
-const MyBottomNavigation = () => {
+export default function MyBottomNavigation() {
   const router = useRouter()
   const [pos, setPos] = useState('')
   const [move, setMove] = useState('-150%')
   const [color, setColor] = useState('#7959FD')
   const positions = [10, 30, 50, 70, 90]
   const colors = ['#FFE85B', '#EE466B', '#7959FD', '#3E9EFB', '#4CF0DE']
+  const { cart } = useCart()
+  const [cartSize, setCartSize] = useState<number>()
+
+  useEffect(() => {
+    if (cart) {
+      setCartSize(cart.length)
+    }
+  }, [cart])
 
   const handleSlide = (where: number) => {
     setMove(positions[where] + '%')
@@ -131,10 +140,17 @@ const MyBottomNavigation = () => {
             (pos === '70' ? '-mt-7 scale-125' : 'mt-0 scale-100 ')
           }
         >
-          <ShoppingCartIcon
-            id="ShoppingCartIcon"
-            className="h-5 w-5 text-PrimaryText"
-          />
+          <div className=" justify-end flex-col items-center cursor-pointer  relative">
+            <ShoppingCartIcon className="h-5 w-5 text-PrimaryText" />
+            {cartSize && cartSize > 0 ? (
+              <div className="absolute">
+                <span className="flex h-3 w-3 relative -mt-[1.6rem] ml-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+              </div>
+            ) : null}
+          </div>
         </div>
       </Link>
       <Link href="/myshopping" passHref>
@@ -151,4 +167,3 @@ const MyBottomNavigation = () => {
     </div>
   )
 }
-export default MyBottomNavigation

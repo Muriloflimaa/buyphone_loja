@@ -11,7 +11,7 @@ import MyBottomNavigation from '../components/MyBottomNavigation'
 import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
 import { SearchProvider } from '../context/SearchContext'
-import { CartProvider } from '../context/UseCartContext'
+import { CartProvider, useCart } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -78,8 +78,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                   )}
                 />
                 <Footer />
+                <MyBottomNavigation />
               </CartProvider>
-              <MyBottomNavigation />
             </SearchProvider>
           </>
         )}
