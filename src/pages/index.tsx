@@ -22,7 +22,7 @@ import Banner4 from '../assets/images/banner4.webp'
 //banner desktop----------
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
-import Banner2DesktopLight from '../assets/images/banner2desktoplight.webp'
+import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
 import Banner3DesktopLight from '../assets/images/banner3desktoplight.webp'
 //dark
 import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
