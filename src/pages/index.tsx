@@ -33,11 +33,9 @@ import Banner3DesktopDark from '../assets/images/banner3desktopdark.webp'
 //light
 import Banner1MobileLight from '../assets/images/banner1mobilelight.webp'
 import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
-import Banner3MobileLight from '../assets/images/banner3mobilelight.webp'
 //dark
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
-import Banner3MobileDark from '../assets/images/banner3mobiledark.webp'
 
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
@@ -115,8 +113,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1MobileDark, Banner2MobileDark, Banner3MobileDark]
-                : [Banner1MobileLight, Banner2MobileLight, Banner3MobileLight]
+                ? [Banner1MobileDark, Banner2MobileDark]
+                : [Banner1MobileLight, Banner2MobileLight]
             }
           />
         </div>
@@ -124,12 +122,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1DesktopDark, Banner2DesktopDark, Banner3DesktopDark]
-                : [
-                    Banner1DesktopLight,
-                    Banner2DesktopLight,
-                    Banner3DesktopLight,
-                  ]
+                ? [Banner1DesktopDark, Banner2DesktopDark]
+                : [Banner1DesktopLight, Banner2DesktopLight]
             }
           />
         </div>

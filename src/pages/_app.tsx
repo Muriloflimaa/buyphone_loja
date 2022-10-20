@@ -67,7 +67,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <CartProvider>
               <NavBar>
                 <React.Fragment>
-                  <div className="py-12 md:py-20"></div>
+                  <div className="py-16 md:py-20"></div>
                   <Component
                     {...pageProps}
                     darkOrLigth={LightOrDark(

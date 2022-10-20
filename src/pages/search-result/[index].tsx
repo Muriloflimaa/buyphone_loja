@@ -30,6 +30,7 @@ export default function SearchResult() {
     try {
       const { data } = await apiStore.post('/search', { query: result })
       setProducts(data.data)
+      setIsError(false)
       console.log(data)
     } catch (error) {
       setIsError(true)
@@ -40,52 +41,52 @@ export default function SearchResult() {
 
   return (
     <>
-      <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
-        {products &&
-          products.map((products: IProduct) => {
-            const discount =
-              process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-                ? 12.5
-                : !!isUser && user && JSON.parse(user)?.type === 1
-                ? 12.5
-                : 7
-            const itens = [
-              products.price,
-              products.magalu_price,
-              products.americanas_price,
-              products.casasbahia_price,
-              products.ponto_price,
-            ]
-            const filteredItens = itens.filter((item) => item)
-            const averagePrice =
-              filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-            const discountPrice = Math.round(averagePrice * (discount / 100))
-            const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+      {products.length > 0 && (
+        <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
+          {products &&
+            products.map((products: IProduct) => {
+              const discount =
+                process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+                  ? 12.5
+                  : !!isUser && user && JSON.parse(user)?.type === 1
+                  ? 12.5
+                  : 7
+              const itens = [
+                products.price,
+                products.magalu_price,
+                products.americanas_price,
+                products.casasbahia_price,
+                products.ponto_price,
+              ]
+              const filteredItens = itens.filter((item) => item)
+              const averagePrice =
+                filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+              const discountPrice = Math.round(averagePrice * (discount / 100))
+              const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
 
-            return (
-              ourPrice > 0 && (
-                <ProductCard
-                  key={products.id}
-                  id={products.id}
-                  name={products.name}
-                  idCategory={products.category_id}
-                  colorPhone={products.color}
-                  price={ourPrice}
-                  averagePrice={averagePrice}
-                  slug={products.slug}
-                  slugCategory={products.slug}
-                  image={
-                    'https://pedidos.buyphone.com.br/media/3004/11-PRETO.webp'
-                  }
-                  memory={products.memory}
-                />
+              return (
+                ourPrice > 0 && (
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    idCategory={products.category_id}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={products.slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                  />
+                )
               )
-            )
-          })}
-      </div>
+            })}
+        </div>
+      )}
       {!!isError && (
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 px-4 py-10">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 px-4 py-24 md:py-10">
           <div>
             <Image src={JuninhoImg} layout="fixed" width={200} height={250} />
           </div>
