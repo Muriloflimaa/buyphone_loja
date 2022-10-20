@@ -71,19 +71,21 @@ export default function login() {
               </a>
             </Link>
           </div>
-          {formState.isSubmitting ? (
-            <button className="btn loading upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0">
-              Carregando
-            </button>
-          ) : (
-            <button
-              className="btn upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0"
-              type="submit"
-            >
-              Entrar
-            </button>
-          )}
-          <div className="text-default flex gap-1 justify-center">
+          <div className="mt-4">
+            {formState.isSubmitting ? (
+              <button className="btn loading upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0">
+                Carregando
+              </button>
+            ) : (
+              <button
+                className="btn upper-case py-4 text-PrimaryText flex justify-center w-full btn-info shadow-md border-0"
+                type="submit"
+              >
+                Entrar
+              </button>
+            )}
+          </div>
+          <div className="text-default flex flex-col md:flex-row items-center gap-1 justify-center">
             Deseja criar uma conta?
             <Link href={'/register'} passHref>
               <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
