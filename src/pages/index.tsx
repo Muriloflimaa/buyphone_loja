@@ -17,11 +17,12 @@ import { SearchContext } from '../context/SearchContext'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
+import Banner4 from '../assets/images/banner4.webp'
 
 //banner desktop----------
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
-import Banner2DesktopLight from '../assets/images/banner2desktoplight.webp'
+import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
 import Banner3DesktopLight from '../assets/images/banner3desktoplight.webp'
 //dark
 import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
@@ -32,11 +33,9 @@ import Banner3DesktopDark from '../assets/images/banner3desktopdark.webp'
 //light
 import Banner1MobileLight from '../assets/images/banner1mobilelight.webp'
 import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
-import Banner3MobileLight from '../assets/images/banner3mobilelight.webp'
 //dark
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
-import Banner3MobileDark from '../assets/images/banner3mobiledark.webp'
 
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
@@ -51,10 +50,10 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
-  const { search } = useContext(SearchContext)
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
-  const currentRefCarroussel = useRef<any>()
   const [showArrow, setShowArrow] = useState(true)
+  const currentRefCarroussel = useRef<any>()
+
   useEffect(() => {
     window.addEventListener('scroll', changeBackground)
   }, [])
@@ -92,7 +91,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   return (
     <>
-      <div id="home" className="absolute -mt-32"></div>
+      <div id="home"></div>
       <RegisterMimo />
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
@@ -100,7 +99,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
       <div className="h-auto -mt-8">
         {showArrow === true ? (
           <div className="w-full fixed z-50 bottom-24 ml-[85%] md:ml-[95%] md:bottom-12 ">
-            <a href="#home">
+            <a onClick={() => scroll(0, 100)} href="#home">
               <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
                 <FontAwesomeIcon
                   icon={faChevronUp}
@@ -114,8 +113,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1MobileDark, Banner2MobileDark, Banner3MobileDark]
-                : [Banner1MobileLight, Banner2MobileLight, Banner3MobileLight]
+                ? [Banner1MobileDark, Banner2MobileDark]
+                : [Banner1MobileLight, Banner2MobileLight]
             }
           />
         </div>
@@ -123,12 +122,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1DesktopDark, Banner2DesktopDark, Banner3DesktopDark]
-                : [
-                    Banner1DesktopLight,
-                    Banner2DesktopLight,
-                    Banner3DesktopLight,
-                  ]
+                ? [Banner1DesktopDark, Banner2DesktopDark]
+                : [Banner1DesktopLight, Banner2DesktopLight]
             }
           />
         </div>
@@ -176,100 +171,11 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               })}
           </Carousel>
         </div>
-        {/* <div className="max-w-7xl mx-auto">
-          <Image src={ScrapeImg} layout="responsive" quality={100} />
-        </div> */}
 
-        {/* <div className="mt-10">
-          <h1 className="text-4xl font-medium text-center">Mais vendidos</h1>
-
-          {data.data.length > 0 ? (
-            <Carousel
-              centerMode={true}
-              showIndicators={false}
-              showStatus={false}
-              showThumbs={false}
-              centerSlidePercentage={26}
-              infiniteLoop={true}
-              renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                hasPrev && (
-                  <button
-                    type="button"
-                    onClick={onClickHandler}
-                    title={label}
-                    className="btn btn-circle absolute z-10 top-[50%] left-4"
-                  >
-                    ❮
-                  </button>
-                )
-              }
-              renderArrowNext={(onClickHandler, hasNext, label) =>
-                hasNext && (
-                  <button
-                    type="button"
-                    onClick={onClickHandler}
-                    title={label}
-                    className="btn btn-circle absolute z-10 top-[50%] right-4"
-                  >
-                    ❯
-                  </button>
-                )
-              }
-            >
-              {data.data.map((category) =>
-                hotProducts(category.products).map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products)
-                  return (
-                    returnPrice.ourPrice > 0 && (
-                      <div className="my-10">
-                        <ProductCard
-                          key={products.id}
-                          id={products.id}
-                          name={products.name}
-                          idCategory={category.id}
-                          colorPhone={products.color}
-                          price={returnPrice.ourPrice}
-                          averagePrice={returnPrice.averagePrice}
-                          slug={products.slug}
-                          slugCategory={category.slug}
-                          image={products.media[0].original_url}
-                          memory={products.memory}
-                        />
-                      </div>
-                    )
-                  )
-                })
-              )}
-            </Carousel>
-          ) : (
-            <div className="flex gap-3 justify-center">
-              <svg
-                className="animate-spin h-5 w-5 text-black"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <h1>Carregando...</h1>
-            </div>
-          )}
-        </div> */}
         <div className="mt-8">
-          {/* <div className="max-w-7xl my-8 mx-auto">
+          <div className="max-w-7xl my-8 mx-auto">
             <Image src={Banner4} quality={100} layout="responsive"></Image>
-          </div> */}
+          </div>
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
@@ -277,7 +183,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {data?.data.length > 0 ? (
               data.data.map((category) =>
-                search(category.products).map((products: IProduct) => {
+                category.products.map((products: IProduct) => {
                   const returnPrice = verificationPrice(products)
                   return (
                     returnPrice.ourPrice > 0 && (
@@ -334,6 +240,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             autoPlay
             interval={5000}
             showIndicators={false}
+            swipeable={false}
             showStatus={false}
             showThumbs={false}
             className="max-w-7xl mx-auto mb-8 "

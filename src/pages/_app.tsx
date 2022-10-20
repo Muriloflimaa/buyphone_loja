@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { parseCookies, setCookie } from 'nookies'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
@@ -19,6 +19,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
   const [isUser, setIsUser] = useState(false)
   const router = useRouter()
+  LightOrDark(process.env.NEXT_PUBLIC_BLACK_FRIDAY, user, isUser)
 
   useEffect(() => {
     const utms = {
@@ -39,8 +40,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       setIsUser(true)
     }
   }, [user]) //realiza verificacao de user para nao dar erro de renderização
-
-  LightOrDark(process.env.NEXT_PUBLIC_BLACK_FRIDAY, user, isUser)
 
   return (
     <Theme
@@ -64,24 +63,25 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </LoginRegister>
         ) : (
-          <>
-            <SearchProvider>
-              <CartProvider>
-                <NavBar />
-                <div className="py-12 md:py-20"></div>
-                <Component
-                  {...pageProps}
-                  darkOrLigth={LightOrDark(
-                    process.env.NEXT_PUBLIC_BLACK_FRIDAY,
-                    user,
-                    isUser
-                  )}
-                />
-                <Footer />
-              </CartProvider>
-              <MyBottomNavigation />
-            </SearchProvider>
-          </>
+          <SearchProvider>
+            <CartProvider>
+              <NavBar>
+                <React.Fragment>
+                  <div className="py-16 md:py-20"></div>
+                  <Component
+                    {...pageProps}
+                    darkOrLigth={LightOrDark(
+                      process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+                      user,
+                      isUser
+                    )}
+                  />
+                  <Footer />
+                  <MyBottomNavigation />
+                </React.Fragment>
+              </NavBar>
+            </CartProvider>
+          </SearchProvider>
         )}
       </AuthProvider>
     </Theme>

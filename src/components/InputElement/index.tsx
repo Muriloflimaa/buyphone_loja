@@ -33,15 +33,20 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             ref={ref}
             {...rest}
             type={type === 'password' ? (show ? type : 'text') : type}
-            className="input input-bordered rounded-md !important w-full text-info-content"
+            className={
+              'input input-bordered rounded-md !important w-full text-info-content relative'
+            }
             placeholder={placeholder}
           />
           {type === 'password' ? (
-            <span className="bg-info text-white" onClick={() => setShow(!show)}>
+            <span
+              className="text-gray-400 bg-transparent absolute right-7 mt-[14px] cursor-pointer"
+              onClick={() => setShow(!show)}
+            >
               {show ? (
-                <EyeOffIcon className="w-4 h-4" />
+                <EyeOffIcon className="w-5 h-5" />
               ) : (
-                <EyeIcon className="w-4 h-4" />
+                <EyeIcon className="w-5 h-5" />
               )}
             </span>
           ) : null}
