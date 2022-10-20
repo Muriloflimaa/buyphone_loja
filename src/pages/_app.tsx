@@ -4,6 +4,7 @@ import { parseCookies, setCookie } from 'nookies'
 import { useEffect, useState } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
 import '../../styles/globals.scss'
 import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
@@ -43,23 +44,22 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Theme
-      dataTheme={`${
-        process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+      dataTheme={`${process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
           ? 'dark'
           : !!isUser && user && JSON.parse(user).type === 1
-          ? 'dark'
-          : 'light'
-      }`}
+            ? 'dark'
+            : 'light'
+        }`}
       className="bg-base-100"
     >
       <Toaster position="top-right" reverseOrder={false} />
       <AuthProvider>
         {router.route === `/login` ||
-        router.route === `/register` ||
-        router.route === `/terms` ||
-        router.route === `/politics` ||
-        router.route === `/forgot-password` ? (
+          router.route === `/register` ||
+          router.route === `/terms` ||
+          router.route === `/politics` ||
+          router.route === `/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>
