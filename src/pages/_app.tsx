@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { parseCookies, setCookie } from 'nookies'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
 import '../../styles/globals.scss'
@@ -11,13 +11,14 @@ import MyBottomNavigation from '../components/MyBottomNavigation'
 import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
 import { SearchProvider } from '../context/SearchContext'
-import { CartProvider, useCart } from '../context/UseCartContext'
+import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
   const [isUser, setIsUser] = useState(false)
   const router = useRouter()
+  LightOrDark(process.env.NEXT_PUBLIC_BLACK_FRIDAY, user, isUser)
 
   useEffect(() => {
     const utms = {
@@ -38,8 +39,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       setIsUser(true)
     }
   }, [user]) //realiza verificacao de user para nao dar erro de renderização
-
-  LightOrDark(process.env.NEXT_PUBLIC_BLACK_FRIDAY, user, isUser)
 
   return (
     <Theme
@@ -64,24 +63,25 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </LoginRegister>
         ) : (
-          <>
-            <SearchProvider>
-              <CartProvider>
-                <NavBar />
-                <div className="py-12 md:py-20"></div>
-                <Component
-                  {...pageProps}
-                  darkOrLigth={LightOrDark(
-                    process.env.NEXT_PUBLIC_BLACK_FRIDAY,
-                    user,
-                    isUser
-                  )}
-                />
-                <Footer />
-                <MyBottomNavigation />
-              </CartProvider>
-            </SearchProvider>
-          </>
+          <SearchProvider>
+            <CartProvider>
+              <NavBar>
+                <React.Fragment>
+                  <div className="py-12 md:py-20"></div>
+                  <Component
+                    {...pageProps}
+                    darkOrLigth={LightOrDark(
+                      process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+                      user,
+                      isUser
+                    )}
+                  />
+                  <Footer />
+                  <MyBottomNavigation />
+                </React.Fragment>
+              </NavBar>
+            </CartProvider>
+          </SearchProvider>
         )}
       </AuthProvider>
     </Theme>

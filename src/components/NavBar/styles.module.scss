@@ -1,16 +1,17 @@
 .divisorbuyphone {
   -webkit-animation: slide 5s linear infinite;
   animation: slide 5s linear infinite;
-  background: url('https://loja.buyphone.com.br/img/degrade-seamless.png') repeat-x;
+  background: url('https://loja.buyphone.com.br/img/degrade-seamless.png')
+    repeat-x;
   height: 1px;
   width: 200%;
 }
 
 @keyframes slide {
   0% {
-      transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-      transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
   }
 }
