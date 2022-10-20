@@ -1,4 +1,8 @@
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import {
+  faFacebook,
+  faInstagram,
+  faWhatsapp,
+} from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -130,6 +134,20 @@ export default function Footer() {
                 </a>
               </Link>
             </li>
+            <li>
+              <Link href={'https://wa.me/5518981367275'}>
+                <a
+                  target="_blank"
+                  className="flex items-center text-info-content"
+                >
+                  <FontAwesomeIcon
+                    icon={faWhatsapp}
+                    className="mr-2 w-5 h-5 text-info-content"
+                  />
+                  (18) 98136-7275
+                </a>
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="flex flex-col lg:flex-row gap-12">
@@ -180,6 +198,7 @@ export default function Footer() {
             Copyright BuyPhone - 2022. Todos os direitos reservados.
           </h1>
           <h2>CNPJ: 40.779.273/0001-09</h2>
+          <h3>Araçatuba - SP, 16.018-000, Brasil</h3>
         </div>
         <h3>Criado com ❤️ por Buyphone.com.br</h3>
       </div>
