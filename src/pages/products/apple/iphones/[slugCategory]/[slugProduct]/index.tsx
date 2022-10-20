@@ -159,7 +159,7 @@ export default function Products({ data }: DataProps) {
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
-          <div className="w-full h-full flex justify-start col-span-6 relative">
+          <div className="w-full h-full flex justify-center md:justify-start col-span-6 relative">
             {data.media && (
               <InnerImageZoom
                 src={data.media[0].original_url}
@@ -175,7 +175,7 @@ export default function Products({ data }: DataProps) {
               <div className="flex flex-col">
                 <div
                   onClick={() => setOnShare(!onShare)}
-                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300"
+                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300 -mt-10 md:mt-0"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -232,10 +232,10 @@ export default function Products({ data }: DataProps) {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-5 text-info-content w-full col-span-4">
+          <div className="flex flex-col items-center md:items-start gap-5 text-info-content w-full col-span-4">
             <div className="flex flex-col gap-4">
               <div>
-                <h1 className="text-2xl font-medium">
+                <h1 className="text-2xl font-medium mt-5 md:mt-0">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
