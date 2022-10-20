@@ -84,7 +84,7 @@ export default function Footer() {
         </div>
         <div>
           <h3 className="font-bold text-lg mb-3 text-info-content">
-            Mais informaçoes
+            Mais informações
           </h3>
           <ul className="gap-1 opacity-90 text-info-content">
             <Link href={'/politics'} passHref>
