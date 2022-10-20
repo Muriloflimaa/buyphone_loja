@@ -1,13 +1,13 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp,
+  faWhatsapp
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
   faEnvelope,
   faLocationDot,
-  faTruckFast,
+  faTruckFast
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -17,6 +17,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
 import { Input } from '../../../../../../components/InputElement'
 import { useCart } from '../../../../../../context/UseCartContext'
@@ -148,8 +149,8 @@ export default function Products({ data }: DataProps) {
           </Link>
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-5">
-          <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-12">
+          <div className="flex-col items-center gap-3 hidden md:flex col-span-2">
             {data.media &&
               data.media.map((res) => {
                 return <Image src={res.original_url} width={60} height={75} />
@@ -158,14 +159,16 @@ export default function Products({ data }: DataProps) {
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
-          <div className="w-full h-full flex justify-start col-span-2 relative">
+          <div className="w-full h-full flex justify-start col-span-6 relative">
             {data.media && (
-              <Image
+              <InnerImageZoom
                 src={data.media[0].original_url}
-                layout="fixed"
-                width="260"
-                height="350"
-                priority={true}
+                zoomSrc={data.media[0].original_url}
+                width={350}
+                height={350}
+                hideHint
+                zoomPreload
+                zoomType="hover"
               />
             )}
             <div className="absolute right-6">
@@ -229,7 +232,7 @@ export default function Products({ data }: DataProps) {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
+          <div className="flex flex-col gap-5 text-info-content w-full col-span-4">
             <div className="flex flex-col gap-4">
               <div>
                 <h1 className="text-2xl font-medium">
@@ -336,9 +339,8 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${
-                            address?.City
-                          }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${address?.City
+                            }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
