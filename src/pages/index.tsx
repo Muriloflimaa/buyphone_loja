@@ -334,6 +334,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             autoPlay
             interval={5000}
             showIndicators={false}
+            swipeable={false}
             showStatus={false}
             showThumbs={false}
             className="max-w-7xl mx-auto mb-8 "
