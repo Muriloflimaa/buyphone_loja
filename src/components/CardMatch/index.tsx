@@ -59,32 +59,33 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
 
   return (
-    <div className="card md:px-36 md:py-14 py-5 flex md:flex-row flex-col justify-center items-center text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
-      <div className="w-[50%] md:w-[80%] mx-auto relative">
+    <div className="card md:px-36 md:py-14 py-5 grid grid-cols-1 md:grid-cols-2 text-info-content bg-accent drop-shadow-xl rounded-lg md:max-w-5xl mx-auto my-10">
+      <div className="relative">
+        <Image
+          src={data.media[0].original_url}
+          layout="fixed"
+          width={250}
+          height={300}
+        />
         <div
           className={
-            'flex absolute w-full z-10 justify-end transition-all duration-300 md:ml-6 md:-mt-10 ' +
-            (failMatch === false ? 'opacity-0' : 'opacity-100')
-          }
-        >
-          <Image src={OuterImg} layout="fixed" />
-        </div>
-        <div
-          className={
-            'flex absolute w-full z-10 justify-start transition-all duration-300 md:-mt-10 ' +
+            'absolute top-0 ' +
             (successMatch === false ? 'opacity-0' : 'opacity-100')
           }
         >
-          <Image src={GosteiImg} layout="fixed" />
+          <Image src={GosteiImg} />
         </div>
-        <div className="w-[80%] mx-auto md:mx-0">
-          <figure>
-            <Image src={data.media[0].original_url} width={250} height={300} />
-          </figure>
+        <div
+          className={
+            'absolute top-0 right-0 ' +
+            (failMatch === false ? 'opacity-0' : 'opacity-100')
+          }
+        >
+          <Image src={OuterImg} />
         </div>
       </div>
 
-      <div className="card-body pt-4 md:items-start items-center w-full">
+      <div className="pt-4 flex flex-col gap-3 md:items-start items-center w-full">
         <h1 className="font-normal text-xl md:text-2xl text-start">
           {data.name}
         </h1>
