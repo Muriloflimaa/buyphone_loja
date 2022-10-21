@@ -228,7 +228,7 @@ export default function MatchInstallment({
                   (matchInstallments ? 'btn-info' : 'btn-disabled')
                 }
               >
-                Avançar{' '}
+                Finalizar compra
                 <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
               </button>
             </div>
