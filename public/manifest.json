@@ -1,0 +1,20 @@
+{
+  "short_name": "BuyPhone",
+  "name": "Loja BuyPhone",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon.ico",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./src/pages/index",
+  "display": "standalone",
+  "theme_color": "#201942",
+  "background_color": "#ffffff"
+}

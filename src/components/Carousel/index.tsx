@@ -19,7 +19,13 @@ const CarouselComponent = (image: imageProps) => {
       >
         {image.image.map((res) => {
           return (
-            <Image key={res.src} src={res} layout="responsive" quality={100} />
+            <Image
+              placeholder="blur"
+              key={res.src}
+              src={res}
+              layout="responsive"
+              quality={100}
+            />
           )
         })}
       </Carousel>

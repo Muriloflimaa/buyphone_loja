@@ -18,12 +18,12 @@ export default function ForgotPassword() {
       .required('Campo email é obrigatório')
       .email('Esse campo precisa ser um e-mail'),
   })
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<ForgoutFormData>({
     resolver: yupResolver(ForgoutFormSchema),
   })
   const { errors } = formState
 
-  const handleForgoutPassword: SubmitHandler<ForgoutFormData | any> = async (
+  const handleForgoutPassword: SubmitHandler<ForgoutFormData> = async (
     values,
     event
   ) => {

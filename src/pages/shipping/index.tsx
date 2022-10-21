@@ -74,16 +74,13 @@ export default function Shipping({ userJson }: userJsonTypes) {
       .min(9, 'CEP precisa ter 8 caracteres'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<GetCepTypes>({
     resolver: yupResolver(getCepSchema),
   })
 
   const { errors } = formState
 
-  const handleCepStorage: SubmitHandler<GetCepTypes | any> = async (
-    value,
-    event
-  ) => {
+  const handleCepStorage: SubmitHandler<GetCepTypes> = async (value, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const cep = value.cep.replace('-', '')

@@ -1,4 +1,5 @@
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   HomeIcon,
@@ -16,7 +17,6 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
-import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
 import { ICategory } from '../../types'
@@ -24,18 +24,30 @@ import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import Drawer from 'react-modern-drawer'
+import 'react-modern-drawer/dist/index.css'
+import LoadingComponent from '../LoadingComponent'
+import { Divider } from 'react-daisyui'
+
+type SearchFormData = {
+  searchMobile: string
+  searchDesktop: string
+}
 
 export default function NavBar() {
   const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const [isOn, setIsOn] = useState(false)
   const [showCart, setShowCart] = useState(false)
-  const { changeState } = useContext(SearchContext)
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
+  const [onShow, setOnShow] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   useEffect(() => {
     if (cart) {
@@ -72,39 +84,55 @@ export default function NavBar() {
     }
   }, [router.asPath])
 
+  const SearchSchema = yup.object().shape({
+    searchMobile: yup.string(),
+    searchDesktop: yup.string(),
+  })
+
+  const { register, handleSubmit, reset } = useForm<SearchFormData>({
+    resolver: yupResolver(SearchSchema),
+  })
+
+  const handleSearch: SubmitHandler<SearchFormData> = async (values, event) => {
+    event?.preventDefault()
+
+    if (values.searchMobile !== '') {
+      router.push(`/search-result/${values.searchMobile}`)
+      reset()
+    }
+    if (values.searchDesktop !== '') {
+      router.push(`/search-result/${values.searchDesktop}`)
+      reset()
+    }
+  }
+
+  const toggleDrawer = () => {
+    setOpenDrawer((prevState) => !prevState)
+  }
+
   return (
     <>
       <div className="fixed z-20 w-full">
         <div className="glass">
-          <nav className="relative mt-0 w-full bg-primary/[.9]">
-            <div className="w-full">
-              <div className="w-full h-16 flex justify-between items-center md:grid md:grid-cols-4 md:h-24 relative p-4 z-10 mx-auto max-w-7xl">
-                <div className="md:col-span-1">
-                  <div
-                    className="block md:hidden"
-                    onClick={() => setIsOn(!isOn)}
-                  >
-                    {/* CHAMA O MENU */}
-                    <label
-                      htmlFor="my-drawer"
-                      className="btn btn-circle z-50 bg-transparent border-none swap swap-rotate transition-none absolute -mt-[20px]"
-                      onClick={() => setIsOn(!isOn)}
+          <div className="bg-primary/[.9] relative">
+            <div className="navbar">
+              <div className="max-w-7xl mx-auto w-full justify-between">
+                {/* NAVBAR LADO ESQUERDO */}
+                <div className="navbar-start md:w-auto">
+                  {/* MOBILE */}
+                  <button className="block md:hidden" onClick={toggleDrawer}>
+                    <svg
+                      className="swap-off fill-current text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 512 512"
                     >
-                      <input type="checkbox" />
-                      <div>
-                        <svg
-                          className="swap-off fill-current text-PrimaryText z-20"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 512 512"
-                        >
-                          <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                        </svg>
-                      </div>
-                    </label>
-                    {/* FIM */}
-                  </div>
+                      <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                    </svg>
+                  </button>
+
+                  {/* DESKTOP */}
                   <div className="hidden md:block">
                     <Link href={'/'} passHref>
                       <a>
@@ -118,60 +146,64 @@ export default function NavBar() {
                     </Link>
                   </div>
                 </div>
-                <div className="md:col-span-2">
-                  <div className="w-full">
-                    <input
-                      type="search"
-                      name="search-form"
-                      id="search-form"
-                      className="input input-bordered rounded-md hidden !important w-full text-white bg-base-200"
-                      placeholder="Pesquisa..."
-                      onClick={() =>
-                        router.asPath !== '/' ? router.push('/') : null
-                      }
-                      onChange={(e) => changeState(e.target.value)}
-                    />
-
-                    <div className="block md:hidden mt-2 ml-8">
-                      <Link href={'/'} passHref>
-                        <a>
-                          <Image
-                            src={Logo}
-                            className="cursor-pointer"
-                            layout="intrinsic"
-                            width={120}
-                            height={80}
-                            alt="Logo BuyPhone"
-                          />
-                        </a>
-                      </Link>
-                    </div>
+                {/* NAVBAR CENTRAL */}
+                <div className="navbar-center md:w-1/2">
+                  {/* MOBILE */}
+                  <div className="block md:hidden">
+                    <Link href={'/'} passHref>
+                      <a>
+                        <Image
+                          src={Logo}
+                          className="cursor-pointer"
+                          layout="fixed"
+                          alt="Logo BuyPhone"
+                        />
+                      </a>
+                    </Link>
                   </div>
+
+                  {/* DESKTOP */}
+                  <form
+                    onSubmit={handleSubmit(handleSearch)}
+                    className="relative flex"
+                  >
+                    <input
+                      {...register('searchDesktop')}
+                      type="text"
+                      className="input rounded-md hidden md:block w-full text-info-content bg-base-200"
+                      placeholder="Pesquisa..."
+                    />
+                    <button type="submit" className="absolute right-4 top-4">
+                      <SearchIcon className="h-5 w-5 text-info-content hidden md:block" />
+                    </button>
+                  </form>
                 </div>
 
-                <div className="md:col-span-1">
-                  <div className="block md:hidden ">
+                {/* NAVBAR LADO DIREITO */}
+                <div className="navbar-end flex justify-end md:w-auto">
+                  {/* MOBILE */}
+                  <div className="block md:hidden">
                     {!showSearch ? (
                       <SearchIcon
-                        className="h-5 w-5 text-PrimaryText block"
+                        className="h-5 w-5 text-white "
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     ) : (
                       <XIcon
-                        className="h-5 w-5 text-PrimaryText block"
+                        className="h-5 w-5 text-white "
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     )}
                   </div>
-
-                  <div className="md:flex justify-end items-center gap-5 w-full hidden ">
+                  {/* DESKTOP */}
+                  <div className="md:flex justify-end items-center gap-5 w-full hidden">
                     {!isUser ? (
                       <Link href={'/login'} passHref>
                         <a>
                           <div className="flex justify-end flex-col items-center cursor-pointer">
                             <FontAwesomeIcon
                               icon={faCircleUser}
-                              className="w-7 h-7 text-PrimaryText"
+                              className="w-7 h-7 text-white"
                             />
                           </div>
                         </a>
@@ -187,12 +219,12 @@ export default function NavBar() {
                           </span>
                           <FontAwesomeIcon
                             icon={faCircleUser}
-                            className="w-6 h-6 mr-1 text-PrimaryText"
+                            className="w-6 h-6 mr-1 text-white"
                           />
                         </label>
                         <ul
                           tabIndex={0}
-                          className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
+                          className="menu menu-compact fixed dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
                         >
                           <li>
                             <Link href={'/user/profile'}>
@@ -227,14 +259,14 @@ export default function NavBar() {
                     {!notShowCart && (
                       <div
                         className={
-                          'dropdown dropdown-end  ' +
+                          'dropdown dropdown-end ' +
                           (showCart ? 'opacity-100 visible' : '')
                         }
                       >
                         <label className=" m-1">
                           <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
                             <ShoppingCartIcon
-                              className="h-7 w-7 text-PrimaryText hidden md:block"
+                              className="h-7 w-7 text-white hidden md:block"
                               onClick={() => setShowCart(!showCart)}
                             />
                             {cartSize && cartSize > 0 ? (
@@ -326,229 +358,202 @@ export default function NavBar() {
                   </div>
                 </div>
               </div>
-              <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
-              <div
-                className={
-                  'z-50 w-full h-12 transition-all duration-300 fixed flex md:hidden ' +
-                  (showSearch === false ? '-mt-[120px]' : 'mt-0')
-                }
+            </div>
+            <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
+            <div
+              className={
+                'z-50 w-full transition-all duration-300 fixed md:hidden flex flex-col gap-3 ' +
+                (showSearch === false ? '-mt-[250px]' : 'mt-0')
+              }
+            >
+              <form
+                onSubmit={handleSubmit(handleSearch)}
+                className="relative flex"
               >
                 <input
-                  type="input"
-                  name="search-form"
-                  id="search-form"
-                  className="input input-bordered rounded-none w-full text-white bg-base-200 hidden"
+                  {...register('searchMobile')}
+                  type="text"
+                  className="input rounded-none w-full text-info-content bg-base-200 block md:hidden px-4"
                   placeholder="Pesquisa..."
-                  onClick={() =>
-                    router.asPath !== '/' ? router.push('/') : null
-                  }
-                  onChange={(e) => changeState(e.target.value)}
                 />
-              </div>
-              <div
-                className={
-                  'w-full mb-2 transition-all durantion-200 ' +
-                  (showSearch === false ? 'mt-0' : 'mt-12')
-                }
-              >
-                <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
-                  <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                    {dataApi && dataApi?.length > 0 && (
-                      <li>
-                        <Link href={'/'}>
-                          <a>Início</a>
+                <button type="submit">
+                  <SearchIcon className="h-5 w-5 text-info-content absolute right-4 top-4" />
+                </button>
+              </form>
+            </div>
+            <div
+              className={
+                'w-full mb-2 transition-all durantion-200 ' +
+                (showSearch === false ? 'mt-0' : 'mt-12')
+              }
+            >
+              <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
+                <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
+                  {dataApi && dataApi?.length > 0 && (
+                    <li>
+                      <Link href={'/'}>
+                        <a>Início</a>
+                      </Link>
+                    </li>
+                  )}
+                  {dataApi && dataApi?.length > 0 ? (
+                    dataApi?.map((category) => (
+                      <li key={category.id}>
+                        <Link
+                          href={`/products/apple/iphones/${category.slug}`}
+                          passHref
+                        >
+                          <a className="w-max">{category.name}</a>
                         </Link>
                       </li>
-                    )}
-                    {dataApi && dataApi?.length > 0 ? (
-                      dataApi?.map((category) => (
-                        <li key={category.id}>
-                          <Link
-                            href={`/products/apple/iphones/${category.slug}`}
-                            passHref
-                          >
-                            <a className="w-max">{category.name}</a>
-                          </Link>
-                        </li>
-                      ))
-                    ) : (
-                      <li>
-                        <div className="flex gap-3">
-                          <svg
-                            className="animate-spin h-5 w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          <h1>Carregando...</h1>
-                        </div>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-                <div className="overflow-hidden">
-                  <div className={styles.divisorbuyphone}></div>
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-      {/* MENU */}
-      <div
-        className={
-          'drawer absolute transition-all duration-500 h-[100vh] ' +
-          (!isOn ? '-z-10 -ml-[200vw]' : 'z-50 block')
-        }
-      >
-        <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-        <div
-          className={
-            'drawer-content transition-all duration-500 delay-500 ' +
-            (isOn ? 'hidden -z-10' : 'block z-50')
-          }
-        ></div>
-        <div className="drawer-side">
-          <label
-            htmlFor="my-drawer"
-            className="drawer-overlay w-full h-[100vh] fixed"
-            onClick={() => setIsOn(!isOn)}
-          ></label>
-          <div className="menu overflow-y-auto h-[100vh] bg-base-100 text-base-content fixed flex">
-            <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
-              <div className="flex justify-between items-center p-6">
-                <div>
-                  {!isUser ? (
-                    <UserCircleIcon className="w-10 h-10" />
+                    ))
                   ) : (
-                    <img
-                      src={userData?.profile_photo_url}
-                      alt="Foto do Usuário"
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
+                    <LoadingComponent />
                   )}
-                </div>
-                {!!isUser ? (
-                  <div className="flex flex-col pl-6">
-                    <h1 className="text-xl font-semibold text-info-content">
-                      {FirstAllUpper(userData?.name)}
-                    </h1>
-                    <h2 className="text-info-content">
-                      {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
-                    </h2>
-                  </div>
-                ) : (
-                  <div className="flex justify-center items-center w-full p-4">
-                    <Link href={'/login'} passHref>
-                      <a className="link text-info-content">Realizar login</a>
-                    </Link>
-                  </div>
-                )}
+                </ul>
               </div>
-              <label
-                htmlFor="my-drawer"
-                className="swap swap-rotate p-6"
-                onClick={() => setIsOn(!isOn)}
-              >
-                <div>
-                  <svg
-                    className="swap-off fill-current text-info-content z-20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 512 512"
-                  >
-                    <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                  </svg>
-                </div>
-              </label>
-            </div>
-
-            <label
-              htmlFor="my-drawer"
-              className="flex px-4 cursor-pointer"
-              onClick={() => {
-                setIsOn(!isOn)
-                router.push('/')
-              }}
-            >
-              <div className="flex py-8 gap-3 w-full">
-                <HomeIcon className="h-5 w-5 text-info-content" />
-                <span className="text-info-content">Página inicial</span>
-              </div>
-            </label>
-
-            <div className="collapse collapse-arrow h-auto overflow-y-auto">
-              <input type="checkbox" />
-              <div className="collapse-title flex gap-3 text-xl">
-                <ShoppingBagIcon className="h-5 w-5 text-info-content" />
-                <span className="text-info-content text-base">Produtos</span>
-              </div>
-              <div className="collapse-content flex flex-col overflow-auto gap-2 h-auto">
-                {dataApi && dataApi?.length > 0 ? (
-                  dataApi?.map((category) => (
-                    <label
-                      htmlFor="my-drawer"
-                      key={category.id}
-                      className="flex px-4 cursor-pointer"
-                      onClick={() => {
-                        setIsOn(!isOn)
-                        router.push(`/products/apple/iphones/${category.slug}`)
-                      }}
-                    >
-                      {category.name}
-                    </label>
-                  ))
-                ) : (
-                  <p>Carregando.</p>
-                )}
+              <div className="overflow-hidden">
+                <div className={styles.divisorbuyphone}></div>
               </div>
             </div>
-
-            <label
-              htmlFor="my-drawer"
-              className="flex px-4 cursor-pointer"
-              onClick={() => {
-                setIsOn(!isOn)
-                router.push('/user/profile')
-              }}
-            >
-              <div className="flex py-8 gap-3 w-full">
-                <UserIcon className="h-5 w-5 text-info-content" />
-                <span className="text-info-content">Minha conta</span>
-              </div>
-            </label>
-            <label
-              htmlFor="my-drawer"
-              className="flex px-4 cursor-pointer"
-              onClick={() => {
-                setIsOn(!isOn)
-                signOut()
-              }}
-            >
-              <div className="flex py-8 gap-3 items-center w-full">
-                <LogoutIcon className="h-5 w-5 text-info-content" />
-                <span className="text-info-content">Sair</span>
-              </div>
-            </label>
           </div>
         </div>
       </div>
+      {/* fim da navbar */}
+
+      {/* drawer/para/mobile */}
+      <Drawer
+        open={openDrawer}
+        onClose={toggleDrawer}
+        direction="left"
+        duration={400}
+        className="w-auto"
+      >
+        <ul className="menu p-4 overflow-x-hidden w-80 h-full bg-base-100 text-base-content">
+          <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center px-4">
+              <div>
+                {!isUser ? (
+                  <UserCircleIcon className="w-10 h-10" />
+                ) : (
+                  <img
+                    src={userData?.profile_photo_url}
+                    alt={'user'}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                )}
+              </div>
+              {!!isUser ? (
+                <div className="flex flex-col px-6">
+                  <h1 className="text-xl font-semibold text-info-content">
+                    {FirstAllUpper(userData?.name)}
+                  </h1>
+                  <h2 className="text-info-content">
+                    {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
+                  </h2>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center w-full p-4">
+                  <Link href={'/login'} passHref>
+                    <a className="link text-info-content">Login</a>
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div onClick={toggleDrawer}>
+              <div>
+                <svg
+                  className="swap-off fill-current text-info-content z-20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 512 512"
+                >
+                  <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <Divider />
+          <div className="h-full flex flex-col justify-between">
+            <div className="flex flex-col gap-5">
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/'}>
+                  <a className="flex gap-3 w-full">
+                    <HomeIcon className="h-5 w-5 text-info-content" />
+                    <span className="text-info-content">Página inicial</span>
+                  </a>
+                </Link>
+              </div>
+
+              <div className="collapse px-4">
+                <input
+                  className="min-h-0 p-0"
+                  onClick={() => setOnShow(!onShow)}
+                  type="checkbox"
+                />
+                <div className="collapse-title min-h-full top-0 p-0 ">
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-3">
+                      <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                      <span className="text-info-content text-base">
+                        Produtos
+                      </span>
+                    </div>
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={
+                        'w-3 h-3 transition-all durantion-300 ' +
+                        (!!onShow ? 'rotate-180' : '')
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="collapse-content">
+                  {dataApi && dataApi?.length > 0 ? (
+                    dataApi?.map((category) => (
+                      <div
+                        key={category.id}
+                        className="flex px-4 cursor-pointer"
+                        onClick={toggleDrawer}
+                      >
+                        <Link href={`/products/apple/iphones/${category.slug}`}>
+                          <a>{category.name}</a>
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Carregando.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/user/profile'}>
+                  <a className="flex gap-3 w-full">
+                    <UserIcon className="h-5 w-5 text-info-content" />
+                    <span className="text-info-content">Minha conta</span>
+                  </a>
+                </Link>
+              </div>
+            </div>
+
+            <div
+              className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
+              onClick={toggleDrawer}
+            >
+              <div onClick={() => signOut()}>
+                <div className="flex gap-3 items-center w-full mt-2">
+                  <LogoutIcon className="h-5 w-5 text-info-content" />
+                  <span className="text-info-content">Sair</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ul>
+      </Drawer>
     </>
   )
 }
