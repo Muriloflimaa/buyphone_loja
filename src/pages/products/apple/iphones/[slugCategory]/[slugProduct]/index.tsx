@@ -25,6 +25,7 @@ import { IProduct } from '../../../../../../types'
 import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
+import InnerImageZoom from 'react-inner-image-zoom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
 
 interface IParams {
@@ -158,12 +159,14 @@ export default function Products({ data }: DataProps) {
           <div className="w-full h-full flex justify-center md:justify-start col-span-2 relative">
             <div className="hidden md:block">
               {data.media && (
-                <Image
+                <InnerImageZoom
                   src={data.media[0].original_url}
-                  layout="fixed"
-                  width="260"
-                  height="350"
-                  priority={true}
+                  zoomSrc={data.media[0].original_url}
+                  width={300}
+                  height={350}
+                  hideHint
+                  zoomPreload
+                  zoomType="hover"
                 />
               )}
             </div>
@@ -178,7 +181,7 @@ export default function Products({ data }: DataProps) {
                 />
               )}
             </div>
-            <div className="absolute right-0 md:right-6 -top-10">
+            <div className="absolute right-0 md:right-4 -top-10">
               <div className="flex flex-col">
                 <div
                   onClick={() => setOnShare(!onShare)}
