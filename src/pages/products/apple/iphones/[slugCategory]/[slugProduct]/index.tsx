@@ -1,13 +1,13 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
   faEnvelope,
   faLocationDot,
-  faTruckFast
+  faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -17,7 +17,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
 import { Input } from '../../../../../../components/InputElement'
 import { useCart } from '../../../../../../context/UseCartContext'
@@ -95,16 +94,13 @@ export default function Products({ data }: DataProps) {
       .min(9, 'CEP precisa ter 8 caracteres'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<GetCepTypes>({
     resolver: yupResolver(getCepSchema),
   })
 
   const { errors } = formState
 
-  const handleCepStorage: SubmitHandler<GetCepTypes | any> = async (
-    value,
-    event
-  ) => {
+  const handleCepStorage: SubmitHandler<GetCepTypes> = async (value, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const cep = value.cep.replace('-', '')
@@ -149,8 +145,8 @@ export default function Products({ data }: DataProps) {
           </Link>
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-12">
-          <div className="flex-col items-center gap-3 hidden md:flex col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-5">
+          <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
             {data.media &&
               data.media.map((res) => {
                 return <Image src={res.original_url} width={60} height={75} />
@@ -159,23 +155,21 @@ export default function Products({ data }: DataProps) {
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
           </div>
 
-          <div className="w-full h-full flex justify-center md:justify-start col-span-6 relative">
+          <div className="w-full h-full flex justify-start col-span-2 relative">
             {data.media && (
-              <InnerImageZoom
+              <Image
                 src={data.media[0].original_url}
-                zoomSrc={data.media[0].original_url}
-                width={350}
-                height={350}
-                hideHint
-                zoomPreload
-                zoomType="hover"
+                layout="fixed"
+                width="260"
+                height="350"
+                priority={true}
               />
             )}
             <div className="absolute right-6">
               <div className="flex flex-col">
                 <div
                   onClick={() => setOnShare(!onShare)}
-                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300 -mt-10 md:mt-0"
+                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -232,10 +226,10 @@ export default function Products({ data }: DataProps) {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center md:items-start gap-5 text-info-content w-full col-span-4">
+          <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-4">
               <div>
-                <h1 className="text-2xl font-medium mt-5 md:mt-0">
+                <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
 
@@ -303,62 +297,66 @@ export default function Products({ data }: DataProps) {
                   </button>
                 )}
               </div>
+              <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
+                <h1 className="text-base font-semibold">
+                  Calcule o frete e prazo de entrega
+                </h1>
+                <form
+                  className="flex flex-col md:flex-row items-start gap-2"
+                  onSubmit={handleSubmit(handleCepStorage)}
+                >
+                  <Input
+                    {...register('cep')}
+                    type="text"
+                    maxLength={9}
+                    placeholder="00000-000"
+                    onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                    error={errors.cep}
+                  />
+                  {formState.isSubmitting ? (
+                    <button
+                      type="submit"
+                      className="btn loading normal-case text-white"
+                    >
+                      Carregando
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-info text-white upper-case text-xs md:text-md py-0"
+                      type="submit"
+                    >
+                      Consultar
+                    </button>
+                  )}
+                </form>
+                <div className="flex flex-col items-start md:text-xs">
+                  {address && (
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon
+                        icon={faLocationDot}
+                        className="w-4 h-4"
+                      />
+                      <p>
+                        {`${address?.Street && address?.Street + '-'} ${
+                          address?.City
+                        }, ${address?.UF}`}
+                      </p>
+                    </div>
+                  )}
 
-              <form onSubmit={handleSubmit(handleCepStorage)}>
-                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
-                  <h1 className="text-base font-semibold">
-                    Calcule o frete e prazo de entrega
-                  </h1>
-                  <div className="flex flex-col md:flex-row items-start gap-2">
-                    <Input
-                      {...register('cep')}
-                      type="text"
-                      maxLength={9}
-                      placeholder="00000-000"
-                      onChange={(e) => mascaraCep(e.target, '#####-####')}
-                      error={errors.cep}
-                    />
-                    {formState.isSubmitting ? (
-                      <button className="btn loading normal-case text-white">
-                        Carregando
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
-                        type="submit"
-                      >
-                        Consultar
-                      </button>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start md:text-xs">
-                    {address && (
-                      <div className="flex items-center gap-2">
+                  {shippingOn && (
+                    <div className="flex justify-between items-start w-full text-success">
+                      <p className="flex items-center gap-2">
                         <FontAwesomeIcon
-                          icon={faLocationDot}
+                          icon={faTruckFast}
                           className="w-4 h-4"
                         />
-                        <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
-                        </p>
-                      </div>
-                    )}
-
-                    {shippingOn && (
-                      <div className="flex justify-between items-start w-full text-success">
-                        <p className="flex items-center gap-2">
-                          <FontAwesomeIcon
-                            icon={faTruckFast}
-                            className="w-4 h-4"
-                          />
-                          {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                        {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </form>
+              </div>
 
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
                 <div className="alert items-start bg-accent w-full grid ">

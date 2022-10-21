@@ -42,6 +42,7 @@ export const CardDepoiments = ({
             <Image
               className={'mask mask-circle '}
               src={image}
+              alt={name}
               width={130}
               height={130}
               layout="fixed"

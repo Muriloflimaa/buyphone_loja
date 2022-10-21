@@ -26,16 +26,13 @@ export default function login() {
       .min(6, 'Minímo 6 digitos'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<SignInFormData>({
     resolver: yupResolver(signInFormSchema),
   })
 
   const { errors } = formState
 
-  const handleSignIn: SubmitHandler<SignInFormData | any> = async (
-    values,
-    event
-  ) => {
+  const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await signIn(values)

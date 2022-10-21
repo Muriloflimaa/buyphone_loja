@@ -14,10 +14,9 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ReactElement, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
-import { SearchContext } from '../../context/SearchContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
 import { ICategory } from '../../types'
@@ -28,27 +27,27 @@ import styles from './styles.module.scss'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
-interface NavBarProps {
-  children: ReactElement
-}
+import Drawer from 'react-modern-drawer'
+import 'react-modern-drawer/dist/index.css'
+import LoadingComponent from '../LoadingComponent'
+import { Divider } from 'react-daisyui'
 
 type SearchFormData = {
   searchMobile: string
   searchDesktop: string
 }
 
-export default function NavBar({ children }: NavBarProps) {
+export default function NavBar() {
   const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart, values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const [isOn, setIsOn] = useState(false)
   const [showCart, setShowCart] = useState(false)
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
   const [onShow, setOnShow] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   useEffect(() => {
     if (cart) {
@@ -90,509 +89,471 @@ export default function NavBar({ children }: NavBarProps) {
     searchDesktop: yup.string(),
   })
 
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, reset } = useForm<SearchFormData>({
     resolver: yupResolver(SearchSchema),
   })
 
-  const handleSearch: SubmitHandler<SearchFormData | any> = async (
-    values,
-    event
-  ) => {
+  const handleSearch: SubmitHandler<SearchFormData> = async (values, event) => {
     event?.preventDefault()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
+      reset()
     }
     if (values.searchDesktop !== '') {
       router.push(`/search-result/${values.searchDesktop}`)
+      reset()
     }
-    //
-    console.log(values)
+  }
+
+  const toggleDrawer = () => {
+    setOpenDrawer((prevState) => !prevState)
   }
 
   return (
     <>
-      <div className="drawer">
-        <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
-          <div className="fixed z-20 w-full">
-            <div className="glass">
-              <div className="bg-primary/[.9] relative">
-                <div className="navbar">
-                  <div className="max-w-7xl mx-auto w-full justify-between">
-                    <div className="navbar-start md:w-auto">
-                      <div
-                        className="block md:hidden"
-                        onClick={() => setIsOn(!isOn)}
-                      >
-                        {/* CHAMA O MENU */}
-                        <label htmlFor="my-drawer" className="drawer-button">
-                          <svg
-                            className="swap-off fill-current text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512"
-                          >
-                            <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                          </svg>
-                        </label>
-                        {/* FIM */}
-                      </div>
-                      <div className="hidden md:block">
-                        <Link href={'/'} passHref>
-                          <a>
-                            <Image
-                              src={Logo}
-                              className="cursor-pointer"
-                              layout="fixed"
-                              alt="Logo BuyPhone"
-                            />
-                          </a>
-                        </Link>
-                      </div>
-                    </div>
-                    <div className="navbar-center md:w-1/2">
-                      <div className="block md:hidden">
-                        <Link href={'/'} passHref>
-                          <a>
-                            <Image
-                              src={Logo}
-                              className="cursor-pointer"
-                              layout="fixed"
-                              alt="Logo BuyPhone"
-                            />
-                          </a>
-                        </Link>
-                      </div>
+      <div className="fixed z-20 w-full">
+        <div className="glass">
+          <div className="bg-primary/[.9] relative">
+            <div className="navbar">
+              <div className="max-w-7xl mx-auto w-full justify-between">
+                {/* NAVBAR LADO ESQUERDO */}
+                <div className="navbar-start md:w-auto">
+                  {/* MOBILE */}
+                  <button className="block md:hidden" onClick={toggleDrawer}>
+                    <svg
+                      className="swap-off fill-current text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                    </svg>
+                  </button>
 
-                      <form
-                        onSubmit={handleSubmit(handleSearch)}
-                        className="relative flex"
-                      >
-                        <input
-                          {...register('searchDesktop')}
-                          type="text"
-                          className="input rounded-md hidden md:block w-full text-white bg-base-200"
-                          placeholder="Pesquisa..."
+                  {/* DESKTOP */}
+                  <div className="hidden md:block">
+                    <Link href={'/'} passHref>
+                      <a>
+                        <Image
+                          src={Logo}
+                          className="cursor-pointer"
+                          layout="fixed"
+                          alt="Logo BuyPhone"
                         />
-                        <button
-                          type="submit"
-                          className="absolute right-4 top-4"
-                        >
-                          <SearchIcon className="h-5 w-5 text-PrimaryText hidden md:block" />
-                        </button>
-                      </form>
-                    </div>
-                    <div className="navbar-end flex justify-end md:w-auto">
-                      <div className="block md:hidden">
-                        {!showSearch ? (
-                          <SearchIcon
-                            className="h-5 w-5 text-PrimaryText "
-                            onClick={() => setShowSearch(!showSearch)}
-                          />
-                        ) : (
-                          <XIcon
-                            className="h-5 w-5 text-PrimaryText "
-                            onClick={() => setShowSearch(!showSearch)}
-                          />
-                        )}
-                      </div>
-                      <div className="md:flex justify-end items-center gap-5 w-full hidden">
-                        {!isUser ? (
-                          <Link href={'/login'} passHref>
-                            <a>
-                              <div className="flex justify-end flex-col items-center cursor-pointer">
-                                <FontAwesomeIcon
-                                  icon={faCircleUser}
-                                  className="w-7 h-7 text-PrimaryText"
-                                />
-                              </div>
-                            </a>
-                          </Link>
-                        ) : (
-                          <div className="hidden sm:inline-block dropdown dropdown-end px-2">
-                            <label
-                              tabIndex={0}
-                              className="btn btn-sm bg-rose-500 hover:bg-rose-700 h-auto py-2 rounded-full text-base-100 flex-row gap-2 pr-1"
-                            >
-                              <span className="normal-case text-white">
-                                Olá, {UniqueName(userData?.name)}
-                              </span>
-                              <FontAwesomeIcon
-                                icon={faCircleUser}
-                                className="w-6 h-6 mr-1 text-PrimaryText"
-                              />
-                            </label>
-                            <ul
-                              tabIndex={0}
-                              className="menu menu-compact dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
-                            >
-                              <li>
-                                <Link href={'/user/profile'}>
-                                  <a>Meus Dados</a>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link href={'/myshopping'}>
-                                  <a>Minhas Compras</a>
-                                </Link>
-                              </li>
-                              <li>
-                                <button
-                                  className="text-left w-full"
-                                  type="submit"
-                                  onClick={() => signOut()}
-                                >
-                                  Sair
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
-                        )}
-
-                        <div
-                          className={
-                            'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
-                            (showCart ? 'block' : 'hidden')
-                          }
-                          onClick={() => setShowCart(!showCart)}
-                        ></div>
-                        {!notShowCart && (
-                          <div
-                            className={
-                              'dropdown dropdown-end ' +
-                              (showCart ? 'opacity-100 visible' : '')
-                            }
-                          >
-                            <label className=" m-1">
-                              <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
-                                <ShoppingCartIcon
-                                  className="h-7 w-7 text-PrimaryText hidden md:block"
-                                  onClick={() => setShowCart(!showCart)}
-                                />
-                                {cartSize && cartSize > 0 ? (
-                                  <div className="absolute">
-                                    <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
-                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                    </span>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </label>
-
-                            <div
-                              className={
-                                'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
-                                (showCart ? 'opacity-100 visible' : '')
-                              }
-                            >
-                              <div className="card-body">
-                                <div className="flex justify-between">
-                                  <span className="text-lg uppercase">
-                                    Meu Carrinho
-                                  </span>
-                                  <span className="font-thin text-xs">
-                                    {cartSize && cartSize > 1
-                                      ? cartSize + ' itens'
-                                      : cartSize == 1
-                                      ? cartSize + ' item'
-                                      : 'Carrinho está vazio'}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="card-body max-h-80 overflow-y-auto gap-6">
-                                {cartSize && cartSize > 0 ? (
-                                  values.map(
-                                    (res) =>
-                                      res.id && (
-                                        <li className="list-none" key={res.id}>
-                                          <ProductCart
-                                            id={res.id}
-                                            amount={res.amount}
-                                            name={res.product.name}
-                                            color={res.product.color}
-                                            price={res.subTotal}
-                                            memory={res.product.memory}
-                                            image={
-                                              res.product.media[0].original_url
-                                            }
-                                          />
-                                        </li>
-                                      )
-                                  )
-                                ) : (
-                                  <h1>Carrinho vazio</h1>
-                                )}
-                              </div>
-                              <div className="card-body bg-base-200">
-                                {somaTotal > 0 ? (
-                                  <div className="flex justify-between py-4">
-                                    <span className="text-gray-500 text-lg">
-                                      Valor Total:
-                                    </span>
-                                    <span className="font-semibold text-lg">
-                                      R$ {moneyMask(somaTotal.toString())}
-                                    </span>
-                                  </div>
-                                ) : (
-                                  ''
-                                )}
-                                {cartSize && cartSize > 0 ? (
-                                  <div className="card-actions justify-center">
-                                    <button
-                                      onClick={() => {
-                                        setShowCart(!showCart)
-                                        router.push('/shipping')
-                                      }}
-                                      className="btn border-transparent bg-success w-full text-white"
-                                    >
-                                      Finalizar Compra
-                                    </button>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                      </a>
+                    </Link>
                   </div>
                 </div>
-                <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
-                <div
-                  className={
-                    'z-50 w-full transition-all duration-300 fixed md:hidden flex flex-col gap-3 ' +
-                    (showSearch === false ? '-mt-[250px]' : 'mt-0')
-                  }
-                >
+                {/* NAVBAR CENTRAL */}
+                <div className="navbar-center md:w-1/2">
+                  {/* MOBILE */}
+                  <div className="block md:hidden">
+                    <Link href={'/'} passHref>
+                      <a>
+                        <Image
+                          src={Logo}
+                          className="cursor-pointer"
+                          layout="fixed"
+                          alt="Logo BuyPhone"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+
+                  {/* DESKTOP */}
                   <form
                     onSubmit={handleSubmit(handleSearch)}
                     className="relative flex"
                   >
                     <input
-                      {...register('searchMobile')}
+                      {...register('searchDesktop')}
                       type="text"
-                      className="input rounded-none w-full text-white bg-base-200 block md:hidden px-4"
+                      className="input rounded-md hidden md:block w-full text-info-content bg-base-200"
                       placeholder="Pesquisa..."
                     />
-                    <button type="submit">
-                      <SearchIcon className="h-5 w-5 text-PrimaryText absolute right-4 top-4" />
+                    <button type="submit" className="absolute right-4 top-4">
+                      <SearchIcon className="h-5 w-5 text-info-content hidden md:block" />
                     </button>
                   </form>
                 </div>
-                <div
-                  className={
-                    'w-full mb-2 transition-all durantion-200 ' +
-                    (showSearch === false ? 'mt-0' : 'mt-12')
-                  }
-                >
-                  <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
-                    <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
-                      {dataApi && dataApi?.length > 0 && (
-                        <li>
-                          <Link href={'/'}>
-                            <a>Início</a>
-                          </Link>
-                        </li>
-                      )}
-                      {dataApi && dataApi?.length > 0 ? (
-                        dataApi?.map((category) => (
-                          <li key={category.id}>
-                            <Link
-                              href={`/products/apple/iphones/${category.slug}`}
-                              passHref
-                            >
-                              <a className="w-max">{category.name}</a>
+
+                {/* NAVBAR LADO DIREITO */}
+                <div className="navbar-end flex justify-end md:w-auto">
+                  {/* MOBILE */}
+                  <div className="block md:hidden">
+                    {!showSearch ? (
+                      <SearchIcon
+                        className="h-5 w-5 text-white "
+                        onClick={() => setShowSearch(!showSearch)}
+                      />
+                    ) : (
+                      <XIcon
+                        className="h-5 w-5 text-white "
+                        onClick={() => setShowSearch(!showSearch)}
+                      />
+                    )}
+                  </div>
+                  {/* DESKTOP */}
+                  <div className="md:flex justify-end items-center gap-5 w-full hidden">
+                    {!isUser ? (
+                      <Link href={'/login'} passHref>
+                        <a>
+                          <div className="flex justify-end flex-col items-center cursor-pointer">
+                            <FontAwesomeIcon
+                              icon={faCircleUser}
+                              className="w-7 h-7 text-white"
+                            />
+                          </div>
+                        </a>
+                      </Link>
+                    ) : (
+                      <div className="hidden sm:inline-block dropdown dropdown-end px-2">
+                        <label
+                          tabIndex={0}
+                          className="btn btn-sm bg-rose-500 hover:bg-rose-700 h-auto py-2 rounded-full text-base-100 flex-row gap-2 pr-1"
+                        >
+                          <span className="normal-case text-white">
+                            Olá, {UniqueName(userData?.name)}
+                          </span>
+                          <FontAwesomeIcon
+                            icon={faCircleUser}
+                            className="w-6 h-6 mr-1 text-white"
+                          />
+                        </label>
+                        <ul
+                          tabIndex={0}
+                          className="menu menu-compact fixed dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
+                        >
+                          <li>
+                            <Link href={'/user/profile'}>
+                              <a>Meus Dados</a>
                             </Link>
                           </li>
-                        ))
-                      ) : (
-                        <li>
-                          <div className="flex gap-3">
-                            <svg
-                              className="animate-spin h-5 w-5 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
+                          <li>
+                            <Link href={'/myshopping'}>
+                              <a>Minhas Compras</a>
+                            </Link>
+                          </li>
+                          <li>
+                            <button
+                              className="text-left w-full"
+                              type="submit"
+                              onClick={() => signOut()}
                             >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            <h1>Carregando...</h1>
-                          </div>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                  <div className="overflow-hidden">
-                    <div className={styles.divisorbuyphone}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {children}
-        </div>
-        <div className="drawer-side">
-          <label htmlFor="my-drawer" className="drawer-overlay"></label>
-          <ul className="menu p-4 overflow-x-hidden w-80 bg-base-100 text-base-content">
-            <div className="flex items-center justify-between border-b-[1px] border-PrimaryText">
-              <div className="flex justify-between items-center px-4">
-                <div>
-                  {!isUser ? (
-                    <UserCircleIcon className="w-10 h-10" />
-                  ) : (
-                    <img
-                      src={userData?.profile_photo_url}
-                      alt={UniqueName(userData?.name)}
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
-                  )}
-                </div>
-                {!!isUser ? (
-                  <div className="flex flex-col px-6">
-                    <h1 className="text-xl font-semibold text-info-content">
-                      {FirstAllUpper(userData?.name)}
-                    </h1>
-                    <h2 className="text-info-content">
-                      {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
-                    </h2>
-                  </div>
-                ) : (
-                  <div className="flex justify-center items-center w-full p-4">
-                    <Link href={'/login'} passHref>
-                      <a className="link text-info-content">Login</a>
-                    </Link>
-                  </div>
-                )}
-              </div>
-              <label
-                htmlFor="my-drawer"
-                className="swap swap-rotate p-6"
-                onClick={() => setIsOn(!isOn)}
-              >
-                <div>
-                  <svg
-                    className="swap-off fill-current text-info-content z-20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 512 512"
-                  >
-                    <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                  </svg>
-                </div>
-              </label>
-            </div>
-            <div className="h-full flex flex-col justify-between">
-              <ul className="flex flex-col gap-5">
-                <label
-                  htmlFor="my-drawer"
-                  className="flex px-4 cursor-pointer"
-                  onClick={() => {
-                    setIsOn(!isOn)
-                    router.push('/')
-                  }}
-                >
-                  <div className="flex gap-3 w-full">
-                    <HomeIcon className="h-5 w-5 text-info-content" />
-                    <span className="text-info-content">Página inicial</span>
-                  </div>
-                </label>
-
-                <div className="collapse px-4">
-                  <input
-                    className="min-h-0 p-0"
-                    onClick={() => setOnShow(!onShow)}
-                    type="checkbox"
-                  />
-                  <div className="collapse-title min-h-full top-0 p-0 ">
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-3">
-                        <ShoppingBagIcon className="h-5 w-5 text-info-content" />
-                        <span className="text-info-content text-base">
-                          Produtos
-                        </span>
+                              Sair
+                            </button>
+                          </li>
+                        </ul>
                       </div>
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
+                    )}
+
+                    <div
+                      className={
+                        'absolute w-[100vw] h-[100vw] p-[3000px] opacity-0 -mr-96 ' +
+                        (showCart ? 'block' : 'hidden')
+                      }
+                      onClick={() => setShowCart(!showCart)}
+                    ></div>
+                    {!notShowCart && (
+                      <div
                         className={
-                          'w-3 h-3 transition-all durantion-300 ' +
-                          (!!onShow ? 'rotate-180' : '')
+                          'dropdown dropdown-end ' +
+                          (showCart ? 'opacity-100 visible' : '')
                         }
-                      />
-                    </div>
-                  </div>
-                  <div className="collapse-content">
-                    {dataApi && dataApi?.length > 0 ? (
-                      dataApi?.map((category) => (
-                        <label
-                          htmlFor="my-drawer"
-                          key={category.id}
-                          className="flex px-4 cursor-pointer"
-                          onClick={() => {
-                            setIsOn(!isOn)
-                            router.push(
-                              `/products/apple/iphones/${category.slug}`
-                            )
-                          }}
-                        >
-                          {category.name}
+                      >
+                        <label className=" m-1">
+                          <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
+                            <ShoppingCartIcon
+                              className="h-7 w-7 text-white hidden md:block"
+                              onClick={() => setShowCart(!showCart)}
+                            />
+                            {cartSize && cartSize > 0 ? (
+                              <div className="absolute">
+                                <span className="flex h-3 w-3 relative -mt-[2.04rem] ml-7">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                              </div>
+                            ) : null}
+                          </div>
                         </label>
-                      ))
-                    ) : (
-                      <p>Carregando.</p>
+
+                        <div
+                          className={
+                            'mt-3 card card-compact dropdown-content bg-secondary w-80 shadow-2xl ' +
+                            (showCart ? 'opacity-100 visible' : '')
+                          }
+                        >
+                          <div className="card-body">
+                            <div className="flex justify-between">
+                              <span className="text-lg uppercase">
+                                Meu Carrinho
+                              </span>
+                              <span className="font-thin text-xs">
+                                {cartSize && cartSize > 1
+                                  ? cartSize + ' itens'
+                                  : cartSize == 1
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="card-body max-h-80 overflow-y-auto gap-6">
+                            {cartSize && cartSize > 0 ? (
+                              values.map(
+                                (res) =>
+                                  res.id && (
+                                    <li className="list-none" key={res.id}>
+                                      <ProductCart
+                                        id={res.id}
+                                        amount={res.amount}
+                                        name={res.product.name}
+                                        color={res.product.color}
+                                        price={res.subTotal}
+                                        memory={res.product.memory}
+                                        image={
+                                          res.product.media[0].original_url
+                                        }
+                                      />
+                                    </li>
+                                  )
+                              )
+                            ) : (
+                              <h1>Carrinho vazio</h1>
+                            )}
+                          </div>
+                          <div className="card-body bg-base-200">
+                            {somaTotal > 0 ? (
+                              <div className="flex justify-between py-4">
+                                <span className="text-gray-500 text-lg">
+                                  Valor Total:
+                                </span>
+                                <span className="font-semibold text-lg">
+                                  R$ {moneyMask(somaTotal.toString())}
+                                </span>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                            {cartSize && cartSize > 0 ? (
+                              <div className="card-actions justify-center">
+                                <button
+                                  onClick={() => {
+                                    setShowCart(!showCart)
+                                    router.push('/shipping')
+                                  }}
+                                  className="btn border-transparent bg-success w-full text-white"
+                                >
+                                  Finalizar Compra
+                                </button>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="border-border max-w-7xl mx-auto border-t-[1px] opacity-50"></div>
+            <div
+              className={
+                'z-50 w-full transition-all duration-300 fixed md:hidden flex flex-col gap-3 ' +
+                (showSearch === false ? '-mt-[250px]' : 'mt-0')
+              }
+            >
+              <form
+                onSubmit={handleSubmit(handleSearch)}
+                className="relative flex"
+              >
+                <input
+                  {...register('searchMobile')}
+                  type="text"
+                  className="input rounded-none w-full text-info-content bg-base-200 block md:hidden px-4"
+                  placeholder="Pesquisa..."
+                />
+                <button type="submit">
+                  <SearchIcon className="h-5 w-5 text-info-content absolute right-4 top-4" />
+                </button>
+              </form>
+            </div>
+            <div
+              className={
+                'w-full mb-2 transition-all durantion-200 ' +
+                (showSearch === false ? 'mt-0' : 'mt-12')
+              }
+            >
+              <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
+                <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
+                  {dataApi && dataApi?.length > 0 && (
+                    <li>
+                      <Link href={'/'}>
+                        <a>Início</a>
+                      </Link>
+                    </li>
+                  )}
+                  {dataApi && dataApi?.length > 0 ? (
+                    dataApi?.map((category) => (
+                      <li key={category.id}>
+                        <Link
+                          href={`/products/apple/iphones/${category.slug}`}
+                          passHref
+                        >
+                          <a className="w-max">{category.name}</a>
+                        </Link>
+                      </li>
+                    ))
+                  ) : (
+                    <LoadingComponent />
+                  )}
+                </ul>
+              </div>
+              <div className="overflow-hidden">
+                <div className={styles.divisorbuyphone}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* fim da navbar */}
 
-                <label
-                  htmlFor="my-drawer"
-                  className="flex px-4 cursor-pointer"
-                  onClick={() => {
-                    setIsOn(!isOn)
-                    router.push('/user/profile')
-                  }}
+      {/* drawer/para/mobile */}
+      <Drawer
+        open={openDrawer}
+        onClose={toggleDrawer}
+        direction="left"
+        duration={400}
+        className="w-auto"
+      >
+        <ul className="menu p-4 overflow-x-hidden w-80 h-full bg-base-100 text-base-content">
+          <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center px-4">
+              <div>
+                {!isUser ? (
+                  <UserCircleIcon className="w-10 h-10" />
+                ) : (
+                  <img
+                    src={userData?.profile_photo_url}
+                    alt={'user'}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                )}
+              </div>
+              {!!isUser ? (
+                <div className="flex flex-col px-6">
+                  <h1 className="text-xl font-semibold text-info-content">
+                    {FirstAllUpper(userData?.name)}
+                  </h1>
+                  <h2 className="text-info-content">
+                    {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
+                  </h2>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center w-full p-4">
+                  <Link href={'/login'} passHref>
+                    <a className="link text-info-content">Login</a>
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div onClick={toggleDrawer}>
+              <div>
+                <svg
+                  className="swap-off fill-current text-info-content z-20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 512 512"
                 >
-                  <div className="flex gap-3 w-full">
+                  <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <Divider />
+          <div className="h-full flex flex-col justify-between">
+            <div className="flex flex-col gap-5">
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/'}>
+                  <a className="flex gap-3 w-full">
+                    <HomeIcon className="h-5 w-5 text-info-content" />
+                    <span className="text-info-content">Página inicial</span>
+                  </a>
+                </Link>
+              </div>
+
+              <div className="collapse px-4">
+                <input
+                  className="min-h-0 p-0"
+                  onClick={() => setOnShow(!onShow)}
+                  type="checkbox"
+                />
+                <div className="collapse-title min-h-full top-0 p-0 ">
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-3">
+                      <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                      <span className="text-info-content text-base">
+                        Produtos
+                      </span>
+                    </div>
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={
+                        'w-3 h-3 transition-all durantion-300 ' +
+                        (!!onShow ? 'rotate-180' : '')
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="collapse-content">
+                  {dataApi && dataApi?.length > 0 ? (
+                    dataApi?.map((category) => (
+                      <div
+                        key={category.id}
+                        className="flex px-4 cursor-pointer"
+                        onClick={toggleDrawer}
+                      >
+                        <Link href={`/products/apple/iphones/${category.slug}`}>
+                          <a>{category.name}</a>
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Carregando.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/user/profile'}>
+                  <a className="flex gap-3 w-full">
                     <UserIcon className="h-5 w-5 text-info-content" />
                     <span className="text-info-content">Minha conta</span>
-                  </div>
-                </label>
-              </ul>
+                  </a>
+                </Link>
+              </div>
+            </div>
 
-              <label
-                htmlFor="my-drawer"
-                className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
-                onClick={() => {
-                  setIsOn(!isOn)
-                  signOut()
-                }}
-              >
+            <div
+              className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
+              onClick={toggleDrawer}
+            >
+              <div onClick={() => signOut()}>
                 <div className="flex gap-3 items-center w-full mt-2">
                   <LogoutIcon className="h-5 w-5 text-info-content" />
                   <span className="text-info-content">Sair</span>
                 </div>
-              </label>
+              </div>
             </div>
-          </ul>
-        </div>
-      </div>
+          </div>
+        </ul>
+      </Drawer>
     </>
   )
 }

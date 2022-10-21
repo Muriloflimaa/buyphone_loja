@@ -34,12 +34,16 @@ interface CepJsonProps {
 }
 
 type GetCepTypes = {
+  number: string
+  neighborhood: string
+  address: string
   street: string
   district: string
   CEP: string
   complement: string
   city: string
   state: string
+  uf: string
 }
 
 export default function address({ cepJson }: CepJsonProps) {
@@ -63,16 +67,13 @@ export default function address({ cepJson }: CepJsonProps) {
     uf: yup.string().required('Campo estado é obrigatório'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<GetCepTypes>({
     resolver: yupResolver(SaveAddressSchema),
   })
 
   const { errors } = formState
 
-  const handleAddress: SubmitHandler<GetCepTypes | any> = async (
-    values,
-    event
-  ) => {
+  const handleAddress: SubmitHandler<GetCepTypes> = async (values, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
 

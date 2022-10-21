@@ -9,11 +9,12 @@ import '../../styles/globals.scss'
 import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
-import NavBar from '../components/NavBar'
+// import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
-import { SearchProvider } from '../context/SearchContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
+import dynamic from 'next/dynamic'
+const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
@@ -63,25 +64,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </LoginRegister>
         ) : (
-          <SearchProvider>
-            <CartProvider>
-              <NavBar>
-                <React.Fragment>
-                  <div className="py-16 md:py-20"></div>
-                  <Component
-                    {...pageProps}
-                    darkOrLigth={LightOrDark(
-                      process.env.NEXT_PUBLIC_BLACK_FRIDAY,
-                      user,
-                      isUser
-                    )}
-                  />
-                  <Footer />
-                  <MyBottomNavigation />
-                </React.Fragment>
-              </NavBar>
-            </CartProvider>
-          </SearchProvider>
+          <CartProvider>
+            <NavBar />
+            <div className="py-16 md:py-20"></div>
+            <Component
+              {...pageProps}
+              darkOrLigth={LightOrDark(
+                process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+                user,
+                isUser
+              )}
+            />
+            <Footer />
+            <MyBottomNavigation />
+          </CartProvider>
         )}
       </AuthProvider>
     </Theme>
