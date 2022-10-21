@@ -46,6 +46,7 @@ export const CardDepoiments = ({
               width={130}
               height={130}
               layout="fixed"
+              placeholder="blur"
             />
           </div>
 

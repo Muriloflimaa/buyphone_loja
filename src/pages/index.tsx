@@ -178,13 +178,20 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
         <div className="md:mt-8">
           <div className="max-w-7xl md:mb-12 mb-6 mx-auto">
-            <Image
-              src={Banner4}
-              placeholder="blur"
-              alt="Banner central"
-              quality={100}
-              layout="responsive"
-            ></Image>
+            <div className="w-full flex justify-center">
+              <div className="w-full h-auto relative flex px-4">
+                <div className="relative w-full h-full pb-[50%] md:pb-[15%]">
+                  <iframe
+                    className="absolute w-full h-48 flex border-none shadow-black/40 shadow-md m-0"
+                    placeholder="blur"
+                    loading="lazy"
+                    src="https://www.youtube.com/embed/thSPGPnuuNg"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
           </div>
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
