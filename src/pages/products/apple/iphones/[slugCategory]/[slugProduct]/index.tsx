@@ -178,11 +178,11 @@ export default function Products({ data }: DataProps) {
                 />
               )}
             </div>
-            <div className="absolute right-0 md:right-6">
+            <div className="absolute right-0 md:right-6 -top-10">
               <div className="flex flex-col">
                 <div
                   onClick={() => setOnShare(!onShare)}
-                  className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300"
+                  className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -210,12 +210,12 @@ export default function Products({ data }: DataProps) {
                     href={`https://web.whatsapp.com/send?text=${url}`}
                     target={'_blank'}
                   >
-                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                    <div className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300">
                       <FontAwesomeIcon icon={faWhatsapp} className="w-6 h-6" />
                     </div>
                   </a>
                   <a href={`mailto:?subject=${url}`} target={'_blank'}>
-                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                    <div className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300">
                       <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6" />
                     </div>
                   </a>
@@ -223,7 +223,7 @@ export default function Products({ data }: DataProps) {
                     href={`https://www.facebook.com/sharer.php?u=${url}`}
                     target={'_blank'}
                   >
-                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                    <div className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300">
                       <FontAwesomeIcon icon={faFacebook} className="w-6 h-6" />
                     </div>
                   </a>
@@ -231,7 +231,7 @@ export default function Products({ data }: DataProps) {
                     href={`https://twitter.com/share?url=${url}`}
                     target={'_blank'}
                   >
-                    <div className="btn hover:bg-transparent btn-ghost hover:rotate-[360deg] transition-all duration-300">
+                    <div className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300">
                       <FontAwesomeIcon icon={faTwitter} className="w-6 h-6" />
                     </div>
                   </a>
