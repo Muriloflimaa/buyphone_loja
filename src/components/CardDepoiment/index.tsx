@@ -35,7 +35,7 @@ export const CardDepoiments = ({
   linkVideo,
 }: Props) => {
   return (
-    <div className="w-full flex flex-col md:flex-row max-w-5xl mx-auto p-10">
+    <div className="w-full flex flex-col md:flex-row max-w-5xl mx-auto p-10 card shadow-lg">
       <div className="md:w-2/3">
         <div className="flex gap-3 relative">
           <div className={styles.effect_border}>
@@ -46,6 +46,7 @@ export const CardDepoiments = ({
               width={130}
               height={130}
               layout="fixed"
+              placeholder="blur"
             />
           </div>
 
