@@ -31,11 +31,9 @@ export default function SearchResult() {
       const { data } = await apiStore.post('/search', { query: result })
       setProducts(data.data)
       setIsError(false)
-      console.log(data)
     } catch (error) {
       setIsError(true)
       setProducts([])
-      console.log(error)
     }
   }
 
