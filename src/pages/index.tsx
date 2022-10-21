@@ -90,7 +90,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   return (
     <>
-      <div id="home"></div>
+      <div className="absolute -mt-48" id="home"></div>
       <RegisterMimo />
       <Head>
         <title>BuyPhone - Seu match perfeito</title>
@@ -176,8 +176,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </Carousel>
         </div>
 
-        <div className="mt-8">
-          <div className="max-w-7xl my-8 mx-auto">
+        <div className="md:mt-8">
+          <div className="max-w-7xl md:mb-12 mb-6 mx-auto">
             <Image
               src={Banner4}
               placeholder="blur"

@@ -10,7 +10,6 @@ import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
 // import NavBar from '../components/NavBar'
 import { AuthProvider } from '../context/AuthContext'
-import { SearchProvider } from '../context/SearchContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
 import dynamic from 'next/dynamic'
@@ -65,22 +64,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </LoginRegister>
         ) : (
-          <SearchProvider>
-            <CartProvider>
-              <NavBar />
-              <div className="py-16 md:py-20"></div>
-              <Component
-                {...pageProps}
-                darkOrLigth={LightOrDark(
-                  process.env.NEXT_PUBLIC_BLACK_FRIDAY,
-                  user,
-                  isUser
-                )}
-              />
-              <Footer />
-              <MyBottomNavigation />
-            </CartProvider>
-          </SearchProvider>
+          <CartProvider>
+            <NavBar />
+            <div className="py-16 md:py-20"></div>
+            <Component
+              {...pageProps}
+              darkOrLigth={LightOrDark(
+                process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+                user,
+                isUser
+              )}
+            />
+            <Footer />
+            <MyBottomNavigation />
+          </CartProvider>
         )}
       </AuthProvider>
     </Theme>

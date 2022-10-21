@@ -89,24 +89,21 @@ export default function NavBar() {
     searchDesktop: yup.string(),
   })
 
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, reset } = useForm<SearchFormData>({
     resolver: yupResolver(SearchSchema),
   })
 
-  const handleSearch: SubmitHandler<SearchFormData | any> = async (
-    values,
-    event
-  ) => {
+  const handleSearch: SubmitHandler<SearchFormData> = async (values, event) => {
     event?.preventDefault()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
+      reset()
     }
     if (values.searchDesktop !== '') {
       router.push(`/search-result/${values.searchDesktop}`)
+      reset()
     }
-    //
-    console.log(values)
   }
 
   const toggleDrawer = () => {

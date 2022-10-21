@@ -16,6 +16,8 @@ type SignUpFormData = {
   mobile_phone: string
   birthdate: string
   document: string
+  name: string
+  confirm_password: string
 }
 
 export default function register() {
@@ -46,16 +48,13 @@ export default function register() {
       .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<SignUpFormData>({
     resolver: yupResolver(signUpFormSchema),
   })
 
   const { errors } = formState
 
-  const handleSignUp: SubmitHandler<SignUpFormData | any> = async (
-    values,
-    event
-  ) => {
+  const handleSignUp: SubmitHandler<SignUpFormData> = async (values, event) => {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
 

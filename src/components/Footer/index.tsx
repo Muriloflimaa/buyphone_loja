@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react'
 import { apiStore } from '../../services/api'
 
 export default function Footer() {
-  const [dataApi, setDataApi] = useState<Array<{}> | undefined>()
+  const [dataApi, setDataApi] = useState<Array<ICategory>>()
 
   useEffect(() => {
     async function Data() {
@@ -42,7 +42,7 @@ export default function Footer() {
           </h3>
           <ul className="text-info-content gap-1 opacity-90">
             {dataApi ? (
-              dataApi.map((category: ICategory | any) => {
+              dataApi.map((category) => {
                 return (
                   <li key={category.id}>
                     <Link

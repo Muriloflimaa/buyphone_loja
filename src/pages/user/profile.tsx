@@ -18,6 +18,7 @@ type SignInFormData = {
   nome: string
   email: string
   mobile_phone: string
+  name: string
 }
 
 interface user {
@@ -42,13 +43,13 @@ export default function profile({ data }: user) {
     mobile_phone: yup.string().required('Campo celular é obrigatório'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<SignInFormData>({
     resolver: yupResolver(changeInfoFormSchema),
   })
 
   const { errors } = formState
 
-  const handleChangeInfoUser: SubmitHandler<SignInFormData | any> = async (
+  const handleChangeInfoUser: SubmitHandler<SignInFormData> = async (
     values,
     event
   ) => {
