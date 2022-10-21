@@ -185,7 +185,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                     className="absolute w-full h-48 flex border-none shadow-black/40 shadow-md m-0"
                     placeholder="blur"
                     loading="lazy"
-                    src="https://www.youtube.com/embed/thSPGPnuuNg"
+                    src="https://www.youtube.com/embed/thSPGPnuuNg?&autoplay=1&loop=1"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   ></iframe>
