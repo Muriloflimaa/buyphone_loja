@@ -188,7 +188,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                       className="absolute w-full h-full flex border-none m-0"
                       placeholder="blur"
                       loading="lazy"
-                      src="https://www.youtube.com/embed/thSPGPnuuNg?rel=0?version=3&autoplay=1&controls=0&&showinfo=0&loop=1&mute=1"
+                      src="https://www.youtube.com/embed/thSPGPnuuNg?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=thSPGPnuuNg"
                       title="YouTube video player"
                       frameBorder="0"
                       allowFullScreen
