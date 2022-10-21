@@ -79,7 +79,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
         <div
           className={
-            'absolute top-0 ' +
+            'absolute top-0 left-16 ' +
             (successMatch === false ? 'opacity-0' : 'opacity-100')
           }
         >

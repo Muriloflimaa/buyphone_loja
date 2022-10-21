@@ -306,7 +306,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               linkVideo="https://www.youtube.com/embed/pMftaexP7RY?autoplay=0&controls=0&showinfo=0&playlist=pMftaexP7RY"
               image={AnaImg}
               profissional="Digital influencer"
-              depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
+              depoiment="Foi uma experiência muito boa de compra!"
             />
             <CardDepoiments
               name="Brendha Crizel"
