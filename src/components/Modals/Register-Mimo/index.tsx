@@ -1,7 +1,5 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { Button } from 'react-daisyui'
 import DollarPack from '../../../assets/images/dollar-pack.svg'
 import LeftDollar from '../../../assets/images/left-dollar.svg'
 import Present from '../../../assets/images/present.svg'
@@ -10,24 +8,19 @@ import NewsletterSubscribe from './MailchimpSubscribe'
 
 export default function RegisterMimo() {
   const router = useRouter()
-  const [showModal, setShowModal] = useState(true)
 
   return (
     <>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-
       <div
         className={`modal glass bg-opacity-30 sm:modal-middle ${
-          !!showModal ? 'modal-open' : ''
+          router.query.utm_source &&
+          router.query.utm_medium &&
+          router.query.utm_campaign &&
+          'modal-open'
         }`}
       >
         <div className="modal-box max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0">
-          <Button
-            onClick={() => setShowModal(false)}
-            className="btn-sm bg-primary absolute left-2 top-2"
-          >
-            x
-          </Button>
           <div className="flex justify-center items-center relative">
             <Image
               src={DollarPack}
