@@ -86,7 +86,7 @@ export default function SearchResult() {
         </div>
       )}
       {!!isError && (
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 px-4 py-24 md:py-10">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 py-24 md:py-10">
           <div>
             <Image src={JuninhoImg} layout="fixed" width={200} height={250} />
           </div>
