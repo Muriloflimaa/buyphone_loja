@@ -178,17 +178,21 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
         <div className="md:mt-8">
           <div className="max-w-7xl md:mb-12 mb-6 mx-auto">
-            <div className="w-full flex justify-center">
-              <div className="w-full h-auto relative flex px-4">
-                <div className="relative w-full h-full pb-[50%] md:pb-[15%]">
-                  <iframe
-                    className="absolute w-full h-48 flex border-none shadow-black/40 shadow-md m-0"
-                    placeholder="blur"
-                    loading="lazy"
-                    src="https://www.youtube.com/embed/thSPGPnuuNg?&autoplay=1&loop=1"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  ></iframe>
+            <div className="flex justify-center items-center h-48 overflow-y-hidden md:w-full rounded-3xl shadow-black/40 shadow-md">
+              <div className="w-full flex justify-center">
+                <div className="w-full h-auto relative flex">
+                  <div className="relative w-full h-full pb-[54.25%]">
+                    <iframe
+                      className="absolute w-full h-full flex border-none m-0"
+                      placeholder="blur"
+                      loading="lazy"
+                      src="https://www.youtube.com/embed/thSPGPnuuNg?&autoplay=1&loop=1&mute=1&controls=0&showinfo=0"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </div>

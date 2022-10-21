@@ -59,7 +59,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
 
   return (
-    <div className="card py-5 my-8 mx-auto grid grid-cols-1 text-info-content bg-accent drop-shadow-xl rounded-lg md:px-36 md:py-14 md:gap-3 md:grid-cols-2 md:max-w-5xl">
+    <div className="card py-5 my-8 mx-auto grid grid-cols-1 text-info-content bg-accent drop-shadow-xl rounded-lg md:px-36 md:py-14 md:gap-10 md:grid-cols-2 md:max-w-5xl">
       <div className="relative flex justify-center md:justify-end col-span-1">
         <div className="hidden md:block">
           <Image
