@@ -99,10 +99,10 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         {showArrow === true ? (
           <div className="w-full fixed z-50 bottom-24 ml-[85%] md:ml-[95%] md:bottom-12 ">
             <a onClick={() => scroll(0, 100)} href="#home">
-              <div className="w-10 h-10 cursor-pointer rounded-full bg-white shadow-black/30 shadow-md flex absolute justify-center items-center">
+              <div className="btn btn-circle border-transparent bg-base-100 shadow-md shadow-black/40">
                 <FontAwesomeIcon
                   icon={faChevronUp}
-                  className="w-5 h-5 text-primary"
+                  className="w-4 marker:h-4 marker:text-primary"
                 />
               </div>
             </a>
@@ -260,14 +260,14 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             swipeable={false}
             showStatus={false}
             showThumbs={false}
-            className="max-w-7xl mx-auto mb-8 "
+            className="max-w-7xl mx-auto mb-8"
             renderArrowPrev={(onClickHandler, hasPrev, label) =>
               hasPrev && (
                 <button
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] left-4"
+                  className="btn btn-circle border-transparent bg-base-100 shadow-md shadow-black/40 absolute z-10 top-[40%] left-4"
                 >
                   ❮
                 </button>
@@ -279,7 +279,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                   type="button"
                   onClick={onClickHandler}
                   title={label}
-                  className="btn btn-circle btn-info text-white absolute z-10 top-[40%] right-4"
+                  className="btn btn-circle border-transparent bg-base-100 shadow-md shadow-black/40 absolute z-10 top-[40%] right-4"
                 >
                   ❯
                 </button>
