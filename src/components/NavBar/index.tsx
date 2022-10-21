@@ -173,11 +173,11 @@ export default function NavBar() {
                     <input
                       {...register('searchDesktop')}
                       type="text"
-                      className="input rounded-md hidden md:block w-full text-white bg-base-200"
+                      className="input rounded-md hidden md:block w-full text-info-content bg-base-200"
                       placeholder="Pesquisa..."
                     />
                     <button type="submit" className="absolute right-4 top-4">
-                      <SearchIcon className="h-5 w-5 text-PrimaryText hidden md:block" />
+                      <SearchIcon className="h-5 w-5 text-info-content hidden md:block" />
                     </button>
                   </form>
                 </div>
@@ -188,12 +188,12 @@ export default function NavBar() {
                   <div className="block md:hidden">
                     {!showSearch ? (
                       <SearchIcon
-                        className="h-5 w-5 text-PrimaryText "
+                        className="h-5 w-5 text-white "
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     ) : (
                       <XIcon
-                        className="h-5 w-5 text-PrimaryText "
+                        className="h-5 w-5 text-white "
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     )}
@@ -206,7 +206,7 @@ export default function NavBar() {
                           <div className="flex justify-end flex-col items-center cursor-pointer">
                             <FontAwesomeIcon
                               icon={faCircleUser}
-                              className="w-7 h-7 text-PrimaryText"
+                              className="w-7 h-7 text-white"
                             />
                           </div>
                         </a>
@@ -222,12 +222,12 @@ export default function NavBar() {
                           </span>
                           <FontAwesomeIcon
                             icon={faCircleUser}
-                            className="w-6 h-6 mr-1 text-PrimaryText"
+                            className="w-6 h-6 mr-1 text-white"
                           />
                         </label>
                         <ul
                           tabIndex={0}
-                          className="menu menu-compact fixed h-[100vh] dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
+                          className="menu menu-compact fixed dropdown-content mt-3 p-2 bg-base-200 rounded-box w-52 shadow-2xl"
                         >
                           <li>
                             <Link href={'/user/profile'}>
@@ -269,7 +269,7 @@ export default function NavBar() {
                         <label className=" m-1">
                           <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
                             <ShoppingCartIcon
-                              className="h-7 w-7 text-PrimaryText hidden md:block"
+                              className="h-7 w-7 text-white hidden md:block"
                               onClick={() => setShowCart(!showCart)}
                             />
                             {cartSize && cartSize > 0 ? (
@@ -376,11 +376,11 @@ export default function NavBar() {
                 <input
                   {...register('searchMobile')}
                   type="text"
-                  className="input rounded-none w-full text-white bg-base-200 block md:hidden px-4"
+                  className="input rounded-none w-full text-info-content bg-base-200 block md:hidden px-4"
                   placeholder="Pesquisa..."
                 />
                 <button type="submit">
-                  <SearchIcon className="h-5 w-5 text-PrimaryText absolute right-4 top-4" />
+                  <SearchIcon className="h-5 w-5 text-info-content absolute right-4 top-4" />
                 </button>
               </form>
             </div>
