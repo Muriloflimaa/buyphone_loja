@@ -154,7 +154,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </div>
         </div>
         <div className="mt-10">
-          <h1 className="text-4xl font-medium text-center">Match perfeito!</h1>
+          <h1 className="text-4xl font-medium text-center">
+            Encontre seu Match!
+          </h1>
 
           <Carousel
             ref={currentRefCarroussel}
@@ -186,10 +188,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                       className="absolute w-full h-full flex border-none m-0"
                       placeholder="blur"
                       loading="lazy"
-                      src="https://www.youtube.com/embed/thSPGPnuuNg?&autoplay=1&loop=1&mute=1&controls=0&showinfo=0"
+                      src="https://www.youtube.com/embed/thSPGPnuuNg?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=thSPGPnuuNg"
                       title="YouTube video player"
                       frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     ></iframe>
                   </div>
@@ -293,7 +294,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             <CardDepoiments
               name="Anna Brisa"
               instagram="www.instagram.com/annabrisaa"
-              linkVideo="https://www.youtube.com/embed/pMftaexP7RY"
+              linkVideo="https://www.youtube.com/embed/pMftaexP7RY&controls=0&showinfo=0&playlist=OhEwSZSrRUY"
               image={AnaImg}
               profissional="Digital influencer"
               depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
@@ -301,7 +302,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             <CardDepoiments
               name="Brendha Crizel"
               instagram="www.instagram.com/brendhacrizel/"
-              linkVideo="https://www.youtube.com/embed/VswfBYbeWFU"
+              linkVideo="https://www.youtube.com/embed/VswfBYbeWFU&controls=0&showinfo=0&playlist=OhEwSZSrRUY"
               image={BrendaImg}
               profissional="Criador(a) de conteúdo digital"
               depoiment="A BuyPhone tem o melhor preço do mercado e você pode escolher como quer pagar"
@@ -309,7 +310,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             <CardDepoiments
               name="Bárbara Brunca"
               instagram="www.instagram.com/barbarabrunca/"
-              linkVideo="https://www.youtube.com/embed/OhEwSZSrRUY"
+              linkVideo="https://www.youtube.com/embed/OhEwSZSrRUY&controls=0&showinfo=0&playlist=OhEwSZSrRUY"
               image={BarbaraImg}
               profissional="Criador(a) de conteúdo digital"
               depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
