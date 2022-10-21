@@ -79,7 +79,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
         <div
           className={
-            'absolute top-0 left-16 ' +
+            'absolute -top-4 left-16 ' +
             (successMatch === false ? 'opacity-0' : 'opacity-100')
           }
         >
@@ -87,7 +87,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
         <div
           className={
-            'absolute top-0 md:right-0 ' +
+            'absolute -top-4 md:right-0 ' +
             (failMatch === false ? 'opacity-0' : 'opacity-100')
           }
         >
@@ -95,10 +95,10 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 items-center col-span-1 md:gap-5 md:items-start">
+      <div className="flex flex-col gap-2 items-center text-start col-span-1 md:gap-5 md:items-start">
         <h1 className="font-normal text-xl md:text-2xl">{data.name}</h1>
         <div>
-          <h1 className="md:text-xl">Especificações</h1>
+          <h1 className="md:text-xl text-start">Especificações</h1>
           <div className="flex gap-3 md:mt-2 text-xs">
             <span className="badge md:p-3 bg-transparent border border-info-content text-info-content">
               {data.memory}
