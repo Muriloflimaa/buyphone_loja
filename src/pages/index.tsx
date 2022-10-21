@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
@@ -13,7 +13,6 @@ import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
-import { SearchContext } from '../context/SearchContext'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -139,13 +138,18 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                 <Image
                   src={!!darkOrLigth ? BannerIphone13Dark : BannerIphone13Light}
                   quality={100}
+                  placeholder="blur"
                 ></Image>
               </a>
             </Link>
           </div>
           <div className="md:w-1/2">
             <a href="#depoiments">
-              <Image src={BannerDepoiments} quality={100}></Image>
+              <Image
+                src={BannerDepoiments}
+                placeholder="blur"
+                quality={100}
+              ></Image>
             </a>
           </div>
         </div>
@@ -174,7 +178,13 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
         <div className="mt-8">
           <div className="max-w-7xl my-8 mx-auto">
-            <Image src={Banner4} quality={100} layout="responsive"></Image>
+            <Image
+              src={Banner4}
+              placeholder="blur"
+              alt="Banner central"
+              quality={100}
+              layout="responsive"
+            ></Image>
           </div>
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
