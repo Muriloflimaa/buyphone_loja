@@ -80,7 +80,7 @@ export const CardDepoiments = ({
       <div className="flex justify-center md:w-1/3">
         <div className="w-full flex justify-center">
           <div className="w-full h-auto relative flex">
-            <div className="relative w-full h-full pb-[54.25%]">
+            <div className="relative w-full h-full pb-[56.25%]">
               <iframe
                 className="absolute w-full h-full flex border-none rounded-3xl shadow-black/40 shadow-md m-0"
                 placeholder="blur"
