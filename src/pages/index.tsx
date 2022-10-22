@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
+import Banner4 from '../assets/images/banner4.webp'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
@@ -16,17 +17,14 @@ import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
-import Banner4 from '../assets/images/banner4.webp'
 
 //banner desktop----------
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
 import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
-import Banner3DesktopLight from '../assets/images/banner3desktoplight.webp'
 //dark
 import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
 import Banner2DesktopDark from '../assets/images/banner2desktopdark.webp'
-import Banner3DesktopDark from '../assets/images/banner3desktopdark.webp'
 
 //banner desktop-----------
 //light
@@ -36,9 +34,9 @@ import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 
-import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
-import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
+import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
+import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 
 interface DataProps {
@@ -73,7 +71,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const [currentSlide, setCurrentSlide] = useState(1)

@@ -13,12 +13,11 @@ export default function RegisterMimo() {
     <>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
       <div
-        className={`modal glass bg-opacity-30 sm:modal-middle ${
-          router.query.utm_source &&
+        className={`modal backdrop-blur bg-opacity-30 sm:modal-middle ${router.query.utm_source &&
           router.query.utm_medium &&
           router.query.utm_campaign &&
           'modal-open'
-        }`}
+          }`}
       >
         <div className="modal-box max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0">
           <div className="flex justify-center items-center relative">

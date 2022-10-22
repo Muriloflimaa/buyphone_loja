@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { parseCookies, setCookie } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Theme } from 'react-daisyui'
 import { Toaster } from 'react-hot-toast'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
@@ -10,10 +10,10 @@ import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
 // import NavBar from '../components/NavBar'
+import dynamic from 'next/dynamic'
 import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
-import dynamic from 'next/dynamic'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -45,11 +45,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Theme
       dataTheme={`${process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+        ? 'dark'
+        : !!isUser && user && JSON.parse(user).type === 1
           ? 'dark'
-          : !!isUser && user && JSON.parse(user).type === 1
-            ? 'dark'
-            : 'light'
+          : 'light'
         }`}
       className="bg-base-100"
     >
