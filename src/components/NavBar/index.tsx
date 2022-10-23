@@ -369,7 +369,6 @@ export default function NavBar() {
                         </div>
                       </div>
                     )}
-                    {console.log(cookies.LEAD)}
                     <div className={`items-center flex-col mt-6 -ml-7 ${cookies.LEAD === 'true' ? 'flex' : 'hidden'}`}>
                       <div className="">
                         <label htmlFor="modal-info-discount" className="cursor-pointer">
