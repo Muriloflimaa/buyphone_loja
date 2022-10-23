@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { setCookie } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 import { FormEvent, useEffect, useState } from 'react';
 import { masktel1 } from '../../../utils/masks';
 import { ToastCustom } from '../../../utils/toastCustom';
@@ -8,6 +8,9 @@ interface IFormFields {
     EMAIL: string,
     FNAME: string,
     PHONE: string,
+    SOURCE: string,
+    MEDIUM: string,
+    CAMPAIGN: string
 }
 
 interface ICustomForm {
@@ -17,6 +20,7 @@ interface ICustomForm {
 
 export default function CustomForm({ status, onValidated }: ICustomForm) {
     const router = useRouter();
+    const cookies = parseCookies(undefined)
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -50,17 +54,21 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
         setEmail('');
         setPhone('');
     }
-
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const newCookies = JSON.parse(cookies.UTM)
         email &&
             name &&
             phone &&
+            newCookies &&
             email.indexOf("@") > -1 &&
             onValidated({
                 EMAIL: email,
                 FNAME: name,
                 PHONE: phone,
+                SOURCE: newCookies.utm_source,
+                MEDIUM: newCookies.utm_medium,
+                CAMPAIGN: newCookies.utm_campaign,
             });
     }
 
