@@ -82,7 +82,7 @@ export default function login() {
               </button>
             )}
           </div>
-          <div className="text-default flex flex-col md:flex-row items-center gap-1 justify-center">
+          <div className="text-default flex flex-col items-center gap-1 justify-center">
             Deseja criar uma conta?
             <Link href={'/register'} passHref>
               <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
