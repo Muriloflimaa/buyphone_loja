@@ -210,7 +210,7 @@ export default function Products({ data }: DataProps) {
                   }
                 >
                   <a
-                    href={`https://api.whatsapp.com/send?phone=5518981367275&text=${url}`}
+                    href={`https://api.whatsapp.com/send?text=${url}`}
                     target={'_blank'}
                   >
                     <div className="btn hover:bg-transparent btn-ghost md:hover:rotate-[360deg] transition-all duration-300">
