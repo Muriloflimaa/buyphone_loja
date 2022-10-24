@@ -7,14 +7,22 @@ import {
   SearchIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
+  TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/solid'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
 import { useContext, useEffect, useState } from 'react'
+import { Divider } from 'react-daisyui'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import Drawer from 'react-modern-drawer'
+import 'react-modern-drawer/dist/index.css'
+import * as yup from 'yup'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
@@ -22,15 +30,10 @@ import { apiStore } from '../../services/api'
 import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import LoadingComponent from '../LoadingComponent'
+import InfoDiscount from '../Modals/Info-Discount'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Drawer from 'react-modern-drawer'
-import 'react-modern-drawer/dist/index.css'
-import LoadingComponent from '../LoadingComponent'
-import { Divider } from 'react-daisyui'
 
 type SearchFormData = {
   searchMobile: string
@@ -48,6 +51,7 @@ export default function NavBar() {
   const router = useRouter()
   const [onShow, setOnShow] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
+  const cookies = parseCookies(undefined)
 
   useEffect(() => {
     if (cart) {
@@ -182,18 +186,28 @@ export default function NavBar() {
                 {/* NAVBAR LADO DIREITO */}
                 <div className="navbar-end flex justify-end md:w-auto">
                   {/* MOBILE */}
-                  <div className="block md:hidden">
+                  <div className="md:hidden flex">
                     {!showSearch ? (
                       <SearchIcon
-                        className="h-5 w-5 text-white "
+                        className="h-5 w-5 text-white"
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     ) : (
                       <XIcon
-                        className="h-5 w-5 text-white "
+                        className="h-5 w-5 text-white"
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     )}
+                    <div className={`items-center flex-col ${cookies.LEAD === 'true' ? 'flex' : 'hidden'}`}>
+                      <div className="ml-3 flex">
+                        <label htmlFor="modal-info-discount" className="cursor-pointer">
+                          <TagIcon
+                            className="h-5 w-5 text-white"
+                          />
+                        </label>
+                        <div className="w-2 h-2 rounded-full bg-info"></div>
+                      </div>
+                    </div>
                   </div>
                   {/* DESKTOP */}
                   <div className="md:flex justify-end items-center gap-5 w-full hidden">
@@ -263,7 +277,7 @@ export default function NavBar() {
                           (showCart ? 'opacity-100 visible' : '')
                         }
                       >
-                        <label className=" m-1">
+                        <label className="m-1">
                           <div className="hidden justify-end flex-col items-center cursor-pointer md:flex relative">
                             <ShoppingCartIcon
                               className="h-7 w-7 text-white hidden md:block"
@@ -295,8 +309,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                  ? cartSize + ' item'
-                                  : 'Carrinho está vazio'}
+                                    ? cartSize + ' item'
+                                    : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -355,6 +369,16 @@ export default function NavBar() {
                         </div>
                       </div>
                     )}
+                    <div className={`items-center flex-col mt-6 -ml-7 ${cookies.LEAD === 'true' ? 'flex' : 'hidden'}`}>
+                      <div className="">
+                        <label htmlFor="modal-info-discount" className="cursor-pointer">
+                          <TagIcon
+                            className="h-7 w-7 text-white hidden md:block"
+                          />
+                        </label>
+                      </div>
+                      <div className="badge badge-info text-xs mt-1">Desconto</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -554,6 +578,7 @@ export default function NavBar() {
           </div>
         </ul>
       </Drawer>
+      <InfoDiscount />
     </>
   )
 }
