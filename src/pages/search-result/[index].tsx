@@ -80,7 +80,7 @@ export default function SearchResult() {
                       price={ourPrice}
                       averagePrice={averagePrice}
                       slug={products.slug}
-                      slugCategory={products.slug}
+                      slugCategory={products.category_slug}
                       image={products.media[0].original_url}
                       memory={products.memory}
                     />
