@@ -197,7 +197,7 @@ export default function Footer() {
           <h1 className="pt-6">
             Copyright BuyPhone - 2022. Todos os direitos reservados.
           </h1>
-          <h2>CNPJ: 40.779.273/0001-09</h2>
+          <h2>CNPJ: 45.679.637/0001-94</h2>
           <h3>Araçatuba - SP, 16.018-000, Brasil</h3>
         </div>
         <h3>Criado com ❤️ por Buyphone.com.br</h3>
