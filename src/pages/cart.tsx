@@ -1,12 +1,14 @@
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ProductCart from '../components/ProductCart'
+import { AuthContext } from '../context/AuthContext'
 import { useCart } from '../context/UseCartContext'
 import { ArrayProduct } from '../types'
 import { moneyMask } from '../utils/masks'
 
 export default function Cart() {
-  const { cart, values, somaTotal } = useCart()
+  const { userData } = useContext(AuthContext)
+  const { cart, values, somaTotal, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
 
   useEffect(() => {
@@ -26,8 +28,8 @@ export default function Cart() {
             {cartSize && cartSize > 1
               ? cartSize + ' itens'
               : cartSize == 1
-              ? cartSize + ' item'
-              : ''}
+                ? cartSize + ' item'
+                : ''}
           </span>
         </div>
         <div className="flex flex-col gap-3">
@@ -53,12 +55,29 @@ export default function Cart() {
           )}
         </div>
         {cartSize && cartSize > 0 ? (
-          <div className="flex justify-between">
-            <span className="text-info-content text-lg">Valor Total:</span>
-            <span className="font-semibold text-info-content text-lg">
-              R$ {moneyMask(somaTotal?.toString())}
-            </span>
-          </div>
+          <>
+            {userData?.promotion &&
+              <div className="flex justify-between">
+                <span className="text-info-content text-lg">Desconto:</span>
+                <span className="font-semibold text-lg text-green-600">
+                  R$ - 150,00
+                </span>
+              </div>
+            }
+            <div className="flex items-center justify-between">
+              <span className="text-info-content text-lg">Valor Total:</span>
+              <div className="flex flex-col">
+                {userData?.promotion &&
+                  <span className="text-[14px] text-gray-500 line-through text-right">
+                    R$ {moneyMask((somaTotal + discountValue).toString())}
+                  </span>
+                }
+                <span className="font-semibold text-info-content text-lg">
+                  R$ {moneyMask(somaTotal?.toString())}
+                </span>
+              </div>
+            </div>
+          </>
         ) : (
           ''
         )}
