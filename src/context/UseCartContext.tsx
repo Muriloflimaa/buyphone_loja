@@ -5,13 +5,14 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
 import { useLocalStorage } from '../utils/useLocalStorage'
+import { AuthContext } from './AuthContext'
 
 interface CartProviderProps {
   children: ReactNode
@@ -34,7 +35,8 @@ interface CartContextData {
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void
   CleanCart: () => void
   values: ArrayProduct[]
-  somaTotal: string | number
+  somaTotal: number
+  discountValue: number
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
@@ -46,6 +48,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+  const { userData } = useContext(AuthContext)
+  const discountValue = 15000
 
   const [cart, setCart] = useState<Product[]>(() => {
     // Verificando se existe no localstorage o carrinho
@@ -71,11 +75,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         const discount =
           process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
             ? 12.5
             : !!isUser && user && JSON.parse(user)?.type === 1
-            ? 12.5
-            : 7
+              ? 12.5
+              : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -117,7 +121,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     for (var i = 0; i < total.length; i++) {
       soma += total[i]
     }
-    setSomaTotal(soma) //somando produtos e setando no state
+    userData?.promotion ? setSomaTotal(soma - discountValue) : setSomaTotal(soma) //somando produtos e setando no state
   }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
@@ -174,8 +178,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             3000,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Notificação'
@@ -286,6 +289,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         CleanCart,
         values,
         somaTotal,
+        discountValue
       }}
     >
       {children}

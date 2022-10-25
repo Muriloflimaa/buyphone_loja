@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
+import { AuthContext } from '../../../context/AuthContext'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStore } from '../../../services/api'
 import { Address } from '../../../types'
@@ -29,8 +30,9 @@ export default function CreditCheckout({ address }: Address) {
   const [cards, setCards] = useState<CardProps[]>([])
   const [matchCard, setMatchCard] = useState<string | null>(null)
   const router = useRouter()
-  const { values, somaTotal, CleanCart } = useCart()
+  const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
+  const { userData } = useContext(AuthContext)
 
   useEffect(() => {
     if (values) {
@@ -166,8 +168,8 @@ export default function CreditCheckout({ address }: Address) {
                   {cartSize && cartSize > 1
                     ? cartSize + ' itens'
                     : cartSize == 1
-                    ? cartSize + ' item'
-                    : 'Carrinho está vazio'}
+                      ? cartSize + ' item'
+                      : 'Carrinho está vazio'}
                 </span>
               </div>
             </div>
@@ -215,11 +217,38 @@ export default function CreditCheckout({ address }: Address) {
               )}
             </div>
             <div className="card-body bg-base-200">
-              <div className="flex justify-between py-4">
+              {userData?.promotion &&
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 text-sm">
+                      Subtotal:
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      R$ {moneyMask((somaTotal + discountValue).toString())}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 text-sm">
+                      Desconto:
+                    </span>
+                    <span className="font-semibold text-sm text-green-600">
+                      R$ -150,00
+                    </span>
+                  </div>
+                </>
+              }
+              <div className="flex justify-between py-4 items-center">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
-                <span className="font-semibold text-lg">
-                  R$ {moneyMask(somaTotal.toString())}
-                </span>
+                <div className="flex flex-col">
+                  {userData?.promotion &&
+                    <span className="text-[14px] text-gray-500 line-through text-right">
+                      R$ {moneyMask((somaTotal + discountValue).toString())}
+                    </span>
+                  }
+                  <span className="font-semibold text-lg">
+                    R$ {moneyMask(somaTotal.toString())}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
