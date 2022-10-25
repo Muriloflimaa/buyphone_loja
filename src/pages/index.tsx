@@ -320,7 +320,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               linkVideo="https://www.youtube.com/embed/OhEwSZSrRUY?autoplay=0&controls=0&showinfo=0&playlist=OhEwSZSrRUY"
               image={BarbaraImg}
               profissional="Criador(a) de conteúdo digital"
-              depoiment="BuyPhone muito bem indicada, uma amiga minha indicou"
+              depoiment="É uma nova forma muito legal, de comprar produtos da apple!"
             />
           </Carousel>
         </div>
