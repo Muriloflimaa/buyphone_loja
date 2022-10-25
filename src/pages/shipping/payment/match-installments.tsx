@@ -1,6 +1,6 @@
 import {
   faCircleCheck,
-  faCircleXmark
+  faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -105,7 +105,6 @@ export default function MatchInstallment({
         return
       }
     } catch (error: any) {
-
       console.log(error.response.data)
       if (error.response.data.errors.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
@@ -245,8 +244,8 @@ export default function MatchInstallment({
                   {cartSize && cartSize > 1
                     ? cartSize + ' itens'
                     : cartSize == 1
-                      ? cartSize + ' item'
-                      : 'Carrinho está vazio'}
+                    ? cartSize + ' item'
+                    : 'Carrinho está vazio'}
                 </span>
               </div>
             </div>
@@ -294,34 +293,30 @@ export default function MatchInstallment({
               )}
             </div>
             <div className="card-body bg-base-200">
-              {userData?.promotion &&
+              {userData?.promotion && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-500 text-sm">
-                      Subtotal:
-                    </span>
+                    <span className="text-gray-500 text-sm">Subtotal:</span>
                     <span className="text-sm text-gray-500">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500 text-sm">
-                      Desconto:
-                    </span>
+                    <span className="text-gray-500 text-sm">Desconto:</span>
                     <span className="font-semibold text-sm text-green-600">
                       R$ -150,00
                     </span>
                   </div>
                 </>
-              }
+              )}
               <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
-                  {userData?.promotion &&
+                  {userData?.promotion && (
                     <span className="text-[14px] text-gray-500 line-through text-right">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>
-                  }
+                  )}
                   <span className="font-semibold text-lg">
                     R$ {moneyMask(somaTotal.toString())}
                   </span>

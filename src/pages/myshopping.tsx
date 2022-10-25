@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react'
 import ListProducts from '../components/ListProducts'
 import { apiStore } from '../services/api'
 import { IInvoice } from '../types'
+import JuninhoImg from '../assets/images/juninho.webp'
 import { PersistentLogin } from '../utils/PersistentLogin'
+import Image from 'next/image'
 
 interface DataProps {
   current_page: number
@@ -56,13 +58,19 @@ interface PedidosProps {
 
 function MyShopping() {
   const [data, setData] = useState<DataProps>()
+  const [errorData, setErrorData] = useState(false)
   const cookies = parseCookies(undefined)
 
   async function GetInvoice() {
-    if (cookies['@BuyPhone:User']) {
-      const user = JSON.parse(cookies['@BuyPhone:User'])
-      const { data } = await apiStore(`orders/user/${user?.id}`)
-      setData(data)
+    try {
+      if (cookies['@BuyPhone:User']) {
+        const user = JSON.parse(cookies['@BuyPhone:User'])
+        const { data } = await apiStore(`orders/user/${user?.id}`)
+        console.log(data)
+        setData(data)
+      }
+    } catch (error) {
+      setErrorData(true)
     }
   }
 
@@ -119,14 +127,10 @@ function MyShopping() {
               </React.Fragment>
             )
           })
-        ) : data && data.data.length <= 0 ? (
+        ) : !!errorData ? (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
-            <img
-              src="https://loja.buyphone.com.br/img/empty.webp"
-              className="max-h-72"
-              alt="carrinho vazio"
-            />
-            <div className="">
+            <Image src={JuninhoImg} layout="fixed" width={200} height={250} />
+            <div>
               <h3 className="font-bold text-2xl">Sorria para a foto!</h3>
               <p className="opacity-50">Seu carrinho está vazio</p>
               <Link href={'/'}>
