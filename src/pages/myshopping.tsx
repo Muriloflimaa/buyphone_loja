@@ -62,6 +62,7 @@ function MyShopping() {
     if (cookies['@BuyPhone:User']) {
       const user = JSON.parse(cookies['@BuyPhone:User'])
       const { data } = await apiStore(`orders/user/${user?.id}`)
+      console.log(data)
       setData(data)
     }
   }

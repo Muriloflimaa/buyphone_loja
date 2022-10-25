@@ -59,8 +59,8 @@ export default function register() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const cookies = parseCookies(undefined)
-    const utms = JSON.parse(cookies.UTM)
-    const lead = JSON.parse(cookies.LEAD)
+    const utms = cookies.UTM && JSON.parse(cookies.UTM)
+    const lead = cookies.LEAD && JSON.parse(cookies.LEAD)
 
     const dataUTM = {
       email: values.email,
@@ -70,9 +70,9 @@ export default function register() {
       birthdate: values.birthdate,
       password: values.password,
       type: 0,
-      utm_source: utms.utm_source,
-      utm_medium: utms.utm_medium,
-      utm_campaign: utms.utm_campaign,
+      utm_source: utms?.utm_source,
+      utm_medium: utms?.utm_medium,
+      utm_campaign: utms?.utm_campaign,
       lead: lead,
     }
 
@@ -92,6 +92,7 @@ export default function register() {
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/login')
     } catch (error: any) {
+      console.log(error)
       if (
         (error.response.status == 422 &&
           !!error.response.data.errors.utm_campaign) ||
