@@ -71,7 +71,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [currentSlide, setCurrentSlide] = useState(1)
