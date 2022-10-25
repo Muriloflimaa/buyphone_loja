@@ -48,12 +48,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [userData]) //useEffect para previnir erro de renderização
 
   async function signIn({ email, password }: SignInCredentials) {
+    const cookies = parseCookies(undefined)
+    const lead = cookies.LEAD ? JSON.parse(cookies.LEAD) : null
+
     try {
       const response = await apiStore.post('/login', {
         email,
         password,
+        lead,
       })
-      const { type, name, id, profile_photo_url } = response.data.user
+      console.log(response.data)
+      const { type, name, id, profile_photo_url, promotion } = response.data.user
 
       const UserObject = {
         name: name,
@@ -61,6 +66,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         type: type,
         profile_photo_url: profile_photo_url,
         email: email,
+        lead: lead,
+        promotion: promotion
       }
       const token = response.data.authorization.token
 

@@ -16,6 +16,7 @@ export default function pix({ address }: Address) {
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const router = useRouter()
+  const discountValue = 15000
 
   useEffect(() => {
     if (values) {
@@ -144,11 +145,13 @@ export default function pix({ address }: Address) {
             <div className="flex justify-between gap-4 w-full">
               <div className="flex flex-col">
                 <strong>Subtotal</strong>
+                <strong>Desconto</strong>
                 <strong>Frete</strong>
               </div>
               <div className="flex flex-col">
-                <span> R$ {moneyMask(somaTotal.toString())}</span>
-                <span>Grátis</span>
+                <span> R$ {moneyMask((somaTotal + discountValue).toString())}</span>
+                {user?.promotion && <span className="text-green-600"> R$ -{moneyMask(discountValue.toString())}</span>}
+                <span className="text-green-600">Grátis</span>
               </div>
             </div>
           </div>

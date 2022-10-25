@@ -43,7 +43,7 @@ type SearchFormData = {
 export default function NavBar() {
   const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
-  const { cart, values, somaTotal } = useCart()
+  const { cart, values, somaTotal, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [showCart, setShowCart] = useState(false)
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
@@ -341,14 +341,33 @@ export default function NavBar() {
                           </div>
                           <div className="card-body bg-base-200">
                             {somaTotal > 0 ? (
-                              <div className="flex justify-between py-4">
-                                <span className="text-gray-500 text-lg">
-                                  Valor Total:
-                                </span>
-                                <span className="font-semibold text-lg">
-                                  R$ {moneyMask(somaTotal.toString())}
-                                </span>
-                              </div>
+                              <>
+                                {userData?.promotion &&
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-500 text-sm">
+                                      Desconto:
+                                    </span>
+                                    <span className="font-semibold text-sm text-green-600">
+                                      R$ -150,00
+                                    </span>
+                                  </div>
+                                }
+                                <div className="flex justify-between items-center py-4">
+                                  <span className="text-gray-500 text-lg">
+                                    Valor Total:
+                                  </span>
+                                  <div className="flex flex-col">
+                                    {userData?.promotion &&
+                                      <span className="text-[14px] text-gray-500 line-through text-right">
+                                        R$ {moneyMask((somaTotal + discountValue).toString())}
+                                      </span>
+                                    }
+                                    <span className="font-semibold text-lg">
+                                      R$ {moneyMask(somaTotal.toString())}
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
                             ) : (
                               ''
                             )}

@@ -8,10 +8,11 @@ import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Installments from '../../../components/Installments'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
+import { AuthContext } from '../../../context/AuthContext'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStore } from '../../../services/api'
 import { ArrayProduct, ProductPayment } from '../../../types'
@@ -51,12 +52,13 @@ interface installmentsProps {
 export default function MatchInstallment({
   GetInfoCredit,
 }: GetInfoCreditProps) {
-  const { values, somaTotal, CleanCart } = useCart()
+  const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
   const [installments, setInstallments] = useState<installmentsProps>()
+  const { userData } = useContext(AuthContext)
 
   const router = useRouter()
 
@@ -103,6 +105,7 @@ export default function MatchInstallment({
         return
       }
     } catch (error: any) {
+      console.log(error.response.data)
       if (error.response.data.errors.document) {
         ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
         destroyCookie(null, '@BuyPhone:CreditCardInfo')
@@ -290,11 +293,34 @@ export default function MatchInstallment({
               )}
             </div>
             <div className="card-body bg-base-200">
+              {userData?.promotion && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 text-sm">Subtotal:</span>
+                    <span className="text-sm text-gray-500">
+                      R$ {moneyMask((somaTotal + discountValue).toString())}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500 text-sm">Desconto:</span>
+                    <span className="font-semibold text-sm text-green-600">
+                      R$ -150,00
+                    </span>
+                  </div>
+                </>
+              )}
               <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
-                <span className="font-semibold text-lg">
-                  R$ {moneyMask(somaTotal.toString())}
-                </span>
+                <div className="flex flex-col">
+                  {userData?.promotion && (
+                    <span className="text-[14px] text-gray-500 line-through text-right">
+                      R$ {moneyMask((somaTotal + discountValue).toString())}
+                    </span>
+                  )}
+                  <span className="font-semibold text-lg">
+                    R$ {moneyMask(somaTotal.toString())}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

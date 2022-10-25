@@ -110,10 +110,14 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
         <div className="text-center md:text-start">
           <h1 className="opacity-80 text-base font-medium line-through decoration-red-600">
-            R$ {moneyMask(returnPrice.averagePrice.toString())}
+            {returnPrice.averagePrice <= 0
+              ? 'Esgotado'
+              : `R$ ${moneyMask(returnPrice.averagePrice.toString())}`}
           </h1>
           <h2 className="text-2xl font-medium">
-            R$ {moneyMask(returnPrice.ourPrice.toString())}
+            {returnPrice.ourPrice <= 0
+              ? 'Esgotado'
+              : `R$ ${moneyMask(returnPrice.ourPrice.toString())}`}
           </h2>
         </div>
         <div className="flex gap-3">
@@ -131,12 +135,21 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
               />
             </button>
           </Link>
-          <button
-            onClick={() => handleAddProduct(data.id, 'success')}
-            className="btn btn-circle bg-transparent text-success hover:bg-success hover:text-white border-success rounded-full"
-          >
-            <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
-          </button>
+          {returnPrice.ourPrice <= 0 ? (
+            <button
+              onClick={() => handleAddProduct(data.id, 'success')}
+              className="btn btn-circle btn-disabled text-success hover:bg-success hover:text-white border-success rounded-full"
+            >
+              <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
+            </button>
+          ) : (
+            <button
+              onClick={() => handleAddProduct(data.id, 'success')}
+              className="btn btn-circle bg-transparent text-success hover:bg-success hover:text-white border-success rounded-full"
+            >
+              <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
+            </button>
+          )}
         </div>
       </div>
     </div>
