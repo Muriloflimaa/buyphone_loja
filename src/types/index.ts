@@ -96,6 +96,7 @@ export interface IUser {
   email?: string
   profile_photo_url: string
   type: number
+  promotion: boolean
 }
 
 export interface IUserOrder {
