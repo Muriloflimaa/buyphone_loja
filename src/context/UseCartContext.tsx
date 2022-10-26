@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -75,11 +75,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         const discount =
           process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
             ? 12.5
             : !!isUser && user && JSON.parse(user)?.type === 1
-              ? 12.5
-              : 7
+            ? 12.5
+            : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -121,7 +121,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     for (var i = 0; i < total.length; i++) {
       soma += total[i]
     }
-    userData?.promotion ? setSomaTotal(soma - discountValue) : setSomaTotal(soma) //somando produtos e setando no state
+    userData?.promotion
+      ? setSomaTotal(soma - discountValue)
+      : setSomaTotal(soma) //somando produtos e setando no state
   }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
@@ -171,14 +173,25 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (productExists) {
           // se sim incrementa a quantidade
           productExists.amount = newAmount
+          const addProduct = await apiStore.get(`products/${productId}`)
+          const products = addProduct.data
+          ToastCustom(
+            300,
+            `${products?.name} ${
+              products?.color
+            } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
+            'success',
+            'Notificação'
+          )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
           const addProduct = await apiStore.get(`products/${productId}`)
           const products = addProduct.data
 
           ToastCustom(
-            3000,
-            `${products?.name} ${products?.color
+            300,
+            `${products?.name} ${
+              products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Notificação'
@@ -289,7 +302,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         CleanCart,
         values,
         somaTotal,
-        discountValue
+        discountValue,
       }}
     >
       {children}
