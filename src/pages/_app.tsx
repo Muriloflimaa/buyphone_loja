@@ -15,6 +15,7 @@ import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
+import { hotjar } from 'react-hotjar'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
@@ -41,6 +42,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       setIsUser(true)
     }
   }, [user]) //realiza verificacao de user para nao dar erro de renderização
+
+  useEffect(() => {
+    hotjar.initialize(3219704, 6)
+  }, [])
 
   return (
     <Theme

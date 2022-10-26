@@ -2111,6 +2111,11 @@ react-hot-toast@^2.3.0:
   dependencies:
     goober "^2.1.10"
 
+react-hotjar@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-hotjar/-/react-hotjar-5.2.0.tgz#ffcfda7eeea6e2816fde6c18a050901674b25f8e"
+  integrity sha512-HLP87fOvEMjstFoJ63M9SAUJQPXcOoT3vT6jZfv4QmKQI5PWIH/ao+eiTkWfvXqnv3WlOi9t7y9EmvLAgqs8hQ==
+
 react-inner-image-zoom@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/react-inner-image-zoom/-/react-inner-image-zoom-3.0.2.tgz#4511fd80005f3dc4b73653ac4a9c67947ecac130"
