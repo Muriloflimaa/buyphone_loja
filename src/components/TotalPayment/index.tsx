@@ -8,29 +8,36 @@ export const TotalPayment = () => {
   const { userData } = useContext(AuthContext)
   return (
     <React.Fragment>
-      <div className="flex flex-col md:flex-row text-center md:text-start justify-between pt-10 md:pt-4 px-4">
+      <div className="flex flex-col md:flex-row text-center items-center md:text-start justify-between px-4">
         <span>Resumo</span>
         {somaTotal > 0 ? (
           <>
             {userData?.promotion ? (
-              <div className="flex items-center">
-                <span className="font-semibold text-lg mr-5">
-                  Valor total:
-                </span>
-                <div className="flex flex-col justify-center">
-                  <span className="text-[14px] text-gray-500 line-through text-right">
+              <div className="flex gap-4">
+                <div className="flex flex-col">
+                  <strong>Subtotal: </strong>
+                  <strong>Desconto: </strong>
+                  <strong>Valor total: </strong>
+                </div>
+                <div className="flex flex-col">
+                  <span>
                     R$ {moneyMask((somaTotal + discountValue).toString())}
                   </span>
-                  <span className="font-semibold text-lg">
+                  {userData?.promotion && (
+                    <span className="text-green-600">
+                      R$ -{moneyMask(discountValue.toString())}
+                    </span>
+                  )}
+                  <span className="font-semibold">
                     R$ {moneyMask(somaTotal.toString())}
                   </span>
                 </div>
               </div>
-            ) :
+            ) : (
               <span className="font-semibold text-lg">
                 Valor total: R$ {moneyMask(somaTotal.toString())}
               </span>
-            }
+            )}
           </>
         ) : null}
       </div>

@@ -1,11 +1,6 @@
-import {
-  faCircleCheck,
-  faCircleXmark,
-} from '@fortawesome/free-regular-svg-icons'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
@@ -15,24 +10,9 @@ import { TotalPayment } from '../../../components/TotalPayment'
 import { AuthContext } from '../../../context/AuthContext'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStore } from '../../../services/api'
-import { ArrayProduct, ProductPayment } from '../../../types'
 import { moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
-
-interface GetInfoCreditProps {
-  GetInfoCredit: {
-    address_id: number
-    amount: number
-    card_cvv: number
-    card_holder_name: string
-    card_number: number
-    document: string
-    expiration_date: string
-    items: Array<{}>
-    shippingPrice: number
-    user_id: number
-  }
-}
+import { setCookies } from '../../../utils/useCookies'
 
 interface installmentsProps {
   1: number | string
@@ -49,14 +29,27 @@ interface installmentsProps {
   12: number | string
 }
 
+interface GetInfoCreditProps {
+  GetInfoCredit: {
+    address_id: number
+    amount: number
+    card_cvv: number
+    card_holder_name: string
+    card_number: number
+    document: string
+    expiration_date: string
+    items: Array<{}>
+    shippingPrice: number
+    user_id: number
+  }
+}
+
 export default function MatchInstallment({
   GetInfoCredit,
 }: GetInfoCreditProps) {
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
-  const [stateModalSuccess, setStateModalSuccess] = useState(false)
-  const [stateModalError, setStateModalError] = useState(false)
   const [installments, setInstallments] = useState<installmentsProps>()
   const { userData } = useContext(AuthContext)
 
@@ -73,48 +66,13 @@ export default function MatchInstallment({
   }, [somaTotal])
 
   async function handleCard() {
-    try {
-      const setDat: ProductPayment[] = []
-      values.map(async (item: ArrayProduct) => {
-        const response = {
-          product_id: item.id,
-          price: item.priceFormated,
-          qty: item.amount,
-        }
-        setDat.push(response)
-      })
-
-      const infoData = {
-        ...GetInfoCredit,
-        items: setDat,
-        installments: matchInstallments,
-      }
-
-      const data: { data: { status: string } } = await apiStore.post(
-        `checkout/credit-card`,
-        infoData
-      )
-
-      if (data.data.status === 'paid') {
-        setStateModalSuccess(true)
-        CleanCart()
-        destroyCookie(null, '@BuyPhone:GetCep')
-        destroyCookie(null, '@BuyPhone:CreditCardInfo')
-      } else {
-        setStateModalError(true)
-        return
-      }
-    } catch (error: any) {
-      console.log(error.response.data)
-      if (error.response.data.errors.document) {
-        ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
-        destroyCookie(null, '@BuyPhone:CreditCardInfo')
-        router.push('/shipping/payment/credit')
-        return
-      }
-
-      setStateModalError(true)
+    const infoData = {
+      ...GetInfoCredit,
+      installments: matchInstallments,
     }
+    destroyCookie(null, '@BuyPhone:CreditCardInfo')
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 60)
+    router.push('/shipping/payment/credit-finally')
   }
 
   async function getInstallments() {
@@ -142,74 +100,7 @@ export default function MatchInstallment({
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
       <TotalPayment />
-      {stateModalSuccess && (
-        <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
-          <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-            <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
-              <FontAwesomeIcon
-                icon={faCircleCheck}
-                className="h-20 w-h-20 mx-auto"
-              />
-              <h3 className="font-bold text-2xl mt-3">Sucesso!</h3>
-            </div>
 
-            <div className="m-0 mt-44"></div>
-            <p className="font-bold text-lg text-success">
-              Obrigado pela sua compra!
-            </p>
-            <span className="mb-6 text-success">
-              O seu pedido foi aceito. <br />
-              Você irá receber uma notificação com os detalhes do pedido no seu
-              e-mail.
-            </span>
-
-            <Link href={'/myshopping'} passHref>
-              <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
-                Ok
-              </button>
-            </Link>
-            <Link href={'/'} passHref>
-              <a className="link  md:mb-0 text-success">
-                Ir para página inicial
-              </a>
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {stateModalError && (
-        <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
-          <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-            <div className="bg-error shadow-sm shadow-error w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
-              <FontAwesomeIcon icon={faCircleXmark} className="h-20 w-h-20" />
-              <h3 className="font-bold text-2xl">Falha!</h3>
-            </div>
-
-            <div className="divider m-0 mt-36"></div>
-            <p className="font-bold text-lg text-error">
-              Ops, ocorreu alguma falha no pagamento!
-            </p>
-            <span className="mb-6 text-error">
-              Tente novamente ou contate o nosso suporte.
-            </span>
-
-            <button
-              onClick={() => setStateModalError(false)}
-              className="btn btn-error max-w-xs text-white w-full rounded-full shadow-md shadow-error/60"
-            >
-              Tentar novamente
-            </button>
-
-            <a
-              target={'_blank'}
-              href="#link-para-suporte"
-              className="link  md:mb-0 text-error"
-            >
-              Contatar o suporte
-            </a>
-          </div>
-        </div>
-      )}
       <div>
         <h2 className="text-2xl md:text-3xl font-medium text-center md:text-start my-6">
           Em quantas vezes?
@@ -231,7 +122,7 @@ export default function MatchInstallment({
                   (matchInstallments ? 'btn-info' : 'btn-disabled')
                 }
               >
-                Finalizar compra
+                Avançar
                 <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
               </button>
             </div>
