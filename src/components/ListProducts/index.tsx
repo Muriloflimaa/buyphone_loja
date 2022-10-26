@@ -86,10 +86,12 @@ const ListProducts = ({
   }
 
   async function handleChangePagination() {
-    try {
-      const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
-      setImage(data.qrcode)
-    } catch (error) {}
+    if (method === 'PIX') {
+      try {
+        const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
+        setImage(data.qrcode)
+      } catch (error) {}
+    }
   }
 
   return (

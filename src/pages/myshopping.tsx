@@ -66,7 +66,6 @@ function MyShopping() {
       if (cookies['@BuyPhone:User']) {
         const user = JSON.parse(cookies['@BuyPhone:User'])
         const { data } = await apiStore(`orders/user/${user?.id}`)
-        console.log(data)
         setData(data)
       }
     } catch (error) {
@@ -105,8 +104,9 @@ function MyShopping() {
         {data && data?.data.length >= 0 ? (
           data?.data.map((pedido) => {
             return (
-              <React.Fragment key={pedido.id}>
+              <React.Fragment>
                 <ListProducts
+                  key={pedido.id}
                   created={pedido.created_at}
                   statuspayment={pedido.invoice?.status}
                   number={pedido.id}
