@@ -8,6 +8,7 @@ import {
   ShoppingBagIcon,
   ShoppingCartIcon,
   TagIcon,
+  TrashIcon,
   UserCircleIcon,
   UserIcon,
   XIcon,
@@ -43,7 +44,7 @@ type SearchFormData = {
 export default function NavBar() {
   const { signOut, userData, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
-  const { cart, values, somaTotal, discountValue } = useCart()
+  const { cart, values, somaTotal, discountValue, isAttCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [showCart, setShowCart] = useState(false)
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
@@ -323,7 +324,46 @@ export default function NavBar() {
                           </div>
 
                           <div className="card-body max-h-80 overflow-y-auto gap-6">
-                            {cartSize && cartSize > 0 ? (
+                            {cartSize && cartSize > 0 && !!isAttCart ? (
+                              [1, 2].map(() => (
+                                <div className="rounded-md max-w-sm w-full ">
+                                  <div className="animate-pulse flex w-full">
+                                    <div
+                                      className="flex justify-between w-full"
+                                      data-testid="product"
+                                    >
+                                      <div className="grid grid-cols-2 col-span-2 w-full">
+                                        <div className="w-12 h-full flex items-center">
+                                          <img
+                                            className="blur"
+                                            src={
+                                              'https://buyphone-files.s3.us-east-2.amazonaws.com/2531/11-BRANCO.webp'
+                                            }
+                                          />
+                                        </div>
+
+                                        <div className="flex flex-col w-1/2 gap-2 justify-between">
+                                          <div className="grid gap-2">
+                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
+
+                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
+                                          </div>
+
+                                          <div className="h-2 w-full bg-slate-300 rounded "></div>
+                                        </div>
+                                      </div>
+                                      <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
+                                        <div className="h-2 w-full bg-slate-300 rounded "></div>
+
+                                        <div className="flex w-full justify-end">
+                                          <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            ) : cartSize && cartSize > 0 ? (
                               values.map(
                                 (res) =>
                                   res.id && (
@@ -347,7 +387,26 @@ export default function NavBar() {
                             )}
                           </div>
                           <div className="card-body bg-base-200">
-                            {somaTotal > 0 ? (
+                            {cartSize && cartSize > 0 && !!isAttCart ? (
+                              <div className="flex justify-between items-center py-4">
+                                <span className="text-gray-500 text-lg">
+                                  Valor Total:
+                                </span>
+                                <div className="flex flex-col">
+                                  {userData?.promotion && (
+                                    <span className="text-[14px] text-gray-500 line-through text-right">
+                                      R${' '}
+                                      {moneyMask(
+                                        (somaTotal + discountValue).toString()
+                                      )}
+                                    </span>
+                                  )}
+                                  <span className="font-semibold text-lg animate-pulse blur-sm">
+                                    R$ xxxx
+                                  </span>
+                                </div>
+                              </div>
+                            ) : somaTotal > 0 ? (
                               <>
                                 {userData?.promotion && (
                                   <div className="flex justify-between">

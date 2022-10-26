@@ -37,6 +37,7 @@ interface CartContextData {
   values: ArrayProduct[]
   somaTotal: number
   discountValue: number
+  isAttCart: boolean
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
@@ -48,6 +49,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+  const [isAttCart, setIsAttCart] = useState(false) //state para mostrar que esta buscando produtos na api
   const { userData } = useContext(AuthContext)
   const discountValue = 15000
 
@@ -69,6 +71,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   useEffect(() => {
     setData([]) //zera o array do data
+    setIsAttCart(true)
     cart.map(async (item) => {
       try {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
@@ -101,6 +104,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         }
 
         setData((data) => [...data, response]) //gravando response no state
+        setIsAttCart(false)
       } catch (error) {
         CleanCart()
       }
@@ -241,7 +245,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         updatedCart.splice(productIndex, 1)
         setCart(updatedCart)
         ToastCustom(
-          3000,
+          300,
           `${name} ${color} - ${memory.toUpperCase()} removido do carrinho!`,
           'error',
           'Que pena...'
@@ -303,6 +307,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         values,
         somaTotal,
         discountValue,
+        isAttCart,
       }}
     >
       {children}
