@@ -14,7 +14,9 @@ import dynamic from 'next/dynamic'
 import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
+import * as gtag from '../../gtag'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
+import { hotjar } from 'react-hotjar'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
@@ -37,10 +39,24 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, [router])
 
   useEffect(() => {
+    const handleRouteChange = (url: any) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
+
+  useEffect(() => {
     if (user) {
       setIsUser(true)
     }
   }, [user]) //realiza verificacao de user para nao dar erro de renderização
+
+  useEffect(() => {
+    hotjar.initialize(3219704, 6)
+  }, [])
 
   return (
     <Theme
