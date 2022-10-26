@@ -10,7 +10,7 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
@@ -198,12 +198,17 @@ export default function NavBar() {
                         onClick={() => setShowSearch(!showSearch)}
                       />
                     )}
-                    <div className={`items-center flex-col ${cookies.LEAD === 'true' ? 'flex' : 'hidden'}`}>
+                    <div
+                      className={`items-center flex-col ${
+                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
+                      }`}
+                    >
                       <div className="ml-3 flex">
-                        <label htmlFor="modal-info-discount" className="cursor-pointer">
-                          <TagIcon
-                            className="h-5 w-5 text-white"
-                          />
+                        <label
+                          htmlFor="modal-info-discount"
+                          className="cursor-pointer"
+                        >
+                          <TagIcon className="h-5 w-5 text-white" />
                         </label>
                         <div className="w-2 h-2 rounded-full bg-info"></div>
                       </div>
@@ -250,15 +255,17 @@ export default function NavBar() {
                               <a>Minhas Compras</a>
                             </Link>
                           </li>
-                          <li>
-                            <button
-                              className="text-left w-full"
-                              type="submit"
-                              onClick={() => signOut()}
-                            >
-                              Sair
-                            </button>
-                          </li>
+                          {userData && (
+                            <li>
+                              <button
+                                className="text-left w-full"
+                                type="submit"
+                                onClick={() => signOut()}
+                              >
+                                Sair
+                              </button>
+                            </li>
+                          )}
                         </ul>
                       </div>
                     )}
@@ -309,8 +316,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -342,7 +349,7 @@ export default function NavBar() {
                           <div className="card-body bg-base-200">
                             {somaTotal > 0 ? (
                               <>
-                                {userData?.promotion &&
+                                {userData?.promotion && (
                                   <div className="flex justify-between">
                                     <span className="text-gray-500 text-sm">
                                       Desconto:
@@ -351,17 +358,20 @@ export default function NavBar() {
                                       R$ -150,00
                                     </span>
                                   </div>
-                                }
+                                )}
                                 <div className="flex justify-between items-center py-4">
                                   <span className="text-gray-500 text-lg">
                                     Valor Total:
                                   </span>
                                   <div className="flex flex-col">
-                                    {userData?.promotion &&
+                                    {userData?.promotion && (
                                       <span className="text-[14px] text-gray-500 line-through text-right">
-                                        R$ {moneyMask((somaTotal + discountValue).toString())}
+                                        R${' '}
+                                        {moneyMask(
+                                          (somaTotal + discountValue).toString()
+                                        )}
                                       </span>
-                                    }
+                                    )}
                                     <span className="font-semibold text-lg">
                                       R$ {moneyMask(somaTotal.toString())}
                                     </span>
@@ -388,15 +398,22 @@ export default function NavBar() {
                         </div>
                       </div>
                     )}
-                    <div className={`items-center flex-col mt-6 -ml-7 ${cookies.LEAD === 'true' ? 'flex' : 'hidden'}`}>
+                    <div
+                      className={`items-center flex-col mt-6 -ml-7 ${
+                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
+                      }`}
+                    >
                       <div className="">
-                        <label htmlFor="modal-info-discount" className="cursor-pointer">
-                          <TagIcon
-                            className="h-7 w-7 text-white hidden md:block"
-                          />
+                        <label
+                          htmlFor="modal-info-discount"
+                          className="cursor-pointer"
+                        >
+                          <TagIcon className="h-7 w-7 text-white hidden md:block" />
                         </label>
                       </div>
-                      <div className="badge badge-info text-xs mt-1">Desconto</div>
+                      <div className="badge badge-info text-xs mt-1">
+                        Desconto
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -582,18 +599,19 @@ export default function NavBar() {
                 </Link>
               </div>
             </div>
-
-            <div
-              className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
-              onClick={toggleDrawer}
-            >
-              <div onClick={() => signOut()}>
-                <div className="flex gap-3 items-center w-full mt-2">
-                  <LogoutIcon className="h-5 w-5 text-info-content" />
-                  <span className="text-info-content">Sair</span>
+            {userData && (
+              <div
+                className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
+                onClick={toggleDrawer}
+              >
+                <div onClick={() => signOut()}>
+                  <div className="flex gap-3 items-center w-full mt-2">
+                    <LogoutIcon className="h-5 w-5 text-info-content" />
+                    <span className="text-info-content">Sair</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </ul>
       </Drawer>
