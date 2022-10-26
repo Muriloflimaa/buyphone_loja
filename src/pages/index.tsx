@@ -71,7 +71,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [currentSlide, setCurrentSlide] = useState(1)
@@ -194,15 +194,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="block md:hidden">
-              <Image
-                src={Banner4}
-                placeholder="blur"
-                alt="Banner central"
-                quality={100}
-                layout="responsive"
-              ></Image>
             </div>
           </div>
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">

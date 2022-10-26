@@ -175,13 +175,13 @@ export default function Footer() {
             <h3 className="font-bold text-lg mb-3">Parceiros</h3>
             <ul className="text-sm flex gap-2">
               <li>
-                <Image src={Parc1Svg} layout="fixed"></Image>
+                <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
               </li>
               <li>
-                <Image src={Parc2Svg} layout="fixed"></Image>
+                <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
               </li>
               <li>
-                <Image src={Parc3Svg} layout="fixed"></Image>
+                <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
               </li>
               <li></li>
             </ul>

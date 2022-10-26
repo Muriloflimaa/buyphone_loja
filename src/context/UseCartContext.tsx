@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -37,6 +37,7 @@ interface CartContextData {
   values: ArrayProduct[]
   somaTotal: number
   discountValue: number
+  isAttCart: boolean
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData)
@@ -48,6 +49,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+  const [isAttCart, setIsAttCart] = useState(false) //state para mostrar que esta buscando produtos na api
   const { userData } = useContext(AuthContext)
   const discountValue = 15000
 
@@ -69,17 +71,18 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   useEffect(() => {
     setData([]) //zera o array do data
+    setIsAttCart(true)
     cart.map(async (item) => {
       try {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
         const discount =
           process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
             ? 12.5
             : !!isUser && user && JSON.parse(user)?.type === 1
-              ? 12.5
-              : 7
+            ? 12.5
+            : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -101,6 +104,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         }
 
         setData((data) => [...data, response]) //gravando response no state
+        setIsAttCart(false)
       } catch (error) {
         CleanCart()
       }
@@ -121,7 +125,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     for (var i = 0; i < total.length; i++) {
       soma += total[i]
     }
-    userData?.promotion ? setSomaTotal(soma - discountValue) : setSomaTotal(soma) //somando produtos e setando no state
+    userData?.promotion
+      ? setSomaTotal(soma - discountValue)
+      : setSomaTotal(soma) //somando produtos e setando no state
   }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
@@ -171,14 +177,25 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (productExists) {
           // se sim incrementa a quantidade
           productExists.amount = newAmount
+          const addProduct = await apiStore.get(`products/${productId}`)
+          const products = addProduct.data
+          ToastCustom(
+            300,
+            `${products?.name} ${
+              products?.color
+            } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
+            'success',
+            'Notificação'
+          )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
           const addProduct = await apiStore.get(`products/${productId}`)
           const products = addProduct.data
 
           ToastCustom(
-            3000,
-            `${products?.name} ${products?.color
+            300,
+            `${products?.name} ${
+              products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Notificação'
@@ -228,7 +245,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         updatedCart.splice(productIndex, 1)
         setCart(updatedCart)
         ToastCustom(
-          3000,
+          300,
           `${name} ${color} - ${memory.toUpperCase()} removido do carrinho!`,
           'error',
           'Que pena...'
@@ -289,7 +306,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         CleanCart,
         values,
         somaTotal,
-        discountValue
+        discountValue,
+        isAttCart,
       }}
     >
       {children}

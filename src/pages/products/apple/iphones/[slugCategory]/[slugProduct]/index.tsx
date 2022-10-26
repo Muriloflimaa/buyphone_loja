@@ -135,6 +135,22 @@ export default function Products({ data }: DataProps) {
         <title>
           BuyPhone - {data.name + ' Apple ' + data.memory + ' ' + data.color}
         </title>
+        <meta property="og:image" content={data.media[0].original_url} />
+        <meta property="og:image:type" content="image/png"></meta>
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="600" />
+        <meta property="og:url" content={url}></meta>
+        <meta property="og:locale" content="pt_BR"></meta>
+        <meta
+          property="og:description"
+          content="Na BuyPhone você encontra iPhones pelo melhor preço, com entrega rápida e frete grátis!"
+        ></meta>
+        <meta
+          property="og:title"
+          content={`BuyPhone - ${
+            data.name + ' Apple ' + data.memory + ' ' + data.color
+          }`}
+        ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
         <h1 className="font-medium flex items-start gap-2">

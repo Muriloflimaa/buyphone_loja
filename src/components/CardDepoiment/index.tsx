@@ -35,20 +35,22 @@ export const CardDepoiments = ({
   linkVideo,
 }: Props) => {
   return (
-    <div className="w-full flex flex-col md:flex-row max-w-5xl mx-auto p-10 card shadow-lg">
+    <div className="w-full flex flex-col md:flex-row max-w-5xl mx-auto p-14 card shadow-lg">
       <div className="md:w-2/3">
         <div className="flex gap-3 relative">
-          <div className={styles.effect_border}>
-            <Image
-              className={'mask mask-circle '}
-              src={image}
-              alt={name}
-              width={130}
-              height={130}
-              layout="fixed"
-              placeholder="blur"
-            />
-          </div>
+          <a target={'_blank'} href={`https://${instagram}`}>
+            <div className={styles.effect_border}>
+              <Image
+                className={'mask mask-circle '}
+                src={image}
+                alt={name}
+                width={130}
+                height={130}
+                layout="fixed"
+                placeholder="blur"
+              />
+            </div>
+          </a>
 
           <div className="flex flex-col items-start text-info-content">
             <span className="flex items-center gap-1">
