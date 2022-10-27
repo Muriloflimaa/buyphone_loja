@@ -226,7 +226,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:cart': cart } = parseCookies(ctx)
   const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
 
-  if (getDataUser && cart !== '[]') {
+  if (getDataUser && cart !== '[]' && GetInfo) {
     const GetInfoCredit = JSON.parse(GetInfo)
     return {
       props: { GetInfoCredit },
