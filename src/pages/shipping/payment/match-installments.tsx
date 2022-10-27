@@ -6,7 +6,6 @@ import { destroyCookie, parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
 import Installments from '../../../components/Installments'
 import ProductCart from '../../../components/ProductCart'
-import { TotalPayment } from '../../../components/TotalPayment'
 import { AuthContext } from '../../../context/AuthContext'
 import { useCart } from '../../../context/UseCartContext'
 import { apiStore } from '../../../services/api'
@@ -50,6 +49,7 @@ export default function MatchInstallment({
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
+  const [valueInstallments, setValueInstallments] = useState<string>('')
   const [installments, setInstallments] = useState<installmentsProps>()
   const { userData } = useContext(AuthContext)
 
@@ -71,7 +71,8 @@ export default function MatchInstallment({
       installments: matchInstallments,
     }
     destroyCookie(null, '@BuyPhone:CreditCardInfo')
-    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 60)
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 120)
+    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 120)
     router.push('/shipping/payment/credit-finally')
   }
 
@@ -99,8 +100,6 @@ export default function MatchInstallment({
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
-      <TotalPayment />
-
       <div>
         <h2 className="text-2xl md:text-3xl font-medium text-center md:text-start my-6">
           Em quantas vezes?
@@ -110,6 +109,7 @@ export default function MatchInstallment({
             {installments && (
               <Installments
                 setMatchInstallments={setMatchInstallments}
+                setValueInstallments={setValueInstallments}
                 props={installments}
               />
             )}
@@ -200,7 +200,7 @@ export default function MatchInstallment({
                   </div>
                 </>
               )}
-              <div className="flex justify-between py-4">
+              {/* <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
                   {userData?.promotion && (
@@ -212,7 +212,7 @@ export default function MatchInstallment({
                     R$ {moneyMask(somaTotal.toString())}
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

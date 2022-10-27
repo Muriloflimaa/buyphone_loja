@@ -73,10 +73,9 @@ export default function CreditCheckout({ address }: Address) {
         user_id: cards[0].user_id,
         address_id: address.id,
         shippingPrice: 0,
-        amount: somaTotal,
       }
 
-      setCookies('@BuyPhone:CreditCardInfo', data, 60 * 60)
+      setCookies('@BuyPhone:CreditCardInfo', data, 120)
       router.push('/shipping/payment/match-installments')
 
       return
@@ -168,8 +167,8 @@ export default function CreditCheckout({ address }: Address) {
                   {cartSize && cartSize > 1
                     ? cartSize + ' itens'
                     : cartSize == 1
-                      ? cartSize + ' item'
-                      : 'Carrinho está vazio'}
+                    ? cartSize + ' item'
+                    : 'Carrinho está vazio'}
                 </span>
               </div>
             </div>
@@ -217,34 +216,30 @@ export default function CreditCheckout({ address }: Address) {
               )}
             </div>
             <div className="card-body bg-base-200">
-              {userData?.promotion &&
+              {userData?.promotion && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-500 text-sm">
-                      Subtotal:
-                    </span>
+                    <span className="text-gray-500 text-sm">Subtotal:</span>
                     <span className="text-sm text-gray-500">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500 text-sm">
-                      Desconto:
-                    </span>
+                    <span className="text-gray-500 text-sm">Desconto:</span>
                     <span className="font-semibold text-sm text-green-600">
                       R$ -150,00
                     </span>
                   </div>
                 </>
-              }
+              )}
               <div className="flex justify-between py-4 items-center">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
-                  {userData?.promotion &&
+                  {userData?.promotion && (
                     <span className="text-[14px] text-gray-500 line-through text-right">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>
-                  }
+                  )}
                   <span className="font-semibold text-lg">
                     R$ {moneyMask(somaTotal.toString())}
                   </span>

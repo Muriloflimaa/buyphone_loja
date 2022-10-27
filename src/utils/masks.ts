@@ -6,6 +6,26 @@ export const moneyMask = (value: string) => {
   return tmp
 }
 
+export const maskReais = (el: string, installments: number) => {
+  const elSplit = el.split('$')[1]
+  const convert = (
+    (Number(elSplit.replace(/\D/g, '')) * installments) /
+    100
+  ).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+
+  return convert
+}
+
+export const maskRl = (el: string, installments: number) => {
+  const elSplit = el.split('$')[1]
+  const convert = (Number(elSplit.replace(/\D/g, '')) * installments) / 100
+
+  return Number(convert.toString().replace('.', ''))
+}
+
 export const date = (date: string) => {
   const convert = new Date(date).toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo',

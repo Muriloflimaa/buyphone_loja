@@ -17,15 +17,22 @@ interface InstallmentsProps {
     12: number | string
   }
   setMatchInstallments: (props: any) => void
+  setValueInstallments: (props: any) => void
 }
 
-const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
+const Installments = ({
+  props,
+  setMatchInstallments,
+  setValueInstallments,
+}: InstallmentsProps) => {
   return (
     <>
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(1)}
+            onClick={() => (
+              setMatchInstallments(1), setValueInstallments('1x ' + props[1])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -37,7 +44,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(2)}
+            onClick={() => (
+              setMatchInstallments(2), setValueInstallments('2x ' + props[2])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -49,7 +58,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(3)}
+            onClick={() => (
+              setMatchInstallments(3), setValueInstallments('3x ' + props[3])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -61,7 +72,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(4)}
+            onClick={() => (
+              setMatchInstallments(4), setValueInstallments('4x ' + props[4])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -73,7 +86,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(5)}
+            onClick={() => (
+              setMatchInstallments(5), setValueInstallments('5x ' + props[5])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -85,7 +100,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(6)}
+            onClick={() => (
+              setMatchInstallments(6), setValueInstallments('6x ' + props[6])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -97,7 +114,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(7)}
+            onClick={() => (
+              setMatchInstallments(7), setValueInstallments('7x ' + props[7])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -109,7 +128,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(8)}
+            onClick={() => (
+              setMatchInstallments(8), setValueInstallments('8x ' + props[8])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -121,7 +142,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(9)}
+            onClick={() => (
+              setMatchInstallments(9), setValueInstallments('9x ' + props[9])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -133,7 +156,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(10)}
+            onClick={() => (
+              setMatchInstallments(10), setValueInstallments('10x ' + props[10])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -145,7 +170,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(11)}
+            onClick={() => (
+              setMatchInstallments(11), setValueInstallments('11x ' + props[11])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"
@@ -157,7 +184,9 @@ const Installments = ({ props, setMatchInstallments }: InstallmentsProps) => {
       <div className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg">
         <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
           <input
-            onClick={() => setMatchInstallments(12)}
+            onClick={() => (
+              setMatchInstallments(12), setValueInstallments('12x ' + props[12])
+            )}
             type="radio"
             name="radio-6"
             className="radio checked:bg-blue-500"

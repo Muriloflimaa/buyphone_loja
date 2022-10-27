@@ -30,7 +30,6 @@ export default function credit({ address }: Address) {
   const [flag, setFlag] = useState('')
   const [focus, setFocus] = useState(false)
   const router = useRouter()
-  const { somaTotal } = useCart()
   const user = GetUseType()
 
   const checksFlag = (card: string) => {
@@ -78,10 +77,9 @@ export default function credit({ address }: Address) {
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
-      amount: somaTotal,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 60)
+    setCookies('@BuyPhone:CreditCardInfo', data, 120)
     router.push('/shipping/payment/match-installments')
   }
 

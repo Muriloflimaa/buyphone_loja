@@ -220,7 +220,7 @@ const ListProducts = ({
               'step ' +
               (expired === 'paid' ?? 'manual_paid' ?? 'captured'
                 ? 'step-success'
-                : 'step-neutral')
+                : 'step-accent')
             }
           >
             <span
@@ -237,7 +237,7 @@ const ListProducts = ({
           </li>
           <li
             className={
-              'step ' + (expired === 'packed' ? 'step-success' : 'step-neutral')
+              'step ' + (expired === 'packed' ? 'step-success' : 'step-accent')
             }
           >
             <span className={expired !== 'packed' ? 'opacity-50' : ''}>
@@ -246,7 +246,7 @@ const ListProducts = ({
               aguardando coleta
             </span>
           </li>
-          <li className="step step-neutral">
+          <li className="step step-accent">
             <span className="opacity-50">Produto enviado</span>
           </li>
         </ul>
