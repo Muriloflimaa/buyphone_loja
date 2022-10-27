@@ -68,6 +68,7 @@ export default function creditFinally({
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
+  const [products, setProducts] = useState<any>([])
 
   useEffect(() => {
     if (values) {
@@ -76,17 +77,16 @@ export default function creditFinally({
   }, [values])
 
   async function handlePayment() {
+    const setDat: ProductPayment[] = []
+    values.map(async (item: ArrayProduct) => {
+      const response = {
+        product_id: item.id,
+        price: item.priceFormated,
+        qty: item.amount,
+      }
+      setDat.push(response)
+    })
     try {
-      const setDat: ProductPayment[] = []
-      values.map(async (item: ArrayProduct) => {
-        const response = {
-          product_id: item.id,
-          price: item.priceFormated,
-          qty: item.amount,
-        }
-        setDat.push(response)
-      })
-
       const infoData = {
         ...GetInfoCredit,
         amount: maskRl(installments, GetInfoCredit.installments),
@@ -97,7 +97,7 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
-
+      setProducts(setDat)
       if (data.status === 'paid') {
         setStateModalSuccess(true)
         CleanCart()
@@ -115,15 +115,7 @@ export default function creditFinally({
         return
       }
     } catch (error: any) {
-      console.log(error)
-      if (error.response.data.errors.document) {
-        ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
-        destroyCookie(null, '@BuyPhone:CreditCardInfo')
-        destroyCookie(null, '@BuyPhone:CreditInstallments')
-        router.push('/shipping/payment/credit')
-        return
-      }
-
+      setProducts(setDat)
       setStateModalError(true)
     }
   }
@@ -190,7 +182,9 @@ export default function creditFinally({
 
             <a
               target={'_blank'}
-              href="#link-para-suporte"
+              href={`https://api.whatsapp.com/send?phone=5518981367275&text=${
+                products && JSON.stringify(products)
+              }${maskReais(installments, GetInfoCredit.installments)}`}
               className="link  md:mb-0 text-error"
             >
               Contatar o suporte
@@ -332,7 +326,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
   const { '@BuyPhone:CreditInstallments': installments } = parseCookies(ctx)
 
-  if (getDataUser && cart !== '[]') {
+  if (getDataUser && cart !== '[]' && GetInfo) {
     const GetInfoCredit = JSON.parse(GetInfo)
     const address = JSON.parse(getDataUser)
     return {
