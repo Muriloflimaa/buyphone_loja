@@ -135,7 +135,10 @@ export default function Products({ data }: DataProps) {
         <title>
           BuyPhone - {data.name + ' Apple ' + data.memory + ' ' + data.color}
         </title>
-        <meta property="og:image" content={data.media[0].original_url} />
+        <meta
+          property="og:image"
+          content={data.media && data.media[0].original_url}
+        />
         <meta property="og:image:type" content="image/png"></meta>
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="600" />
