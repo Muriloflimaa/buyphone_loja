@@ -21,6 +21,10 @@ import { useRouter } from 'next/router'
 import { setCookies } from '../../../utils/useCookies'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
+import {
+  faCircleExclamation,
+  faExclamation,
+} from '@fortawesome/free-solid-svg-icons'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -30,7 +34,6 @@ export default function credit({ address }: Address) {
   const [flag, setFlag] = useState('')
   const [focus, setFocus] = useState(false)
   const router = useRouter()
-  const { somaTotal } = useCart()
   const user = GetUseType()
 
   const checksFlag = (card: string) => {
@@ -78,10 +81,9 @@ export default function credit({ address }: Address) {
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
-      amount: somaTotal,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 60)
+    setCookies('@BuyPhone:CreditCardInfo', data, 120)
     router.push('/shipping/payment/match-installments')
   }
 
@@ -121,15 +123,10 @@ export default function credit({ address }: Address) {
                   Parcele em até 12x no cartão de crédito
                 </span>
               </div>
-              <svg
-                className="h-6 w-6 fill-current md:h-8 md:w-8"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
-              </svg>
+              <FontAwesomeIcon
+                icon={faExclamation}
+                className="h-6 w-6 fill-current"
+              />
             </div>
             <div className="divider">Informações de Pagamento</div>
 
@@ -224,8 +221,11 @@ export default function credit({ address }: Address) {
                 Carregando
               </button>
             ) : (
-              <button type="submit" className="btn btn-info mt-8 mb-0">
-                Pagar
+              <button
+                type="submit"
+                className="btn btn-info text-white mt-8 mb-0"
+              >
+                Avançar
               </button>
             )}
           </form>

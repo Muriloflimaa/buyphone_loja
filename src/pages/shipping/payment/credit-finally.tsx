@@ -10,7 +10,7 @@ import { useCart } from '../../../context/UseCartContext'
 import { apiStore } from '../../../services/api'
 import { Address, ArrayProduct, ProductPayment } from '../../../types'
 import { GetUseType } from '../../../utils/getUserType'
-import { moneyMask } from '../../../utils/masks'
+import { maskReais, maskRl, moneyMask } from '../../../utils/masks'
 import { ToastCustom } from '../../../utils/toastCustom'
 import { setCookies } from '../../../utils/useCookies'
 
@@ -26,7 +26,7 @@ interface GetInfoCreditProps {
     items: Array<{}>
     shippingPrice: number
     user_id: number
-    installments?: string | number
+    installments: number
   }
   address: {
     address: string
@@ -41,11 +41,25 @@ interface GetInfoCreditProps {
     updated_at: string
     user_id: number
   }
+  installments: string
+}
+
+interface DataProps {
+  data: {
+    amount: number
+    created_at: string
+    id: number
+    invoice_id: string
+    order_id: number
+    status: string
+    updated_at: string
+  }
 }
 
 export default function creditFinally({
   GetInfoCredit,
   address,
+  installments,
 }: GetInfoCreditProps) {
   const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
@@ -54,6 +68,7 @@ export default function creditFinally({
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
+  const [products, setProducts] = useState<any>([])
 
   useEffect(() => {
     if (values) {
@@ -62,45 +77,45 @@ export default function creditFinally({
   }, [values])
 
   async function handlePayment() {
+    const setDat: ProductPayment[] = []
+    values.map(async (item: ArrayProduct) => {
+      const response = {
+        product_id: item.id,
+        price: item.priceFormated,
+        qty: item.amount,
+      }
+      setDat.push(response)
+    })
     try {
-      const setDat: ProductPayment[] = []
-      values.map(async (item: ArrayProduct) => {
-        const response = {
-          product_id: item.id,
-          price: item.priceFormated,
-          qty: item.amount,
-        }
-        setDat.push(response)
-      })
-
       const infoData = {
         ...GetInfoCredit,
+        amount: maskRl(installments, GetInfoCredit.installments),
         items: setDat,
       }
 
-      const data: { data: { status: string } } = await apiStore.post(
+      const { data }: DataProps = await apiStore.post(
         `checkout/credit-card`,
         infoData
       )
-
-      if (data.data.status === 'paid') {
+      setProducts(setDat)
+      if (data.status === 'paid') {
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
         destroyCookie(null, '@BuyPhone:CreditCardInfo')
+        destroyCookie(null, '@BuyPhone:CreditInstallments')
+        destroyCookie(undefined, '@BuyPhone:GetCep')
+        destroyCookie(undefined, '@BuyPhone:CreditCardInfo')
+        destroyCookie(undefined, '@BuyPhone:CreditInstallments')
+        destroyCookie({}, '@BuyPhone:CreditCardInfo')
+        destroyCookie({}, '@BuyPhone:CreditInstallments')
+        destroyCookie({}, '@BuyPhone:GetCep')
       } else {
         setStateModalError(true)
         return
       }
     } catch (error: any) {
-      console.log(error.response.data)
-      if (error.response.data.errors.document) {
-        ToastCustom(3000, 'Por favor verifique o seu número de CPF', 'error')
-        destroyCookie(null, '@BuyPhone:CreditCardInfo')
-        router.push('/shipping/payment/credit')
-        return
-      }
-
+      setProducts(setDat)
       setStateModalError(true)
     }
   }
@@ -167,7 +182,9 @@ export default function creditFinally({
 
             <a
               target={'_blank'}
-              href="#link-para-suporte"
+              href={`https://api.whatsapp.com/send?phone=5518981367275&text=${
+                products && JSON.stringify(products)
+              }${maskReais(installments, GetInfoCredit.installments)}`}
               className="link  md:mb-0 text-error"
             >
               Contatar o suporte
@@ -253,7 +270,7 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col items-end">
                 <strong>Condição:</strong>
-                <span>{GetInfoCredit.installments}x</span>
+                <span>{installments}</span>
               </div>
             </div>
           </div>
@@ -267,7 +284,6 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col">
                 <span>
-                  {' '}
                   R$ {moneyMask((somaTotal + discountValue).toString())}
                 </span>
                 {user?.promotion && (
@@ -283,9 +299,11 @@ export default function creditFinally({
           <div className="w-full flex justify-center z-50">
             <div className="fixed bottom-[-10px] mb-20 md:mb-4 text-primary-content card card-compact glass w-[98%] md:w-80 z-50">
               <div className="card-body bg-primary/90 ">
-                <div className="flex gap-4 w-full text-xl">
+                <div className="flex justify-between gap-4 w-full text-xl">
                   <span>Total</span>
-                  <span> R$ {moneyMask(somaTotal.toString())}</span>
+                  <span>
+                    {maskReais(installments, GetInfoCredit.installments)}
+                  </span>
                 </div>
                 <a
                   onClick={() => handlePayment()}
@@ -306,12 +324,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
   const { '@BuyPhone:cart': cart } = parseCookies(ctx)
   const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
+  const { '@BuyPhone:CreditInstallments': installments } = parseCookies(ctx)
 
-  if (getDataUser && cart !== '[]') {
+  if (getDataUser && cart !== '[]' && GetInfo) {
     const GetInfoCredit = JSON.parse(GetInfo)
     const address = JSON.parse(getDataUser)
     return {
-      props: { GetInfoCredit, address },
+      props: { GetInfoCredit, address, installments },
     }
   } else {
     return {
