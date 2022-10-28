@@ -1,6 +1,3 @@
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext } from 'react'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
@@ -19,7 +16,6 @@ interface IParams {
 }
 
 export default function Products({ data }: DataProps) {
-  console.log(data)
   const { userData } = useContext(AuthContext)
   const discount =
     process.env.NEXT_PUBLIC_BLACK_FRIDAY &&

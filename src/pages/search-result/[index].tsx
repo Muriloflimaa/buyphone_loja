@@ -116,6 +116,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
           <div className="btn-group max-w-7xl mx-auto rounded-b-md">
             {products?.links.map((link) => (
               <button
+                key={link.label}
                 onClick={() => {
                   handleChangePagination(link.url), window.scrollTo(0, 0)
                 }}
