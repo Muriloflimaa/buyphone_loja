@@ -26,6 +26,9 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
     const [phone, setPhone] = useState('');
 
     useEffect(() => {
+        const openModalInfoDiscount = () => {
+            return document.getElementById('modal-open-cadastre')?.classList.add('modal-open')
+        }
         if (status === "success") {
             ToastCustom(
                 3000,
@@ -38,6 +41,7 @@ export default function CustomForm({ status, onValidated }: ICustomForm) {
                 path: '/',
             })
             router.push('/')
+            setTimeout(openModalInfoDiscount, 3000)
         }
         if (status === "error") {
             ToastCustom(
