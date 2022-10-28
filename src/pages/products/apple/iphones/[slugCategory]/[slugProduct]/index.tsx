@@ -28,6 +28,7 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import InnerImageZoom from 'react-inner-image-zoom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 
 interface IParams {
   params: {
@@ -350,18 +351,10 @@ export default function Products({ data }: DataProps) {
                     </p>
 
                     <div className="flex gap-3 w-full items-end">
-                      <div className="flex flex-col gap-2 w-full">
-                        <input
-                          className="input input-bordered w-full"
-                          placeholder="Nome"
-                        />
-                        <input
-                          className="input input-bordered w-full"
-                          placeholder="E-mail"
-                        />
-                      </div>
-
-                      <label className="btn btn-info text-white">Enviar</label>
+                      <MailchimpFormContainer
+                        nameProduct={`${data.category_slug} ${data.slug}`}
+                        notPhone
+                      />
                     </div>
                   </div>
                 </div>

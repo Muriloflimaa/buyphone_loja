@@ -8,6 +8,7 @@ import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
 import CartaImg from '../../assets/images/carta.png'
+import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
 
 interface ProductCardProps {
   id: number
@@ -181,23 +182,10 @@ const ProductCard = ({
                 </p>
 
                 <div className="flex gap-3 w-full items-end">
-                  <div className="flex flex-col gap-2 w-full">
-                    <input
-                      className="input input-bordered w-full"
-                      placeholder="Nome"
-                    />
-                    <input
-                      className="input input-bordered w-full"
-                      placeholder="E-mail"
-                    />
-                  </div>
-
-                  <label
-                    htmlFor={id.toString()}
-                    className="btn btn-info text-white"
-                  >
-                    Enviar
-                  </label>
+                  <MailchimpFormContainer
+                    nameProduct={`${slugCategory} ${slug}`}
+                    notPhone
+                  />
                 </div>
               </div>
             </label>
