@@ -12,14 +12,39 @@ interface IParams {
   }
 }
 
+export interface DataProps {
+  current_page: number
+  data: Array<IProduct>
+  first_page_url: string
+  from: number
+  last_page: number
+  last_page_url: string
+  links: Array<{
+    active: boolean
+    label: string
+    url: string
+  }>
+  next_page_url: string
+  path: string
+  per_page: number
+  prev_page_url: null | number
+  to: number
+  total: number
+}
+
 interface ResultSearchProps {
-  data: { data: Array<IProduct> }
+  data: DataProps
   query: string
 }
 
 export default function SearchResult({ data, query }: ResultSearchProps) {
+  const [products, setProducts] = useState(data)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
+
+  useEffect(() => {
+    setProducts(data)
+  }, [data])
 
   useEffect(() => {
     if (user) {
@@ -27,16 +52,28 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
     }
   }, [user]) //atualiza o state para nao dar erro de renderizacao
 
+  async function handleChangePagination(page: string) {
+    try {
+      const { data } = await apiStore.post(
+        `/search${page
+          .replace('https://beta-api.buyphone.com.br/store/search', '')
+          .replace(`https://api.buyphone.com.br/store/search`, '')}`,
+        { query: query }
+      )
+      setProducts(data)
+    } catch (error) {}
+  }
+
   return (
     <>
-      {!!data && (
+      {!!products ? (
         <>
           <h1 className="text-4xl font-medium text-center">
             Você buscou por {query}
           </h1>
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
-            {data &&
-              data.data.map((products: IProduct) => {
+            {products &&
+              products.data.map((products: IProduct) => {
                 const discount =
                   process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                   !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
@@ -76,9 +113,24 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                 )
               })}
           </div>
+          <div className="btn-group max-w-7xl mx-auto rounded-b-md">
+            {products?.links.map((link) => (
+              <button
+                onClick={() => {
+                  handleChangePagination(link.url), window.scrollTo(0, 0)
+                }}
+                className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
+                  link.active === true ? 'btn-disabled' : ''
+                }`}
+              >
+                {link.label
+                  .replace('&laquo; Previous', 'Anterior')
+                  .replace('Next &raquo;', 'Próximo')}
+              </button>
+            ))}
+          </div>
         </>
-      )}
-      {!data && (
+      ) : (
         <>
           <h1 className="text-4xl font-medium text-center">
             Você buscou por {query}
