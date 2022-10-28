@@ -10,11 +10,11 @@ import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
 // import NavBar from '../components/NavBar'
-import dynamic from 'next/dynamic'
 import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
 import * as gtag from '../../gtag'
+import dynamic from 'next/dynamic'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 import { hotjar } from 'react-hotjar'
 

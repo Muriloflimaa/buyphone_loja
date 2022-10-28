@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import JuninhoImg from '../../assets/images/juninho.webp'
@@ -7,12 +6,18 @@ import ProductCard from '../../components/ProductCard'
 import { apiStore } from '../../services/api'
 import { IProduct } from '../../types'
 
-export default function SearchResult() {
-  const { query } = useRouter()
-  const result = query.index
-  const [products, setProducts] = useState<Array<IProduct>>([])
-  const [isError, setIsError] = useState(false)
+interface IParams {
+  params: {
+    index: string
+  }
+}
 
+interface ResultSearchProps {
+  data: { data: Array<IProduct> }
+  query: string
+}
+
+export default function SearchResult({ data, query }: ResultSearchProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
 
@@ -22,31 +27,16 @@ export default function SearchResult() {
     }
   }, [user]) //atualiza o state para nao dar erro de renderizacao
 
-  useEffect(() => {
-    GetResult()
-  }, [query])
-
-  async function GetResult() {
-    try {
-      const { data } = await apiStore.post('/search', { query: result })
-      setProducts(data.data)
-      setIsError(false)
-    } catch (error) {
-      setIsError(true)
-      setProducts([])
-    }
-  }
-
   return (
     <>
-      {products.length > 0 && (
+      {!!data && (
         <>
           <h1 className="text-4xl font-medium text-center">
-            Você buscou por {result}
+            Você buscou por {query}
           </h1>
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
-            {products &&
-              products.map((products: IProduct) => {
+            {data &&
+              data.data.map((products: IProduct) => {
                 const discount =
                   process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                   !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
@@ -70,30 +60,28 @@ export default function SearchResult() {
                 const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
 
                 return (
-                  ourPrice > 0 && (
-                    <ProductCard
-                      key={products.id}
-                      id={products.id}
-                      name={products.name}
-                      idCategory={products.category_id}
-                      colorPhone={products.color}
-                      price={ourPrice}
-                      averagePrice={averagePrice}
-                      slug={products.slug}
-                      slugCategory={products.category_slug}
-                      image={products.media[0].original_url}
-                      memory={products.memory}
-                    />
-                  )
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    idCategory={products.category_id}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={products.category_slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                  />
                 )
               })}
           </div>
         </>
       )}
-      {!!isError && (
+      {!data && (
         <>
           <h1 className="text-4xl font-medium text-center">
-            Você buscou por {result}
+            Você buscou por {query}
           </h1>
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 py-24 md:py-10">
             <div>
@@ -103,7 +91,7 @@ export default function SearchResult() {
               <span className="text-lg text-info-content">
                 <span className="font-semibold text-3xl">Ops!</span>
                 <p>Não encontramos nenhum resultado para a busca por</p>
-                <p className="font-medium text-lg">"{result}"</p>
+                <p className="font-medium text-lg">"{query}"</p>
               </span>
               <ul className="list-disc pl-4 mt-4 text-red-600">
                 <li>Verifique se a palavra foi digitada corretamente.</li>
@@ -117,4 +105,21 @@ export default function SearchResult() {
       )}
     </>
   )
+}
+
+export const getServerSideProps = async ({ params }: IParams) => {
+  const query = params.index
+  try {
+    const { data } = await apiStore.post('/search', { query: params.index })
+    return {
+      props: {
+        data,
+        query,
+      },
+    }
+  } catch (error) {
+    return {
+      props: { query },
+    }
+  }
 }
