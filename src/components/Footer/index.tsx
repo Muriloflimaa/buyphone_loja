@@ -198,13 +198,6 @@ export default function Footer() {
               <h3 className="font-medium text-lg mb-3">Verificações</h3>
               <ul className="flex flex-col gap-2">
                 <li className="w-[100%]">
-                  <Image
-                    src={SeloReclamePng}
-                    layout="responsive"
-                    quality={100}
-                  ></Image>
-                </li>
-                <li className="w-[100%]">
                   <a
                     target={'_blank'}
                     href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"
