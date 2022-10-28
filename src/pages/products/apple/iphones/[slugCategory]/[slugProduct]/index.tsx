@@ -366,67 +366,68 @@ export default function Products({ data }: DataProps) {
                   </div>
                 </div>
               )}
-
-              <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
-                <h1 className="text-base font-semibold">
-                  Calcule o frete e prazo de entrega
-                </h1>
-                <form
-                  className="flex flex-col md:flex-row items-start gap-2"
-                  onSubmit={handleSubmit(handleCepStorage)}
-                >
-                  <Input
-                    {...register('cep')}
-                    type="text"
-                    maxLength={9}
-                    placeholder="00000-000"
-                    onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
-                    error={errors.cep}
-                  />
-                  {formState.isSubmitting ? (
-                    <button
-                      type="submit"
-                      className="btn loading normal-case text-white"
-                    >
-                      Carregando
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-info text-white upper-case text-xs md:text-md py-0"
-                      type="submit"
-                    >
-                      Consultar
-                    </button>
-                  )}
-                </form>
-                <div className="flex flex-col items-start md:text-xs">
-                  {address && (
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        className="w-4 h-4"
-                      />
-                      <p>
-                        {`${address?.Street && address?.Street + '-'} ${
-                          address?.City
-                        }, ${address?.UF}`}
-                      </p>
-                    </div>
-                  )}
-
-                  {shippingOn && (
-                    <div className="flex justify-between items-start w-full text-success">
-                      <p className="flex items-center gap-2">
+              {returnPrice.averagePrice > 0 && (
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
+                  <h1 className="text-base font-semibold">
+                    Calcule o frete e prazo de entrega
+                  </h1>
+                  <form
+                    className="flex flex-col md:flex-row items-start gap-2"
+                    onSubmit={handleSubmit(handleCepStorage)}
+                  >
+                    <Input
+                      {...register('cep')}
+                      type="text"
+                      maxLength={9}
+                      placeholder="00000-000"
+                      onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                      error={errors.cep}
+                    />
+                    {formState.isSubmitting ? (
+                      <button
+                        type="submit"
+                        className="btn loading normal-case text-white"
+                      >
+                        Carregando
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
+                        type="submit"
+                      >
+                        Consultar
+                      </button>
+                    )}
+                  </form>
+                  <div className="flex flex-col items-start md:text-xs">
+                    {address && (
+                      <div className="flex items-center gap-2">
                         <FontAwesomeIcon
-                          icon={faTruckFast}
+                          icon={faLocationDot}
                           className="w-4 h-4"
                         />
-                        {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
-                      </p>
-                    </div>
-                  )}
+                        <p>
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
+                        </p>
+                      </div>
+                    )}
+
+                    {shippingOn && (
+                      <div className="flex justify-between items-start w-full text-success">
+                        <p className="flex items-center gap-2">
+                          <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-4 h-4"
+                          />
+                          {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
                 <div className="alert items-start bg-accent w-full grid ">
