@@ -658,20 +658,21 @@ export default function NavBar() {
                   </a>
                 </Link>
               </div>
-            </div>
-            {userData && (
-              <div
-                className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
-                onClick={toggleDrawer}
-              >
-                <div onClick={() => signOut()}>
-                  <div className="flex gap-3 items-center w-full mt-2">
-                    <LogoutIcon className="h-5 w-5 text-info-content" />
-                    <span className="text-info-content">Sair</span>
+              <Divider />
+              {userData && (
+                <div
+                  className="flex px-4 cursor-pointer"
+                  onClick={toggleDrawer}
+                >
+                  <div onClick={() => signOut()}>
+                    <div className="flex gap-3 items-center w-full">
+                      <LogoutIcon className="h-5 w-5 text-info-content" />
+                      <span className="text-info-content">Sair</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </ul>
       </Drawer>
