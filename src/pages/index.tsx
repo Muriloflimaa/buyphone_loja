@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
-import Banner4 from '../assets/images/banner4.webp'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
@@ -48,24 +47,11 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
-  const [showArrow, setShowArrow] = useState(true)
   const currentRefCarroussel = useRef<any>()
-
-  useEffect(() => {
-    window.addEventListener('scroll', changeBackground)
-  }, [])
 
   useEffect(() => {
     getProductsMatch()
   }, [])
-
-  const changeBackground = () => {
-    if (window.scrollY > 300) {
-      setShowArrow(true)
-    } else {
-      setShowArrow(false)
-    }
-  }
 
   async function getProductsMatch() {
     try {
@@ -94,18 +80,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        {showArrow === true ? (
-          <div className="w-full fixed z-50 bottom-24 ml-[85%] md:ml-[95%] md:bottom-12 ">
-            <a onClick={() => scroll(0, 100)} href="#home">
-              <div className="btn btn-circle border-transparent bg-base-100 shadow-md shadow-black/40">
-                <FontAwesomeIcon
-                  icon={faChevronUp}
-                  className="w-4 marker:h-4 marker:text-primary"
-                />
-              </div>
-            </a>
-          </div>
-        ) : null}
         <div className="block md:hidden">
           <CarouselComponent
             image={
