@@ -7,6 +7,7 @@ import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
+import MeetImg from '../assets/images/BannerMeet.png'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -299,6 +300,17 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               depoiment="É uma nova forma muito legal, de comprar produtos da apple!"
             />
           </Carousel>
+        </div>
+
+        <div className="max-w-7xl mx-auto my-10">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Conheça a BuyPhone
+          </h1>
+          <Image
+            src={MeetImg}
+            layout="responsive"
+            className="rounded-3xl cursor-pointer"
+          />
         </div>
       </div>
     </>
