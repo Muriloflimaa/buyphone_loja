@@ -340,7 +340,7 @@ export default function Products({ data }: DataProps) {
                       />
 
                       <span className="text-xs">
-                        Infelizmente não temos esse produto em estoque no
+                        Infelizmente não temos disponibilidade desse produto no
                         momento.
                       </span>
                     </div>
