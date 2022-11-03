@@ -67,20 +67,21 @@ const ProductCard = ({
           </figure>
         </div>
 
-        <span className="badge badge-success w-full bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold mx-auto">
+        <span className="badge badge-success py-5 md:py-0 w-full bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold mx-auto">
           {`${
             changeText
               ? resultDiscountPercent.replace('.0', '') + '% de desconto'
               : 'parcelamento em ate 12x'
           }`}
         </span>
-        <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-xs font-semibold mx-auto">
+        <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-xs py-5 md:py-0 font-semibold mx-auto">
           {changeText ? (
-            <span className="flex gap-1">
-              <span className="text-[#1F7501]/50">Economia de </span>
-
-              <span className="text-[#004907]">
-                R$ {moneyMask((averagePrice - price).toString())}
+            <span>
+              Economia de
+              <span className="text-[#004907] ml-1">
+                <br className="block md:hidden" />
+                R$
+                {moneyMask((averagePrice - price).toString())}
               </span>
             </span>
           ) : (

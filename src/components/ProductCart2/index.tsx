@@ -151,12 +151,12 @@ const ProductCart = ({
               <img src={image} alt={name} />
             </div>
 
-            <div className="flex flex-col items-start justify-between h-full">
+            <div className="flex flex-col items-start gap-8 h-full">
               <div className="flex flex-col">
                 <span>Modelo</span>
                 <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
               </div>
-              <div>
+              <div className="flex items-center gap-2">
                 <span>Quantidade</span>
                 {!show && (
                   <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
@@ -181,16 +181,16 @@ const ProductCart = ({
                     </button>
                   </div>
                 )}
+                {!show && (
+                  <button
+                    type="button"
+                    data-testid="remove-product"
+                    onClick={() => handleRemoveProduct(id, name, color, memory)}
+                  >
+                    <TrashIcon className="h-4 w-4 text-red-600" />
+                  </button>
+                )}
               </div>
-              {!show && (
-                <button
-                  type="button"
-                  data-testid="remove-product"
-                  onClick={() => handleRemoveProduct(id, name, color, memory)}
-                >
-                  <TrashIcon className="h-4 w-4 text-red-600" />
-                </button>
-              )}
             </div>
           </div>
         </div>
