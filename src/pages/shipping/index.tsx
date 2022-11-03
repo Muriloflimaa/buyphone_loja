@@ -150,7 +150,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                             ...ad,
                           })
                         }
-                        className="normal-case btn btn-sm btn-info text-white h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
+                        className="normal-case btn btn-sm text-info-content bg-transparent border-[1px] h-full leading-4 max-h-20 py-3 w-full gap-4 justify-between relative"
                       >
                         <div className="flex items-center gap-3 md:gap-8">
                           <FontAwesomeIcon
