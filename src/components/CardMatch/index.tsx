@@ -1,6 +1,5 @@
 import { faBars, faHeart, faI, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -15,9 +14,10 @@ import { verificationPrice } from '../../utils/verificationPrice'
 interface CardMatchProps {
   next: () => void
   data: IProduct
+  changeText: boolean
 }
 
-const CardMatch = ({ next, data }: CardMatchProps) => {
+const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
   const [failMatch, setFailMatch] = useState(false)
   const [successMatch, setSuccesMatch] = useState(false)
   const { addProduct } = useCart()
@@ -57,6 +57,11 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
 
   const returnPrice = verificationPrice(data)
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
+  const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
+  const resultDiscountPercent = (
+    (resultDiscount / returnPrice.averagePrice) *
+    100
+  ).toFixed(1)
 
   return (
     <div className="card py-5 my-8 mx-auto grid grid-cols-1 text-info-content bg-accent drop-shadow-xl rounded-lg md:px-36 md:py-14 md:gap-10 md:grid-cols-2 md:max-w-5xl">
@@ -96,6 +101,33 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
       </div>
 
       <div className="flex flex-col gap-2 items-center md:text-start col-span-1 md:gap-5 md:items-start">
+        <span className="badge badge-success w-2/3 bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold">
+          {`${
+            changeText
+              ? resultDiscountPercent.replace('.0', '') + '% de desconto'
+              : 'parcelamento em ate 12x'
+          }`}
+        </span>
+        <span className="badge badge-success w-2/3 bg-[#D5FDC7] text-[#004907] uppercase text-xs font-semibold">
+          {changeText ? (
+            <span className="flex gap-1">
+              <span className="text-[#1F7501]/50">Economia de </span>
+
+              <span className="text-[#004907]">
+                R${' '}
+                {moneyMask(
+                  (returnPrice.averagePrice - returnPrice.ourPrice).toString()
+                )}
+              </span>
+            </span>
+          ) : (
+            <span className="flex gap-1">
+              <span className="text-[#004907]">Entrada no PIX + </span>
+              <span className="text-[#1F7501]/50">pacercelas</span>
+            </span>
+          )}
+        </span>
+
         <h1 className="font-normal text-xl md:text-2xl">{data.name}</h1>
         <div>
           <h1 className="md:text-xl md:text-start">Especificações</h1>

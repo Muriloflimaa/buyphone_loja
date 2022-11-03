@@ -1,6 +1,3 @@
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext, useState } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
 import { AuthContext } from '../../../../../context/AuthContext'

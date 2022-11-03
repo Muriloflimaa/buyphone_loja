@@ -148,7 +148,14 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           >
             {productsMatch &&
               productsMatch.map((res) => {
-                return <CardMatch key={res.id} data={res} next={next} />
+                return (
+                  <CardMatch
+                    key={res.id}
+                    data={res}
+                    changeText={changeText}
+                    next={next}
+                  />
+                )
               })}
           </Carousel>
         </div>
