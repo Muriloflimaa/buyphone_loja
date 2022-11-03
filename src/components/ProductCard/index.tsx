@@ -34,6 +34,10 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
+  const resultDiscount = averagePrice - price
+  const resultDiscountPercent = ((resultDiscount / averagePrice) * 100).toFixed(
+    1
+  )
 
   const link = `/products/apple/iphones/${slugCategory}/${slug}`
 
@@ -60,7 +64,11 @@ const ProductCard = ({
         </div>
 
         <span className="badge badge-success w-full bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold mx-auto">
-          {`${changeText ? '7% de desconto' : 'parcelamento em ate 12x'}`}
+          {`${
+            changeText
+              ? resultDiscountPercent.replace('.0', '') + '% de desconto'
+              : 'parcelamento em ate 12x'
+          }`}
         </span>
         <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-xs font-semibold mx-auto">
           {changeText ? (
