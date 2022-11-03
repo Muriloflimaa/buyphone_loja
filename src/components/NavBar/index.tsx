@@ -328,8 +328,11 @@ export default function NavBar() {
 
                           <div className="card-body max-h-80 overflow-y-auto gap-6">
                             {cartSize && cartSize > 0 && !!isAttCart ? (
-                              [1, 2].map(() => (
-                                <div className="rounded-md max-w-sm w-full ">
+                              [1, 2].map((res) => (
+                                <div
+                                  key={res}
+                                  className="rounded-md max-w-sm w-full "
+                                >
                                   <div className="animate-pulse flex w-full">
                                     <div
                                       className="flex justify-between w-full"
