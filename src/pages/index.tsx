@@ -46,6 +46,7 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
+  const [changeText, setChangeText] = useState(false)
 
   useEffect(() => {
     getProductsMatch()
@@ -69,6 +70,10 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     }
     setCurrentSlide(currentSlide + 1)
   }
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
 
   return (
     <>
@@ -191,6 +196,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                         slugCategory={category.slug}
                         image={products.media[0].original_url}
                         memory={products.memory}
+                        changeText={changeText}
                       />
                     )
                   )
