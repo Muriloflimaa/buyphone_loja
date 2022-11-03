@@ -1,3 +1,4 @@
+import { Router, useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import {
   createContext,
@@ -51,6 +52,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
   const [isAttCart, setIsAttCart] = useState(false) //state para mostrar que esta buscando produtos na api
   const { userData } = useContext(AuthContext)
+  const router = useRouter()
   const discountValue = 15000
 
   const [cart, setCart] = useState<Product[]>(() => {
@@ -201,11 +203,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
             'Sucesso'
           )
 
-          const newProduct = {
-            id: products.id,
-            amount: 1,
+          if (cart.length == 0) {
+            const newProduct = {
+              id: products.id,
+              amount: 1,
+            }
+            updatedCart.push(newProduct)
+            router.push('/cart')
+          } else {
+            const newProduct = {
+              id: products.id,
+              amount: 1,
+            }
+            updatedCart.push(newProduct)
           }
-          updatedCart.push(newProduct)
         }
         //Atualizando o Carrinho
 
