@@ -185,7 +185,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
               products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
-            'Notificação'
+            'Sucesso'
           )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
@@ -198,7 +198,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
               products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
-            'Notificação'
+            'Sucesso'
           )
 
           const newProduct = {
@@ -211,7 +211,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         setCart(updatedCart)
       } catch {
-        ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
+        ToastCustom(2000, 'Erro na adição do produto', 'error', 'Que pena...')
         localStorage.removeItem('@BuyPhone:cart')
         CleanCart()
       }
@@ -254,7 +254,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         throw Error()
       }
     } catch {
-      ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Notificação')
+      ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Que pena...')
       CleanCart()
     }
   }
