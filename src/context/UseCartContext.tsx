@@ -98,6 +98,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const discountPrice = Math.round(averagePrice * (discount / 100))
         const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
 
+        if (ourPrice <= 0) {
+          CleanCart()
+          window.location.href = '/'
+          return
+        }
+
         const response = {
           ...item, //adicionando amount e id que está no localstorage
           product: data, //data vem da api que é chamada
