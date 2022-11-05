@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
+import MeetImg from '../assets/images/BannerMeet.png'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
-import MeetImg from '../assets/images/BannerMeet.png'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -35,6 +35,7 @@ import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
+import ItsModal from '../components/Modals/Its-Match'
 import ProductCard from '../components/ProductCard'
 
 interface DataProps {
@@ -57,7 +58,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const [currentSlide, setCurrentSlide] = useState(1)
@@ -313,6 +314,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           />
         </div>
       </div>
+      <ItsModal />
     </>
   )
 }
