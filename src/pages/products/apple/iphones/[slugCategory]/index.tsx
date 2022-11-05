@@ -1,12 +1,9 @@
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext } from 'react'
-import ProductCard from '../../../../../components/ProductCard'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
 import { apiStore } from '../../../../../services/api'
+import ProductCard from '../../../../../components/ProductCard'
 
 interface DataProps {
   data: ICategory
@@ -20,7 +17,14 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
-  const discount = userData?.type === 1 ? 12.5 : 7
+  const discount =
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+      ? 12.5
+      : userData?.type === 1
+      ? 12.5
+      : 7
+
   return (
     <>
       <Head>
@@ -37,29 +41,26 @@ export default function Products({ data }: DataProps) {
                 products.casasbahia_price,
                 products.ponto_price,
               ]
+
               const filteredItens = itens.filter((item) => item)
               const averagePrice =
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-              return ourPrice ? (
-                <React.Fragment key={products.id}>
-                  <ProductCard
-                    key={products.id}
-                    id={products.id}
-                    name={products.name}
-                    colorPhone={products.color}
-                    price={ourPrice}
-                    averagePrice={averagePrice}
-                    idCategory={products.id}
-                    slug={products.slug}
-                    slugCategory={data.slug}
-                    image={products.media[0].original_url}
-                    memory={products.memory}
-                  />
-                </React.Fragment>
-              ) : (
-                <></>
+              return (
+                <ProductCard
+                  key={products.id}
+                  id={products.id}
+                  name={products.name}
+                  colorPhone={products.color}
+                  price={ourPrice}
+                  averagePrice={averagePrice}
+                  idCategory={products.id}
+                  slug={products.slug}
+                  slugCategory={data.slug}
+                  image={products.media[0].original_url}
+                  memory={products.memory}
+                />
               )
             })
           ) : (

@@ -102,6 +102,7 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
+      setShowSearch(false)
       reset()
     }
     if (values.searchDesktop !== '') {
