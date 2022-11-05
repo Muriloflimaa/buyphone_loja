@@ -17,6 +17,8 @@ import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
 import { apiStore } from '../../services/api'
+import SeloReclamePng from '../../assets/images/seloReclame.png'
+import SeloBlintadoPng from '../../assets/images/siteblindado.png'
 
 export default function Footer() {
   const [dataApi, setDataApi] = useState<Array<ICategory>>()
@@ -171,23 +173,44 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-bold text-lg mb-3">Parceiros</h3>
-            <ul className="text-sm flex gap-2">
-              <li>
-                <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
-              </li>
-              <li>
-                <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
-              </li>
-              <li>
-                <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
-              </li>
-              <li></li>
-            </ul>
-            <small className="text-xs text-info-content">
-              Seus dados estão seguros
-            </small>
+          <div className="flex flex-col gap-10">
+            <div>
+              <h3 className="font-bold text-lg mb-3">Parceiros</h3>
+              <ul className="text-sm flex gap-2">
+                <li>
+                  <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
+                </li>
+                <li>
+                  <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
+                </li>
+                <li>
+                  <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
+                </li>
+                <li></li>
+              </ul>
+              <small className="text-xs text-info-content">
+                Seus dados estão seguros
+              </small>
+            </div>
+            <div className="flex flex-col">
+              <h3 className="font-bold text-lg mb-3">Verificações</h3>
+              <ul className="flex flex-col gap-2">
+                <li className="w-[100%]">
+                  <Image
+                    src={SeloReclamePng}
+                    layout="responsive"
+                    quality={100}
+                  ></Image>
+                </li>
+                <li className="w-[100%]">
+                  <Image
+                    src={SeloBlintadoPng}
+                    layout="responsive"
+                    quality={100}
+                  ></Image>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

@@ -7,7 +7,6 @@ import {
   faChevronLeft,
   faCircleExclamation,
   faEnvelope,
-  faExclamation,
   faLocationDot,
   faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
@@ -350,11 +349,17 @@ export default function Products({ data }: DataProps) {
                       iremos encaminhar um email para você! Fique atento.
                     </p>
 
-                    <div className="flex gap-3 w-full items-center">
-                      <input
-                        className="input input-bordered w-full"
-                        placeholder="E-mail"
-                      />
+                    <div className="flex gap-3 w-full items-end">
+                      <div className="flex flex-col gap-2 w-full">
+                        <input
+                          className="input input-bordered w-full"
+                          placeholder="Nome"
+                        />
+                        <input
+                          className="input input-bordered w-full"
+                          placeholder="E-mail"
+                        />
+                      </div>
 
                       <label className="btn btn-info text-white">Enviar</label>
                     </div>

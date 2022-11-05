@@ -158,7 +158,7 @@ const ProductCard = ({
         <>
           <input type="checkbox" id={id.toString()} className="modal-toggle" />
           <label htmlFor={id.toString()} className="modal cursor-pointer">
-            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[6%] z-50 flex items-center justify-center w-full">
+            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[2%] mb-[108px] z-50 flex items-center justify-center w-full">
               <Image
                 src={CartaImg}
                 width={232}
@@ -169,7 +169,7 @@ const ProductCard = ({
               />
             </div>
             <label className="modal-box relative" htmlFor="">
-              <div className="mt-28 text-center">
+              <div className="mt-24 text-center">
                 <h3 className="text-3xl font-semibold">Seja notificado!</h3>
                 <p className="py-4 text-info-content/50">
                   Assim que o{' '}
@@ -180,11 +180,17 @@ const ProductCard = ({
                   para você! Fique atento.
                 </p>
 
-                <div className="flex gap-3 w-full items-center">
-                  <input
-                    className="input input-bordered w-full"
-                    placeholder="E-mail"
-                  />
+                <div className="flex gap-3 w-full items-end">
+                  <div className="flex flex-col gap-2 w-full">
+                    <input
+                      className="input input-bordered w-full"
+                      placeholder="Nome"
+                    />
+                    <input
+                      className="input input-bordered w-full"
+                      placeholder="E-mail"
+                    />
+                  </div>
 
                   <label
                     htmlFor={id.toString()}
