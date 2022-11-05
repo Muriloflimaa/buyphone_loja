@@ -1,4 +1,3 @@
-import { Router, useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import {
   createContext,
@@ -6,7 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -52,7 +51,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
   const [isAttCart, setIsAttCart] = useState(false) //state para mostrar que esta buscando produtos na api
   const { userData } = useContext(AuthContext)
-  const router = useRouter()
   const discountValue = 15000
 
   const [cart, setCart] = useState<Product[]>(() => {
@@ -80,11 +78,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         const discount =
           process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
             ? 12.5
             : !!isUser && user && JSON.parse(user)?.type === 1
-            ? 12.5
-            : 7
+              ? 12.5
+              : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -189,8 +187,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           const products = addProduct.data
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'
@@ -202,8 +199,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'
@@ -215,7 +211,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
               amount: 1,
             }
             updatedCart.push(newProduct)
-            router.push('/cart')
           } else {
             const newProduct = {
               id: products.id,
@@ -312,7 +307,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       CleanCart()
     }
   }
-
   return (
     <CartContext.Provider
       value={{
