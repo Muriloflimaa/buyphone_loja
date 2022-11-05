@@ -57,9 +57,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
         lead,
       })
-
-      const { type, name, id, profile_photo_url, promotion } =
-        response.data.user
+      console.log(response.data)
+      const { type, name, id, profile_photo_url, promotion } = response.data.user
 
       const UserObject = {
         name: name,
@@ -68,7 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         profile_photo_url: profile_photo_url,
         email: email,
         lead: lead,
-        promotion: promotion,
+        promotion: promotion
       }
       const token = response.data.authorization.token
 
