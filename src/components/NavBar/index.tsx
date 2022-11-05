@@ -7,9 +7,11 @@ import {
   SearchIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
-  TagIcon, UserCircleIcon,
+  TagIcon,
+  TrashIcon,
+  UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
@@ -102,7 +104,6 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
-      setShowSearch(false)
       reset()
     }
     if (values.searchDesktop !== '') {
@@ -113,10 +114,6 @@ export default function NavBar() {
 
   const toggleDrawer = () => {
     setOpenDrawer((prevState) => !prevState)
-  }
-
-  const handleOpenModalInfo = () => {
-    return document.getElementById('modal-open-cadastre')?.classList.add('modal-open')
   }
 
   return (
@@ -204,8 +201,9 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${cookies.LEAD === 'true' ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col ${
+                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="ml-3 flex">
                         <label
@@ -320,8 +318,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -461,12 +459,13 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${cookies.LEAD === 'true' ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${
+                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="">
                         <label
-                          onClick={handleOpenModalInfo}
+                          htmlFor="modal-info-discount"
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-7 w-7 text-white hidden md:block" />

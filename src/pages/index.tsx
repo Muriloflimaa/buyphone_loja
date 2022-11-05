@@ -7,11 +7,13 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
+import Banner4 from '../assets/images/banner4.webp'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
+import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -36,7 +38,6 @@ import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
-import ProductCard from '../components/ProductCard'
 
 interface DataProps {
   data: {
@@ -200,25 +201,52 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </h1>
 
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
-            {data.data.map((category) =>
-              category.products.map((products: IProduct) => {
-                const returnPrice = verificationPrice(products)
-                return (
-                  <ProductCard
-                    key={products.id}
-                    id={products.id}
-                    name={products.name}
-                    idCategory={category.id}
-                    colorPhone={products.color}
-                    price={returnPrice.ourPrice}
-                    averagePrice={returnPrice.averagePrice}
-                    slug={products.slug}
-                    slugCategory={category.slug}
-                    image={products.media[0].original_url}
-                    memory={products.memory}
-                  />
-                )
-              })
+            {data?.data.length > 0 ? (
+              data.data.map((category) =>
+                category.products.map((products: IProduct) => {
+                  const returnPrice = verificationPrice(products)
+                  return (
+                    returnPrice.ourPrice > 0 && (
+                      <ProductCard
+                        key={products.id}
+                        id={products.id}
+                        name={products.name}
+                        idCategory={category.id}
+                        colorPhone={products.color}
+                        price={returnPrice.ourPrice}
+                        averagePrice={returnPrice.averagePrice}
+                        slug={products.slug}
+                        slugCategory={category.slug}
+                        image={products.media[0].original_url}
+                        memory={products.memory}
+                      />
+                    )
+                  )
+                })
+              )
+            ) : (
+              <div className="flex gap-3 justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <h1>Carregando...</h1>
+              </div>
             )}
           </div>
         </div>

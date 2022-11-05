@@ -92,6 +92,7 @@ export default function register() {
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/login')
     } catch (error: any) {
+      console.log(error)
       if (
         (error.response.status == 422 &&
           !!error.response.data.errors.utm_campaign) ||
