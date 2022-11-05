@@ -1,10 +1,10 @@
-import { faBars, faHeart, faI, faX } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faHeart, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import OuterImg from '../../assets/images/outer.svg'
 import GosteiImg from '../../assets/images/gostei.svg'
+import OuterImg from '../../assets/images/outer.svg'
 
 import { useCart } from '../../context/UseCartContext'
 import { IProduct } from '../../types'
@@ -102,11 +102,10 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
 
       <div className="flex flex-col gap-2 items-center md:text-start col-span-1 md:gap-5 md:items-start">
         <span className="badge badge-success w-2/3 bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold">
-          {`${
-            changeText
+          {`${changeText
               ? resultDiscountPercent.replace('.0', '') + '% de desconto'
               : 'parcelamento em ate 12x'
-          }`}
+            }`}
         </span>
         <span className="badge badge-success w-2/3 bg-[#D5FDC7] text-[#004907] uppercase text-xs font-semibold">
           {changeText ? (
@@ -123,7 +122,7 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
           ) : (
             <span className="flex gap-1">
               <span className="text-[#004907]">Entrada no PIX + </span>
-              <span className="text-[#1F7501]/50">pacercelas</span>
+              <span className="text-[#1F7501]/50">parcelas</span>
             </span>
           )}
         </span>
