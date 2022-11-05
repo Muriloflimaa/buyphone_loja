@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
+import ProductCard from '../../../../../components/ProductCard'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
 import { apiStore } from '../../../../../services/api'
-import ProductCard from '../../../../../components/ProductCard'
 
 interface DataProps {
   data: ICategory
@@ -24,6 +24,12 @@ export default function Products({ data }: DataProps) {
       : userData?.type === 1
       ? 12.5
       : 7
+
+  const [changeText, setChangeText] = useState(false)
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
 
   return (
     <>
@@ -47,20 +53,25 @@ export default function Products({ data }: DataProps) {
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-              return (
-                <ProductCard
-                  key={products.id}
-                  id={products.id}
-                  name={products.name}
-                  colorPhone={products.color}
-                  price={ourPrice}
-                  averagePrice={averagePrice}
-                  idCategory={products.id}
-                  slug={products.slug}
-                  slugCategory={data.slug}
-                  image={products.media[0].original_url}
-                  memory={products.memory}
-                />
+              return ourPrice ? (
+                <React.Fragment key={products.id}>
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    idCategory={products.id}
+                    slug={products.slug}
+                    slugCategory={data.slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                    changeText={changeText}
+                  />
+                </React.Fragment>
+              ) : (
+                <></>
               )
             })
           ) : (

@@ -1,5 +1,3 @@
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -9,6 +7,7 @@ import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
+import MeetImg from '../assets/images/BannerMeet.png'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -47,24 +46,12 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
-  const [showArrow, setShowArrow] = useState(true)
   const currentRefCarroussel = useRef<any>()
-
-  useEffect(() => {
-    window.addEventListener('scroll', changeBackground)
-  }, [])
+  const [changeText, setChangeText] = useState(false)
 
   useEffect(() => {
     getProductsMatch()
   }, [])
-
-  const changeBackground = () => {
-    if (window.scrollY > 300) {
-      setShowArrow(true)
-    } else {
-      setShowArrow(false)
-    }
-  }
 
   async function getProductsMatch() {
     try {
@@ -85,6 +72,10 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     setCurrentSlide(currentSlide + 1)
   }
 
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
+
   return (
     <>
       <div className="absolute -mt-48" id="home"></div>
@@ -93,18 +84,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        {showArrow === true ? (
-          <div className="w-full fixed z-50 bottom-24 ml-[85%] md:ml-[95%] md:bottom-12 ">
-            <a onClick={() => scroll(0, 100)} href="#home">
-              <div className="btn btn-circle border-transparent bg-base-100 shadow-md shadow-black/40">
-                <FontAwesomeIcon
-                  icon={faChevronUp}
-                  className="w-4 marker:h-4 marker:text-primary"
-                />
-              </div>
-            </a>
-          </div>
-        ) : null}
         <div className="block md:hidden">
           <CarouselComponent
             image={
@@ -170,7 +149,14 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           >
             {productsMatch &&
               productsMatch.map((res) => {
-                return <CardMatch key={res.id} data={res} next={next} />
+                return (
+                  <CardMatch
+                    key={res.id}
+                    data={res}
+                    changeText={changeText}
+                    next={next}
+                  />
+                )
               })}
           </Carousel>
         </div>
@@ -200,25 +186,53 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </h1>
 
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
-            {data.data.map((category) =>
-              category.products.map((products: IProduct) => {
-                const returnPrice = verificationPrice(products)
-                return (
-                  <ProductCard
-                    key={products.id}
-                    id={products.id}
-                    name={products.name}
-                    idCategory={category.id}
-                    colorPhone={products.color}
-                    price={returnPrice.ourPrice}
-                    averagePrice={returnPrice.averagePrice}
-                    slug={products.slug}
-                    slugCategory={category.slug}
-                    image={products.media[0].original_url}
-                    memory={products.memory}
-                  />
-                )
-              })
+            {data?.data.length > 0 ? (
+              data.data.map((category) =>
+                category.products.map((products: IProduct) => {
+                  const returnPrice = verificationPrice(products)
+                  return (
+                    returnPrice.ourPrice > 0 && (
+                      <ProductCard
+                        key={products.id}
+                        id={products.id}
+                        name={products.name}
+                        idCategory={category.id}
+                        colorPhone={products.color}
+                        price={returnPrice.ourPrice}
+                        averagePrice={returnPrice.averagePrice}
+                        slug={products.slug}
+                        slugCategory={category.slug}
+                        image={products.media[0].original_url}
+                        memory={products.memory}
+                        changeText={changeText}
+                      />
+                    )
+                  )
+                })
+              )
+            ) : (
+              <div className="flex gap-3 justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <h1>Carregando...</h1>
+              </div>
             )}
           </div>
         </div>
@@ -286,6 +300,17 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               depoiment="É uma nova forma muito legal, de comprar produtos da apple!"
             />
           </Carousel>
+        </div>
+
+        <div className="max-w-7xl mx-auto my-10">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Conheça a BuyPhone
+          </h1>
+          <Image
+            src={MeetImg}
+            layout="responsive"
+            className="rounded-3xl cursor-pointer"
+          />
         </div>
       </div>
     </>
