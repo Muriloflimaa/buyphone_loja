@@ -64,6 +64,12 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
     } catch (error) {}
   }
 
+  const [changeText, setChangeText] = useState(false)
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
+
   return (
     <>
       {!!products ? (
@@ -109,6 +115,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                     slugCategory={products.category_slug}
                     image={products.media[0].original_url}
                     memory={products.memory}
+                    changeText={changeText}
                   />
                 )
               })}
