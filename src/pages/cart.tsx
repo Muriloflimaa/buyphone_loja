@@ -35,44 +35,28 @@ export default function Cart() {
               : ''}
           </span>
         </div>
+
         <div className="flex flex-col gap-3">
           {cartSize && cartSize > 0 && !!isAttCart ? (
-            [1, 2].map(() => (
-              <div className="rounded-md w-full ">
-                <div className="animate-pulse flex w-full">
-                  <div
-                    className="flex justify-between w-full"
-                    data-testid="product"
-                  >
-                    <div className="grid grid-cols-2 col-span-2 w-full">
-                      <div className="w-36 h-full flex items-center">
-                        <img
-                          className="blur"
-                          src={
-                            'https://buyphone-files.s3.us-east-2.amazonaws.com/2531/11-BRANCO.webp'
-                          }
-                        />
-                      </div>
+            cart.map((res) => (
+              <div
+                key={res.id}
+                className="flex animate-pulse justify-between items-center w-full p-4"
+              >
+                <div className="flex gap-3 w-full">
+                  <div className="w-28 h-36 bg-slate-300 rounded flex items-center"></div>
 
-                      <div className="flex flex-col gap-2 justify-between">
-                        <div className="grid gap-2">
-                          <div className="h-2 w-full bg-slate-300 rounded "></div>
+                  <div className="flex flex-col gap-8">
+                    <div className="grid gap-2">
+                      <div className="h-2 w-14 bg-slate-300 rounded "></div>
 
-                          <div className="h-2 w-full bg-slate-300 rounded "></div>
-                        </div>
-
-                        <div className="h-2 w-full bg-slate-300 rounded "></div>
-                      </div>
+                      <div className="h-2 w-32 bg-slate-300 rounded "></div>
                     </div>
-                    <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
-                      <div className="h-2 w-full bg-slate-300 rounded "></div>
 
-                      <div className="flex w-full justify-end">
-                        <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
-                      </div>
-                    </div>
+                    <div className="h-2 w-28 bg-slate-300 rounded "></div>
                   </div>
                 </div>
+                <div className="h-20 w-1/3 bg-slate-300 rounded " />
               </div>
             ))
           ) : cartSize && cartSize > 0 ? (

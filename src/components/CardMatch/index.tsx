@@ -22,7 +22,9 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
   const [successMatch, setSuccessMatch] = useState(false)
   const { addProduct } = useCart()
   const handleOpenModalItsMatch = () => {
-    return document.getElementById('modal-open-match')?.classList.add('modal-open')
+    return document
+      .getElementById('modal-open-match')
+      ?.classList.add('modal-open')
   }
 
   async function noMatch() {
@@ -110,10 +112,11 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
 
         <div className="flex flex-col gap-2 items-center md:text-start col-span-1 md:gap-5 md:items-start">
           <span className="badge badge-success w-2/3 bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold">
-            {`${changeText
-              ? resultDiscountPercent.replace('.0', '') + '% de desconto'
-              : 'parcelamento em ate 12x'
-              }`}
+            {`${
+              changeText
+                ? resultDiscountPercent.replace('.0', '') + '% de desconto'
+                : 'parcelamento em ate 12x'
+            }`}
           </span>
           <span className="badge badge-success w-2/3 bg-[#D5FDC7] text-[#004907] uppercase text-xs font-semibold">
             {changeText ? (

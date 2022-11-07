@@ -34,9 +34,9 @@ import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
-import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import ProductCard from '../components/ProductCard'
+import CardMatch from '../components/CardMatch'
 
 interface DataProps {
   data: {
@@ -58,7 +58,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [currentSlide, setCurrentSlide] = useState(1)
