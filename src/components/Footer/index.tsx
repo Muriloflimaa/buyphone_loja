@@ -51,7 +51,7 @@ export default function Footer() {
                       href={`/products/apple/iphones/${category.slug}`}
                       passHref
                     >
-                      <a className="w-max">{category.name}</a>
+                      <a className="w-max link-hover">{category.name}</a>
                     </Link>
                   </li>
                 )
@@ -90,10 +90,19 @@ export default function Footer() {
           </h3>
           <ul className="gap-1 opacity-90 text-info-content">
             <Link href={'/politics'} passHref>
-              <li className="link cursor-pointer">Política de privacidade</li>
+              <li className="link link-hover cursor-pointer">
+                Política de privacidade
+              </li>
             </Link>
             <Link href={'/terms'} passHref>
-              <li className="link cursor-pointer">Termos e condições</li>
+              <li className="link link-hover cursor-pointer">
+                Termos e condições
+              </li>
+            </Link>
+            <Link href={'/institucional'} passHref>
+              <li className="link link-hover cursor-pointer">
+                Conheça a BuyPhone
+              </li>
             </Link>
           </ul>
         </div>
@@ -102,7 +111,7 @@ export default function Footer() {
             Contatos
           </h3>
           <ul className="text-sm block leading-6 text-info-content">
-            <li>
+            <li className="link-hover">
               <Link href={'mailto:contato@buyphone.com.br'}>
                 <a className="flex items-center">
                   <FontAwesomeIcon
@@ -113,7 +122,7 @@ export default function Footer() {
                 </a>
               </Link>
             </li>
-            <li>
+            <li className="link-hover">
               <Link href={'https://www.facebook.com/Buyphone.match'}>
                 <a target="_blank" className="flex items-center">
                   <FontAwesomeIcon
@@ -124,7 +133,7 @@ export default function Footer() {
                 </a>
               </Link>
             </li>
-            <li>
+            <li className="link-hover">
               <Link href={'https://instagram.com/buyphone.match'}>
                 <a
                   target="_blank"
@@ -138,7 +147,7 @@ export default function Footer() {
                 </a>
               </Link>
             </li>
-            <li>
+            <li className="link-hover">
               <Link href={'https://wa.me/5518981367275'}>
                 <a
                   target="_blank"

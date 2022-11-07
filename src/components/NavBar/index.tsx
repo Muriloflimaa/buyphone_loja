@@ -1,5 +1,8 @@
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronDown,
+  faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   HomeIcon,
@@ -650,6 +653,20 @@ export default function NavBar() {
                   <a className="flex gap-3 w-full">
                     <UserIcon className="h-5 w-5 text-info-content" />
                     <span className="text-info-content">Minha conta</span>
+                  </a>
+                </Link>
+              </div>
+
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/institucional'}>
+                  <a className="flex gap-3 w-full">
+                    <FontAwesomeIcon
+                      icon={faCircleExclamation}
+                      className="w-5 h-5"
+                    />
+                    <span className="text-info-content">
+                      Conheça a BuyPhone
+                    </span>
                   </a>
                 </Link>
               </div>

@@ -52,6 +52,7 @@ import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import ProductCard from '../components/ProductCard'
+import Link from 'next/link'
 
 interface DataProps {
   data: {
@@ -430,11 +431,15 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Conheça a BuyPhone
           </h1>
-          <Image
-            src={MeetImg}
-            layout="responsive"
-            className="rounded-3xl cursor-pointer"
-          />
+          <Link href="/institucional">
+            <a>
+              <Image
+                src={MeetImg}
+                layout="responsive"
+                className="rounded-3xl cursor-pointer"
+              />
+            </a>
+          </Link>
         </div>
       </div>
       <ItsModal />
