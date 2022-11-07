@@ -326,43 +326,29 @@ export default function NavBar() {
 
                           <div className="card-body max-h-80 overflow-y-auto gap-6">
                             {cartSize && cartSize > 0 && !!isAttCart ? (
-                              [1, 2].map((res) => (
+                              cart.map((res) => (
                                 <div
-                                  key={res}
-                                  className="rounded-md max-w-sm w-full "
+                                  key={res.id}
+                                  className="flex animate-pulse justify-between w-full min-h-[70px] p-4"
                                 >
-                                  <div className="animate-pulse flex w-full">
-                                    <div
-                                      className="flex justify-between w-full"
-                                      data-testid="product"
-                                    >
-                                      <div className="grid grid-cols-2 col-span-2 w-full">
-                                        <div className="w-12 h-full flex items-center">
-                                          <img
-                                            className="blur"
-                                            src={
-                                              'https://buyphone-files.s3.us-east-2.amazonaws.com/2531/11-BRANCO.webp'
-                                            }
-                                          />
-                                        </div>
+                                  <div className="flex gap-3 w-full">
+                                    <div className="w-8 h-full bg-slate-300 rounded flex items-center"></div>
 
-                                        <div className="flex flex-col w-1/2 gap-2 justify-between">
-                                          <div className="grid gap-2">
-                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
+                                    <div className="flex flex-col gap-2 justify-between">
+                                      <div className="grid gap-2">
+                                        <div className="h-2 w-8 bg-slate-300 rounded "></div>
 
-                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
-                                          </div>
-
-                                          <div className="h-2 w-full bg-slate-300 rounded "></div>
-                                        </div>
+                                        <div className="h-2 w-8 bg-slate-300 rounded "></div>
                                       </div>
-                                      <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
-                                        <div className="h-2 w-full bg-slate-300 rounded "></div>
 
-                                        <div className="flex w-full justify-end">
-                                          <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
-                                        </div>
-                                      </div>
+                                      <div className="h-2 w-8 bg-slate-300 rounded "></div>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
+                                    <div className="h-2 w-full bg-slate-300 rounded "></div>
+
+                                    <div className="flex w-full justify-end">
+                                      <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
                                     </div>
                                   </div>
                                 </div>
