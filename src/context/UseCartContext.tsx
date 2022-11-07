@@ -44,7 +44,7 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
-  const [storagedCart] = useLocalStorage('@BuyPhone:cart', '') //pegando carrinho no storage
+  const storagedCart = useLocalStorage('@BuyPhone:cart') //pegando carrinho no storage
   const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
   const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado

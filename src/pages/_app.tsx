@@ -80,6 +80,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>
+        ) : router.route === `/institucional` ? (
+          <Component {...pageProps} />
         ) : (
           <CartProvider>
             <NavBar />

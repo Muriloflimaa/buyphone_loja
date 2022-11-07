@@ -1,0 +1,98 @@
+.object1 {
+  -webkit-animation: action 1s infinite alternate;
+  animation: action 1s infinite alternate;
+}
+
+.object2 {
+  -webkit-animation: action 2s infinite alternate;
+  animation: action 2s infinite alternate;
+}
+
+.object3 {
+  -webkit-animation: action 3s infinite alternate;
+  animation: action 3.5s infinite alternate;
+}
+
+.object4 {
+  -webkit-animation: action 4s infinite alternate;
+  animation: action 4s infinite alternate;
+}
+
+.object5 {
+  -webkit-animation: action 6s infinite alternate;
+  animation: action 4.5s infinite alternate;
+}
+
+.object6 {
+  -webkit-animation: action 7s infinite alternate;
+  animation: action 5s infinite alternate;
+}
+
+.object7 {
+  -webkit-animation: action 8s infinite alternate;
+  animation: action 5.5s infinite alternate;
+}
+
+@-webkit-keyframes action {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes action {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-30px);
+  }
+}
+
+.container {
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.photobanner {
+  position: absolute;
+  width: 190%;
+  top: 0px;
+  left: 0px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+  white-space: nowrap;
+  animation: bannermove 30s linear infinite;
+
+  @media only screen and (min-width: 600px) {
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .photobanner {
+    position: absolute;
+    width: 200%;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    gap: 1rem;
+    animation: bannermove 5s linear infinite;
+  }
+}
+
+@keyframes bannermove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
+}

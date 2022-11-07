@@ -53,7 +53,7 @@ export default function Products({ data }: DataProps) {
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-              return ourPrice ? (
+              return (
                 <React.Fragment key={products.id}>
                   <ProductCard
                     key={products.id}
@@ -70,8 +70,6 @@ export default function Products({ data }: DataProps) {
                     changeText={changeText}
                   />
                 </React.Fragment>
-              ) : (
-                <></>
               )
             })
           ) : (

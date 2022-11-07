@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
+import LoadingComponent from '../../../components/LoadingComponent'
 import ProductCart from '../../../components/ProductCart'
 import { TotalPayment } from '../../../components/TotalPayment'
 import { AuthContext } from '../../../context/AuthContext'
@@ -33,6 +34,7 @@ export default function CreditCheckout({ address }: Address) {
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const { userData } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (values) {
@@ -57,7 +59,9 @@ export default function CreditCheckout({ address }: Address) {
     try {
       const { data } = await apiStore.get(`cards/user/${address.user_id}`)
       setCards(data)
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       setCards([])
     }
   }
@@ -75,7 +79,7 @@ export default function CreditCheckout({ address }: Address) {
         shippingPrice: 0,
       }
 
-      setCookies('@BuyPhone:CreditCardInfo', data, 120)
+      setCookies('@BuyPhone:CreditCardInfo', data, 180)
       router.push('/shipping/payment/match-installments')
 
       return
@@ -124,6 +128,7 @@ export default function CreditCheckout({ address }: Address) {
                 </div>
               )
             })}
+            {loading && <LoadingComponent />}
 
             <div className="flex gap-2 w-full items-center">
               <div className="w-5 h-5" />

@@ -1,13 +1,9 @@
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
-import AnaImg from '../assets/images/anabrisa.jpg'
 import MeetImg from '../assets/images/BannerMeet.png'
-import BarbaraImg from '../assets/images/barbara.jpg'
-import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -15,27 +11,47 @@ import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
 
-//banner desktop----------
+//*** images
+//*** clientes
+import AnaImg from '../assets/images/client_anabrisa.jpg'
+import BarbaraImg from '../assets/images/client_barbara.jpg'
+import BrendaImg from '../assets/images/client_brenda.jpg'
+import CLyviaImg from '../assets/images/client_lyvia.png'
+import CGabrielImg from '../assets/images/client_gabriel.png'
+import CLuizImg from '../assets/images/client_luiz.png'
+import CIgorImg from '../assets/images/client_igor.png'
+import CAmandaImg from '../assets/images/client_amanda.png'
+//*** banners grandes (desktop)
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
 import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
 //dark
 import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
 import Banner2DesktopDark from '../assets/images/banner2desktopdark.webp'
-
-//banner desktop-----------
+import BannerBlackFriday from '../assets/images/bannerblackfriday.webp'
+//***  minibanners
 //light
 import Banner1MobileLight from '../assets/images/banner1mobilelight.webp'
 import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
+import BannerInstagramLight from '../assets/images/banneriglight.webp'
+import BannerLojasLight from '../assets/images/bannerlojaslight.webp'
+import MiniBannerWhatsappLigth from '../assets/images/MiniBannerWhatsappLigth.webp'
 //dark
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
+import BannerInstagramDark from '../assets/images/bannerigdark.webp'
+import BannerLojasDark from '../assets/images/bannerlojasdark.webp'
+import MiniBannerWhatsappDark from '../assets/images/MiniBannerWhatsappDark.webp'
+
+import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
+import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
 
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import ItsModal from '../components/Modals/Its-Match'
 import ProductCard from '../components/ProductCard'
+import Link from 'next/link'
 import CardMatch from '../components/CardMatch'
 
 interface DataProps {
@@ -98,36 +114,98 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1DesktopDark, Banner2DesktopDark]
-                : [Banner1DesktopLight, Banner2DesktopLight]
+                ? [
+                    {
+                      ...BannerBlackFriday,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                    },
+                    Banner1DesktopDark,
+                    Banner2DesktopDark,
+                  ]
+                : [
+                    {
+                      ...BannerBlackFriday,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                    },
+                    Banner1DesktopLight,
+                    Banner2DesktopLight,
+                  ]
             }
           />
         </div>
 
         <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-3 md:mt-1 gap-1">
           <div className="md:w-1/2">
-            <Link
-              className="cursor-pointer"
-              href={'/products/apple/iphones/iphone-13-pro'}
-              passHref
-            >
-              <a>
-                <Image
-                  src={!!darkOrLigth ? BannerIphone13Dark : BannerIphone13Light}
-                  quality={100}
-                  placeholder="blur"
-                ></Image>
-              </a>
-            </Link>
+            <CarouselComponent
+              image={
+                !!darkOrLigth
+                  ? [
+                      {
+                        ...MiniBannerBlackFriday,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                      },
+                      {
+                        ...BannerIphone13Dark,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                      {
+                        ...BannerInstagramDark,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+                      BannerLojasDark,
+                    ]
+                  : [
+                      {
+                        ...MiniBannerBlackFriday,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                      },
+                      {
+                        ...BannerIphone13Light,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                      {
+                        ...BannerInstagramLight,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+                      BannerLojasLight,
+                    ]
+              }
+            />
           </div>
           <div className="md:w-1/2">
-            <a href="#depoiments">
-              <Image
-                src={BannerDepoiments}
-                placeholder="blur"
-                quality={100}
-              ></Image>
-            </a>
+            <CarouselComponent
+              image={
+                !!darkOrLigth
+                  ? [
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappDark,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      {
+                        ...MiniBannerConheca,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
+                  : [
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappLigth,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      {
+                        ...MiniBannerConheca,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
+              }
+            />
           </div>
         </div>
         <div className="mt-10">
@@ -192,22 +270,20 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                 category.products.map((products: IProduct) => {
                   const returnPrice = verificationPrice(products)
                   return (
-                    returnPrice.ourPrice > 0 && (
-                      <ProductCard
-                        key={products.id}
-                        id={products.id}
-                        name={products.name}
-                        idCategory={category.id}
-                        colorPhone={products.color}
-                        price={returnPrice.ourPrice}
-                        averagePrice={returnPrice.averagePrice}
-                        slug={products.slug}
-                        slugCategory={category.slug}
-                        image={products.media[0].original_url}
-                        memory={products.memory}
-                        changeText={changeText}
-                      />
-                    )
+                    <ProductCard
+                      key={products.id}
+                      id={products.id}
+                      name={products.name}
+                      idCategory={category.id}
+                      colorPhone={products.color}
+                      price={returnPrice.ourPrice}
+                      averagePrice={returnPrice.averagePrice}
+                      slug={products.slug}
+                      slugCategory={category.slug}
+                      image={products.media[0].original_url}
+                      memory={products.memory}
+                      changeText={changeText}
+                    />
                   )
                 })
               )
@@ -300,6 +376,54 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               profissional="Criador(a) de conteúdo digital"
               depoiment="É uma nova forma muito legal, de comprar produtos da apple!"
             />
+            <CardDepoiments
+              name="Lyvia Nagib Fulanetti"
+              instagram="www.instagram.com/lyvianagib/"
+              linkVideo="https://www.youtube.com/embed/Npmw1UcMnxM?autoplay=0&controls=0&showinfo=0&playlist=Npmw1UcMnxM"
+              image={CLyviaImg}
+              profissional="Fisioterapeuta"
+              depoiment="Comprei dois celulares, um pra mim e um pra
+                     minha irmã, dois iPhones 11. O preço é muito
+                     abaixo. Vale muito a pena!"
+            />
+            <CardDepoiments
+              name="Gabriel Martins"
+              instagram="www.instagram.com/gabrielpessoamartins/"
+              linkVideo="https://www.youtube.com/embed/w1Sv0QIFxyA?autoplay=0&controls=0&showinfo=0&playlist=w1Sv0QIFxyA"
+              image={CGabrielImg}
+              profissional="Empresário"
+              depoiment="Celular zero, lacrado na caixa! Pesquisei
+                     bastante em vários lugares e o preço deles é bem
+                     abaixo do mercado."
+            />
+            <CardDepoiments
+              name="Luiz Henrique Puertas"
+              instagram="www.instagram.com/luizpuertas/"
+              linkVideo="https://www.youtube.com/embed/t3U1o2I9WvI?autoplay=0&controls=0&showinfo=0&playlist=t3U1o2I9WvI"
+              image={CLuizImg}
+              profissional="Vendas de sistemas fotovoltaicos"
+              depoiment="Um preço muito bom, paguei muito barato no
+                     Iphone original lacrado!"
+            />
+            <CardDepoiments
+              name="Igor Fortin"
+              instagram="www.instagram.com/igorfortin/"
+              linkVideo="https://www.youtube.com/embed/vH0EjiMyZaQ?autoplay=0&controls=0&showinfo=0&playlist=vH0EjiMyZaQ"
+              image={CIgorImg}
+              profissional="Advogado"
+              depoiment="IPhone 12 que adquiri na BuyPhone, perfeito!
+                     Novo, com ótimas condições de preço e
+                     parcelamento."
+            />
+            <CardDepoiments
+              name="Amanda L. Prado"
+              instagram="www.instagram.com/_amandalprado/"
+              linkVideo="https://www.youtube.com/embed/xzX8LJv7VuQ?autoplay=0&controls=0&showinfo=0&playlist=xzX8LJv7VuQ"
+              image={CAmandaImg}
+              profissional="🧿"
+              depoiment="A Amanda adorou o produto que comprou na
+                     BuyPhone."
+            />
           </Carousel>
         </div>
 
@@ -307,11 +431,15 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Conheça a BuyPhone
           </h1>
-          <Image
-            src={MeetImg}
-            layout="responsive"
-            className="rounded-3xl cursor-pointer"
-          />
+          <Link href="/institucional">
+            <a>
+              <Image
+                src={MeetImg}
+                layout="responsive"
+                className="rounded-3xl cursor-pointer"
+              />
+            </a>
+          </Link>
         </div>
       </div>
       <ItsModal />
