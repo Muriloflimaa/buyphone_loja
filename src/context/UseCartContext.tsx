@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -78,11 +78,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         const discount =
           process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
             ? 12.5
             : !!isUser && user && JSON.parse(user)?.type === 1
-            ? 12.5
-            : 7
+              ? 12.5
+              : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -95,6 +95,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           filteredItens.length > 0 ? Math.min(...filteredItens) : 0
         const discountPrice = Math.round(averagePrice * (discount / 100))
         const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
+        if (ourPrice <= 0) {
+          CleanCart()
+          window.location.href = '/'
+          return
+        }
 
         const response = {
           ...item, //adicionando amount e id que está no localstorage
@@ -181,11 +187,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           const products = addProduct.data
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
-            'Notificação'
+            'Sucesso'
           )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
@@ -194,24 +199,31 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
-            'Notificação'
+            'Sucesso'
           )
 
-          const newProduct = {
-            id: products.id,
-            amount: 1,
+          if (cart.length == 0) {
+            const newProduct = {
+              id: products.id,
+              amount: 1,
+            }
+            updatedCart.push(newProduct)
+          } else {
+            const newProduct = {
+              id: products.id,
+              amount: 1,
+            }
+            updatedCart.push(newProduct)
           }
-          updatedCart.push(newProduct)
         }
         //Atualizando o Carrinho
 
         setCart(updatedCart)
       } catch {
-        ToastCustom(2000, 'Erro na adição do produto', 'error', 'Notificação')
+        ToastCustom(2000, 'Erro na adição do produto', 'error', 'Que pena...')
         localStorage.removeItem('@BuyPhone:cart')
         CleanCart()
       }
@@ -254,7 +266,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         throw Error()
       }
     } catch {
-      ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Notificação')
+      ToastCustom(2000, 'Erro na remoção do produto', 'error', 'Que pena...')
       CleanCart()
     }
   }
@@ -295,7 +307,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       CleanCart()
     }
   }
-
   return (
     <CartContext.Provider
       value={{

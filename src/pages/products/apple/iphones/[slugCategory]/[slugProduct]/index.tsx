@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
+  faCircleExclamation,
   faEnvelope,
   faLocationDot,
   faTruckFast,
@@ -27,6 +28,7 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import InnerImageZoom from 'react-inner-image-zoom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 
 interface IParams {
   params: {
@@ -332,66 +334,68 @@ export default function Products({ data }: DataProps) {
                   </button>
                 )}
               </div>
-              <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
-                <h1 className="text-base font-semibold">
-                  Calcule o frete e prazo de entrega
-                </h1>
-                <form
-                  className="flex flex-col md:flex-row items-start gap-2"
-                  onSubmit={handleSubmit(handleCepStorage)}
-                >
-                  <Input
-                    {...register('cep')}
-                    type="text"
-                    maxLength={9}
-                    placeholder="00000-000"
-                    onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
-                    error={errors.cep}
-                  />
-                  {formState.isSubmitting ? (
-                    <button
-                      type="submit"
-                      className="btn loading normal-case text-white"
-                    >
-                      Carregando
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-info text-white upper-case text-xs md:text-md py-0"
-                      type="submit"
-                    >
-                      Consultar
-                    </button>
-                  )}
-                </form>
-                <div className="flex flex-col items-start md:text-xs">
-                  {address && (
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        className="w-4 h-4"
-                      />
-                      <p>
-                        {`${address?.Street && address?.Street + '-'} ${
-                          address?.City
-                        }, ${address?.UF}`}
-                      </p>
-                    </div>
-                  )}
-
-                  {shippingOn && (
-                    <div className="flex justify-between items-start w-full text-success">
-                      <p className="flex items-center gap-2">
+              {returnPrice.ourPrice > 0 && (
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
+                  <h1 className="text-base font-semibold">
+                    Calcule o frete e prazo de entrega
+                  </h1>
+                  <form
+                    className="flex flex-col md:flex-row items-start gap-2"
+                    onSubmit={handleSubmit(handleCepStorage)}
+                  >
+                    <Input
+                      {...register('cep')}
+                      type="text"
+                      maxLength={9}
+                      placeholder="00000-000"
+                      onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                      error={errors.cep}
+                    />
+                    {formState.isSubmitting ? (
+                      <button
+                        type="submit"
+                        className="btn loading normal-case text-white"
+                      >
+                        Carregando
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
+                        type="submit"
+                      >
+                        Consultar
+                      </button>
+                    )}
+                  </form>
+                  <div className="flex flex-col items-start md:text-xs">
+                    {address && (
+                      <div className="flex items-center gap-2">
                         <FontAwesomeIcon
-                          icon={faTruckFast}
+                          icon={faLocationDot}
                           className="w-4 h-4"
                         />
-                        {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
-                      </p>
-                    </div>
-                  )}
+                        <p>
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
+                        </p>
+                      </div>
+                    )}
+
+                    {shippingOn && (
+                      <div className="flex justify-between items-start w-full text-success">
+                        <p className="flex items-center gap-2">
+                          <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-4 h-4"
+                          />
+                          {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
                 <div className="alert items-start bg-accent w-full grid ">
@@ -426,17 +430,6 @@ export default function Products({ data }: DataProps) {
             {description ? refact(description) : 'Sem descrição'}
           </div>
         </div>
-        {/* <div className="flex-col my-5 gap-3 text-info-content flex">
-          <div className="alert bg-accent border-[1px] border-[#00000014] items-center justify-start gap-1 md:flex-col md:items-start md:flex">
-            <h1 className="text-base font-medium">
-              Avaliações de clientes
-              <span className="text-[10px] pl-1 font-normal">
-                (300 avaliações)
-              </span>
-            </h1>
-          </div>
-          <Rating />
-        </div> */}
       </div>
     </>
   )

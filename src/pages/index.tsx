@@ -1,5 +1,3 @@
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -7,12 +5,12 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
+import MeetImg from '../assets/images/BannerMeet.png'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
-import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -33,10 +31,14 @@ import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 
+import BannerBlackFriday from '../assets/images/bannerblackfriday.webp'
+
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
+import ItsModal from '../components/Modals/Its-Match'
+import ProductCard from '../components/ProductCard'
 
 interface DataProps {
   data: {
@@ -48,6 +50,7 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
+  const [changeText, setChangeText] = useState(false)
 
   useEffect(() => {
     getProductsMatch()
@@ -72,6 +75,10 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     setCurrentSlide(currentSlide + 1)
   }
 
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
+
   return (
     <>
       <div className="absolute -mt-48" id="home"></div>
@@ -93,8 +100,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <CarouselComponent
             image={
               !!darkOrLigth
-                ? [Banner1DesktopDark, Banner2DesktopDark]
-                : [Banner1DesktopLight, Banner2DesktopLight]
+                ? [BannerBlackFriday, Banner1DesktopDark, Banner2DesktopDark]
+                : [BannerBlackFriday, Banner1DesktopLight, Banner2DesktopLight]
             }
           />
         </div>
@@ -145,7 +152,14 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           >
             {productsMatch &&
               productsMatch.map((res) => {
-                return <CardMatch key={res.id} data={res} next={next} />
+                return (
+                  <CardMatch
+                    key={res.id}
+                    data={res}
+                    changeText={changeText}
+                    next={next}
+                  />
+                )
               })}
           </Carousel>
         </div>
@@ -193,6 +207,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                         slugCategory={category.slug}
                         image={products.media[0].original_url}
                         memory={products.memory}
+                        changeText={changeText}
                       />
                     )
                   )
@@ -289,7 +304,19 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             />
           </Carousel>
         </div>
+
+        <div className="max-w-7xl mx-auto my-10">
+          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+            Conheça a BuyPhone
+          </h1>
+          <Image
+            src={MeetImg}
+            layout="responsive"
+            className="rounded-3xl cursor-pointer"
+          />
+        </div>
       </div>
+      <ItsModal />
     </>
   )
 }
