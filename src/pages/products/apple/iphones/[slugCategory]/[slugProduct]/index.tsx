@@ -455,17 +455,6 @@ export default function Products({ data }: DataProps) {
             {description ? refact(description) : 'Sem descrição'}
           </div>
         </div>
-        {/* <div className="flex-col my-5 gap-3 text-info-content flex">
-          <div className="alert bg-accent border-[1px] border-[#00000014] items-center justify-start gap-1 md:flex-col md:items-start md:flex">
-            <h1 className="text-base font-medium">
-              Avaliações de clientes
-              <span className="text-[10px] pl-1 font-normal">
-                (300 avaliações)
-              </span>
-            </h1>
-          </div>
-          <Rating />
-        </div> */}
       </div>
     </>
   )
