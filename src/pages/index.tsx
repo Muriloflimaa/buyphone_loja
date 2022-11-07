@@ -49,10 +49,10 @@ import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
-import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import ProductCard from '../components/ProductCard'
 import Link from 'next/link'
+import CardMatch from '../components/CardMatch'
 
 interface DataProps {
   data: {
