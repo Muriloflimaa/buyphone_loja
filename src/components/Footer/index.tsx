@@ -103,13 +103,13 @@ export default function Footer() {
           </h3>
           <ul className="text-sm block leading-6 text-info-content">
             <li>
-              <Link href={'mailto:contatobuyphone@gmail.com'}>
+              <Link href={'mailto:contato@buyphone.com.br'}>
                 <a className="flex items-center">
                   <FontAwesomeIcon
                     icon={faEnvelope}
                     className="mr-2 w-5 h-5 text-info-content"
                   />
-                  contatobuyphone@gmail.com
+                  contato@buyphone.com.br
                 </a>
               </Link>
             </li>
