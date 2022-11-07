@@ -643,7 +643,7 @@ export default function NavBar() {
                       </div>
                     ))
                   ) : (
-                    <p>Carregando.</p>
+                    <LoadingComponent />
                   )}
                 </div>
               </div>

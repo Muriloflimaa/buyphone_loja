@@ -17,7 +17,7 @@ import Parc3Svg from '../../assets/images/image29.svg'
 import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
 import { apiStore } from '../../services/api'
-import SeloReclamePng from '../../assets/images/seloReclame.png'
+import SeloBlintadoGooglePng from '../../assets/images/google.png'
 import SeloBlintadoPng from '../../assets/images/siteblindado.png'
 
 export default function Footer() {
@@ -206,13 +206,25 @@ export default function Footer() {
             <div className="flex flex-col">
               <h3 className="font-medium text-lg mb-3">Verificações</h3>
               <ul className="flex flex-col gap-2">
-                <li className="w-[100%]">
+                <li className="w-[50%]">
                   <a
                     target={'_blank'}
                     href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"
                   >
                     <Image
                       src={SeloBlintadoPng}
+                      layout="responsive"
+                      quality={100}
+                    ></Image>
+                  </a>
+                </li>
+                <li className="w-[100%]">
+                  <a
+                    target={'_blank'}
+                    href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"
+                  >
+                    <Image
+                      src={SeloBlintadoGooglePng}
                       layout="responsive"
                       quality={100}
                     ></Image>

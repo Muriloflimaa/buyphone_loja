@@ -110,12 +110,12 @@ export default function Depoimentos() {
   return (
     <React.Fragment>
       <NavBar />
-      <div id="main" className="bg-primary">
+      <div id="main" className="bg-[#201942]">
         <div className="w-full pt-36 mx-auto max-w-6xl px-4">
           <div className="w-full flex flex-col-reverse md:flex-row justify-between">
-            <div className="flex flex-col text-base-100 ">
+            <div className="flex flex-col text-white ">
               <div className="text-center md:text-start">
-                <h1 className="text-base-100/10 uppercase text-5xl lg:text-8xl font-bold lg:absolute lg:leading-3">
+                <h1 className="text-white/10 uppercase text-5xl lg:text-8xl font-bold lg:absolute lg:leading-3">
                   pague menos
                 </h1>
                 <h2 className="uppercase tracking-widest text-xl font-bold lg:mt-6 ">
@@ -123,7 +123,7 @@ export default function Depoimentos() {
                   <br /> MUITO MAIS BARATO!
                 </h2>
               </div>
-              <Divider className="bg-base-100/20 divider h-[1px] text-center md:text-start" />
+              <Divider className="bg-white/20 divider h-[1px] text-center md:text-start" />
               <span className="font-normal lg:text-xl text-center md:text-start">
                 Conosco, você encontra toda linha de iPhones, com o melhor preço
                 do mercado, 100% nacionais fornecido pelas maiores lojas do
@@ -132,7 +132,7 @@ export default function Depoimentos() {
             </div>
 
             <div className="h-auto w-full flex justify-center">
-              <div className="bg-base-100/20 w-72 h-72 lg:w-96 lg:h-96 flex justify-center items-center relative rounded-[100%]">
+              <div className="bg-white/20 w-72 h-72 lg:w-96 lg:h-96 flex justify-center items-center relative rounded-[100%]">
                 <div className="w-40 lg:w-60 h-auto absolute lg:right-9 lg:top-0 z-10">
                   <Image
                     src={PhoneImg}
@@ -183,13 +183,13 @@ export default function Depoimentos() {
                 />
                 <div
                   className={
-                    'w-20 h-20 bg-base-100/10 rounded-[100%] shadow-md shadow-black/30 absolute -left-10 bottom-0 top-0 mt-[50%] ' +
+                    'w-20 h-20 bg-white/10 rounded-[100%] shadow-md shadow-black/30 absolute -left-10 bottom-0 top-0 mt-[50%] ' +
                     styles.object5
                   }
                 />
                 <div
                   className={
-                    'w-20 h-20 md:w-32  md:h-32 bg-base-100/10 rounded-[100%] shadow-md shadow-black/30 absolute -right-3 lg:-right-8 bottom-10 ' +
+                    'w-20 h-20 md:w-32  md:h-32 bg-white/10 rounded-[100%] shadow-md shadow-black/30 absolute -right-3 lg:-right-8 bottom-10 ' +
                     styles.object7
                   }
                 />
@@ -199,8 +199,8 @@ export default function Depoimentos() {
         </div>
         <div className="mx-4">
           <div className="py-14 px-4 relative max-w-6xl mx-auto hidden md:block">
-            <div className="w-24 h-[200px] blur-md bg-primary -left-8 absolute top-0 z-10" />
-            <div className="w-24 h-[200px] blur-md bg-primary -right-4 md:-right-8 absolute top-0 z-10" />
+            <div className="w-24 h-[200px] blur-md bg-[#201942] -left-8 absolute top-0 z-10" />
+            <div className="w-24 h-[200px] blur-md bg-[#201942] -right-4 md:-right-8 absolute top-0 z-10" />
             <div className={styles.container}>
               <div className={styles.photobanner}>
                 <CardLojas image={CasasBahiaImg} width={150} />
@@ -232,16 +232,16 @@ export default function Depoimentos() {
           </div>
         </div>
       </div>
-      <div id="entenda" className="bg-base-200">
+      <div id="entenda" className="bg-[#F2F2F2]">
         <div className="flex mx-auto max-w-6xl px-4 py-20 flex-col relative">
           <div className="text-center flex flex-col items-center">
-            <h1 className="text-primary/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
+            <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               ENTENDA
             </h1>
-            <h2 className="text-primary uppercase tracking-widest text-xl font-bold md:mt-6">
+            <h2 className="text-[#201942] uppercase tracking-widest text-xl font-bold md:mt-6">
               ASSISTA AO VÍDEO E ENTENDA MELHOR!
             </h2>
-            <div className="bg-primary/20 w-20 h-[5px] rounded-3xl mt-4"></div>
+            <div className="bg-[#201942]/20 w-20 h-[5px] rounded-3xl mt-4"></div>
           </div>
 
           <div className="flex justify-center w-full max-w-5xl mx-auto mt-11">
@@ -264,18 +264,18 @@ export default function Depoimentos() {
           </div>
         </div>
       </div>
-      <div className="bg-primary relative py-4 pb-10">
+      <div className="bg-[#201942] relative py-4 pb-10">
         <div className="max-w-6xl mx-auto flex flex-col items-center relative pt-10 md:pt-20 px-4">
           <div className="text-center flex flex-col items-center">
-            <h1 className="text-base-100/5 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
+            <h1 className="text-white/5 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               Conheça
             </h1>
-            <h2 className="text-base-100 md:w-2/3 uppercase tracking-widest text-xl font-bold md:mt-6">
+            <h2 className="text-white md:w-2/3 uppercase tracking-widest text-xl font-bold md:mt-6">
               TODAS AS ETAPAS DO NOSSO MODELO DE VENDAS INOVADOR
             </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-around relative w-full text-base-100 mt-10 md:mt-0">
+          <div className="flex flex-col md:flex-row justify-around relative w-full text-white mt-10 md:mt-0">
             <div className="absolute hidden md:flex w-full justify-center -bottom-32">
               <Image src={Arrow1} alt="Arrow1" />
             </div>
@@ -318,7 +318,7 @@ export default function Depoimentos() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-end w-full relative md:mt-14 z-10 text-base-100">
+          <div className="flex flex-col md:flex-row justify-end w-full relative md:mt-14 z-10 text-white">
             <div className="md:absolute hidden md:flex w-full justify-center md:justify-end md:-top-10 md:-left-36">
               <Image src={Arrow2} alt="Arrow 2" />
             </div>
@@ -328,7 +328,7 @@ export default function Depoimentos() {
             <div className="flex w-full h-36 justify-center md:hidden">
               <Image src={ArrowWhitePng} alt="Arrow2" />
             </div>
-            <div className="flex flex-col md:absolute md:left-0 items-center md:mt-64 text-primary">
+            <div className="flex flex-col md:absolute md:left-0 items-center md:mt-64 text-[#201942]">
               <Image
                 className="max-w-[150px] md:max-w-none"
                 src={Juninho2CartPhone}
@@ -336,7 +336,7 @@ export default function Depoimentos() {
                 alt="Juninho2CartPhone"
               />
 
-              <div className="flex flex-col text-base-100 md:text-primary">
+              <div className="flex flex-col text-white md:text-[#201942]">
                 <h1 className="font-semibold text-lg md:text-xl">•Pedido</h1>
                 <span className="max-w-xs text-sm md:text-base">
                   O cliente realiza o pedido do produto em nosso site.
@@ -344,7 +344,7 @@ export default function Depoimentos() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center max-w-md mx-auto md:mx-0 text-base-100 md:pt-14 md:mr-48">
+            <div className="flex flex-col items-center max-w-md mx-auto md:mx-0 text-white md:pt-14 md:mr-48">
               <div className="flex w-full h-36 justify-center md:hidden">
                 <Image src={ArrowWhitePng} alt="Arrow2" />
               </div>
@@ -369,7 +369,7 @@ export default function Depoimentos() {
           </div>
         </div>
       </div>
-      <div className="bg-base-100 w-full h-auto md:-mt-24 pb-4">
+      <div className="bg-white w-full h-auto md:-mt-24 pb-4">
         <div className="max-w-6xl mx-auto w-full flex flex-col relative px-4">
           <div className="hidden md:flex w-full absolute justify-start -ml-10 mt-24 -left-8">
             <Image src={Arrow4} alt="Arrow3" />
@@ -382,7 +382,7 @@ export default function Depoimentos() {
             <div className="flex w-full h-36 justify-center md:hidden">
               <Image src={ArrowPurplePng} alt="Arrow2" />
             </div>
-            <div className="flex flex-col md:ml-10 md:items-start items-center max-w-md mx-auto text-primary">
+            <div className="flex flex-col md:ml-10 md:items-start items-center max-w-md mx-auto text-[#201942]">
               <Image
                 className="max-w-[150px] md:max-w-none"
                 src={Juninho3Post}
@@ -405,7 +405,7 @@ export default function Depoimentos() {
               <Image src={ArrowPurplePng} alt="Arrow2" />
             </div>
             <div className="flex flex-col gap-8">
-              <div className="flex flex-col md:items-start items-center max-w-md mx-auto text-primary md:mt-8">
+              <div className="flex flex-col md:items-start items-center max-w-md mx-auto text-[#201942] md:mt-8">
                 <Image
                   className="max-w-[100px] md:max-w-none"
                   src={Girl2BuyPhone}
@@ -424,7 +424,7 @@ export default function Depoimentos() {
                 </div>
               </div>
 
-              <div className="flex flex-col md:items-start items-center max-w-md mx-auto text-primary">
+              <div className="flex flex-col md:items-start items-center max-w-md mx-auto text-[#201942]">
                 <div className="flex w-full h-36 justify-center md:hidden">
                   <Image src={ArrowPurplePng} alt="Arrow2" />
                 </div>
@@ -450,13 +450,13 @@ export default function Depoimentos() {
         </div>
       </div>
 
-      <div id="depoimentos" className="bg-base-200 w-full">
+      <div id="depoimentos" className="bg-[#F2F2F2] w-full">
         <div className="max-w-6xl mx-auto px-4 w-full pt-20 pb-10">
           <div className="text-center flex flex-col items-center">
-            <h1 className="text-primary/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
+            <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               Depoimentos
             </h1>
-            <h2 className="text-primary uppercase tracking-widest text-xl font-bold md:mt-6">
+            <h2 className="text-[#201942] uppercase tracking-widest text-xl font-bold md:mt-6">
               de alguns de nossos clientes
             </h2>
           </div>
@@ -569,13 +569,13 @@ export default function Depoimentos() {
           </Carousel>
         </div>
       </div>
-      <div id="social" className="bg-base-200 w-full">
+      <div id="social" className="bg-[#F2F2F2] w-full">
         <div className="max-w-6xl mx-auto pt-10 md:pb-24 px-4 flex flex-col">
           <div className="text-center flex flex-col items-center">
-            <h1 className="text-primary/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
+            <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               Redes sociais
             </h1>
-            <h2 className="text-primary md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
+            <h2 className="text-[#201942] md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
               Redes sociais
             </h2>
           </div>
@@ -610,17 +610,17 @@ export default function Depoimentos() {
         </div>
       </div>
 
-      <div id="contato" className="bg-primary w-full">
+      <div id="contato" className="bg-[#201942] w-full">
         <div className="max-w-6xl mx-auto px-4 w-full flex flex-col py-16">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex justify-start max-w-lg">
               <div className="flex flex-col items-center text-center md:text-start md:items-start gap-4">
-                <h1 className="text-3xl text-base-100">
+                <h1 className="text-3xl text-white">
                   Compre pelo Whatsapp
                   <br /> Tire suas duvidas juntamente com o nosso consultor.
                 </h1>
                 <a target={'_blank'} href="https://wa.me/5518981367275">
-                  <button className="btn btn-success border-none rounded-3xl bg-[#02900F] text-base-100 w-44">
+                  <button className="btn btn-success border-none rounded-3xl bg-[#02900F] text-white w-44">
                     Clique aqui
                   </button>
                 </a>
@@ -632,13 +632,13 @@ export default function Depoimentos() {
           </div>
         </div>
       </div>
-      <div id="compare" className="bg-base-200 w-full">
+      <div id="compare" className="bg-[#F2F2F2] w-full">
         <div className="max-w-6xl mx-auto pt-10 md:py-24 px-4 flex flex-col">
           <div className="text-center flex flex-col items-center">
-            <h1 className="text-primary/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
+            <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               COMPARE
             </h1>
-            <h2 className="text-primary md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
+            <h2 className="text-[#201942] md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
               ENTENDA nossos diferencias e faça a sua melhor escolha
             </h2>
           </div>
@@ -672,13 +672,13 @@ export default function Depoimentos() {
           </div>
         </div>
       </div>
-      <div className="bg-primary w-full">
+      <div className="bg-[#201942] w-full">
         <div className="max-w-6xl mx-auto flex flex-col px-4 py-24 relative">
           <div className="text-center flex flex-col items-center pb-10">
-            <h1 className="text-base-100/5 uppercase text-5xl md:text-7xl font-bold md:absolute md:leading-3">
+            <h1 className="text-white/5 uppercase text-5xl md:text-7xl font-bold md:absolute md:leading-3">
               Dúvidas frequentes
             </h1>
-            <h2 className="text-base-100 uppercase tracking-widest text-2xl font-bold md:mt-[10px]">
+            <h2 className="text-white uppercase tracking-widest text-2xl font-bold md:mt-[10px]">
               Dúvidas frequentes
             </h2>
           </div>
@@ -688,7 +688,7 @@ export default function Depoimentos() {
               <div key={res.title} className="collapse collapse-arrow w-full">
                 <input id="Check1" type="checkbox" />
                 <label htmlFor="Check1"></label>
-                <div className="collapse-title text-xl font-medium text-white bg-base-100/10 w-full">
+                <div className="collapse-title text-xl font-medium text-white bg-white/10 w-full">
                   {res.title}
                 </div>
 

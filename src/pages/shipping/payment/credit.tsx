@@ -83,7 +83,7 @@ export default function credit({ address }: Address) {
       shippingPrice: 0,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 120)
+    setCookies('@BuyPhone:CreditCardInfo', data, 180)
     router.push('/shipping/payment/match-installments')
   }
 

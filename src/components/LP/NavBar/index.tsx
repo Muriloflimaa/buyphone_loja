@@ -20,7 +20,7 @@ export default function NavBar({ navbar }: navBarProps) {
     <>
       <div className="fixed z-20 w-full">
         <div className="glass">
-          <div className="navbar bg-primary/90">
+          <div className="navbar bg-[#201942]/90">
             <div className="max-w-6xl mx-auto w-full px-4">
               <div className="flex-1">
                 <a href="#main" className="font-medium">
@@ -35,7 +35,7 @@ export default function NavBar({ navbar }: navBarProps) {
 
               <div className="flex-none hidden md:flex">
                 {/* para desktop */}
-                <ul className="text-sm menu menu-horizontal text-base-100 gap-10">
+                <ul className="text-sm menu menu-horizontal text-white gap-10">
                   <li>
                     <a href="#entenda" className="font-medium">
                       Como funciona
@@ -67,12 +67,11 @@ export default function NavBar({ navbar }: navBarProps) {
                   </li>
 
                   <Link href="/">
-                    <button className="btn bg-base-100 normal-case rounded-xl transition-all duration-300 text-primary">
+                    <button className="btn bg-white normal-case rounded-xl transition-all duration-300 text-[#201942]">
                       Ir para loja
                     </button>
                   </Link>
                 </ul>
-                j
               </div>
               <li className="block md:hidden" onClick={toggleDrawer}>
                 <svg
@@ -97,7 +96,7 @@ export default function NavBar({ navbar }: navBarProps) {
         onClose={toggleDrawer}
         direction="top"
         duration={400}
-        className="w-auto h-auto bg-primary"
+        className="w-auto h-auto bg-[#201942]"
       >
         <ul className="menu p-5 items-center text-white">
           <li onClick={toggleDrawer}>
@@ -131,7 +130,9 @@ export default function NavBar({ navbar }: navBarProps) {
           </li>
 
           <Link href="https://www.buyphone.com.br/">
-            <button className="btn bg-white text-primary">Ir para loja</button>
+            <button className="btn bg-white text-[#201942]">
+              Ir para loja
+            </button>
           </Link>
         </ul>
       </Drawer>
