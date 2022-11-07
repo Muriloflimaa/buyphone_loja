@@ -3,10 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
-import AnaImg from '../assets/images/anabrisa.jpg'
 import MeetImg from '../assets/images/BannerMeet.png'
-import BarbaraImg from '../assets/images/barbara.jpg'
-import BrendaImg from '../assets/images/brenda.jpg'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -14,7 +11,17 @@ import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
 
-// banners grandes (desktop)
+//*** images
+//*** clientes
+import AnaImg from '../assets/images/client_anabrisa.jpg'
+import BarbaraImg from '../assets/images/client_barbara.jpg'
+import BrendaImg from '../assets/images/client_brenda.jpg'
+import CLyviaImg from '../assets/images/client_lyvia.png'
+import CGabrielImg from '../assets/images/client_gabriel.png'
+import CLuizImg from '../assets/images/client_luiz.png'
+import CIgorImg from '../assets/images/client_igor.png'
+import CAmandaImg from '../assets/images/client_amanda.png'
+//*** banners grandes (desktop)
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
 import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
@@ -22,8 +29,7 @@ import Banner2DesktopLight from '../assets/images/banner3desktoplight.webp'
 import Banner1DesktopDark from '../assets/images/banner1desktopdark.webp'
 import Banner2DesktopDark from '../assets/images/banner2desktopdark.webp'
 import BannerBlackFriday from '../assets/images/bannerblackfriday.webp'
-
-// minibanners
+//***  minibanners
 //light
 import Banner1MobileLight from '../assets/images/banner1mobilelight.webp'
 import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
@@ -368,6 +374,54 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={BarbaraImg}
               profissional="Criador(a) de conteúdo digital"
               depoiment="É uma nova forma muito legal, de comprar produtos da apple!"
+            />
+            <CardDepoiments
+              name="Lyvia Nagib Fulanetti"
+              instagram="www.instagram.com/lyvianagib/"
+              linkVideo="https://www.youtube.com/embed/Npmw1UcMnxM?autoplay=0&controls=0&showinfo=0&playlist=Npmw1UcMnxM"
+              image={CLyviaImg}
+              profissional="Fisioterapeuta"
+              depoiment="Comprei dois celulares, um pra mim e um pra
+                     minha irmã, dois iPhones 11. O preço é muito
+                     abaixo. Vale muito a pena!"
+            />
+            <CardDepoiments
+              name="Gabriel Martins"
+              instagram="www.instagram.com/gabrielpessoamartins/"
+              linkVideo="https://www.youtube.com/embed/w1Sv0QIFxyA?autoplay=0&controls=0&showinfo=0&playlist=w1Sv0QIFxyA"
+              image={CGabrielImg}
+              profissional="Empresário"
+              depoiment="Celular zero, lacrado na caixa! Pesquisei
+                     bastante em vários lugares e o preço deles é bem
+                     abaixo do mercado."
+            />
+            <CardDepoiments
+              name="Luiz Henrique Puertas"
+              instagram="www.instagram.com/luizpuertas/"
+              linkVideo="https://www.youtube.com/embed/t3U1o2I9WvI?autoplay=0&controls=0&showinfo=0&playlist=t3U1o2I9WvI"
+              image={CLuizImg}
+              profissional="Vendas de sistemas fotovoltaicos"
+              depoiment="Um preço muito bom, paguei muito barato no
+                     Iphone original lacrado!"
+            />
+            <CardDepoiments
+              name="Igor Fortin"
+              instagram="www.instagram.com/igorfortin/"
+              linkVideo="https://www.youtube.com/embed/vH0EjiMyZaQ?autoplay=0&controls=0&showinfo=0&playlist=vH0EjiMyZaQ"
+              image={CIgorImg}
+              profissional="Advogado"
+              depoiment="IPhone 12 que adquiri na BuyPhone, perfeito!
+                     Novo, com ótimas condições de preço e
+                     parcelamento."
+            />
+            <CardDepoiments
+              name="Amanda L. Prado"
+              instagram="www.instagram.com/_amandalprado/"
+              linkVideo="https://www.youtube.com/embed/xzX8LJv7VuQ?autoplay=0&controls=0&showinfo=0&playlist=xzX8LJv7VuQ"
+              image={CAmandaImg}
+              profissional="🧿"
+              depoiment="A Amanda adorou o produto que comprou na
+                     BuyPhone."
             />
           </Carousel>
         </div>
