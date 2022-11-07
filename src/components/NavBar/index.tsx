@@ -8,7 +8,6 @@ import {
   ShoppingBagIcon,
   ShoppingCartIcon,
   TagIcon,
-  TrashIcon,
   UserCircleIcon,
   UserIcon,
   XIcon,
@@ -104,6 +103,7 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
+      setShowSearch(false)
       reset()
     }
     if (values.searchDesktop !== '') {
@@ -114,6 +114,12 @@ export default function NavBar() {
 
   const toggleDrawer = () => {
     setOpenDrawer((prevState) => !prevState)
+  }
+
+  const handleOpenModalInfo = () => {
+    return document
+      .getElementById('modal-open-cadastre')
+      ?.classList.add('modal-open')
   }
 
   return (
@@ -454,7 +460,7 @@ export default function NavBar() {
                     >
                       <div className="">
                         <label
-                          htmlFor="modal-info-discount"
+                          onClick={handleOpenModalInfo}
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-7 w-7 text-white hidden md:block" />

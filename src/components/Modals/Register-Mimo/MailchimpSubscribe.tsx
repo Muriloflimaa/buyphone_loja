@@ -4,14 +4,22 @@ import CustomForm from './CustomForm'
 interface IFormFields {
   EMAIL: string
   FNAME: string
-  PHONE: string
+  PHONE?: string
 }
 interface ICustomForm {
   status: string | null
   subscribe: (data: IFormFields) => void
 }
 
-export default function MailchimpFormContainer() {
+interface IMailChimp {
+  notPhone?: boolean
+  nameProduct?: string
+}
+
+export default function MailchimpFormContainer({
+  notPhone,
+  nameProduct,
+}: IMailChimp) {
   const postUrl = `https://buyphone.us21.list-manage.com/subscribe/post?u=7b8f081fe24d9fd579e7c35eb&amp;id=001069f3c1&amp;f_id=0093c2e1f0`
 
   return (
@@ -20,7 +28,9 @@ export default function MailchimpFormContainer() {
         url={postUrl}
         render={({ subscribe, status }: ICustomForm) => (
           <CustomForm
+            nameProduct={nameProduct}
             status={status}
+            notPhone={notPhone}
             onValidated={(formData) => subscribe(formData)}
           />
         )}

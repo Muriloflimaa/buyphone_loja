@@ -17,7 +17,14 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
-  const discount = userData?.type === 1 ? 12.5 : 7
+  const discount =
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+      ? 12.5
+      : userData?.type === 1
+      ? 12.5
+      : 7
+
   const [changeText, setChangeText] = useState(false)
 
   setTimeout(() => {
@@ -40,6 +47,7 @@ export default function Products({ data }: DataProps) {
                 products.casasbahia_price,
                 products.ponto_price,
               ]
+
               const filteredItens = itens.filter((item) => item)
               const averagePrice =
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0

@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
+  faCircleExclamation,
   faEnvelope,
   faLocationDot,
   faTruckFast,
@@ -27,6 +28,7 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import InnerImageZoom from 'react-inner-image-zoom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 
 interface IParams {
   params: {

@@ -312,7 +312,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       CleanCart()
     }
   }
-
   return (
     <CartContext.Provider
       value={{

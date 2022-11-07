@@ -5,13 +5,12 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import AnaImg from '../assets/images/anabrisa.jpg'
+import MeetImg from '../assets/images/BannerMeet.png'
 import BarbaraImg from '../assets/images/barbara.jpg'
 import BrendaImg from '../assets/images/brenda.jpg'
-import MeetImg from '../assets/images/BannerMeet.png'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
-import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { ICategory, IProduct } from '../types'
 import { verificationPrice } from '../utils/verificationPrice'
@@ -35,6 +34,8 @@ import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
+import ItsModal from '../components/Modals/Its-Match'
+import ProductCard from '../components/ProductCard'
 import CardMatch from '../components/CardMatch'
 
 interface DataProps {
@@ -313,6 +314,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           />
         </div>
       </div>
+      <ItsModal />
     </>
   )
 }
