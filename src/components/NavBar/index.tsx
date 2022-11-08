@@ -106,12 +106,12 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
-      reset()
     }
     if (values.searchDesktop !== '') {
       router.push(`/search-result/${values.searchDesktop}`)
-      reset()
     }
+    setShowSearch(false)
+    reset()
   }
 
   const toggleDrawer = () => {
