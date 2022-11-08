@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import JuninhoImg from '../../assets/images/juninho.webp'
@@ -7,14 +6,45 @@ import ProductCard from '../../components/ProductCard'
 import { apiStore } from '../../services/api'
 import { IProduct } from '../../types'
 
-export default function SearchResult() {
-  const { query } = useRouter()
-  const result = query.index
-  const [products, setProducts] = useState<Array<IProduct>>([])
-  const [isError, setIsError] = useState(false)
+interface IParams {
+  params: {
+    index: string
+  }
+}
 
+export interface DataProps {
+  current_page: number
+  data: Array<IProduct>
+  first_page_url: string
+  from: number
+  last_page: number
+  last_page_url: string
+  links: Array<{
+    active: boolean
+    label: string
+    url: string
+  }>
+  next_page_url: string
+  path: string
+  per_page: number
+  prev_page_url: null | number
+  to: number
+  total: number
+}
+
+interface ResultSearchProps {
+  data: DataProps
+  query: string
+}
+
+export default function SearchResult({ data, query }: ResultSearchProps) {
+  const [products, setProducts] = useState(data)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
+
+  useEffect(() => {
+    setProducts(data)
+  }, [data])
 
   useEffect(() => {
     if (user) {
@@ -22,19 +52,16 @@ export default function SearchResult() {
     }
   }, [user]) //atualiza o state para nao dar erro de renderizacao
 
-  useEffect(() => {
-    GetResult()
-  }, [query])
-
-  async function GetResult() {
+  async function handleChangePagination(page: string) {
     try {
-      const { data } = await apiStore.post('/search', { query: result })
-      setProducts(data.data)
-      setIsError(false)
-    } catch (error) {
-      setIsError(true)
-      setProducts([])
-    }
+      const { data } = await apiStore.post(
+        `/search${page
+          .replace('https://beta-api.buyphone.com.br/store/search', '')
+          .replace(`https://api.buyphone.com.br/store/search`, '')}`,
+        { query: query }
+      )
+      setProducts(data)
+    } catch (error) {}
   }
 
   const [changeText, setChangeText] = useState(false)
@@ -45,14 +72,14 @@ export default function SearchResult() {
 
   return (
     <>
-      {products.length > 0 && (
+      {!!products ? (
         <>
           <h1 className="text-4xl font-medium text-center">
-            Você buscou por {result}
+            Você buscou por {query}
           </h1>
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
             {products &&
-              products.map((products: IProduct) => {
+              products.data.map((products: IProduct) => {
                 const discount =
                   process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                   !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
@@ -93,12 +120,28 @@ export default function SearchResult() {
                 )
               })}
           </div>
+          <div className="btn-group max-w-7xl mx-auto rounded-b-md">
+            {products?.links.map((link) => (
+              <button
+                key={link.label}
+                onClick={() => {
+                  handleChangePagination(link.url), window.scrollTo(0, 0)
+                }}
+                className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
+                  link.active === true ? 'btn-disabled' : ''
+                }`}
+              >
+                {link.label
+                  .replace('&laquo; Previous', 'Anterior')
+                  .replace('Next &raquo;', 'Próximo')}
+              </button>
+            ))}
+          </div>
         </>
-      )}
-      {!!isError && (
+      ) : (
         <>
           <h1 className="text-4xl font-medium text-center">
-            Você buscou por {result}
+            Você buscou por {query}
           </h1>
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 py-24 md:py-10">
             <div>
@@ -108,7 +151,7 @@ export default function SearchResult() {
               <span className="text-lg text-info-content">
                 <span className="font-semibold text-3xl">Ops!</span>
                 <p>Não encontramos nenhum resultado para a busca por</p>
-                <p className="font-medium text-lg">"{result}"</p>
+                <p className="font-medium text-lg">"{query}"</p>
               </span>
               <ul className="list-disc pl-4 mt-4 text-red-600">
                 <li>Verifique se a palavra foi digitada corretamente.</li>
@@ -122,4 +165,21 @@ export default function SearchResult() {
       )}
     </>
   )
+}
+
+export const getServerSideProps = async ({ params }: IParams) => {
+  const query = params.index
+  try {
+    const { data } = await apiStore.post('/search', { query: params.index })
+    return {
+      props: {
+        data,
+        query,
+      },
+    }
+  } catch (error) {
+    return {
+      props: { query },
+    }
+  }
 }
