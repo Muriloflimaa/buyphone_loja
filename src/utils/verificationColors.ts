@@ -27,6 +27,8 @@ export const verificationColor = (colorPhone: string) => {
     return 'bg-gray-400'
   } else if (colorPhone === 'Dourado') {
     return 'bg-amber-100'
+  } else if (colorPhone === 'Roxo') {
+    return 'bg-purple-400'
   } else if (colorPhone === 'Rosa') {
     return 'bg-pink-200'
   }

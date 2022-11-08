@@ -29,10 +29,10 @@ const ProductCart = ({
 
   useEffect(() => {
     if (
-      router.asPath == '/shipping' ||
-      router.asPath == '/shipping/payment/pix' ||
-      router.asPath == '/shipping/address' ||
-      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/payment/pix/pix-checkout' ||
+      router.asPath == '/shipping/payment/credit/match-card' ||
+      router.asPath == '/shipping/payment/credit/match-installments' ||
+      router.asPath == '/shipping/payment/credit/credit-checkout' ||
       router.asPath == '/shipping/payment/custom' ||
       router.asPath == '/shipping/payment/credit' ||
       router.asPath == '/shipping/payment/credit-checkout' ||

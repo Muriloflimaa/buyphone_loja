@@ -2,17 +2,16 @@ import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
-import ProductCart from '../../../components/ProductCart'
-import { useCart } from '../../../context/UseCartContext'
-import { apiStore } from '../../../services/api'
-import { Address, ArrayProduct, ProductPayment } from '../../../types'
-import { GetUseType } from '../../../utils/getUserType'
-import { maskReais, maskRl, moneyMask } from '../../../utils/masks'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { useCart } from '../../../../context/UseCartContext'
+import { apiStore } from '../../../../services/api'
+import { ArrayProduct, ProductPayment } from '../../../../types'
+import { GetUseType } from '../../../../utils/getUserType'
+import { maskReais, maskRl, moneyMask } from '../../../../utils/masks'
+import { setCookies } from '../../../../utils/useCookies'
 
 interface GetInfoCreditProps {
   GetInfoCredit: {
@@ -64,11 +63,12 @@ export default function creditFinally({
   const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const router = useRouter()
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const [products, setProducts] = useState<any>([])
+  const [products, setProducts] = useState<ProductPayment[]>([])
+  const [disableFinally, setDisableFinally] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (values) {
@@ -77,6 +77,8 @@ export default function creditFinally({
   }, [values])
 
   async function handlePayment() {
+    setDisableFinally(true)
+    setLoading(true)
     const setDat: ProductPayment[] = []
     values.map(async (item: ArrayProduct) => {
       const response = {
@@ -97,8 +99,11 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
+      setDisableFinally(false)
       setProducts(setDat)
+      setLoading(false)
       if (data.status === 'paid') {
+        setCookies('@BuyPhone:SuccessShipping', 'true', 180)
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
@@ -111,10 +116,16 @@ export default function creditFinally({
         destroyCookie({}, '@BuyPhone:CreditInstallments')
         destroyCookie({}, '@BuyPhone:GetCep')
       } else {
+        setDisableFinally(false)
+        setProducts(setDat)
+        setLoading(false)
         setStateModalError(true)
         return
       }
     } catch (error: any) {
+      setDisableFinally(false)
+      setProducts(setDat)
+      setLoading(false)
       setProducts(setDat)
       setStateModalError(true)
     }
@@ -122,6 +133,20 @@ export default function creditFinally({
 
   return (
     <>
+      {loading && (
+        <>
+          <input
+            type="checkbox"
+            id="my-modal-5"
+            className="modal-toggle modal-open"
+          />
+          <div className="modal modal-open">
+            <div className="modal-box bg-transparent shadow-none flex justify-center items-center max-w-5xl">
+              <LoadingComponent message={'Processando Pedido...'} />
+            </div>
+          </div>
+        </>
+      )}
       {stateModalSuccess && (
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
           <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
@@ -143,15 +168,10 @@ export default function creditFinally({
               e-mail.
             </span>
 
-            <Link href={'/myshopping'} passHref>
+            <Link href={'/purchased'} passHref>
               <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
                 Ok
               </button>
-            </Link>
-            <Link href={'/'} passHref>
-              <a className="link  md:mb-0 text-success">
-                Ir para página inicial
-              </a>
             </Link>
           </div>
         </div>
@@ -184,7 +204,7 @@ export default function creditFinally({
               target={'_blank'}
               href={`https://api.whatsapp.com/send?phone=5518981367275&text=${
                 products && JSON.stringify(products)
-              }${maskReais(installments, GetInfoCredit.installments)}`}
+              }${maskReais(installments, GetInfoCredit?.installments)}`}
               className="link  md:mb-0 text-error"
             >
               Contatar o suporte
@@ -302,14 +322,20 @@ export default function creditFinally({
                 <div className="flex justify-between gap-4 w-full text-xl">
                   <span>Total</span>
                   <span>
-                    {maskReais(installments, GetInfoCredit.installments)}
+                    {installments &&
+                      maskReais(installments, GetInfoCredit.installments)}
                   </span>
                 </div>
                 <a
                   onClick={() => handlePayment()}
-                  className="flex btn btn-info text-white w-full"
+                  className={
+                    'flex btn btn-info text-white w-full ' +
+                    (disableFinally && 'btn-disabled')
+                  }
                 >
-                  Finalizar Compra
+                  {disableFinally
+                    ? 'Processando pedido...'
+                    : 'Finalizar Compra'}
                 </a>
               </div>
             </div>

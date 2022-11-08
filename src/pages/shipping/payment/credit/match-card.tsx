@@ -5,15 +5,16 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
-import ProductCart from '../../../components/ProductCart'
-import { TotalPayment } from '../../../components/TotalPayment'
-import { AuthContext } from '../../../context/AuthContext'
-import { useCart } from '../../../context/UseCartContext'
-import { apiStore } from '../../../services/api'
-import { Address } from '../../../types'
-import { moneyMask } from '../../../utils/masks'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { TotalPayment } from '../../../../components/TotalPayment'
+import { AuthContext } from '../../../../context/AuthContext'
+import { useCart } from '../../../../context/UseCartContext'
+import { apiStore } from '../../../../services/api'
+import { Address } from '../../../../types'
+import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
+import { setCookies } from '../../../../utils/useCookies'
 
 interface CardProps {
   brand: string
@@ -33,6 +34,7 @@ export default function CreditCheckout({ address }: Address) {
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const { userData } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (values) {
@@ -57,14 +59,16 @@ export default function CreditCheckout({ address }: Address) {
     try {
       const { data } = await apiStore.get(`cards/user/${address.user_id}`)
       setCards(data)
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       setCards([])
     }
   }
 
   function handleCard() {
     if (matchCard === 'newCard') {
-      router.push('/shipping/payment/credit')
+      router.push('/shipping/payment/credit/new-card')
       return
     }
     if (matchCard !== null) {
@@ -75,8 +79,8 @@ export default function CreditCheckout({ address }: Address) {
         shippingPrice: 0,
       }
 
-      setCookies('@BuyPhone:CreditCardInfo', data, 120)
-      router.push('/shipping/payment/match-installments')
+      setCookies('@BuyPhone:CreditCardInfo', data, 180)
+      router.push('/shipping/payment/credit/match-installments')
 
       return
     } else {
@@ -124,6 +128,7 @@ export default function CreditCheckout({ address }: Address) {
                 </div>
               )
             })}
+            {loading && <LoadingComponent />}
 
             <div className="flex gap-2 w-full items-center">
               <div className="w-5 h-5" />

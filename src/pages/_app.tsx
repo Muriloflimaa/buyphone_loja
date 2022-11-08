@@ -80,10 +80,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>
+        ) : router.route === `/institucional` ? (
+          <Component {...pageProps} />
         ) : (
           <CartProvider>
             <NavBar />
-            <div className="py-16 md:py-20"></div>
+            <div className="py-16"></div>
             <Component
               {...pageProps}
               darkOrLigth={LightOrDark(

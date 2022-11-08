@@ -1,5 +1,8 @@
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronDown,
+  faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   HomeIcon,
@@ -8,7 +11,6 @@ import {
   ShoppingBagIcon,
   ShoppingCartIcon,
   TagIcon,
-  TrashIcon,
   UserCircleIcon,
   UserIcon,
   XIcon,
@@ -74,10 +76,10 @@ export default function NavBar() {
 
   useEffect(() => {
     if (
-      router.asPath == '/shipping' ||
-      router.asPath == '/shipping/payment/pix' ||
-      router.asPath == '/shipping/address' ||
-      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/payment/pix/pix-checkout' ||
+      router.asPath == '/shipping/payment/credit/match-card' ||
+      router.asPath == '/shipping/payment/credit/match-installments' ||
+      router.asPath == '/shipping/payment/credit/credit-checkout' ||
       router.asPath == '/shipping/payment/custom' ||
       router.asPath == '/shipping/payment/credit' ||
       router.asPath == '/shipping/payment/credit-checkout' ||
@@ -104,16 +106,22 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
-      reset()
     }
     if (values.searchDesktop !== '') {
       router.push(`/search-result/${values.searchDesktop}`)
-      reset()
     }
+    setShowSearch(false)
+    reset()
   }
 
   const toggleDrawer = () => {
     setOpenDrawer((prevState) => !prevState)
+  }
+
+  const handleOpenModalInfo = () => {
+    return document
+      .getElementById('modal-open-cadastre')
+      ?.classList.add('modal-open')
   }
 
   return (
@@ -326,40 +334,29 @@ export default function NavBar() {
 
                           <div className="card-body max-h-80 overflow-y-auto gap-6">
                             {cartSize && cartSize > 0 && !!isAttCart ? (
-                              [1, 2].map(() => (
-                                <div className="rounded-md max-w-sm w-full ">
-                                  <div className="animate-pulse flex w-full">
-                                    <div
-                                      className="flex justify-between w-full"
-                                      data-testid="product"
-                                    >
-                                      <div className="grid grid-cols-2 col-span-2 w-full">
-                                        <div className="w-12 h-full flex items-center">
-                                          <img
-                                            className="blur"
-                                            src={
-                                              'https://buyphone-files.s3.us-east-2.amazonaws.com/2531/11-BRANCO.webp'
-                                            }
-                                          />
-                                        </div>
+                              cart.map((res) => (
+                                <div
+                                  key={res.id}
+                                  className="flex animate-pulse justify-between w-full min-h-[70px] p-4"
+                                >
+                                  <div className="flex gap-3 w-full">
+                                    <div className="w-8 h-full bg-slate-300 rounded flex items-center"></div>
 
-                                        <div className="flex flex-col w-1/2 gap-2 justify-between">
-                                          <div className="grid gap-2">
-                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
+                                    <div className="flex flex-col gap-2 justify-between">
+                                      <div className="grid gap-2">
+                                        <div className="h-2 w-8 bg-slate-300 rounded "></div>
 
-                                            <div className="h-2 w-full bg-slate-300 rounded "></div>
-                                          </div>
-
-                                          <div className="h-2 w-full bg-slate-300 rounded "></div>
-                                        </div>
+                                        <div className="h-2 w-8 bg-slate-300 rounded "></div>
                                       </div>
-                                      <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
-                                        <div className="h-2 w-full bg-slate-300 rounded "></div>
 
-                                        <div className="flex w-full justify-end">
-                                          <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
-                                        </div>
-                                      </div>
+                                      <div className="h-2 w-8 bg-slate-300 rounded "></div>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col w-1/3 gap-2 justify-between items-end">
+                                    <div className="h-2 w-full bg-slate-300 rounded "></div>
+
+                                    <div className="flex w-full justify-end">
+                                      <div className="h-2 w-1/2 bg-slate-300 rounded "></div>
                                     </div>
                                   </div>
                                 </div>
@@ -645,7 +642,7 @@ export default function NavBar() {
                       </div>
                     ))
                   ) : (
-                    <p>Carregando.</p>
+                    <LoadingComponent />
                   )}
                 </div>
               </div>
@@ -658,20 +655,35 @@ export default function NavBar() {
                   </a>
                 </Link>
               </div>
-            </div>
-            {userData && (
-              <div
-                className="flex px-4 cursor-pointer border-t-2 border-info-content/30"
-                onClick={toggleDrawer}
-              >
-                <div onClick={() => signOut()}>
-                  <div className="flex gap-3 items-center w-full mt-2">
-                    <LogoutIcon className="h-5 w-5 text-info-content" />
-                    <span className="text-info-content">Sair</span>
+
+              <div className="flex px-4 cursor-pointer" onClick={toggleDrawer}>
+                <Link href={'/institucional'}>
+                  <a className="flex gap-3 w-full">
+                    <FontAwesomeIcon
+                      icon={faCircleExclamation}
+                      className="w-5 h-5"
+                    />
+                    <span className="text-info-content">
+                      Conheça a BuyPhone
+                    </span>
+                  </a>
+                </Link>
+              </div>
+              <Divider />
+              {userData && (
+                <div
+                  className="flex px-4 cursor-pointer"
+                  onClick={toggleDrawer}
+                >
+                  <div onClick={() => signOut()}>
+                    <div className="flex gap-3 items-center w-full">
+                      <LogoutIcon className="h-5 w-5 text-info-content" />
+                      <span className="text-info-content">Sair</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </ul>
       </Drawer>

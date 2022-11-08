@@ -8,7 +8,7 @@ export const TotalPayment = () => {
   const { userData } = useContext(AuthContext)
   return (
     <React.Fragment>
-      <div className="flex flex-col md:flex-row text-center items-center md:text-start justify-between px-4">
+      <div className="flex flex-col md:flex-row text-center items-center md:text-start justify-between px-4 mt-6 md:mt-8">
         <span>Resumo</span>
         {somaTotal > 0 ? (
           <>
@@ -17,7 +17,7 @@ export const TotalPayment = () => {
                 <div className="flex flex-col">
                   <strong>Subtotal: </strong>
                   <strong>Desconto: </strong>
-                  <strong>Valor total: </strong>
+                  <strong>SubTotal: </strong>
                 </div>
                 <div className="flex flex-col">
                   <span>
@@ -35,7 +35,7 @@ export const TotalPayment = () => {
               </div>
             ) : (
               <span className="font-semibold text-lg">
-                Valor total: R$ {moneyMask(somaTotal.toString())}
+                SubTotal: R$ {moneyMask(somaTotal.toString())}
               </span>
             )}
           </>

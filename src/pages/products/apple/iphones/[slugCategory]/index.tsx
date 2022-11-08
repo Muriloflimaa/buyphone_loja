@@ -1,7 +1,4 @@
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
 import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
@@ -20,7 +17,20 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
-  const discount = userData?.type === 1 ? 12.5 : 7
+  const discount =
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+      ? 12.5
+      : userData?.type === 1
+      ? 12.5
+      : 7
+
+  const [changeText, setChangeText] = useState(false)
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
+
   return (
     <>
       <Head>
@@ -42,7 +52,7 @@ export default function Products({ data }: DataProps) {
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0
               const discountPrice = Math.round(averagePrice * (discount / 100))
               const ourPrice = averagePrice - discountPrice
-              return ourPrice ? (
+              return (
                 <React.Fragment key={products.id}>
                   <ProductCard
                     key={products.id}
@@ -54,12 +64,11 @@ export default function Products({ data }: DataProps) {
                     idCategory={products.id}
                     slug={products.slug}
                     slugCategory={data.slug}
-                    image={products.media[0].original_url}
+                    image={products.media[0]?.original_url}
                     memory={products.memory}
+                    changeText={changeText}
                   />
                 </React.Fragment>
-              ) : (
-                <></>
               )
             })
           ) : (

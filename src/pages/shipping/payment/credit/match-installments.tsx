@@ -4,14 +4,15 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
-import Installments from '../../../components/Installments'
-import ProductCart from '../../../components/ProductCart'
-import { AuthContext } from '../../../context/AuthContext'
-import { useCart } from '../../../context/UseCartContext'
-import { apiStore } from '../../../services/api'
-import { moneyMask } from '../../../utils/masks'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import Installments from '../../../../components/Installments'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { AuthContext } from '../../../../context/AuthContext'
+import { useCart } from '../../../../context/UseCartContext'
+import { apiStore } from '../../../../services/api'
+import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
+import { setCookies } from '../../../../utils/useCookies'
 
 interface installmentsProps {
   1: number | string
@@ -51,6 +52,7 @@ export default function MatchInstallment({
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [valueInstallments, setValueInstallments] = useState<string>('')
   const [installments, setInstallments] = useState<installmentsProps>()
+  const [loading, setLoading] = useState(true)
   const { userData } = useContext(AuthContext)
 
   const router = useRouter()
@@ -71,9 +73,9 @@ export default function MatchInstallment({
       installments: matchInstallments,
     }
     destroyCookie(null, '@BuyPhone:CreditCardInfo')
-    setCookies('@BuyPhone:CreditCardInfo', infoData, 120)
-    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 120)
-    router.push('/shipping/payment/credit-finally')
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 180)
+    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 180)
+    router.push('/shipping/payment/credit/credit-checkout')
   }
 
   async function getInstallments() {
@@ -85,7 +87,7 @@ export default function MatchInstallment({
       const response = await apiStore.get(`checkout/installments`, {
         params: data,
       })
-
+      setLoading(false)
       setInstallments(response.data)
     } catch (error) {
       ToastCustom(
@@ -113,6 +115,7 @@ export default function MatchInstallment({
                 props={installments}
               />
             )}
+            {loading && <LoadingComponent />}
 
             <div className="flex justify-end mt-4">
               <button
