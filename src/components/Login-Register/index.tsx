@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ReactElement, useEffect, useState } from 'react'
-import LogoSvg from '../../assets/images/LogoPurple.svg'
+import LogoSvg from '../../assets/images/LogoPurple.webp'
 import styles from './styles.module.scss'
 
 interface Homeprops {
@@ -44,6 +44,7 @@ const LoginRegister = ({ children }: Homeprops) => {
                 <Image
                   src={LogoSvg}
                   layout="fixed"
+                  quality={100}
                   width={160}
                   height={80}
                   className="object-contain"

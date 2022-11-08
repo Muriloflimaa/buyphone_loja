@@ -47,7 +47,6 @@ export default function Products({ data }: DataProps) {
                 products.casasbahia_price,
                 products.ponto_price,
               ]
-
               const filteredItens = itens.filter((item) => item)
               const averagePrice =
                 filteredItens.length > 0 ? Math.min(...filteredItens) : 0

@@ -106,7 +106,6 @@ export default function NavBar() {
 
     if (values.searchMobile !== '') {
       router.push(`/search-result/${values.searchMobile}`)
-      setShowSearch(false)
       reset()
     }
     if (values.searchDesktop !== '') {
@@ -463,7 +462,7 @@ export default function NavBar() {
                     >
                       <div className="">
                         <label
-                          onClick={handleOpenModalInfo}
+                          htmlFor="modal-info-discount"
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-7 w-7 text-white hidden md:block" />

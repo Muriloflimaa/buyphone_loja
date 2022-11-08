@@ -41,9 +41,9 @@ export default function login() {
 
   return (
     <>
-      <span className="text-2xl flex text-center justify-center pt-4 text-default font-medium">
-        Faça login ou cadastre-se
-      </span>
+      <div className="text-2xl flex md:gap-1 flex-col md:flex-row text-center justify-center pt-4 text-default font-medium">
+        <span>Faça login ou </span> <span>cadastre-se</span>
+      </div>
       <div className="w-full">
         <form
           onSubmit={handleSubmit(handleSignIn)}
