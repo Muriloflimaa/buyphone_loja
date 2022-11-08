@@ -23,11 +23,10 @@ const CarouselComponent = (image: imageProps) => {
         {image.image.map((res) => {
           return (res.link && res.link.substring(0, 1) === '/') ||
             (res.link && res.link.substring(0, 1) === '#') ? (
-            <Link href={res.link}>
+            <Link key={res.src} href={res.link}>
               <a>
                 <Image
                   placeholder="blur"
-                  key={res.src}
                   src={res}
                   layout="responsive"
                   quality={100}
@@ -35,11 +34,10 @@ const CarouselComponent = (image: imageProps) => {
               </a>
             </Link>
           ) : res.link ? (
-            <Link href={res.link}>
+            <Link key={res.src} href={res.link}>
               <a target={'_blank'}>
                 <Image
                   placeholder="blur"
-                  key={res.src}
                   src={res}
                   layout="responsive"
                   quality={100}

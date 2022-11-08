@@ -129,7 +129,7 @@ export default function NavBar({ navbar }: navBarProps) {
             </a>
           </li>
 
-          <Link href="https://www.buyphone.com.br/">
+          <Link href="/">
             <button className="btn bg-white text-[#201942]">
               Ir para loja
             </button>
