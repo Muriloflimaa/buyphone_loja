@@ -140,7 +140,7 @@ const ProductCart = ({
   return (
     <div
       className={
-        'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col '
+        'bg-colorCard rounded-xl w-full h-min flex justify-between text-xs flex-col  '
       }
       key={id}
     >
@@ -152,11 +152,11 @@ const ProductCart = ({
             </div>
 
             <div className="flex flex-col items-start gap-8 h-full">
-              <div className="flex flex-col">
+              <div className="flex flex-col text-info-content">
                 <span>Modelo</span>
                 <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-info-content">
                 <span>Quantidade</span>
                 {!show && (
                   <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
