@@ -182,9 +182,9 @@ const ProductCard = ({
           )}
           {price <= 0 && (
             <label htmlFor={id.toString()}>
-              <div className="flex flex-col cursor-pointer p-3 bg-primary/50 transition-all duration-300 rounded-lg hover:bg-primary">
+              <div className="flex flex-col cursor-pointer p-3 bg-info/50 text-white transition-all duration-300 rounded-lg hover:bg-info">
                 <h1 className="text-xs">Produto indisponível no momento</h1>
-                <div className="flex flex-col md:flex-row gap-1 text-blue-500 items-center justify-center">
+                <div className="flex flex-col md:flex-row gap-1 text-white items-center justify-center">
                   <FontAwesomeIcon icon={faBell} className="w-3 h-3" />
                   <h2 className="link text-xs font-semibold">
                     Avise-me quando chegar
