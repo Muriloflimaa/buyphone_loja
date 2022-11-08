@@ -71,13 +71,13 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
   }, 1400)
 
   return (
-    <>
+    <div className="my-5">
       {!!products ? (
         <>
           <h1 className="text-4xl font-medium text-center">
             Você buscou por {query}
           </h1>
-          <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl py-24 md:py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl my-5">
             {products &&
               products.data.map((products: IProduct) => {
                 const discount =
@@ -163,7 +163,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
           </div>
         </>
       )}
-    </>
+    </div>
   )
 }
 
