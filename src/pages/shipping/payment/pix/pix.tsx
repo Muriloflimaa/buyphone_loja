@@ -2,16 +2,18 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
-import ProductCart from '../../../components/ProductCart'
-import { useCart } from '../../../context/UseCartContext'
-import { apiStore } from '../../../services/api'
-import { Address, ProductPayment } from '../../../types'
-import { GetUseType } from '../../../utils/getUserType'
-import { moneyMask } from '../../../utils/masks'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { useCart } from '../../../../context/UseCartContext'
+import { apiStore } from '../../../../services/api'
+import { Address, ProductPayment } from '../../../../types'
+import { GetUseType } from '../../../../utils/getUserType'
+import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
+import { setCookies } from '../../../../utils/useCookies'
 
 export default function pix({ address }: Address) {
+  const [loading, setLoading] = useState(false)
   const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
@@ -25,6 +27,7 @@ export default function pix({ address }: Address) {
   }, [values])
 
   async function handlePayment() {
+    setLoading(true)
     try {
       const setDat: ProductPayment[] = []
       values.map(async (item) => {
@@ -58,6 +61,20 @@ export default function pix({ address }: Address) {
 
   return (
     <>
+      {loading && (
+        <>
+          <input
+            type="checkbox"
+            id="my-modal-5"
+            className="modal-toggle modal-open"
+          />
+          <div className="modal modal-open">
+            <div className="modal-box bg-transparent shadow-none flex justify-center items-center max-w-5xl">
+              <LoadingComponent message={'Processando Pedido...'} />
+            </div>
+          </div>
+        </>
+      )}
       <div className="max-w-7xl mx-auto px-4 grid">
         <div className="relative w-full">
           <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
@@ -174,7 +191,7 @@ export default function pix({ address }: Address) {
                   onClick={() => handlePayment()}
                   className="flex btn btn-info text-white w-full"
                 >
-                  Finalizar Compra
+                  {loading ? 'Processando pedido...' : 'Finalizar Compra'}
                 </a>
               </div>
             </div>

@@ -85,7 +85,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         ) : (
           <CartProvider>
             <NavBar />
-            <div className="py-16 md:py-20"></div>
+            <div className="py-16"></div>
             <Component
               {...pageProps}
               darkOrLigth={LightOrDark(

@@ -61,7 +61,7 @@ export default function payment() {
                   </span>
                 </div>
                 <div>
-                  <Link href={'/shipping/payment/credit-checkout'}>
+                  <Link href={'/shipping/payment/credit/match-card'}>
                     <a className="btn btn-info text-white w-full justify-between">
                       <span>Cartão de crédito</span>
                       <svg

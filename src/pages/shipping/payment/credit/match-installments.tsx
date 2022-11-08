@@ -1,40 +1,61 @@
-import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
-import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
-import LoadingComponent from '../../../components/LoadingComponent'
-import ProductCart from '../../../components/ProductCart'
-import { TotalPayment } from '../../../components/TotalPayment'
-import { AuthContext } from '../../../context/AuthContext'
-import { useCart } from '../../../context/UseCartContext'
-import { apiStore } from '../../../services/api'
-import { Address } from '../../../types'
-import { moneyMask } from '../../../utils/masks'
-import { ToastCustom } from '../../../utils/toastCustom'
-import { setCookies } from '../../../utils/useCookies'
+import Installments from '../../../../components/Installments'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { AuthContext } from '../../../../context/AuthContext'
+import { useCart } from '../../../../context/UseCartContext'
+import { apiStore } from '../../../../services/api'
+import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
+import { setCookies } from '../../../../utils/useCookies'
 
-interface CardProps {
-  brand: string
-  card_id: string
-  created_at: string
-  holder_name: string
-  id: number
-  last_digits: string
-  updated_at: string
-  user_id: number
+interface installmentsProps {
+  1: number | string
+  2: number | string
+  3: number | string
+  4: number | string
+  5: number | string
+  6: number | string
+  7: number | string
+  8: number | string
+  9: number | string
+  10: number | string
+  11: number | string
+  12: number | string
 }
 
-export default function CreditCheckout({ address }: Address) {
-  const [cards, setCards] = useState<CardProps[]>([])
-  const [matchCard, setMatchCard] = useState<string | null>(null)
-  const router = useRouter()
+interface GetInfoCreditProps {
+  GetInfoCredit: {
+    address_id: number
+    amount: number
+    card_cvv: number
+    card_holder_name: string
+    card_number: number
+    document: string
+    expiration_date: string
+    items: Array<{}>
+    shippingPrice: number
+    user_id: number
+  }
+}
+
+export default function MatchInstallment({
+  GetInfoCredit,
+}: GetInfoCreditProps) {
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const { userData } = useContext(AuthContext)
+  const [matchInstallments, setMatchInstallments] = useState<string>('')
+  const [valueInstallments, setValueInstallments] = useState<string>('')
+  const [installments, setInstallments] = useState<installmentsProps>()
   const [loading, setLoading] = useState(true)
+  const { userData } = useContext(AuthContext)
+
+  const router = useRouter()
 
   useEffect(() => {
     if (values) {
@@ -43,130 +64,75 @@ export default function CreditCheckout({ address }: Address) {
   }, [values])
 
   useEffect(() => {
-    GetCreditCard()
-  }, [])
+    getInstallments()
+  }, [somaTotal])
 
-  async function handleRemoveCard(id: number) {
-    try {
-      setCards((oldState) => oldState.filter((card) => card.id !== id))
-      await apiStore.delete(`cards/${id}`)
-    } catch (error) {
-      return
+  async function handleCard() {
+    const infoData = {
+      ...GetInfoCredit,
+      installments: matchInstallments,
     }
+    destroyCookie(null, '@BuyPhone:CreditCardInfo')
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 180)
+    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 180)
+    router.push('/shipping/payment/credit/credit-checkout')
   }
 
-  async function GetCreditCard() {
+  async function getInstallments() {
     try {
-      const { data } = await apiStore.get(`cards/user/${address.user_id}`)
-      setCards(data)
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      setCards([])
-    }
-  }
-
-  function handleCard() {
-    if (matchCard === 'newCard') {
-      router.push('/shipping/payment/credit')
-      return
-    }
-    if (matchCard !== null) {
       const data = {
-        card_id: matchCard,
-        user_id: cards[0].user_id,
-        address_id: address.id,
-        shippingPrice: 0,
+        amount: somaTotal,
       }
 
-      setCookies('@BuyPhone:CreditCardInfo', data, 180)
-      router.push('/shipping/payment/match-installments')
-
-      return
-    } else {
-      ToastCustom(3000, 'Escolha uma opção de cartão', 'error')
+      const response = await apiStore.get(`checkout/installments`, {
+        params: data,
+      })
+      setLoading(false)
+      setInstallments(response.data)
+    } catch (error) {
+      ToastCustom(
+        3000,
+        'Ocorreu algum erro para calcular as parcelas, tente novamente ou contate o suporte.',
+        'error'
+      )
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      router.push('/shipping/payment')
     }
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 grid">
-      <TotalPayment />
       <div>
-        <h2 className="text-2xl md:text-3xl font-medium text-center my-6">
-          Selecione um cartão
+        <h2 className="text-2xl md:text-3xl font-medium text-center md:text-start my-6">
+          Em quantas vezes?
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
-          <div className="flex flex-col w-full gap-3">
-            {cards.map((res) => {
-              return (
-                <div key={res.id} className="flex gap-2 w-full items-center">
-                  <FontAwesomeIcon
-                    onClick={() => handleRemoveCard(res.id)}
-                    icon={faTrash}
-                    className="w-5 h-5 cursor-pointer"
-                  />
-                  <div
-                    key={res.id}
-                    className="form-control w-full h-full stat p-0 flex shadow-md rounded-lg"
-                  >
-                    <label className="label gap-2 h-full py-5 px-6 cursor-pointer justify-start">
-                      <input
-                        type="radio"
-                        onClick={() => setMatchCard(res.card_id.toString())}
-                        name="radio-6"
-                        className="radio checked:bg-blue-500"
-                      />
-                      <FontAwesomeIcon
-                        icon={faCreditCard}
-                        className="w-4 h-4 ml-5"
-                      />
-                      <span className="label-text text-lg">
-                        {res.brand} **** {res.last_digits}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="flex flex-col w-full gap-2">
+            {installments && (
+              <Installments
+                setMatchInstallments={setMatchInstallments}
+                setValueInstallments={setValueInstallments}
+                props={installments}
+              />
+            )}
             {loading && <LoadingComponent />}
-
-            <div className="flex gap-2 w-full items-center">
-              <div className="w-5 h-5" />
-              <div className="form-control w-full stat p-0 flex shadow-md rounded-lg">
-                <label className="label gap-2  py-5 px-6 cursor-pointer justify-start">
-                  <input
-                    type="radio"
-                    name="radio-6"
-                    onClick={() => setMatchCard('newCard')}
-                    className="radio checked:bg-blue-500"
-                  />
-                  <FontAwesomeIcon
-                    icon={faCreditCard}
-                    className="w-4 h-4 ml-5"
-                  />
-                  <span className="label-text text-lg">
-                    Novo cartão de crédito
-                  </span>
-                </label>
-              </div>
-            </div>
 
             <div className="flex justify-end mt-4">
               <button
                 onClick={handleCard}
                 className={
                   'btn self-end text-white ' +
-                  (!matchCard ? 'btn-disabled' : 'btn-info')
+                  (matchInstallments ? 'btn-info' : 'btn-disabled')
                 }
               >
-                Avançar{' '}
+                Avançar
                 <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
               </button>
             </div>
           </div>
           <div className="card card-compact bg-base-100 shadow w-full h-fit">
             <div className="card-body">
-              <div className="flex justify-between items-center text-gray-500">
+              <div className="flex justify-between items-center">
                 <span className="text-lg uppercase">Meu Carrinho</span>
                 <span className="font-thin text-xs">
                   {cartSize && cartSize > 1
@@ -237,7 +203,7 @@ export default function CreditCheckout({ address }: Address) {
                   </div>
                 </>
               )}
-              <div className="flex justify-between py-4 items-center">
+              {/* <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
                   {userData?.promotion && (
@@ -249,7 +215,7 @@ export default function CreditCheckout({ address }: Address) {
                     R$ {moneyMask(somaTotal.toString())}
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -261,19 +227,12 @@ export default function CreditCheckout({ address }: Address) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
   const { '@BuyPhone:cart': cart } = parseCookies(ctx)
+  const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
 
-  if (!getDataUser) {
+  if (getDataUser && cart !== '[]' && GetInfo) {
+    const GetInfoCredit = JSON.parse(GetInfo)
     return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-  if (getDataUser && cart !== '[]') {
-    const address = JSON.parse(getDataUser)
-    return {
-      props: { address },
+      props: { GetInfoCredit },
     }
   } else {
     return {

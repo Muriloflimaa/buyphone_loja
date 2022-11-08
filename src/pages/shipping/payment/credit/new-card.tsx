@@ -2,29 +2,25 @@ import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import { useState } from 'react'
-import Card from '../../../components/Card/index'
-import { TotalPayment } from '../../../components/TotalPayment'
-import { Address } from '../../../types'
+import Card from '../../../../components/Card/index'
+import { TotalPayment } from '../../../../components/TotalPayment'
+import { Address } from '../../../../types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Input } from '../../../components/InputElement'
+import { Input } from '../../../../components/InputElement'
 import {
   maskCpfCnpjInput,
   maskCreditCard,
   maskExpirationDate,
   maskMustNumber,
-} from '../../../utils/masks'
-import { useCart } from '../../../context/UseCartContext'
-import { GetUseType } from '../../../utils/getUserType'
+} from '../../../../utils/masks'
+import { GetUseType } from '../../../../utils/getUserType'
 import { useRouter } from 'next/router'
-import { setCookies } from '../../../utils/useCookies'
+import { setCookies } from '../../../../utils/useCookies'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
-import {
-  faCircleExclamation,
-  faExclamation,
-} from '@fortawesome/free-solid-svg-icons'
+import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -84,7 +80,7 @@ export default function credit({ address }: Address) {
     }
 
     setCookies('@BuyPhone:CreditCardInfo', data, 180)
-    router.push('/shipping/payment/match-installments')
+    router.push('/shipping/payment/credit/match-installments')
   }
 
   const { errors } = formState
