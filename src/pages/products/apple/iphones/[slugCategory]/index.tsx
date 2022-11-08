@@ -65,7 +65,7 @@ export default function Products({ data }: DataProps) {
                     idCategory={products.id}
                     slug={products.slug}
                     slugCategory={data.slug}
-                    image={products.media[0].original_url}
+                    image={products.media[0]?.original_url}
                     memory={products.memory}
                     changeText={changeText}
                   />
