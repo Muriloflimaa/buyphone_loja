@@ -110,8 +110,8 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 items-center md:text-start col-span-1 md:gap-5 md:items-start">
-          <span className="badge badge-success w-2/3 bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold">
+        <div className="flex flex-col gap-2 items-center md:text-start col-span-1  md:items-start">
+          <span className="badge badge-success w-2/3 bg-primary text-white uppercase text-xs font-semibold">
             {`${
               changeText
                 ? resultDiscountPercent.replace('.0', '') + '% de desconto'

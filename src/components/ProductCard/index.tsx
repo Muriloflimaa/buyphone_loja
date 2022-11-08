@@ -76,7 +76,7 @@ const ProductCard = ({
             <div>
               {price > 0 && (
                 <>
-                  <span className="badge badge-success py-5 md:py-0 w-full bg-[#F8F5BD] text-[#BF7300] uppercase text-xs font-semibold mx-auto">
+                  <span className="badge badge-success py-5 md:py-0 w-full bg-primary text-white uppercase text-xs font-semibold mx-auto">
                     {`${
                       changeText
                         ? resultDiscountPercent !== 'NaN'
