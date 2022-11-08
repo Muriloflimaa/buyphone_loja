@@ -42,7 +42,7 @@ export default function payment() {
               <h3 className="font-medium">Opções de pagamento</h3>
               <div className="grid gap-8">
                 <div>
-                  <Link href={'/shipping/payment/pix'}>
+                  <Link href={'/shipping/payment/pix/pix-checkout'}>
                     <a className="btn btn-info text-white w-full justify-between">
                       <span>Pix</span>
                       <svg

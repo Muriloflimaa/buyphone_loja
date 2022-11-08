@@ -1,104 +1,199 @@
 import { GetServerSidePropsContext } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
-import toast from 'react-hot-toast'
+import { destroyCookie, parseCookies } from 'nookies'
+import React, { useEffect, useState } from 'react'
+import LoadingComponent from '../../../../components/LoadingComponent'
+import ProductCart from '../../../../components/ProductCart'
+import { useCart } from '../../../../context/UseCartContext'
 import { apiStore } from '../../../../services/api'
+import { Address, ProductPayment } from '../../../../types'
+import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
 import { setCookies } from '../../../../utils/useCookies'
 
-interface PixPaymentProps {
-  pix: {
-    amount: number
-    brcode: string
-    created_at: string
-    id: number
-    invoice_id: string
-    link: string
-    order_id: number
-    pdf: string
-    qrcode: string
-    status: string
-    updated_at: string
-  }
-}
-
-export default function PixCheckout({ pix }: PixPaymentProps) {
+export default function pix({ address }: Address) {
+  const [loading, setLoading] = useState(false)
+  const user = GetUseType()
+  const { values, somaTotal, CleanCart } = useCart()
+  const [cartSize, setCartSize] = useState<number>()
   const router = useRouter()
+  const discountValue = 15000
 
-  const copyToClipBoard = async (copyMe: string) => {
-    AttPayment()
-    try {
-      await navigator.clipboard.writeText(copyMe)
-      toast.success('link copiado com sucesso')
-    } catch (err) {
-      toast.error('erro ao copiar o link')
+  useEffect(() => {
+    if (values) {
+      setCartSize(values.length)
     }
-  }
+  }, [values])
 
-  async function AttPayment() {
+  async function handlePayment() {
+    setLoading(true)
     try {
-      const { data } = await apiStore.get(`invoices/${pix.id}`)
-      if (data.status === 'paid') {
-        setCookies('@BuyPhone:SuccessShipping', 'true', 180)
-        router.push('/purchased')
+      const setDat: ProductPayment[] = []
+      values.map(async (item) => {
+        const response = {
+          product_id: item.id,
+          price: item.priceFormated,
+          qty: item.amount,
+        }
+        setDat.push(response)
+      })
+
+      const items = {
+        user_id: user.id,
+        address_id: address?.id,
+        amount: somaTotal,
+        items: setDat,
       }
+      const { data } = await apiStore.post('checkout/pix', items)
+      setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
+      destroyCookie(null, '@BuyPhone:GetCep')
+      destroyCookie(null, 'USER_LEAD')
+      CleanCart()
+      router.push('/shipping/payment/pix/pix-payment')
     } catch (error) {
-      router.push('/myshopping')
+      ToastCustom(3000, 'Ocorreu um erro, contate o suporte.', 'error')
+      CleanCart()
+      destroyCookie(null, '@BuyPhone:GetCep')
+      router.push('/')
     }
   }
 
   return (
     <>
-      <div className="my-10 px-4">
-        <div className="flex flex-col gap-4 max-w-5xl mx-auto">
-          <div className="flex flex-col w-full md:flex-row justify-evenly">
-            <div className="text-center w-full grid gap-3">
-              <div className="card card-compact shadow w-fit mx-auto">
-                <Image
-                  src={pix.qrcode}
-                  width={128}
-                  height={128}
-                  className="mx-auto"
-                />
-              </div>
-              <h3 className="font-bold text-2xl">
-                Valor: R$ {moneyMask(pix.amount?.toString())}
-              </h3>
-              <div className="grid gap-2">
-                <a
-                  onClick={() => copyToClipBoard(`${pix.brcode}`)}
-                  className="btn btn-info text-white"
-                >
-                  Copiar QRCode
-                </a>
+      {loading && (
+        <>
+          <input
+            type="checkbox"
+            id="my-modal-5"
+            className="modal-toggle modal-open"
+          />
+          <div className="modal modal-open">
+            <div className="modal-box bg-transparent shadow-none flex justify-center items-center max-w-5xl">
+              <LoadingComponent message={'Processando Pedido...'} />
+            </div>
+          </div>
+        </>
+      )}
+      <div className="max-w-7xl mx-auto px-4 grid">
+        <div className="relative w-full">
+          <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
+            Conferir e Finalizar
+          </h2>
+          <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 pt-6 border-t border-base-300">
+            <h3 className="text-2xl font-medium">Aparelho(s)</h3>
 
-                <Link href={pix?.pdf ?? ''}>
-                  <a className="btn btn-info text-white">Baixar PDF</a>
-                </Link>
+            {cartSize && cartSize > 0 ? (
+              values.map(
+                (res) =>
+                  res.id && (
+                    <React.Fragment key={res.id}>
+                      <ProductCart
+                        id={res.id}
+                        amount={res.amount}
+                        name={res.product.name}
+                        color={res.product.color}
+                        price={res.subTotal}
+                        memory={res.product.memory}
+                        image={res.product.media[0].original_url}
+                      />
+                    </React.Fragment>
+                  )
+              )
+            ) : (
+              <div className="flex gap-3">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <h1>Carregando...</h1>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 pt-6 border-t border-base-300">
+            <h3 className="text-2xl font-medium">Enviar para</h3>
+            <div className="flex justify-between gap-4 w-full">
+              <div className="flex flex-col">
+                <strong>Endereço:</strong>
+                <span>{`${address?.address}, ${address?.number}`}</span>
+                <span></span>
+                <span>{address?.neighborhood}</span>
+                <span></span>
+                <span>{address?.city}</span>
+                <span></span>
+              </div>
+              <div className="flex flex-col">
+                <strong>Comprador:</strong>
+                <span>{user?.name}</span>
+                <span>{user?.email}</span>
               </div>
             </div>
-            <div className="divider md:divider-horizontal"></div>
-            <div className="flex flex-col w-full justify-center gap-3">
-              <div className="badge badge-lg badge-warning">
-                Aguardando Pagamento
+          </div>
+          <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 pt-6 border-t border-base-300">
+            <h3 className="text-2xl font-medium">Pagamento</h3>
+            <div className="flex justify-between gap-4 w-full">
+              <div className="flex flex-col">
+                <strong>Opção:</strong>
+                <span>PIX</span>
               </div>
-              <div className="flex flex-col gap-3">
-                <h3 className="font-bold text-3xl">
-                  Enviar R$ {moneyMask(pix.amount.toString())} para:
-                </h3>
-                <div>
-                  <span className="font-bold">Nome:</span> Buyp Programas de
-                  Vantagens e Tecnologia Ltda
-                </div>
-                <div>
-                  <span className="font-bold">CNPJ:</span> 45.679.637/0001-94
-                </div>
+              <div className="flex flex-col">
+                <strong>Condição:</strong>
+                <span>1x sem juros</span>
               </div>
-              <a className="btn btn-info text-white" onClick={AttPayment}>
-                Verificar Pagamento
-              </a>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-6 max-w-3xl mx-auto mt-4 mb-12 py-6 border-y border-base-300">
+            <h3 className="text-2xl font-medium">Total</h3>
+            <div className="flex justify-between gap-4 w-full">
+              <div className="flex flex-col">
+                <strong>Subtotal</strong>
+                <strong>Desconto</strong>
+                <strong>Frete</strong>
+              </div>
+              <div className="flex flex-col">
+                <span>
+                  {' '}
+                  R$ {moneyMask((somaTotal + discountValue).toString())}
+                </span>
+                {user?.promotion && (
+                  <span className="text-green-600">
+                    {' '}
+                    R$ -{moneyMask(discountValue.toString())}
+                  </span>
+                )}
+                <span className="text-green-600">Grátis</span>
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex justify-center z-50">
+            <div className="fixed bottom-[-10px] mb-20 md:mb-4 text-primary-content card card-compact glass w-[98%] md:w-80 z-50">
+              <div className="card-body bg-primary/90 ">
+                <div className="flex gap-4 w-full text-xl">
+                  <span>Total</span>
+                  <span> R$ {moneyMask(somaTotal.toString())}</span>
+                </div>
+                <a
+                  onClick={() => handlePayment()}
+                  className="flex btn btn-info text-white w-full"
+                >
+                  {loading ? 'Processando pedido...' : 'Finalizar Compra'}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -108,14 +203,15 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
 }
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const { '@BuyPhone:Pix': pixCookies } = parseCookies(ctx)
+  const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
+  const { '@BuyPhone:cart': cart } = parseCookies(ctx)
 
-  if (pixCookies) {
-    const pix = JSON.parse(pixCookies)
-    return { props: { pix } }
-  }
-
-  if (!pixCookies) {
+  if (getDataUser && cart !== '[]') {
+    const address = JSON.parse(getDataUser)
+    return {
+      props: { address },
+    }
+  } else {
     return {
       redirect: {
         destination: '/',

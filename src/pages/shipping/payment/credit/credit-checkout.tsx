@@ -99,6 +99,7 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
+      setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
       if (data.status === 'paid') {
@@ -115,10 +116,15 @@ export default function creditFinally({
         destroyCookie({}, '@BuyPhone:CreditInstallments')
         destroyCookie({}, '@BuyPhone:GetCep')
       } else {
+        setDisableFinally(false)
+        setProducts(setDat)
+        setLoading(false)
         setStateModalError(true)
         return
       }
     } catch (error: any) {
+      setDisableFinally(false)
+      setProducts(setDat)
       setLoading(false)
       setProducts(setDat)
       setStateModalError(true)
