@@ -65,7 +65,12 @@ const ProductCard = ({
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
               <figure className="mb-6">
-                <Image src={image} width={350} height={450} />
+                <Image
+                  src={image}
+                  className="object-contain"
+                  width={350}
+                  height={450}
+                />
               </figure>
             </div>
             <div>
@@ -199,7 +204,7 @@ const ProductCard = ({
         <>
           <input type="checkbox" id={id.toString()} className="modal-toggle" />
           <label htmlFor={id.toString()} className="modal cursor-pointer">
-            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[2%] mb-[108px] z-50 flex items-center justify-center w-full">
+            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[0%] mb-[108px] z-50 flex items-center justify-center w-full">
               <Image
                 src={CartaImg}
                 width={232}

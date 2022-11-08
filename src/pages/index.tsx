@@ -280,7 +280,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                       averagePrice={returnPrice.averagePrice}
                       slug={products.slug}
                       slugCategory={category.slug}
-                      image={products.media[0].original_url}
+                      image={products.media[0]?.original_url}
                       memory={products.memory}
                       changeText={changeText}
                     />

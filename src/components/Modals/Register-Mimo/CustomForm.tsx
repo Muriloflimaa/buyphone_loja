@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
-import { parseCookies, setCookie } from 'nookies';
-import { FormEvent, useEffect, useState } from 'react';
-import { masktel1 } from '../../../utils/masks';
-import { ToastCustom } from '../../../utils/toastCustom';
+import { useRouter } from 'next/router'
+import { parseCookies, setCookie } from 'nookies'
+import { FormEvent, useEffect, useState } from 'react'
+import { masktel1 } from '../../../utils/masks'
+import { ToastCustom } from '../../../utils/toastCustom'
 
 interface IFormFields {
   EMAIL: string
@@ -90,7 +90,7 @@ export default function CustomForm({
     <form
       className={
         'form-control gap-2 w-full ' +
-        (!!notPhone ? 'flex flex-row items-end' : 'my-7 px-7')
+        (!!notPhone ? 'flex flex-col items-center' : 'my-7 px-7')
       }
       onSubmit={(e) => handleSubmit(e)}
     >
@@ -132,7 +132,7 @@ export default function CustomForm({
           {status === 'sending' ? 'CADASTRANDO...' : 'CADASTRAR'}
         </button>
       ) : (
-        <button className="btn btn-info text-white" type="submit">
+        <button className="btn btn-info btn-block text-white" type="submit">
           {status === 'sending' ? 'Enviando...' : 'Enviar'}
         </button>
       )}
