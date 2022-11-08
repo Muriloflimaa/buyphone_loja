@@ -139,7 +139,7 @@ export default function Products({ data }: DataProps) {
         </title>
         <meta
           property="og:image"
-          content={data.media && data.media[0].original_url}
+          content={data.media && data.media[0]?.original_url}
         />
         <meta property="og:image:type" content="image/png"></meta>
         <meta property="og:image:width" content="800" />
@@ -171,7 +171,7 @@ export default function Products({ data }: DataProps) {
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
             {data.media &&
               data.media.map((res) => {
-                return <Image src={res.original_url} width={60} height={75} />
+                return <Image src={res?.original_url} width={60} height={75} />
               })}
 
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
@@ -181,8 +181,8 @@ export default function Products({ data }: DataProps) {
             <div className="hidden md:block">
               {data.media && (
                 <InnerImageZoom
-                  src={data.media[0].original_url}
-                  zoomSrc={data.media[0].original_url}
+                  src={data.media[0]?.original_url}
+                  zoomSrc={data.media[0]?.original_url}
                   width={300}
                   height={350}
                   hideHint
@@ -194,7 +194,7 @@ export default function Products({ data }: DataProps) {
             <div className="md:hidden">
               {data.media && (
                 <Image
-                  src={data.media[0].original_url}
+                  src={data.media[0]?.original_url}
                   layout="fixed"
                   width="240"
                   height="300"
