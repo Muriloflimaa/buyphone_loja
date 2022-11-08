@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
+  faCircleExclamation,
   faEnvelope,
   faLocationDot,
   faTruckFast,
@@ -27,6 +28,7 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import InnerImageZoom from 'react-inner-image-zoom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 
 interface IParams {
   params: {
@@ -292,106 +294,133 @@ export default function Products({ data }: DataProps) {
               </div>
 
               <div>
-                <h1 className="opacity-80 line-through decoration-red-600">
-                  {returnPrice.ourPrice <= 0
-                    ? 'Sem estoque'
-                    : 'R$ ' + moneyMask(returnPrice.averagePrice.toString())}
-                </h1>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-3xl font-bold">
-                    {returnPrice.ourPrice <= 0
-                      ? 'Sem estoque'
-                      : 'R$ ' + moneyMask(returnPrice.ourPrice.toString())}
-                  </h2>
-                  <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
-                    -{resultDiscountPercent.replace('.0', '')}%
-                  </span>
-                </div>
-              </div>
-              <div className="badge border-transparent bg-[#D5FDC7] rounded-xl text-xs font-semibold p-3 uppercase">
-                <span className="text-[#8DC679]">
-                  economia de{' '}
-                  <span className="text-[#327434]">
-                    R$ {moneyMask(resultDiscount.toString())}
-                  </span>
-                </span>
-              </div>
-
-              <div>
-                {returnPrice.ourPrice <= 0 ? (
-                  <button className="btn btn-disabled text-white">
-                    Sem estoque
-                  </button>
-                ) : (
-                  <button
-                    className="btn border-transparent bg-success w-full text-white"
-                    data-testid="add-product-button"
-                    onClick={() => handleAddProduct(data.id)}
-                  >
-                    Adicionar ao carrinho
-                  </button>
+                {returnPrice.averagePrice > 0 && (
+                  <>
+                    <h1 className="opacity-80 line-through decoration-red-600">
+                      {moneyMask(returnPrice.averagePrice.toString())}
+                    </h1>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-3xl font-bold">
+                        {moneyMask(returnPrice.ourPrice.toString())}
+                      </h2>
+                      <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
+                        -{resultDiscountPercent.replace('.0', '')}%
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
-              <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
-                <h1 className="text-base font-semibold">
-                  Calcule o frete e prazo de entrega
-                </h1>
-                <form
-                  className="flex flex-col md:flex-row items-start gap-2"
-                  onSubmit={handleSubmit(handleCepStorage)}
+              {returnPrice.averagePrice > 0 && (
+                <div className="badge border-transparent bg-[#D5FDC7] rounded-xl text-xs font-semibold p-3 uppercase">
+                  <span className="text-[#8DC679]">
+                    economia de{' '}
+                    <span className="text-[#327434]">
+                      R$ {moneyMask(resultDiscount.toString())}
+                    </span>
+                  </span>
+                </div>
+              )}
+              {returnPrice.averagePrice > 0 && (
+                <button
+                  className="btn border-transparent bg-success w-full text-white"
+                  data-testid="add-product-button"
+                  onClick={() => handleAddProduct(data.id)}
                 >
-                  <Input
-                    {...register('cep')}
-                    type="text"
-                    maxLength={9}
-                    placeholder="00000-000"
-                    onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
-                    error={errors.cep}
-                  />
-                  {formState.isSubmitting ? (
-                    <button
-                      type="submit"
-                      className="btn loading normal-case text-white"
-                    >
-                      Carregando
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-info text-white upper-case text-xs md:text-md py-0"
-                      type="submit"
-                    >
-                      Consultar
-                    </button>
-                  )}
-                </form>
-                <div className="flex flex-col items-start md:text-xs">
-                  {address && (
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        className="w-4 h-4"
-                      />
-                      <p>
-                        {`${address?.Street && address?.Street + '-'} ${
-                          address?.City
-                        }, ${address?.UF}`}
-                      </p>
-                    </div>
-                  )}
+                  Adicionar ao carrinho
+                </button>
+              )}
 
-                  {shippingOn && (
-                    <div className="flex justify-between items-start w-full text-success">
-                      <p className="flex items-center gap-2">
+              {returnPrice.averagePrice <= 0 && (
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
+                  <div className="flex flex-col text-start items-start gap-3 my-3">
+                    <div className="flex gap-2 text-start items-center bg-info/30 rounded-lg p-2">
+                      <FontAwesomeIcon
+                        icon={faCircleExclamation}
+                        className="w-5 h-5"
+                      />
+
+                      <span className="text-xs">
+                        Infelizmente não temos disponibilidade desse produto no
+                        momento.
+                      </span>
+                    </div>
+                    <p className="font-semibold text-2xl">Seja notificado!</p>
+                    <p className="text-info-content/50 text-sm">
+                      Assim que o produto estiver disponível em nosso site,
+                      iremos encaminhar um email para você! Fique atento.
+                    </p>
+
+                    <div className="flex gap-3 w-full items-end">
+                      <MailchimpFormContainer
+                        nameProduct={`${data.category_slug} ${data.slug}`}
+                        notPhone
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {returnPrice.averagePrice > 0 && (
+                <div className="alert items-start w-full flex flex-col border-[1px] border-[#00000014] bg-accent text-info-content">
+                  <h1 className="text-base font-semibold">
+                    Calcule o frete e prazo de entrega
+                  </h1>
+                  <form
+                    className="flex flex-col md:flex-row items-start gap-2"
+                    onSubmit={handleSubmit(handleCepStorage)}
+                  >
+                    <Input
+                      {...register('cep')}
+                      type="text"
+                      maxLength={9}
+                      placeholder="00000-000"
+                      onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                      error={errors.cep}
+                    />
+                    {formState.isSubmitting ? (
+                      <button
+                        type="submit"
+                        className="btn loading normal-case text-white"
+                      >
+                        Carregando
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-info text-white upper-case text-xs md:text-md py-0"
+                        type="submit"
+                      >
+                        Consultar
+                      </button>
+                    )}
+                  </form>
+                  <div className="flex flex-col items-start md:text-xs">
+                    {address && (
+                      <div className="flex items-center gap-2">
                         <FontAwesomeIcon
-                          icon={faTruckFast}
+                          icon={faLocationDot}
                           className="w-4 h-4"
                         />
-                        {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
-                      </p>
-                    </div>
-                  )}
+                        <p>
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
+                        </p>
+                      </div>
+                    )}
+
+                    {shippingOn && (
+                      <div className="flex justify-between items-start w-full text-success">
+                        <p className="flex items-center gap-2">
+                          <FontAwesomeIcon
+                            icon={faTruckFast}
+                            className="w-4 h-4"
+                          />
+                          {`Chegará grátis em até ${shippingOn?.days} dias úteis`}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
                 <div className="alert items-start bg-accent w-full grid ">
