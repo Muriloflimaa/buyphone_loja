@@ -10,7 +10,6 @@ import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { IProduct } from '../types'
-import { verificationPrice } from '../utils/verificationPrice'
 
 //*** images
 //*** clientes
@@ -66,7 +65,7 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
-  const [changeText, setChangeText] = useState(false)
+
   const [apiNew, setApiNew] = useState<Array<IProduct>>(data.data)
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
@@ -82,7 +81,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const handleCarregarProdutos = async () => {
     if (currentPage !== data.last_page) {
       await apiStore
-        .get(`products/?per_page=10&page=${currentPage}`)
+        .get(`products/?page=${currentPage}`)
         .then((response) => response.data.data)
         .then((newProducts) =>
           setApiNew((prevData) => [...prevData, ...newProducts])
@@ -107,10 +106,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     }
     setCurrentSlide(currentSlide + 1)
   }
-
-  // setTimeout(() => {
-  //   setChangeText(!changeText)
-  // }, 1400)
 
   useEffect(() => {
     getProductsMatch()
@@ -251,14 +246,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           >
             {productsMatch &&
               productsMatch.map((res) => {
-                return (
-                  <CardMatch
-                    key={res.id}
-                    data={res}
-                    changeText={changeText}
-                    next={next}
-                  />
-                )
+                return <CardMatch key={res.id} data={res} next={next} />
               })}
           </Carousel>
         </div>
@@ -319,7 +307,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                     slugCategory={products.category_slug}
                     image={products.media[0].original_url}
                     memory={products.memory}
-                    changeText={changeText}
                   />
                 )
               })

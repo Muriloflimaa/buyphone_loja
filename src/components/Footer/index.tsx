@@ -208,7 +208,7 @@ export default function Footer() {
                 <li className="w-[50%]">
                   <a
                     target={'_blank'}
-                    href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"
+                    href="https://www.sslshopper.com/ssl-checker.html#hostname=buyphone.com.br"
                   >
                     <Image
                       src={SeloBlintadoPng}

@@ -14,10 +14,10 @@ import { verificationPrice } from '../../utils/verificationPrice'
 interface CardMatchProps {
   next: () => void
   data: IProduct
-  changeText: boolean
 }
 
-const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
+const CardMatch = ({ next, data }: CardMatchProps) => {
+  const [changeText, setChangeText] = useState(false)
   const [failMatch, setFailMatch] = useState(false)
   const [successMatch, setSuccessMatch] = useState(false)
   const { addProduct } = useCart()
@@ -30,6 +30,10 @@ const CardMatch = ({ next, data, changeText }: CardMatchProps) => {
   async function noMatch() {
     setFailMatch(false)
   }
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
 
   async function Math() {
     setSuccessMatch(false)
