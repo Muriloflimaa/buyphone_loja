@@ -30,7 +30,6 @@ export const verificationPrice = (products: IProduct) => {
   const averagePrice = filteredItens.length > 0 ? Math.min(...filteredItens) : 0
   const discountPrice = Math.round(averagePrice * (discount / 100))
   const ourPrice = averagePrice - discountPrice
-
   return {
     averagePrice,
     ourPrice,

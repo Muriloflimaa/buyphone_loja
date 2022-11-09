@@ -17,19 +17,7 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
-  const discount =
-    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-      ? 12.5
-      : userData?.type === 1
-      ? 12.5
-      : 7
-
-  const [changeText, setChangeText] = useState(false)
-
-  setTimeout(() => {
-    setChangeText(!changeText)
-  }, 1400)
+  const discount = userData?.type === 1 ? 12.5 : 7
 
   return (
     <>
@@ -66,7 +54,6 @@ export default function Products({ data }: DataProps) {
                     slugCategory={data.slug}
                     image={products.media[0]?.original_url}
                     memory={products.memory}
-                    changeText={changeText}
                   />
                 </React.Fragment>
               )

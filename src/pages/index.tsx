@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, NextPage } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -9,8 +9,7 @@ import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
 import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
-import { ICategory, IProduct } from '../types'
-import { verificationPrice } from '../utils/verificationPrice'
+import { IProduct } from '../types'
 
 //*** images
 //*** clientes
@@ -50,13 +49,15 @@ import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
+import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import Link from 'next/link'
-import CardMatch from '../components/CardMatch'
+import { parseCookies } from 'nookies'
 
 interface DataProps {
   data: {
-    data: Array<ICategory>
+    data: Array<IProduct>
+    last_page: number
   }
   darkOrLigth: boolean
 }
@@ -64,11 +65,30 @@ interface DataProps {
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
-  const [changeText, setChangeText] = useState(false)
+
+  const [apiNew, setApiNew] = useState<Array<IProduct>>(data.data)
+  const [currentSlide, setCurrentSlide] = useState(1)
+  const [currentPage, setCurrentPage] = useState(2)
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
 
   useEffect(() => {
-    getProductsMatch()
-  }, [])
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
+
+  const handleCarregarProdutos = async () => {
+    if (currentPage !== data.last_page) {
+      await apiStore
+        .get(`products/?page=${currentPage}`)
+        .then((response) => response.data.data)
+        .then((newProducts) =>
+          setApiNew((prevData) => [...prevData, ...newProducts])
+        )
+    }
+    setCurrentPage(currentPage + 1)
+  }
 
   async function getProductsMatch() {
     try {
@@ -76,8 +96,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
       setProductsMatch(data)
     } catch (error) {}
   }
-
-  const [currentSlide, setCurrentSlide] = useState(1)
 
   function next() {
     const maxCurrent = currentRefCarroussel.current?.itemsRef.length
@@ -89,9 +107,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     setCurrentSlide(currentSlide + 1)
   }
 
-  setTimeout(() => {
-    setChangeText(!changeText)
-  }, 1400)
+  useEffect(() => {
+    getProductsMatch()
+  }, [])
 
   return (
     <>
@@ -104,7 +122,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         <div className="block md:hidden">
           <CarouselComponent
             image={
-              !!darkOrLigth
+              darkOrLigth
                 ? [Banner1MobileDark, Banner2MobileDark]
                 : [Banner1MobileLight, Banner2MobileLight]
             }
@@ -113,7 +131,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         <div className="md:block hidden">
           <CarouselComponent
             image={
-              !!darkOrLigth
+              darkOrLigth
                 ? [
                     {
                       ...BannerBlackFriday,
@@ -138,7 +156,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="md:w-1/2">
             <CarouselComponent
               image={
-                !!darkOrLigth
+                darkOrLigth
                   ? [
                       {
                         ...MiniBannerBlackFriday,
@@ -175,7 +193,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="md:w-1/2">
             <CarouselComponent
               image={
-                !!darkOrLigth
+                darkOrLigth
                   ? [
                       {
                         ...BannerDepoiments,
@@ -228,14 +246,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           >
             {productsMatch &&
               productsMatch.map((res) => {
-                return (
-                  <CardMatch
-                    key={res.id}
-                    data={res}
-                    changeText={changeText}
-                    next={next}
-                  />
-                )
+                return <CardMatch key={res.id} data={res} next={next} />
               })}
           </Carousel>
         </div>
@@ -263,30 +274,42 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
-
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
-            {data?.data.length > 0 ? (
-              data.data.map((category) =>
-                category.products.map((products: IProduct) => {
-                  const returnPrice = verificationPrice(products)
-                  return (
-                    <ProductCard
-                      key={products.id}
-                      id={products.id}
-                      name={products.name}
-                      idCategory={category.id}
-                      colorPhone={products.color}
-                      price={returnPrice.ourPrice}
-                      averagePrice={returnPrice.averagePrice}
-                      slug={products.slug}
-                      slugCategory={category.slug}
-                      image={products.media[0]?.original_url}
-                      memory={products.memory}
-                      changeText={changeText}
-                    />
-                  )
-                })
-              )
+            {apiNew.length > 0 ? (
+              apiNew.map((products: IProduct) => {
+                const discount =
+                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+                const itens = [
+                  products.price,
+                  products.magalu_price,
+                  products.americanas_price,
+                  products.casasbahia_price,
+                  products.ponto_price,
+                ]
+                const filteredItens = itens.filter((item) => item)
+                const averagePrice =
+                  filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+                const discountPrice = Math.round(
+                  averagePrice * (discount / 100)
+                )
+                const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
+                return (
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    idCategory={products.category_id}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={products.category_slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                  />
+                )
+              })
             ) : (
               <div className="flex gap-3 justify-center">
                 <svg
@@ -313,6 +336,16 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             )}
           </div>
         </div>
+        {currentPage !== data.last_page && (
+          <div className="flex w-full justify-center">
+            <button
+              className="btn border btn-outline hover:btn-info hover:text-white w-full max-w-[250px] mt-8"
+              onClick={handleCarregarProdutos}
+            >
+              Ver mais
+            </button>
+          </div>
+        )}
         <div id="depoiments"></div>
         <div className="mt-20">
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
@@ -447,10 +480,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps = async () => {
   try {
-    const { data } = await apiStore.get(`categories/`)
-
+    const { data } = await apiStore.get(`products/`)
     return {
       props: {
         data,

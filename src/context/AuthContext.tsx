@@ -58,7 +58,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         lead,
       })
       console.log(response.data)
-      const { type, name, id, profile_photo_url, promotion } = response.data.user
+      const { type, name, id, profile_photo_url, promotion } =
+        response.data.user
 
       const UserObject = {
         name: name,
@@ -67,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         profile_photo_url: profile_photo_url,
         email: email,
         lead: lead,
-        promotion: promotion
+        promotion: promotion,
       }
       const token = response.data.authorization.token
 
@@ -121,6 +122,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       destroyCookie(undefined, '@BuyPhone:Token')
       destroyCookie({}, '@BuyPhone:User')
       destroyCookie({}, '@BuyPhone:Token')
+      destroyCookie(null, '@BuyPhone:Token')
+      destroyCookie(null, '@BuyPhone:User')
       setUserData(null)
       Router.push('/')
     } catch (error) {
@@ -128,6 +131,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       destroyCookie(undefined, '@BuyPhone:Token')
       destroyCookie({}, '@BuyPhone:User')
       destroyCookie({}, '@BuyPhone:Token')
+      destroyCookie(null, '@BuyPhone:Token')
+      destroyCookie(null, '@BuyPhone:User')
       setUserData(null)
       Router.push('/')
     }

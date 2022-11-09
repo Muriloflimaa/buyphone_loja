@@ -5,16 +5,13 @@ import { useWindowSize } from '../utils/useWindowSize'
 import GifPng from '../assets/images/giphy.gif'
 import { destroyCookie, parseCookies } from 'nookies'
 import { GetServerSidePropsContext } from 'next'
-import { useEffect } from 'react'
 
 export default function Purchased() {
   const size = useWindowSize()
 
-  useEffect(() => {
-    destroyCookie(null, '@BuyPhone:SuccessShipping')
-    destroyCookie(undefined, '@BuyPhone:SuccessShipping')
-    destroyCookie({}, '@BuyPhone:SuccessShipping')
-  }, [])
+  destroyCookie(null, '@BuyPhone:SuccessShipping')
+  destroyCookie(undefined, '@BuyPhone:SuccessShipping')
+  destroyCookie({}, '@BuyPhone:SuccessShipping')
 
   return (
     <>
@@ -32,7 +29,7 @@ export default function Purchased() {
             O seu pedido foi aceito e está sendo processado. Você irá receber
             uma notificação com os detalhes do pedido no seu e-mail.
           </span>
-          <Link href={'/myshopping'}>
+          <Link href={'/user/myshopping'}>
             <a className="link">Ir para minhas compras</a>
           </Link>
 

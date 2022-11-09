@@ -21,7 +21,7 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
         destroyCookie(ctx, '@BuyPhone:Token')
         return {
           redirect: {
-            destination: '/login',
+            destination: '/account/login',
             permanent: false,
           },
         }

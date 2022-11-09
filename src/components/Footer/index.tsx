@@ -39,7 +39,7 @@ export default function Footer() {
     <footer className="bg-secondary w-full py-6 pb-32 p-4 md:pb-6 max-w-7xl mx-auto">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:justify-between gap-y-12 md:gap-y-0 gap-x-6">
         <div>
-          <h3 className="font-bold text-lg mb-3 text-info-content">
+          <h3 className="font-medium text-lg mb-3 text-info-content">
             Categorias
           </h3>
           <ul className="text-info-content gap-1 opacity-90">
@@ -85,7 +85,7 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-bold text-lg mb-3 text-info-content">
+          <h3 className="font-medium text-lg mb-3 text-info-content">
             Mais informações
           </h3>
           <ul className="gap-1 opacity-90 text-info-content">
@@ -107,7 +107,9 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="font-bold text-lg mb-3 text-info-content">Contatos</h3>
+          <h3 className="font-medium text-lg mb-3 text-info-content">
+            Contatos
+          </h3>
           <ul className="text-sm block leading-6 text-info-content">
             <li className="link-hover">
               <Link href={'mailto:contato@buyphone.com.br'}>
@@ -162,8 +164,28 @@ export default function Footer() {
           </ul>
         </div>
         <div className="flex flex-col lg:flex-row gap-12">
+          <div className="flex flex-col gap-10">
+            <div>
+              <h3 className="font-medium text-lg mb-3">Parceiros</h3>
+              <ul className="menu menu-vertical text-sm flex gap-2">
+                <li>
+                  <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
+                </li>
+                <li>
+                  <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
+                </li>
+                <li>
+                  <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
+                </li>
+              </ul>
+              <small className="text-xs text-info-content">
+                Seus dados estão seguros
+              </small>
+            </div>
+          </div>
+
           <div>
-            <h3 className="font-bold text-lg mb-3">Métodos de Pagamento</h3>
+            <h3 className="font-medium text-lg mb-3">Métodos de Pagamento</h3>
 
             <ul className="text-sm flex gap-2">
               <li>
@@ -180,34 +202,13 @@ export default function Footer() {
               </li>
               <li></li>
             </ul>
-          </div>
-
-          <div className="flex flex-col gap-10">
-            <div>
-              <h3 className="font-medium text-lg mb-3">Parceiros</h3>
-              <ul className="text-sm flex gap-2">
-                <li>
-                  <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
-                </li>
-                <li>
-                  <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
-                </li>
-                <li>
-                  <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
-                </li>
-                <li></li>
-              </ul>
-              <small className="text-xs text-info-content">
-                Seus dados estão seguros
-              </small>
-            </div>
-            <div className="flex flex-col">
+            <div className="mt-8">
               <h3 className="font-medium text-lg mb-3">Verificações</h3>
-              <ul className="flex flex-col gap-2">
+              <ul className="flex items-center">
                 <li className="w-[50%]">
                   <a
                     target={'_blank'}
-                    href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"
+                    href="https://www.sslshopper.com/ssl-checker.html#hostname=buyphone.com.br"
                   >
                     <Image
                       src={SeloBlintadoPng}
@@ -216,7 +217,7 @@ export default function Footer() {
                     ></Image>
                   </a>
                 </li>
-                <li className="w-[100%]">
+                <li className="w-[50%]">
                   <a
                     target={'_blank'}
                     href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbuyphone.com.br%2F&hl=pt_BR"

@@ -2,9 +2,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
-import { Input } from '../components/InputElement'
-import { apiStore } from '../services/api'
-import { ToastCustom } from '../utils/toastCustom'
+import { Input } from '../../components/InputElement'
+import { apiStore } from '../../services/api'
+import { ToastCustom } from '../../utils/toastCustom'
 
 type ForgoutFormData = {
   email: string
@@ -36,7 +36,7 @@ export default function ForgotPassword() {
         'Enviamos um link para recuperação de senha no seu e-mail.',
         'success'
       )
-      router.push('/login')
+      router.push('/account/login')
     } catch (error: any) {
       if (error.response.data.message === 'The selected email is invalid.') {
         ToastCustom(

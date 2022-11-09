@@ -73,7 +73,7 @@ const ListProducts = ({
   async function getShippingDays() {
     try {
       const infoShippingSend = {
-        cep: zipCode,
+        cep: zipCode?.toString().replace('-', ''),
         total: value,
         qtd_items: 1,
       }
@@ -191,7 +191,7 @@ const ListProducts = ({
                             </div>
                             <a
                               className="btn btn-info text-white"
-                              onClick={() => router.push('/myshopping')}
+                              onClick={() => router.push('/user/myshopping')}
                             >
                               Verificar Pagamento
                             </a>
