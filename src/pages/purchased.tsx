@@ -44,7 +44,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
 
   if (success) {
-    console.log(success)
     return {
       props: {},
     }
