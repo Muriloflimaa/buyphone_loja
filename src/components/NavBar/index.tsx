@@ -227,7 +227,7 @@ export default function NavBar() {
                   {/* DESKTOP */}
                   <div className="md:flex justify-end items-center gap-5 w-full hidden">
                     {!isUser ? (
-                      <Link href={'/login'} passHref>
+                      <Link href={'/account/login'} passHref>
                         <a>
                           <div className="flex justify-end flex-col items-center cursor-pointer">
                             <FontAwesomeIcon
@@ -261,7 +261,7 @@ export default function NavBar() {
                             </Link>
                           </li>
                           <li>
-                            <Link href={'/myshopping'}>
+                            <Link href={'/user/myshopping'}>
                               <a>Minhas Compras</a>
                             </Link>
                           </li>
@@ -573,7 +573,7 @@ export default function NavBar() {
                 </div>
               ) : (
                 <div className="flex justify-center items-center w-full p-4">
-                  <Link href={'/login'} passHref>
+                  <Link href={'/account/login'} passHref>
                     <a className="link text-info-content">Login</a>
                   </Link>
                 </div>

@@ -281,7 +281,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col items-center">
               <Image
-                className="max-w-[120px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={GirlBuyPhone}
                 alt="GirlBuyPhone"
                 quality={100}
@@ -300,7 +300,7 @@ export default function Depoimentos() {
               </div>
 
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={JuninhoBuyPhone}
                 quality={100}
                 alt="JuninhoBuyPhone"
@@ -330,7 +330,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col md:absolute md:left-0 items-center md:mt-64 text-[#201942]">
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho2CartPhone}
                 quality={100}
                 alt="Juninho2CartPhone"
@@ -350,7 +350,7 @@ export default function Depoimentos() {
               </div>
 
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho2BuyPhone}
                 quality={100}
                 alt="Juninho2BuyPhone"
@@ -384,7 +384,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col md:ml-10 md:items-start items-center max-w-md mx-auto text-[#201942]">
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho3Post}
                 quality={100}
                 alt="Juninho2CartPhone"
@@ -429,7 +429,7 @@ export default function Depoimentos() {
                   <Image src={ArrowPurplePng} alt="Arrow2" />
                 </div>
                 <Image
-                  className="max-w-[150px] md:max-w-none"
+                  className="max-w-[120px] md:max-w-none object-contain"
                   src={Juninho2AirPlane}
                   quality={100}
                   alt="Juninho2AirPlane"
@@ -575,8 +575,8 @@ export default function Depoimentos() {
             <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               Redes sociais
             </h1>
-            <h2 className="text-[#201942] md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
-              Redes sociais
+            <h2 className="text-[#201942] md:w-3/6 uppercase tracking-widest text-xl font-bold md:mt-6">
+              Fique por dentro das novidades e atualizações da Buyphone
             </h2>
           </div>
           <div className="grid grids-cols-1 md:grid-cols-4 gap-8 py-24 md:p-0 md:pt-12">

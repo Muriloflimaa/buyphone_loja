@@ -4,11 +4,11 @@ import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { Input } from '../components/InputElement'
-import { apiStore } from '../services/api'
-import { maskCpfInput, masktel } from '../utils/masks'
-import { ToastCustom } from '../utils/toastCustom'
-import { WithSSRGuest } from '../utils/WithSSRGuest'
+import { Input } from '../../components/InputElement'
+import { apiStore } from '../../services/api'
+import { maskCpfInput, masktel } from '../../utils/masks'
+import { ToastCustom } from '../../utils/toastCustom'
+import { WithSSRGuest } from '../../utils/WithSSRGuest'
 
 type SignUpFormData = {
   email: string
@@ -90,7 +90,7 @@ export default function register() {
       //precisa formatar os dados antes de enviar
       await apiStore.post('/users', dataUTM)
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
-      router.push('/login')
+      router.push('/account/login')
     } catch (error: any) {
       console.log(error)
       if (
@@ -102,7 +102,7 @@ export default function register() {
         try {
           await apiStore.post('/users', data)
           ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
-          router.push('/login')
+          router.push('/account/login')
         } catch (newError: any) {
           if (newError.response.data.errors) {
             const resposta = newError.response.data.errors
@@ -218,7 +218,7 @@ export default function register() {
         )}
         <div className="text-center text-sm">
           Já é registrado?{' '}
-          <Link href={'/login'} passHref>
+          <Link href={'/account/login'} passHref>
             <a className="font-semibold text-blue-700 hover:text-blue-600">
               Entrar
             </a>

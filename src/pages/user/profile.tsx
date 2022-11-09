@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { apiStore } from '../../services/api'
+import { apiStore, link } from '../../services/api'
 import { UserData } from '../../types'
 import { masktel } from '../../utils/masks'
 import { ToastCustom } from '../../utils/toastCustom'
@@ -318,7 +318,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       destroyCookie(ctx, '@BuyPhone:Token')
       return {
         redirect: {
-          destination: '/login',
+          destination: '/account/login',
           permanent: false,
         },
       }
@@ -333,7 +333,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     })
     return {
       redirect: {
-        destination: '/login',
+        destination: '/account/login',
         permanent: false,
       },
     }
@@ -347,14 +347,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const userjson = JSON.parse(user)
 
     //chamada api com id do user obtido + bearer token do cookies
-    const { data } = await axios.get(
-      `https://beta-api.buyphone.com.br/store/users/${userjson.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,
-        },
-      }
-    )
+    const { data } = await axios.get(`${link}/store/users/${userjson.id}`, {
+      headers: {
+        Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,
+      },
+    })
 
     //envia o data para a aplicacao com sucesso
     return {

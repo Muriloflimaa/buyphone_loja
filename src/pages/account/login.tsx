@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { Input } from '../components/InputElement'
-import { AuthContext } from '../context/AuthContext'
-import { WithSSRGuest } from '../utils/WithSSRGuest'
+import { Input } from '../../components/InputElement'
+import { AuthContext } from '../../context/AuthContext'
+import { WithSSRGuest } from '../../utils/WithSSRGuest'
 
 type SignInFormData = {
   email: string
@@ -38,7 +38,6 @@ export default function login() {
     await signIn(values)
   }
 
-
   return (
     <>
       <div className="text-2xl flex md:gap-1 flex-col md:flex-row text-center justify-center pt-4 text-default font-medium">
@@ -63,7 +62,7 @@ export default function login() {
             error={errors.password}
           />
           <div className="flex justify-end w-full">
-            <Link href={'/forgot-password'} passHref>
+            <Link href={'/account/forgot-password'} passHref>
               <a className="text-xs  text-blue-600 link cursor-pointer">
                 Esqueceu sua senha?
               </a>
@@ -85,7 +84,7 @@ export default function login() {
           </div>
           <div className="text-default flex flex-col items-center gap-1 justify-center">
             Deseja criar uma conta?
-            <Link href={'/register'} passHref>
+            <Link href={'/account/register'} passHref>
               <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
             </Link>
           </div>

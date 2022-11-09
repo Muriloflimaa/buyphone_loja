@@ -21,7 +21,6 @@ interface ProductCardProps {
   idCategory: number
   slug: string
   slugCategory: string
-  changeText: boolean
 }
 
 const ProductCard = ({
@@ -34,14 +33,18 @@ const ProductCard = ({
   slug,
   slugCategory,
   memory,
-  changeText,
 }: ProductCardProps) => {
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
+  const [changeText, setChangeText] = useState(false)
   const resultDiscount = averagePrice - price
   const resultDiscountPercent = ((resultDiscount / averagePrice) * 100).toFixed(
     1
   )
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
 
   const link = `/products/apple/iphones/${slugCategory}/${slug}`
 
@@ -100,8 +103,8 @@ const ProductCard = ({
                       <span className="flex gap-1">
                         <span className="text-[#004907]">
                           Entrada no PIX +{' '}
+                          <span className="text-[#1F7501]/50">parcelas</span>
                         </span>
-                        <span className="text-[#1F7501]/50">parcelas</span>
                       </span>
                     )}
                   </span>

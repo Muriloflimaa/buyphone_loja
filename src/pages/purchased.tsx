@@ -32,7 +32,7 @@ export default function Purchased() {
             O seu pedido foi aceito e está sendo processado. Você irá receber
             uma notificação com os detalhes do pedido no seu e-mail.
           </span>
-          <Link href={'/myshopping'}>
+          <Link href={'/user/myshopping'}>
             <a className="link">Ir para minhas compras</a>
           </Link>
 

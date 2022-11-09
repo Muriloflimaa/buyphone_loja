@@ -45,7 +45,7 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
         router.push('/purchased')
       }
     } catch (error) {
-      router.push('/myshopping')
+      router.push('/user/myshopping')
     }
   }
 
