@@ -348,7 +348,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     //chamada api com id do user obtido + bearer token do cookies
     const { data } = await axios.get(
-      `https://beta-api.buyphone.com.br/store/users/${userjson.id}`,
+      `https://api.buyphone.com.br/store/users/${userjson.id}`,
       {
         headers: {
           Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,

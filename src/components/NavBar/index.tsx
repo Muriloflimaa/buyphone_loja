@@ -261,7 +261,7 @@ export default function NavBar() {
                             </Link>
                           </li>
                           <li>
-                            <Link href={'/myshopping'}>
+                            <Link href={'/user/myshopping'}>
                               <a>Minhas Compras</a>
                             </Link>
                           </li>

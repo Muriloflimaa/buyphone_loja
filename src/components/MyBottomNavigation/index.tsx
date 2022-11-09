@@ -62,7 +62,7 @@ export default function MyBottomNavigation() {
       return
     }
 
-    if (router.asPath === '/myshopping') {
+    if (router.asPath === '/user/myshopping') {
       handleSlide(4)
       return
     } else {
@@ -153,7 +153,7 @@ export default function MyBottomNavigation() {
           </div>
         </div>
       </Link>
-      <Link href="/myshopping" passHref>
+      <Link href="/user/myshopping" passHref>
         <div
           onClick={() => handleSlide(4)}
           className={

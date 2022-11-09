@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
-import ListProducts from '../components/ListProducts'
-import { apiStore } from '../services/api'
-import { IInvoice } from '../types'
-import JuninhoImg from '../assets/images/juninho.webp'
-import { PersistentLogin } from '../utils/PersistentLogin'
+import ListProducts from '../../components/ListProducts'
+import { apiStore } from '../../services/api'
+import { IInvoice } from '../../types'
+import JuninhoImg from '../../assets/images/juninho.webp'
+import { PersistentLogin } from '../../utils/PersistentLogin'
 import Image from 'next/image'
 
 interface DataProps {
@@ -104,9 +104,8 @@ function MyShopping() {
         {data && data?.data.length >= 0 ? (
           data?.data.map((pedido) => {
             return (
-              <React.Fragment>
+              <React.Fragment key={pedido.id}>
                 <ListProducts
-                  key={pedido.id}
                   created={pedido.created_at}
                   statuspayment={pedido.invoice?.status}
                   number={pedido.id}
@@ -165,6 +164,7 @@ function MyShopping() {
         <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
           {data?.links.map((link) => (
             <button
+              key={link.label}
               onClick={() => {
                 handleChangePagination(
                   link.label
@@ -192,6 +192,6 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
   return {
     props: {},
   }
-}, '/myshopping')
+}, '/user/myshopping')
 
 export default MyShopping
