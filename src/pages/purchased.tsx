@@ -10,12 +10,6 @@ import { useEffect } from 'react'
 export default function Purchased() {
   const size = useWindowSize()
 
-  useEffect(() => {
-    destroyCookie(null, '@BuyPhone:SuccessShipping')
-    destroyCookie(undefined, '@BuyPhone:SuccessShipping')
-    destroyCookie({}, '@BuyPhone:SuccessShipping')
-  }, [])
-
   return (
     <>
       <Confetti
@@ -47,6 +41,10 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
 
   if (success) {
+    destroyCookie(null, '@BuyPhone:SuccessShipping')
+    destroyCookie(undefined, '@BuyPhone:SuccessShipping')
+    destroyCookie({}, '@BuyPhone:SuccessShipping')
+    destroyCookie(ctx, '@BuyPhone:SuccessShipping')
     return {
       props: {},
     }

@@ -4,7 +4,6 @@ import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
 import { apiStore } from '../../../../../services/api'
-import { verificationPrice } from '../../../../../utils/verificationPrice'
 
 interface DataProps {
   data: ICategory
@@ -18,13 +17,7 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const { userData } = useContext(AuthContext)
-  const discount =
-    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-      ? 12.5
-      : userData?.type === 1
-      ? 12.5
-      : 7
+  const discount = userData?.type === 1 ? 12.5 : 7
 
   return (
     <>
@@ -35,7 +28,18 @@ export default function Products({ data }: DataProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
           {data.products.length > 0 ? (
             data.products.map((products) => {
-              const returnPrice = verificationPrice(products)
+              const itens = [
+                products.price,
+                products.magalu_price,
+                products.americanas_price,
+                products.casasbahia_price,
+                products.ponto_price,
+              ]
+              const filteredItens = itens.filter((item) => item)
+              const averagePrice =
+                filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+              const discountPrice = Math.round(averagePrice * (discount / 100))
+              const ourPrice = averagePrice - discountPrice
               return (
                 <React.Fragment key={products.id}>
                   <ProductCard
@@ -43,8 +47,8 @@ export default function Products({ data }: DataProps) {
                     id={products.id}
                     name={products.name}
                     colorPhone={products.color}
-                    price={returnPrice.ourPrice}
-                    averagePrice={returnPrice.averagePrice}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
                     idCategory={products.id}
                     slug={products.slug}
                     slugCategory={data.slug}
