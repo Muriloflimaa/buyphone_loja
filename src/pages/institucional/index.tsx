@@ -281,7 +281,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col items-center">
               <Image
-                className="max-w-[120px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={GirlBuyPhone}
                 alt="GirlBuyPhone"
                 quality={100}
@@ -300,7 +300,7 @@ export default function Depoimentos() {
               </div>
 
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={JuninhoBuyPhone}
                 quality={100}
                 alt="JuninhoBuyPhone"
@@ -330,7 +330,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col md:absolute md:left-0 items-center md:mt-64 text-[#201942]">
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho2CartPhone}
                 quality={100}
                 alt="Juninho2CartPhone"
@@ -350,7 +350,7 @@ export default function Depoimentos() {
               </div>
 
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho2BuyPhone}
                 quality={100}
                 alt="Juninho2BuyPhone"
@@ -384,7 +384,7 @@ export default function Depoimentos() {
             </div>
             <div className="flex flex-col md:ml-10 md:items-start items-center max-w-md mx-auto text-[#201942]">
               <Image
-                className="max-w-[150px] md:max-w-none"
+                className="max-w-[120px] md:max-w-none object-contain"
                 src={Juninho3Post}
                 quality={100}
                 alt="Juninho2CartPhone"
@@ -429,7 +429,7 @@ export default function Depoimentos() {
                   <Image src={ArrowPurplePng} alt="Arrow2" />
                 </div>
                 <Image
-                  className="max-w-[150px] md:max-w-none"
+                  className="max-w-[120px] md:max-w-none object-contain"
                   src={Juninho2AirPlane}
                   quality={100}
                   alt="Juninho2AirPlane"
