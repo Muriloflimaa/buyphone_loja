@@ -22,7 +22,7 @@ export function PersistentLogin<P>(
       })
       return {
         redirect: {
-          destination: '/login',
+          destination: '/account/login',
           permanent: false,
         },
       }
@@ -41,7 +41,7 @@ export function PersistentLogin<P>(
         })
         return {
           redirect: {
-            destination: '/login',
+            destination: '/account/login',
             permanent: false,
           },
         }

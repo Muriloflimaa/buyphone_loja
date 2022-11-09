@@ -318,7 +318,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       destroyCookie(ctx, '@BuyPhone:Token')
       return {
         redirect: {
-          destination: '/login',
+          destination: '/account/login',
           permanent: false,
         },
       }
@@ -333,7 +333,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     })
     return {
       redirect: {
-        destination: '/login',
+        destination: '/account/login',
         permanent: false,
       },
     }

@@ -72,11 +72,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <Toaster position="top-right" reverseOrder={false} />
       <AuthProvider>
-        {router.route === `/login` ||
-        router.route === `/register` ||
-        router.route === `/terms` ||
-        router.route === `/politics` ||
-        router.route === `/forgot-password` ? (
+        {router.route === `/account/login` ||
+        router.route === `/account/register` ||
+        router.route === `/account/terms` ||
+        router.route === `/account/politics` ||
+        router.route === `/account/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>

@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { Input } from '../components/InputElement'
-import { AuthContext } from '../context/AuthContext'
-import { WithSSRGuest } from '../utils/WithSSRGuest'
+import { Input } from '../../components/InputElement'
+import { AuthContext } from '../../context/AuthContext'
+import { WithSSRGuest } from '../../utils/WithSSRGuest'
 
 type SignInFormData = {
   email: string
@@ -37,7 +37,6 @@ export default function login() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     await signIn(values)
   }
-
 
   return (
     <>
@@ -85,7 +84,7 @@ export default function login() {
           </div>
           <div className="text-default flex flex-col items-center gap-1 justify-center">
             Deseja criar uma conta?
-            <Link href={'/register'} passHref>
+            <Link href={'/account/register'} passHref>
               <a className="link text-blue-600 cursor-pointer">Cadastre-se</a>
             </Link>
           </div>
