@@ -53,10 +53,11 @@ import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import Link from 'next/link'
+import { parseCookies } from 'nookies'
 
 interface DataProps {
   data: {
-    data: Array<IProduct>,
+    data: Array<IProduct>
     last_page: number
   }
   darkOrLigth: boolean
@@ -69,12 +70,23 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [apiNew, setApiNew] = useState<Array<IProduct>>(data.data)
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
 
   const handleCarregarProdutos = async () => {
     if (currentPage !== data.last_page) {
-      await apiStore.get(`products/?per_page=10&page=${currentPage}`)
+      await apiStore
+        .get(`products/?per_page=10&page=${currentPage}`)
         .then((response) => response.data.data)
-        .then((newProducts) => setApiNew((prevData) => [...prevData, ...newProducts]));
+        .then((newProducts) =>
+          setApiNew((prevData) => [...prevData, ...newProducts])
+        )
     }
     setCurrentPage(currentPage + 1)
   }
@@ -83,7 +95,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   function next() {
@@ -277,24 +289,38 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {apiNew.length > 0 ? (
               apiNew.map((products: IProduct) => {
-                const returnPrice = verificationPrice(products)
+                const discount =
+                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+                const itens = [
+                  products.price,
+                  products.magalu_price,
+                  products.americanas_price,
+                  products.casasbahia_price,
+                  products.ponto_price,
+                ]
+                const filteredItens = itens.filter((item) => item)
+                const averagePrice =
+                  filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+                const discountPrice = Math.round(
+                  averagePrice * (discount / 100)
+                )
+                const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
                 return (
-                  returnPrice.ourPrice > 0 && (
-                    <ProductCard
-                      key={products.id}
-                      id={products.id}
-                      name={products.name}
-                      idCategory={products.category_id}
-                      colorPhone={products.color}
-                      price={returnPrice.ourPrice}
-                      averagePrice={returnPrice.averagePrice}
-                      slug={products.slug}
-                      slugCategory={products.category_slug}
-                      image={products.media[0].original_url}
-                      memory={products.memory}
-                      changeText={changeText}
-                    />
-                  )
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    idCategory={products.category_id}
+                    colorPhone={products.color}
+                    price={ourPrice}
+                    averagePrice={averagePrice}
+                    slug={products.slug}
+                    slugCategory={products.category_slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                    changeText={changeText}
+                  />
                 )
               })
             ) : (
@@ -324,11 +350,15 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </div>
         </div>
         {currentPage !== data.last_page && (
-          <div className='flex w-full justify-center'>
-            <button className='btn border btn-outline btn-primary w-full max-w-[250px] mt-8' onClick={handleCarregarProdutos}>Ver mais</button>
+          <div className="flex w-full justify-center">
+            <button
+              className="btn border btn-outline hover:btn-info hover:text-white w-full max-w-[250px] mt-8"
+              onClick={handleCarregarProdutos}
+            >
+              Ver mais
+            </button>
           </div>
-        )
-        }
+        )}
         <div id="depoiments"></div>
         <div className="mt-20">
           <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
