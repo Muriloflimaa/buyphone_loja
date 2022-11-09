@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
@@ -15,6 +16,8 @@ export default function NavBar({ navbar }: navBarProps) {
   const toggleDrawer = () => {
     setOpenDrawer((prevState) => !prevState)
   }
+
+  const router = useRouter()
 
   return (
     <>
@@ -37,33 +40,33 @@ export default function NavBar({ navbar }: navBarProps) {
                 {/* para desktop */}
                 <ul className="text-sm menu menu-horizontal text-white gap-10">
                   <li>
-                    <a href="#entenda" className="font-medium">
-                      Como funciona
-                    </a>
+                    <Link href={'/institucional#entenda'}>
+                      <a className="font-medium">Como funciona</a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="#depoimentos" className="font-medium">
-                      Depoimentos
-                    </a>
+                    <Link href={'/institucional/depoimentos'}>
+                      <a className="font-medium">Depoimentos</a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="#social" className="font-medium">
-                      Redes sociais
-                    </a>
+                    <Link href={'/institucional#social'}>
+                      <a className="font-medium">Redes sociais</a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="#contato" className="font-medium">
-                      Contato
-                    </a>
+                    <Link href={'/institucional#contato'}>
+                      <a className="font-medium">Contato</a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="#compare" className="font-medium">
-                      Diferenciais
-                    </a>
+                    <Link href={'/institucional#compare'}>
+                      <a className="font-medium">Diferenciais</a>
+                    </Link>
                   </li>
 
                   <Link href="/">
@@ -99,34 +102,34 @@ export default function NavBar({ navbar }: navBarProps) {
         className="w-auto h-auto bg-[#201942]"
       >
         <ul className="menu p-5 items-center text-white">
-          <li onClick={toggleDrawer}>
-            <a href="#entenda" className="font-medium">
-              Como funciona
-            </a>
+          <li>
+            <Link onClick={toggleDrawer} href={'/institucional#entenda'}>
+              <a className="font-medium">Como funciona</a>
+            </Link>
           </li>
 
-          <li onClick={toggleDrawer}>
-            <a href="#depoimentos" className="font-medium">
-              Depoimentos
-            </a>
+          <li>
+            <Link onClick={toggleDrawer} href={'/institucional/depoimentos'}>
+              <a className="font-medium">Depoimentos</a>
+            </Link>
           </li>
 
-          <li onClick={toggleDrawer}>
-            <a href="#social" className="font-medium">
-              Redes sociais
-            </a>
+          <li>
+            <Link onClick={toggleDrawer} href={'/institucional#social'}>
+              <a className="font-medium">Redes sociais</a>
+            </Link>
           </li>
 
-          <li onClick={toggleDrawer}>
-            <a href="#contato" className="font-medium">
-              Contato
-            </a>
+          <li>
+            <Link onClick={toggleDrawer} href={'/institucional#contato'}>
+              <a className="font-medium">Contato</a>
+            </Link>
           </li>
 
-          <li onClick={toggleDrawer}>
-            <a href="#compare" className="font-medium">
-              Diferenciais
-            </a>
+          <li>
+            <Link onClick={toggleDrawer} href={'/institucional#compare'}>
+              <a className="font-medium">Diferenciais</a>
+            </Link>
           </li>
 
           <Link href="/">

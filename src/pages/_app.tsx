@@ -80,7 +80,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>
-        ) : router.route === `/institucional` ? (
+        ) : router.route === `/institucional` ||
+          router.route === `/institucional/depoimentos` ? (
           <Component {...pageProps} />
         ) : (
           <CartProvider>
