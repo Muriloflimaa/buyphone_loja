@@ -575,8 +575,8 @@ export default function Depoimentos() {
             <h1 className="text-[#201942]/10 uppercase text-5xl md:text-8xl font-bold md:absolute md:leading-3">
               Redes sociais
             </h1>
-            <h2 className="text-[#201942] md:w-1/3 uppercase tracking-widest text-xl font-bold md:mt-6">
-              Redes sociais
+            <h2 className="text-[#201942] md:w-3/6 uppercase tracking-widest text-xl font-bold md:mt-6">
+              Fique por dentro das novidades e atualizações da Buyphone
             </h2>
           </div>
           <div className="grid grids-cols-1 md:grid-cols-4 gap-8 py-24 md:p-0 md:pt-12">
