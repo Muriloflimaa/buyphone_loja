@@ -103,8 +103,8 @@ const ProductCard = ({
                       <span className="flex gap-1">
                         <span className="text-[#004907]">
                           Entrada no PIX +{' '}
+                          <span className="text-[#1F7501]/50">parcelas</span>
                         </span>
-                        <span className="text-[#1F7501]/50">parcelas</span>
                       </span>
                     )}
                   </span>
