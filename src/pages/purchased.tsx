@@ -5,10 +5,13 @@ import { useWindowSize } from '../utils/useWindowSize'
 import GifPng from '../assets/images/giphy.gif'
 import { destroyCookie, parseCookies } from 'nookies'
 import { GetServerSidePropsContext } from 'next'
-import { useEffect } from 'react'
 
 export default function Purchased() {
   const size = useWindowSize()
+
+  destroyCookie(null, '@BuyPhone:SuccessShipping')
+  destroyCookie(undefined, '@BuyPhone:SuccessShipping')
+  destroyCookie({}, '@BuyPhone:SuccessShipping')
 
   return (
     <>
@@ -41,10 +44,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
 
   if (success) {
-    destroyCookie(null, '@BuyPhone:SuccessShipping')
-    destroyCookie(undefined, '@BuyPhone:SuccessShipping')
-    destroyCookie({}, '@BuyPhone:SuccessShipping')
-    destroyCookie(ctx, '@BuyPhone:SuccessShipping')
+    console.log(success)
     return {
       props: {},
     }
