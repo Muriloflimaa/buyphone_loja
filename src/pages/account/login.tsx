@@ -62,7 +62,7 @@ export default function login() {
             error={errors.password}
           />
           <div className="flex justify-end w-full">
-            <Link href={'/forgot-password'} passHref>
+            <Link href={'/account/forgot-password'} passHref>
               <a className="text-xs  text-blue-600 link cursor-pointer">
                 Esqueceu sua senha?
               </a>
