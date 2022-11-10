@@ -605,29 +605,18 @@ export default function NavBar() {
                 </Link>
               </div>
 
-              <div className="collapse px-4">
-                <input
-                  className="min-h-0 p-0"
-                  onClick={() => setOnShow(!onShow)}
-                  type="checkbox"
-                />
-                <div className="collapse-title min-h-full top-0 p-0 ">
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-3">
-                      <ShoppingBagIcon className="h-5 w-5 text-info-content" />
-                      <span className="text-info-content text-base">
-                        Produtos
-                      </span>
-                    </div>
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className={
-                        'w-3 h-3 transition-all durantion-300 ' +
-                        (!!onShow ? 'rotate-180' : '')
-                      }
-                    />
+              <div className="collapse collapse-arrow w-full mx-4">
+                <input id="Check1" className="p-0 min-h-0" type="checkbox" />
+                <label htmlFor="Check1"></label>
+                <div className="collapse-title after:top-2 min-h-0 p-0 text-xl font-medium w-full">
+                  <div className="flex items-center gap-3">
+                    <ShoppingBagIcon className="h-5 w-5 text-info-content" />
+                    <span className="text-info-content font-light text-base">
+                      Produtos
+                    </span>
                   </div>
                 </div>
+
                 <div className="collapse-content">
                   {dataApi && dataApi?.length > 0 ? (
                     dataApi?.map((category) => (
