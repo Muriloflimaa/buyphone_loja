@@ -64,10 +64,10 @@ const ProductCard = ({
         className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
         key={id}
       >
-        <div className="card-body text-center flex flex-col justify-between">
+        <div className="card-body md:px-8 px-2 text-center flex flex-col justify-between">
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
-              <figure className="mb-6">
+              <figure className="mb-4">
                 <Image
                   src={image}
                   className="object-contain"
@@ -79,7 +79,7 @@ const ProductCard = ({
             <div>
               {price > 0 && (
                 <>
-                  <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercases text-[6px] md:text-xs font-semibold mx-auto">
+                  <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercase text-[8px] px-0 md:text-xs font-semibold mx-auto">
                     {`${
                       changeText
                         ? resultDiscountPercent !== 'NaN'
@@ -89,12 +89,11 @@ const ProductCard = ({
                         : 'parcelamento em ate 12x'
                     }`}
                   </span>
-                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] md:text-xs md:py-0 font-semibold mx-auto">
+                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] px-[3px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (
                       <span>
-                        Economia de
-                        <span className="text-[#004907] ml-1">
-                          <br className="block md:hidden" />
+                        Economia de{' '}
+                        <span className="text-[#004907]">
                           R$
                           {moneyMask((averagePrice - price).toString())}
                         </span>
@@ -113,7 +112,7 @@ const ProductCard = ({
 
               <h2
                 onClick={() => router.push(link)}
-                className="card-title justify-center flex-col font-medium"
+                className="card-title justify-center flex-col font-medium mt-2"
               >
                 {name}
               </h2>
