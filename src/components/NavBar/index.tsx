@@ -1,8 +1,5 @@
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
-import {
-  faChevronDown,
-  faCircleExclamation,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   HomeIcon,
@@ -52,7 +49,6 @@ export default function NavBar() {
   const [dataApi, setDataApi] = useState<Array<ICategory> | null>()
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
-  const [onShow, setOnShow] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   const cookies = parseCookies(undefined)
 

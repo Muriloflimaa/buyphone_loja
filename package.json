@@ -34,6 +34,7 @@
     "react-modern-drawer": "^1.1.2",
     "react-responsive-carousel": "^3.2.23",
     "react-scratchcard-v2": "^1.1.1",
+    "react-simply-carousel": "^8.4.0",
     "react-use-window-size": "^1.0.1",
     "sass": "^1.54.0",
     "yup": "^0.32.11"

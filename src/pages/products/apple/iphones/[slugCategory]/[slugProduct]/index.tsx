@@ -29,9 +29,10 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
 import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
-import ProductCard from '../../../../../../components/ProductCard'
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
+import dynamic from 'next/dynamic'
+const Carousel = dynamic(() => import('react-simply-carousel'), { ssr: false })
 
 interface IParams {
   params: {
@@ -68,6 +69,10 @@ export default function Products({ data, categoryData }: DataProps) {
   const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
+  const [products, setProducts] = useState<
+    Array<IProduct & { ourPrice: number; averagePrice: number }>
+  >([])
+
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
@@ -76,6 +81,7 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
+  const [activeSlide, setActiveSlide] = useState(0)
 
   useEffect(() => {
     geturl()
@@ -142,6 +148,38 @@ export default function Products({ data, categoryData }: DataProps) {
         'error'
       )
     }
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  function getProducts() {
+    categoryData.map((res) => {
+      const discount =
+        !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+      const itens = [
+        res.price,
+        res.magalu_price,
+        res.americanas_price,
+        res.casasbahia_price,
+        res.ponto_price,
+      ]
+      const filteredItens = itens.filter((item) => item)
+      const averagePrice =
+        filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+      const discountPrice = Math.round(averagePrice * (discount / 100))
+      const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
+      const response = {
+        ...res,
+        ourPrice: ourPrice,
+        averagePrice: averagePrice,
+      }
+      if (ourPrice > 0) {
+        setProducts((products) => [...products, response])
+      }
+    })
   }
 
   return (
@@ -471,31 +509,70 @@ export default function Products({ data, categoryData }: DataProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 my-8">
-        <h1 className="md:text-4xl text-3xl font-medium text-center">
+        <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
           Produtos relacionados
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-4">
-          {categoryData.map((products) => {
-            const returnPrice = verificationPrice(products)
-
-            return (
-              returnPrice.ourPrice > 0 && (
-                <React.Fragment key={products.id}>
-                  <ProductRelationCard
-                    key={products.id}
-                    id={products.id}
-                    name={products.name}
-                    colorPhone={products.color}
-                    price={returnPrice.ourPrice}
-                    averagePrice={returnPrice.averagePrice}
-                    idCategory={products.id}
-                    slug={products.slug}
-                    slugCategory={data.category_slug}
-                    image={products.media[0]?.original_url}
-                    memory={products.memory}
-                  />
-                </React.Fragment>
+        <div className="hidden md:block">
+          <Carousel
+            updateOnItemClick
+            containerProps={{
+              style: {
+                width: '100%',
+                justifyContent: 'space-between',
+              },
+            }}
+            activeSlideIndex={activeSlide}
+            onRequestChange={setActiveSlide}
+            forwardBtnProps={{
+              children: '>',
+            }}
+            backwardBtnProps={{
+              children: '<',
+            }}
+            itemsToShow={4}
+            speed={400}
+          >
+            {products.map((product) => {
+              return (
+                product.ourPrice > 0 && (
+                  <div key={product.id} className="w-[300px] p-8">
+                    <ProductRelationCard
+                      key={product.id}
+                      id={product.id}
+                      name={product.name}
+                      colorPhone={product.color}
+                      price={product.ourPrice}
+                      averagePrice={product.averagePrice}
+                      idCategory={product.id}
+                      slug={product.slug}
+                      slugCategory={data.category_slug}
+                      image={product.media[0]?.original_url}
+                      memory={product.memory}
+                    />
+                  </div>
+                )
               )
+            })}
+          </Carousel>
+        </div>
+
+        <div className="md:hidden grid grid-cols-2 gap-4 mt-4">
+          {products.slice(0, 6).map((product) => {
+            return (
+              <React.Fragment key={product.id}>
+                <ProductRelationCard
+                  id={product.id}
+                  name={product.name}
+                  colorPhone={product.color}
+                  price={product.ourPrice}
+                  averagePrice={product.averagePrice}
+                  idCategory={product.id}
+                  slug={product.slug}
+                  slugCategory={data.category_slug}
+                  image={product.media[0]?.original_url}
+                  memory={product.memory}
+                />
+              </React.Fragment>
             )
           })}
         </div>

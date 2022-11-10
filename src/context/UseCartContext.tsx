@@ -112,7 +112,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         CleanCart()
       }
     })
-  }, [cart])
+  }, [cart, user])
 
   useEffect(() => {
     const values = data.filter(function (this: any, a: any) {
