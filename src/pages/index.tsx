@@ -152,7 +152,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           />
         </div>
 
-        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-3 md:mt-1 gap-1">
+        <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 md:mt-1 gap-1">
           <div className="md:w-1/2">
             <CarouselComponent
               image={
