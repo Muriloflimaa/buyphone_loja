@@ -206,18 +206,19 @@ const ProductCard = ({
         <>
           <input type="checkbox" id={id.toString()} className="modal-toggle" />
           <label htmlFor={id.toString()} className="modal cursor-pointer">
-            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[0%] mb-[108px] z-50 flex items-center justify-center w-full">
-              <Image
-                src={CartaImg}
-                width={232}
-                height={216}
-                quality={100}
-                layout="fixed"
-                alt="Imagem pacote de dinheiro"
-              />
-            </div>
-            <label className="modal-box relative" htmlFor="">
-              <div className="mt-24 text-center">
+            <label className="modal-box overflow-y-visible relative" htmlFor="">
+              <div className="absolute bg-transparent shadow-none -top-14 md:-top-32 left-0 z-50 flex justify-center w-full">
+                <div className="relative md:w-[200px] w-[130px]">
+                  <Image
+                    src={CartaImg}
+                    quality={100}
+                    layout="responsive"
+                    className="object-contain"
+                    alt="Imagem pacote de dinheiro"
+                  />
+                </div>
+              </div>
+              <div className="text-center mt-10">
                 <h3 className="text-3xl font-semibold">Seja notificado!</h3>
                 <p className="py-4 text-info-content/50">
                   Assim que o{' '}
