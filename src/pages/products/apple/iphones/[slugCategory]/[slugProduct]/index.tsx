@@ -1,10 +1,12 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
-  faChevronLeft, faCircleExclamation, faEnvelope,
+  faChevronLeft,
+  faCircleExclamation,
+  faEnvelope,
   faLocationDot,
   faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
@@ -27,6 +29,9 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
 import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
+import ProductCard from '../../../../../../components/ProductCard'
+import { parseCookies } from 'nookies'
+import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 
 interface IParams {
   params: {
@@ -37,6 +42,7 @@ interface IParams {
 
 interface DataProps {
   data: IProduct
+  categoryData: Array<IProduct>
 }
 
 type GetCepTypes = {
@@ -56,7 +62,7 @@ type shippingOnTypes = {
   days: string
 }
 
-export default function Products({ data }: DataProps) {
+export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
   const returnPrice = verificationPrice(data)
@@ -64,6 +70,7 @@ export default function Products({ data }: DataProps) {
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
@@ -77,6 +84,14 @@ export default function Products({ data }: DataProps) {
       setDescrition(data.description)
     }
   }, [])
+
+  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user]) //atualiza o state para nao dar erro de renderizacao
 
   const { addProduct } = useCart()
 
@@ -150,8 +165,9 @@ export default function Products({ data }: DataProps) {
         ></meta>
         <meta
           property="og:title"
-          content={`BuyPhone - ${data.name + ' Apple ' + data.memory + ' ' + data.color
-            }`}
+          content={`BuyPhone - ${
+            data.name + ' Apple ' + data.memory + ' ' + data.color
+          }`}
         ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -397,8 +413,9 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
@@ -452,6 +469,37 @@ export default function Products({ data }: DataProps) {
           </div>
         </div>
       </div>
+
+      <div className="max-w-7xl mx-auto px-4 my-8">
+        <h1 className="md:text-4xl text-3xl font-medium text-center">
+          Produtos relacionados
+        </h1>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-4">
+          {categoryData.map((products) => {
+            const returnPrice = verificationPrice(products)
+
+            return (
+              returnPrice.ourPrice > 0 && (
+                <React.Fragment key={products.id}>
+                  <ProductRelationCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    colorPhone={products.color}
+                    price={returnPrice.ourPrice}
+                    averagePrice={returnPrice.averagePrice}
+                    idCategory={products.id}
+                    slug={products.slug}
+                    slugCategory={data.category_slug}
+                    image={products.media[0]?.original_url}
+                    memory={products.memory}
+                  />
+                </React.Fragment>
+              )
+            )
+          })}
+        </div>
+      </div>
     </>
   )
 }
@@ -461,9 +509,14 @@ export const getStaticProps = async ({ params }: IParams) => {
     const data = await apiStore.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
+    const categoryData = await apiStore.get(
+      `categories/${params.slugCategory}?per_page=6&page=1`
+    )
+
     return {
       props: {
         data: data.data,
+        categoryData: categoryData.data.products,
       },
       revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
@@ -474,7 +527,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStore.get(`products/?per_page=200&page=1`)
+    const { data } = await apiStore.get(`products?per_page=10500&page=1`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {

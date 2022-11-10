@@ -81,12 +81,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
             {products &&
               products.data.map((products: IProduct) => {
                 const discount =
-                  process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-                  !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-                    ? 12.5
-                    : !!isUser && user && JSON.parse(user)?.type === 1
-                    ? 12.5
-                    : 7
+                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
                 const itens = [
                   products.price,
                   products.magalu_price,
