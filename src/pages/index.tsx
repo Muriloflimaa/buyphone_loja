@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
-import MeetImg from '../assets/images/BannerMeet.png'
+import MeetImg from '../assets/images/BannerMeet.webp'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Register-Mimo'
@@ -227,7 +227,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </div>
         </div>
         <div className="mt-10">
-          <h1 className="text-4xl font-medium text-center">
+          <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Encontre seu Match!
           </h1>
 
@@ -271,7 +271,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               </div>
             </div>
           </div>
-          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+          <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
@@ -348,7 +348,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
         )}
         <div id="depoiments"></div>
         <div className="mt-20">
-          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+          <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Depoimentos
           </h1>
           <Carousel
@@ -460,16 +460,17 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </Carousel>
         </div>
 
-        <div className="max-w-7xl mx-auto my-10">
-          <h1 className="md:text-4xl text-2xl font-medium text-center mb-8">
+        <div className="max-w-7xl mx-auto my-10 px-4">
+          <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Conheça a BuyPhone
           </h1>
           <Link href="/institucional">
             <a>
               <Image
                 src={MeetImg}
+                placeholder="blur"
                 layout="responsive"
-                className="rounded-3xl cursor-pointer"
+                className="md:rounded-3xl cursor-pointer"
               />
             </a>
           </Link>

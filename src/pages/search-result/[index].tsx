@@ -74,7 +74,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
     <div className="my-5">
       {!!products ? (
         <>
-          <h1 className="text-4xl font-medium text-center">
+          <h1 className="md:text-4xl text-3xl font-medium text-center">
             Você buscou por {query}
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl my-5">
