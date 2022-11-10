@@ -79,7 +79,7 @@ const ProductCard = ({
             <div>
               {price > 0 && (
                 <>
-                  <span className="badge badge-success py-5 md:py-0 w-full bg-primary text-white uppercase text-xs font-semibold mx-auto">
+                  <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercases text-[6px] md:text-xs font-semibold mx-auto">
                     {`${
                       changeText
                         ? resultDiscountPercent !== 'NaN'
@@ -89,7 +89,7 @@ const ProductCard = ({
                         : 'parcelamento em ate 12x'
                     }`}
                   </span>
-                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-xs py-5 md:py-0 font-semibold mx-auto">
+                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (
                       <span>
                         Economia de
@@ -100,7 +100,7 @@ const ProductCard = ({
                         </span>
                       </span>
                     ) : (
-                      <span className="flex gap-1">
+                      <span className="flex md:gap-1">
                         <span className="text-[#004907]">
                           Entrada no PIX +{' '}
                           <span className="text-[#1F7501]/50">parcelas</span>
