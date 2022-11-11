@@ -31,10 +31,7 @@ import { verificationPrice } from '../../../../../../utils/verificationPrice'
 import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
-import dynamic from 'next/dynamic'
-const ReactSimplyCarousel = dynamic(() => import('react-simply-carousel'), {
-  ssr: false,
-})
+import Carousel from 'better-react-carousel'
 
 interface IParams {
   params: {
@@ -178,7 +175,7 @@ export default function Products({ data, categoryData }: DataProps) {
         ourPrice: ourPrice,
         averagePrice: averagePrice,
       }
-      if (ourPrice > 0) {
+      if (ourPrice > 0 && res.id !== data.id) {
         setProducts((products) => [...products, response])
       }
     })
@@ -514,54 +511,11 @@ export default function Products({ data, categoryData }: DataProps) {
         <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
           Produtos relacionados
         </h1>
-        <div className="hidden md:block">
-          <ReactSimplyCarousel
-            updateOnItemClick
-            containerProps={{
-              style: {
-                width: '100%',
-                justifyContent: 'space-between',
-              },
-            }}
-            activeSlideIndex={activeSlide}
-            onRequestChange={setActiveSlide}
-            forwardBtnProps={{
-              children: '>',
-            }}
-            backwardBtnProps={{
-              children: '<',
-            }}
-            itemsToShow={4}
-            speed={400}
-          >
-            {products.map((product) => {
-              return (
-                product.ourPrice > 0 && (
-                  <div key={product.id} className="w-[300px] p-8">
-                    <ProductRelationCard
-                      key={product.id}
-                      id={product.id}
-                      name={product.name}
-                      colorPhone={product.color}
-                      price={product.ourPrice}
-                      averagePrice={product.averagePrice}
-                      idCategory={product.id}
-                      slug={product.slug}
-                      slugCategory={data.category_slug}
-                      image={product.media[0]?.original_url}
-                      memory={product.memory}
-                    />
-                  </div>
-                )
-              )
-            })}
-          </ReactSimplyCarousel>
-        </div>
 
-        <div className="md:hidden grid grid-cols-2 gap-4 mt-4">
-          {products.slice(0, 6).map((product) => {
+        <Carousel cols={6} rows={1} gap={20} loop={true}>
+          {products.map((product) => {
             return (
-              <React.Fragment key={product.id}>
+              <Carousel.Item key={product.id}>
                 <ProductRelationCard
                   id={product.id}
                   name={product.name}
@@ -574,10 +528,10 @@ export default function Products({ data, categoryData }: DataProps) {
                   image={product.media[0]?.original_url}
                   memory={product.memory}
                 />
-              </React.Fragment>
+              </Carousel.Item>
             )
           })}
-        </div>
+        </Carousel>
       </div>
     </>
   )

@@ -47,7 +47,7 @@ const ProductRelationCard = ({
   return (
     <>
       <div
-        className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
+        className="card card-compact cursor-pointer w-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
         key={id}
       >
         <div
