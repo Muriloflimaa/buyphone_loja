@@ -31,10 +31,7 @@ import { verificationPrice } from '../../../../../../utils/verificationPrice'
 import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
-import dynamic from 'next/dynamic'
-const ReactSimplyCarousel = dynamic(() => import('react-simply-carousel'), {
-  ssr: false,
-})
+import Carousel from 'better-react-carousel'
 
 interface IParams {
   params: {
@@ -71,10 +68,6 @@ export default function Products({ data, categoryData }: DataProps) {
   const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
-  const [products, setProducts] = useState<
-    Array<IProduct & { ourPrice: number; averagePrice: number }>
-  >([])
-
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
@@ -83,7 +76,6 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
-  const [activeSlide, setActiveSlide] = useState(0)
 
   useEffect(() => {
     geturl()
@@ -150,38 +142,6 @@ export default function Products({ data, categoryData }: DataProps) {
         'error'
       )
     }
-  }
-
-  useEffect(() => {
-    getProducts()
-  }, [])
-
-  function getProducts() {
-    categoryData.map((res) => {
-      const discount =
-        !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-      const itens = [
-        res.price,
-        res.magalu_price,
-        res.americanas_price,
-        res.casasbahia_price,
-        res.ponto_price,
-      ]
-      const filteredItens = itens.filter((item) => item)
-      const averagePrice =
-        filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-      const discountPrice = Math.round(averagePrice * (discount / 100))
-      const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
-
-      const response = {
-        ...res,
-        ourPrice: ourPrice,
-        averagePrice: averagePrice,
-      }
-      if (ourPrice > 0) {
-        setProducts((products) => [...products, response])
-      }
-    })
   }
 
   return (
@@ -350,11 +310,11 @@ export default function Products({ data, categoryData }: DataProps) {
                 {returnPrice.averagePrice > 0 && (
                   <>
                     <h1 className="opacity-80 line-through decoration-red-600">
-                      {moneyMask(returnPrice.averagePrice.toString())}
+                      R$ {moneyMask(returnPrice.averagePrice.toString())}
                     </h1>
                     <div className="flex items-center gap-2">
                       <h2 className="text-3xl font-bold">
-                        {moneyMask(returnPrice.ourPrice.toString())}
+                        R$ {moneyMask(returnPrice.ourPrice.toString())}
                       </h2>
                       <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
                         -{resultDiscountPercent.replace('.0', '')}%
@@ -514,70 +474,33 @@ export default function Products({ data, categoryData }: DataProps) {
         <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
           Produtos relacionados
         </h1>
-        <div className="hidden md:block">
-          <ReactSimplyCarousel
-            updateOnItemClick
-            containerProps={{
-              style: {
-                width: '100%',
-                justifyContent: 'space-between',
-              },
-            }}
-            activeSlideIndex={activeSlide}
-            onRequestChange={setActiveSlide}
-            forwardBtnProps={{
-              children: '>',
-            }}
-            backwardBtnProps={{
-              children: '<',
-            }}
-            itemsToShow={4}
-            speed={400}
-          >
-            {products.map((product) => {
-              return (
-                product.ourPrice > 0 && (
-                  <div key={product.id} className="w-[300px] p-8">
-                    <ProductRelationCard
-                      key={product.id}
-                      id={product.id}
-                      name={product.name}
-                      colorPhone={product.color}
-                      price={product.ourPrice}
-                      averagePrice={product.averagePrice}
-                      idCategory={product.id}
-                      slug={product.slug}
-                      slugCategory={data.category_slug}
-                      image={product.media[0]?.original_url}
-                      memory={product.memory}
-                    />
-                  </div>
-                )
-              )
-            })}
-          </ReactSimplyCarousel>
-        </div>
 
-        <div className="md:hidden grid grid-cols-2 gap-4 mt-4">
-          {products.slice(0, 6).map((product) => {
+        <Carousel
+          cols={categoryData.length >= 6 ? 6 : categoryData.length - 1}
+          rows={1}
+          gap={20}
+          loop={true}
+        >
+          {categoryData.map((product) => {
+            const returnPrice = verificationPrice(product)
             return (
-              <React.Fragment key={product.id}>
+              <Carousel.Item key={product.id}>
                 <ProductRelationCard
                   id={product.id}
                   name={product.name}
                   colorPhone={product.color}
-                  price={product.ourPrice}
-                  averagePrice={product.averagePrice}
+                  price={returnPrice.ourPrice}
+                  averagePrice={returnPrice.averagePrice}
                   idCategory={product.id}
                   slug={product.slug}
                   slugCategory={data.category_slug}
                   image={product.media[0]?.original_url}
                   memory={product.memory}
                 />
-              </React.Fragment>
+              </Carousel.Item>
             )
           })}
-        </div>
+        </Carousel>
       </div>
     </>
   )
@@ -589,7 +512,7 @@ export const getStaticProps = async ({ params }: IParams) => {
       `products/${params.slugCategory}/${params.slugProduct}`
     )
     const categoryData = await apiStore.get(
-      `categories/${params.slugCategory}?per_page=6&page=1`
+      `categories/${params.slugCategory}?per_page=18`
     )
 
     return {
@@ -606,7 +529,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStore.get(`products?per_page=10500&page=1`)
+    const { data } = await apiStore.get(`products?per_page=500`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {
