@@ -512,7 +512,7 @@ export default function Products({ data, categoryData }: DataProps) {
           Produtos relacionados
         </h1>
 
-        <Carousel cols={5} rows={1} gap={20} loop>
+        <Carousel cols={5} rows={1} gap={20} loop={true}>
           {products.map((product) => {
             return (
               <Carousel.Item key={product.id}>
@@ -558,7 +558,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStore.get(`products?per_page=300`)
+    const { data } = await apiStore.get(`products?per_page=500`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {

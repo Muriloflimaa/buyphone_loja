@@ -80,14 +80,18 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   const handleCarregarProdutos = async () => {
     if (currentPage !== data.last_page) {
-      await apiStore
-        .get(`products/?page=${currentPage}`)
-        .then((response) => response.data.data)
-        .then((newProducts) =>
-          setApiNew((prevData) => [...prevData, ...newProducts])
-        )
+      try {
+        await apiStore
+          .get(`products?page=${currentPage}`)
+          .then((response) => response.data.data)
+          .then((newProducts) =>
+            setApiNew((prevData) => [...prevData, ...newProducts])
+          )
+        setCurrentPage(currentPage + 1)
+      } catch (error) {
+        return
+      }
     }
-    setCurrentPage(currentPage + 1)
   }
 
   async function getProductsMatch() {
@@ -483,7 +487,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await apiStore.get(`products/`)
+    const { data } = await apiStore.get(`products?page=1`)
     return {
       props: {
         data,

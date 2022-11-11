@@ -87,7 +87,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export async function getStaticPaths() {
   try {
-    const { data } = await apiStore.get(`categories?per_page=100`)
+    const { data } = await apiStore.get(`categories?per_page=500`)
 
     const paths = data.data.map((category: ICategory) => {
       return {
