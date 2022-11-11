@@ -30,6 +30,9 @@ const ProductCart = ({
   useEffect(() => {
     if (
       router.asPath == '/shipping/payment/pix/pix-checkout' ||
+      router.asPath == '/shipping/payment' ||
+      router.asPath == '/shipping/address' ||
+      router.asPath == '/shipping/payment/credit/new-card' ||
       router.asPath == '/shipping/payment/credit/match-card' ||
       router.asPath == '/shipping/payment/credit/match-installments' ||
       router.asPath == '/shipping/payment/credit/credit-checkout' ||
