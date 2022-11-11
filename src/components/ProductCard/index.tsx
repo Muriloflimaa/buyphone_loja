@@ -73,6 +73,7 @@ const ProductCard = ({
                   className="object-contain"
                   width={350}
                   height={450}
+                  placeholder="blur"
                 />
               </figure>
             </div>
