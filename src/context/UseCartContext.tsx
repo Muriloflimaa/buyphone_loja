@@ -79,12 +79,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
         const discount =
-          process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-            ? 12.5
-            : !!isUser && user && JSON.parse(user)?.type === 1
-            ? 12.5
-            : 7
+          !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
         const itens = [
           data.price,
           data.magalu_price,
@@ -117,7 +112,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         CleanCart()
       }
     })
-  }, [cart])
+  }, [cart, user])
 
   useEffect(() => {
     const values = data.filter(function (this: any, a: any) {

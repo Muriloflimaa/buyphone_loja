@@ -27,6 +27,7 @@ const CarouselComponent = (image: imageProps) => {
               <a>
                 <Image
                   placeholder="blur"
+                  className="object-contain"
                   src={res}
                   layout="responsive"
                   quality={100}
@@ -38,6 +39,7 @@ const CarouselComponent = (image: imageProps) => {
               <a target={'_blank'}>
                 <Image
                   placeholder="blur"
+                  className="object-contain"
                   src={res}
                   layout="responsive"
                   quality={100}
@@ -47,6 +49,7 @@ const CarouselComponent = (image: imageProps) => {
           ) : (
             <Image
               placeholder="blur"
+              className="object-contain"
               key={res.src}
               src={res}
               layout="responsive"

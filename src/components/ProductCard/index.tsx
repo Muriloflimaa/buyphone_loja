@@ -64,22 +64,23 @@ const ProductCard = ({
         className="card card-compact cursor-pointer w-full h-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 sm:card-normal max-w-xs relative overflow-visible rounded-lg"
         key={id}
       >
-        <div className="card-body text-center flex flex-col justify-between">
+        <div className="card-body md:px-8 px-2 text-center flex flex-col justify-between">
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
-              <figure className="mb-6">
+              <figure className="mb-4">
                 <Image
                   src={image}
                   className="object-contain"
                   width={350}
                   height={450}
+                  placeholder="blur"
                 />
               </figure>
             </div>
             <div>
               {price > 0 && (
                 <>
-                  <span className="badge badge-success py-5 md:py-0 w-full bg-primary text-white uppercase text-xs font-semibold mx-auto">
+                  <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercase text-[8px] px-0 md:text-xs font-semibold mx-auto">
                     {`${
                       changeText
                         ? resultDiscountPercent !== 'NaN'
@@ -89,18 +90,17 @@ const ProductCard = ({
                         : 'parcelamento em ate 12x'
                     }`}
                   </span>
-                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-xs py-5 md:py-0 font-semibold mx-auto">
+                  <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] px-[3px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (
                       <span>
-                        Economia de
-                        <span className="text-[#004907] ml-1">
-                          <br className="block md:hidden" />
+                        Economia de{' '}
+                        <span className="text-[#004907]">
                           R$
                           {moneyMask((averagePrice - price).toString())}
                         </span>
                       </span>
                     ) : (
-                      <span className="flex gap-1">
+                      <span className="flex md:gap-1">
                         <span className="text-[#004907]">
                           Entrada no PIX +{' '}
                           <span className="text-[#1F7501]/50">parcelas</span>
@@ -113,7 +113,7 @@ const ProductCard = ({
 
               <h2
                 onClick={() => router.push(link)}
-                className="card-title justify-center flex-col font-medium"
+                className="card-title justify-center flex-col font-medium mt-2"
               >
                 {name}
               </h2>
@@ -207,18 +207,19 @@ const ProductCard = ({
         <>
           <input type="checkbox" id={id.toString()} className="modal-toggle" />
           <label htmlFor={id.toString()} className="modal cursor-pointer">
-            <div className="absolute modal-box bg-transparent p-0 shadow-none top-0 mt-[0%] mb-[108px] z-50 flex items-center justify-center w-full">
-              <Image
-                src={CartaImg}
-                width={232}
-                height={216}
-                quality={100}
-                layout="fixed"
-                alt="Imagem pacote de dinheiro"
-              />
-            </div>
-            <label className="modal-box relative" htmlFor="">
-              <div className="mt-24 text-center">
+            <label className="modal-box overflow-y-visible relative" htmlFor="">
+              <div className="absolute bg-transparent shadow-none -top-14 md:-top-32 left-0 z-50 flex justify-center w-full">
+                <div className="relative md:w-[200px] w-[130px]">
+                  <Image
+                    src={CartaImg}
+                    quality={100}
+                    layout="responsive"
+                    className="object-contain"
+                    alt="Imagem pacote de dinheiro"
+                  />
+                </div>
+              </div>
+              <div className="text-center mt-10">
                 <h3 className="text-3xl font-semibold">Seja notificado!</h3>
                 <p className="py-4 text-info-content/50">
                   Assim que o{' '}
