@@ -40,19 +40,21 @@ export default function Purchased() {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
+//descomente para iniciar validação nos cookies
 
-  if (success) {
-    return {
-      props: {},
-    }
-  } else {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-}
+// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
+
+//   if (success) {
+//     return {
+//       props: {},
+//     }
+//   } else {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     }
+//   }
+// }
