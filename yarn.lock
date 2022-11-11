@@ -2166,10 +2166,10 @@ react-scratchcard-v2@^1.1.1:
   resolved "https://registry.yarnpkg.com/react-scratchcard-v2/-/react-scratchcard-v2-1.1.1.tgz#a1bfe1503b416a59b905c21b61dfa3a7ecfade6b"
   integrity sha512-2yzLLOqJBthSIxeN7JViDqzRX/OBR8tLVPxe408AL3aWi/V1nVvUvOwU7aY+1/oAR/uuVTK3DC46unv4LzTKeg==
 
-react-simply-carousel@^8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/react-simply-carousel/-/react-simply-carousel-8.4.0.tgz#7f39e08f00a512ff4cc21b0669ff3888beba7d91"
-  integrity sha512-pcINtHBhgYzihVWY3GI1VbJtMB/NFIjwual5RmrO/THaDtym+zs5EAADHF3S7pOd8SzcXswsQXFkLwQ1Mzs6DA==
+react-simply-carousel@^8.4.1:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/react-simply-carousel/-/react-simply-carousel-8.4.1.tgz#73f1e479685c55fc1fb1cb4711d8977c3f96498c"
+  integrity sha512-Yxj7sIHIpzdwXuLvrZNuHA4+z81HVGA2b8XtxnsAOZ18rxiZidKop+5OP8frKmVa5TzkBCc/b6N6Ar1gzeEemw==
   dependencies:
     core-js "^3.8.1"
 

@@ -32,7 +32,9 @@ import MailchimpFormContainer from '../../../../../../components/Modals/Register
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import dynamic from 'next/dynamic'
-const Carousel = dynamic(() => import('react-simply-carousel'), { ssr: false })
+const ReactSimplyCarousel = dynamic(() => import('react-simply-carousel'), {
+  ssr: false,
+})
 
 interface IParams {
   params: {
@@ -513,7 +515,7 @@ export default function Products({ data, categoryData }: DataProps) {
           Produtos relacionados
         </h1>
         <div className="hidden md:block">
-          <Carousel
+          <ReactSimplyCarousel
             updateOnItemClick
             containerProps={{
               style: {
@@ -553,7 +555,7 @@ export default function Products({ data, categoryData }: DataProps) {
                 )
               )
             })}
-          </Carousel>
+          </ReactSimplyCarousel>
         </div>
 
         <div className="md:hidden grid grid-cols-2 gap-4 mt-4">

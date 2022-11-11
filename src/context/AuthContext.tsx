@@ -40,6 +40,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   })
 
   useEffect(() => {
+    if (user && JSON.parse(user) !== userData) {
+      setCookies('@BuyPhone:User', JSON.stringify(userData), 60 * 60 * 24 * 90)
+    }
+  }, [userData])
+
+  useEffect(() => {
     if (userData === null) {
       setIsUser(false)
     } else {
