@@ -487,7 +487,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await apiStore.get(`products?page=1`)
+    const { data } = await apiStore.get(`products?per_page=10&page=1`)
     return {
       props: {
         data,
