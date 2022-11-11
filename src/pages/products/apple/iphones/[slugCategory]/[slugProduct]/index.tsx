@@ -512,7 +512,7 @@ export default function Products({ data, categoryData }: DataProps) {
           Produtos relacionados
         </h1>
 
-        <Carousel cols={6} rows={1} gap={20} loop={true}>
+        <Carousel cols={5} rows={1} gap={20} loop>
           {products.map((product) => {
             return (
               <Carousel.Item key={product.id}>
