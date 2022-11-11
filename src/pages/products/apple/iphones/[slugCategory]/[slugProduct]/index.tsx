@@ -511,7 +511,9 @@ export const getStaticProps = async ({ params }: IParams) => {
     const data = await apiStore.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
-    const categoryData = await apiStore.get(`categories/${params.slugCategory}`)
+    const categoryData = await apiStore.get(
+      `categories/${params.slugCategory}?per_page=18`
+    )
 
     return {
       props: {
