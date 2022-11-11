@@ -542,9 +542,7 @@ export const getStaticProps = async ({ params }: IParams) => {
     const data = await apiStore.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
-    const categoryData = await apiStore.get(
-      `categories/${params.slugCategory}?per_page=6&page=1`
-    )
+    const categoryData = await apiStore.get(`categories/${params.slugCategory}`)
 
     return {
       props: {
@@ -560,7 +558,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStore.get(`products?per_page=10500&page=1`)
+    const { data } = await apiStore.get(`products?per_page=300`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {
