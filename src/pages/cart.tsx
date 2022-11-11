@@ -102,9 +102,15 @@ export default function Cart() {
 
               <div className="flex justify-between">
                 <span className="text-gray-500 text-sm">Subtotal</span>
-                <span className="text-sm text-gray-500">
-                  R$ {moneyMask((somaTotal + discountValue).toString())}
-                </span>
+                {!!isAttCart ? (
+                  <span className="text-sm text-gray-500 animate-pulse blur-sm">
+                    R$ XXX,XX
+                  </span>
+                ) : (
+                  <span className="text-sm text-gray-500">
+                    R$ {moneyMask((somaTotal + discountValue).toString())}
+                  </span>
+                )}
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500 text-sm">Frete</span>
@@ -125,9 +131,15 @@ export default function Cart() {
               {
                 <div className="flex w-full justify-between items-center">
                   <span>Total</span>
-                  <span className="font-semibold text-info-content text-lg">
-                    R$ {moneyMask(somaTotal?.toString())}
-                  </span>
+                  {!!isAttCart ? (
+                    <span className="font-semibold text-info-content text-lg animate-pulse blur-sm">
+                      R$ XXX,XX
+                    </span>
+                  ) : (
+                    <span className="font-semibold text-info-content text-lg">
+                      R$ {moneyMask(somaTotal?.toString())}
+                    </span>
+                  )}
                 </div>
               }
 

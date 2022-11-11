@@ -347,11 +347,11 @@ export default function Products({ data, categoryData }: DataProps) {
                 {returnPrice.averagePrice > 0 && (
                   <>
                     <h1 className="opacity-80 line-through decoration-red-600">
-                      {moneyMask(returnPrice.averagePrice.toString())}
+                      R$ {moneyMask(returnPrice.averagePrice.toString())}
                     </h1>
                     <div className="flex items-center gap-2">
                       <h2 className="text-3xl font-bold">
-                        {moneyMask(returnPrice.ourPrice.toString())}
+                        R$ {moneyMask(returnPrice.ourPrice.toString())}
                       </h2>
                       <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
                         -{resultDiscountPercent.replace('.0', '')}%
