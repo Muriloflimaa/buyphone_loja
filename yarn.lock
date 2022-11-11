@@ -686,6 +686,11 @@ cookie@^0.4.1:
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.4.2.tgz"
   integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
 
+core-js@^3.8.1:
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.26.0.tgz#a516db0ed0811be10eac5d94f3b8463d03faccfe"
+  integrity sha512-+DkDrhoR4Y0PxDz6rurahuB+I45OsEUv8E1maPTB6OuHRohMMcznBq9TMpdpDMm/hUPob/mJJS3PqgbHpMTQgw==
+
 cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -2160,6 +2165,13 @@ react-scratchcard-v2@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-scratchcard-v2/-/react-scratchcard-v2-1.1.1.tgz#a1bfe1503b416a59b905c21b61dfa3a7ecfade6b"
   integrity sha512-2yzLLOqJBthSIxeN7JViDqzRX/OBR8tLVPxe408AL3aWi/V1nVvUvOwU7aY+1/oAR/uuVTK3DC46unv4LzTKeg==
+
+react-simply-carousel@^8.4.1:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/react-simply-carousel/-/react-simply-carousel-8.4.1.tgz#73f1e479685c55fc1fb1cb4711d8977c3f96498c"
+  integrity sha512-Yxj7sIHIpzdwXuLvrZNuHA4+z81HVGA2b8XtxnsAOZ18rxiZidKop+5OP8frKmVa5TzkBCc/b6N6Ar1gzeEemw==
+  dependencies:
+    core-js "^3.8.1"
 
 react-use-window-size@^1.0.1:
   version "1.0.1"

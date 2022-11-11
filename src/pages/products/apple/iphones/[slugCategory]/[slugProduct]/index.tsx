@@ -1,10 +1,12 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
-  faChevronLeft, faCircleExclamation, faEnvelope,
+  faChevronLeft,
+  faCircleExclamation,
+  faEnvelope,
   faLocationDot,
   faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
@@ -27,6 +29,12 @@ import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
 import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
+import { parseCookies } from 'nookies'
+import ProductRelationCard from '../../../../../../components/ProductRelationCard'
+import dynamic from 'next/dynamic'
+const ReactSimplyCarousel = dynamic(() => import('react-simply-carousel'), {
+  ssr: false,
+})
 
 interface IParams {
   params: {
@@ -37,6 +45,7 @@ interface IParams {
 
 interface DataProps {
   data: IProduct
+  categoryData: Array<IProduct>
 }
 
 type GetCepTypes = {
@@ -56,19 +65,25 @@ type shippingOnTypes = {
   days: string
 }
 
-export default function Products({ data }: DataProps) {
+export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
   const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
+  const [products, setProducts] = useState<
+    Array<IProduct & { ourPrice: number; averagePrice: number }>
+  >([])
+
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
+  const [activeSlide, setActiveSlide] = useState(0)
 
   useEffect(() => {
     geturl()
@@ -77,6 +92,14 @@ export default function Products({ data }: DataProps) {
       setDescrition(data.description)
     }
   }, [])
+
+  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user]) //atualiza o state para nao dar erro de renderizacao
 
   const { addProduct } = useCart()
 
@@ -129,6 +152,38 @@ export default function Products({ data }: DataProps) {
     }
   }
 
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  function getProducts() {
+    categoryData.map((res) => {
+      const discount =
+        !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
+      const itens = [
+        res.price,
+        res.magalu_price,
+        res.americanas_price,
+        res.casasbahia_price,
+        res.ponto_price,
+      ]
+      const filteredItens = itens.filter((item) => item)
+      const averagePrice =
+        filteredItens.length > 0 ? Math.min(...filteredItens) : 0
+      const discountPrice = Math.round(averagePrice * (discount / 100))
+      const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+
+      const response = {
+        ...res,
+        ourPrice: ourPrice,
+        averagePrice: averagePrice,
+      }
+      if (ourPrice > 0) {
+        setProducts((products) => [...products, response])
+      }
+    })
+  }
+
   return (
     <>
       <Head>
@@ -150,8 +205,9 @@ export default function Products({ data }: DataProps) {
         ></meta>
         <meta
           property="og:title"
-          content={`BuyPhone - ${data.name + ' Apple ' + data.memory + ' ' + data.color
-            }`}
+          content={`BuyPhone - ${
+            data.name + ' Apple ' + data.memory + ' ' + data.color
+          }`}
         ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -397,8 +453,9 @@ export default function Products({ data }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
@@ -452,6 +509,76 @@ export default function Products({ data }: DataProps) {
           </div>
         </div>
       </div>
+
+      <div className="max-w-7xl mx-auto px-4 my-8">
+        <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
+          Produtos relacionados
+        </h1>
+        <div className="hidden md:block">
+          <ReactSimplyCarousel
+            updateOnItemClick
+            containerProps={{
+              style: {
+                width: '100%',
+                justifyContent: 'space-between',
+              },
+            }}
+            activeSlideIndex={activeSlide}
+            onRequestChange={setActiveSlide}
+            forwardBtnProps={{
+              children: '>',
+            }}
+            backwardBtnProps={{
+              children: '<',
+            }}
+            itemsToShow={4}
+            speed={400}
+          >
+            {products.map((product) => {
+              return (
+                product.ourPrice > 0 && (
+                  <div key={product.id} className="w-[300px] p-8">
+                    <ProductRelationCard
+                      key={product.id}
+                      id={product.id}
+                      name={product.name}
+                      colorPhone={product.color}
+                      price={product.ourPrice}
+                      averagePrice={product.averagePrice}
+                      idCategory={product.id}
+                      slug={product.slug}
+                      slugCategory={data.category_slug}
+                      image={product.media[0]?.original_url}
+                      memory={product.memory}
+                    />
+                  </div>
+                )
+              )
+            })}
+          </ReactSimplyCarousel>
+        </div>
+
+        <div className="md:hidden grid grid-cols-2 gap-4 mt-4">
+          {products.slice(0, 6).map((product) => {
+            return (
+              <React.Fragment key={product.id}>
+                <ProductRelationCard
+                  id={product.id}
+                  name={product.name}
+                  colorPhone={product.color}
+                  price={product.ourPrice}
+                  averagePrice={product.averagePrice}
+                  idCategory={product.id}
+                  slug={product.slug}
+                  slugCategory={data.category_slug}
+                  image={product.media[0]?.original_url}
+                  memory={product.memory}
+                />
+              </React.Fragment>
+            )
+          })}
+        </div>
+      </div>
     </>
   )
 }
@@ -461,9 +588,14 @@ export const getStaticProps = async ({ params }: IParams) => {
     const data = await apiStore.get(
       `products/${params.slugCategory}/${params.slugProduct}`
     )
+    const categoryData = await apiStore.get(
+      `categories/${params.slugCategory}?per_page=6&page=1`
+    )
+
     return {
       props: {
         data: data.data,
+        categoryData: categoryData.data.products,
       },
       revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
@@ -474,7 +606,7 @@ export const getStaticProps = async ({ params }: IParams) => {
 
 export const getStaticPaths = async () => {
   try {
-    const { data } = await apiStore.get(`products/?per_page=200&page=1`)
+    const { data } = await apiStore.get(`products?per_page=10500&page=1`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {
