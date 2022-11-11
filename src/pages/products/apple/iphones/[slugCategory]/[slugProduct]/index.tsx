@@ -68,9 +68,6 @@ export default function Products({ data, categoryData }: DataProps) {
   const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
-  const [products, setProducts] = useState<
-    Array<IProduct & { ourPrice: number; averagePrice: number }>
-  >([])
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
@@ -145,38 +142,6 @@ export default function Products({ data, categoryData }: DataProps) {
         'error'
       )
     }
-  }
-
-  useEffect(() => {
-    getProducts()
-  }, [])
-
-  function getProducts() {
-    categoryData.map((res) => {
-      const discount =
-        !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-      const itens = [
-        res.price,
-        res.magalu_price,
-        res.americanas_price,
-        res.casasbahia_price,
-        res.ponto_price,
-      ]
-      const filteredItens = itens.filter((item) => item)
-      const averagePrice =
-        filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-      const discountPrice = Math.round(averagePrice * (discount / 100))
-      const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
-
-      const response = {
-        ...res,
-        ourPrice: ourPrice,
-        averagePrice: averagePrice,
-      }
-      if (ourPrice > 0 && res.id !== data.id) {
-        setProducts((products) => [...products, response])
-      }
-    })
   }
 
   return (
@@ -510,16 +475,22 @@ export default function Products({ data, categoryData }: DataProps) {
           Produtos relacionados
         </h1>
 
-        <Carousel cols={5} rows={1} gap={20} loop={true}>
-          {products.map((product) => {
+        <Carousel
+          cols={categoryData.length >= 6 ? 6 : categoryData.length - 1}
+          rows={1}
+          gap={20}
+          loop={true}
+        >
+          {categoryData.map((product) => {
+            const returnPrice = verificationPrice(product)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
                   id={product.id}
                   name={product.name}
                   colorPhone={product.color}
-                  price={product.ourPrice}
-                  averagePrice={product.averagePrice}
+                  price={returnPrice.ourPrice}
+                  averagePrice={returnPrice.averagePrice}
                   idCategory={product.id}
                   slug={product.slug}
                   slugCategory={data.category_slug}

@@ -47,7 +47,7 @@ const ProductRelationCard = ({
   return (
     <>
       <div
-        className="card card-compact cursor-pointer w-full text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
+        className="card card-compact cursor-pointer w-full max-w-[300px] mx-auto text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
         key={id}
       >
         <div
@@ -78,27 +78,10 @@ const ProductRelationCard = ({
               </div>
             </div>
           </div>
-          {/* //para desktok */}
-          {price > 0 && (
-            <div className="flex-col text-left gap-2 hidden lg:flex">
-              <div className="flex justify-between items-center text-xs">
-                <span>Preço comum:</span>
-                <span className="opacity-80 line-through decoration-red-600">
-                  R$ {moneyMask(averagePrice.toString())}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span>Nosso Preço:</span>
-                <span className="text-success font-semibold">
-                  R${moneyMask(price.toString())}
-                </span>
-              </div>
-            </div>
-          )}
 
           {/* //para mobile */}
           {price > 0 && (
-            <div className="flex flex-col gap-1 lg:hidden">
+            <div className="flex flex-col gap-1">
               <div className="flex flex-col">
                 <span className="text-xs">Preço comum:</span>
                 <span className="opacity-40 line-through decoration-red-600">
@@ -109,6 +92,23 @@ const ProductRelationCard = ({
                 <span className="text-xs">Nosso preço: </span>
                 <span className="text-success font-semibold text-base">
                   R$ {moneyMask(price.toString())}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {price <= 0 && (
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-col">
+                <span className="text-xs">Preço comum:</span>
+                <span className="opacity-40 line-through decoration-red-600">
+                  Conferir Produto
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs">Nosso preço: </span>
+                <span className="text-success font-semibold text-base">
+                  Conferir Produto
                 </span>
               </div>
             </div>
