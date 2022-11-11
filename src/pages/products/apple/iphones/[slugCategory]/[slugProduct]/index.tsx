@@ -71,7 +71,6 @@ export default function Products({ data, categoryData }: DataProps) {
   const [products, setProducts] = useState<
     Array<IProduct & { ourPrice: number; averagePrice: number }>
   >([])
-
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
@@ -80,7 +79,6 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
-  const [activeSlide, setActiveSlide] = useState(0)
 
   useEffect(() => {
     geturl()
