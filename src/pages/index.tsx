@@ -136,22 +136,24 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           const params = {
             name: router.query.name,
             email: decodesEmail,
-            whatsapp: decodesPhone,
+            phone: `+55${decodesPhone}`,
             list: 10,
             utm_source: router.query.utm_source,
             utm_medium: router.query.utm_medium,
             utm_campaign: router.query.utm_campaign,
           }
           const response = await apiStore.post('leads', params)
-          const convert = response.data[Object.keys(response.data)[0]]
-          console.log(JSON.parse(convert))
+          console.log(response)
           if (response.data.message === 'success') {
             ToastCustom(6000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado')
             return
           }
           if (response.data.message === 'error') {
-            ToastCustom(6000, 'Tente novamente para receber um novo e-mail ', 'error', 'Houve um erro!')
-            // router.push(`/?utm_source=${params.utm_source}&utm_medium=${params.utm_medium}&utm_campaign=${params.utm_campaign}`)
+            if (response.data.response.code === 'duplicate_parameter') {
+              ToastCustom(8000, 'Você já tem acesso a essa promoção', 'error', 'Dados já cadastrados')
+              return
+            }
+            ToastCustom(8000, `${response.data.response.message}`, 'error', 'Houve um erro!')
             return
           }
         } catch (error) {

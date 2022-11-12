@@ -21,6 +21,7 @@ export default function SendInBlue() {
             className="input input-bordered rounded-md w-full text-info-content"
             onChange={(e) => setName(e.target.value)}
             type="text"
+            title="digite um campo"
             name='name'
             value={name}
             placeholder="Nome"
