@@ -5,7 +5,7 @@ import DollarPack from '../../../assets/images/dollar-pack.svg'
 import LeftDollar from '../../../assets/images/left-dollar.svg'
 import Present from '../../../assets/images/present.svg'
 import RightDollar from '../../../assets/images/right-dollar.svg'
-import NewsletterSubscribe from './MailchimpSubscribe'
+import SendInBlue from './SendInBlue'
 
 export default function RegisterMimo() {
   const router = useRouter()
@@ -58,7 +58,7 @@ export default function RegisterMimo() {
                 </span>
               </h3>
             </div>
-            <NewsletterSubscribe />
+            <SendInBlue />
             <div className="absolute w-full left-0 bottom-0 flex justify-between -z-10">
               <Image
                 src={LeftDollar}

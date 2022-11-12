@@ -28,12 +28,11 @@ import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
-import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import Carousel from 'better-react-carousel'
-
 interface IParams {
+
   params: {
     slugCategory: string
     slugProduct: string
@@ -363,12 +362,12 @@ export default function Products({ data, categoryData }: DataProps) {
                       iremos encaminhar um email para você! Fique atento.
                     </p>
 
-                    <div className="flex gap-3 w-full items-end">
+                    {/* <div className="flex gap-3 w-full items-end">
                       <MailchimpFormContainer
                         nameProduct={`${data.category_slug} ${data.slug}`}
                         notPhone
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}

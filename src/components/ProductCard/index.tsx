@@ -4,11 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import CartaImg from '../../assets/images/carta.png'
-import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
+import MailchimpFormContainer from '../Modals/Register-Mimo/SendInBlue'
 
 interface ProductCardProps {
   id: number
