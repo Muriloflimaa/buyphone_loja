@@ -48,7 +48,7 @@ import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
@@ -145,6 +145,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           const response = await apiStore.post('leads', params)
           console.log(response)
           if (response.data.message === 'success') {
+            setCookie(null, 'LEAD', 'true', {
+              path: '/',
+            })
             ToastCustom(6000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado')
             return
           }
