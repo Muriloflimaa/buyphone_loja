@@ -1,14 +1,9 @@
 export default function handler(req, res) {
   // Get data submitted in request's body.
+  console.log(req)
   const body = req.body
   var criptEmail = new Buffer(body.email).toString('base64')
   var criptTel = new Buffer(body.tel).toString('base64')
-  console.log(criptEmail, criptTel)
-  // if (!body.name  !body.email  !body.phone || !body.message) {
-  //     // Sends a HTTP bad request error code
-  //     return res.status(400).json({ data: "Required fields are not found" });
-  // }
-
   const SibApiV3Sdk = require('sib-api-v3-sdk')
   const defaultClient = SibApiV3Sdk.ApiClient.instance
   const apiKey = defaultClient.authentications['api-key']
@@ -25,7 +20,7 @@ export default function handler(req, res) {
         name: body.name,
       },
     ],
-    templateId: req.query.template,
+    templateId: Number(req.query.template),
     params: {
       name: body.name,
       email: body.email,
@@ -46,14 +41,13 @@ export default function handler(req, res) {
   apiInstance.sendTransacEmail(sendSmtpEmail).then(
     function (data) {
       console.log('API called successfully. Returned data: ' + data)
-      res.redirect('/?success-email')
+      res.redirect('/?success=true')
     },
     function (error) {
       res.redirect(
-        `/?utm_source=${body.utm_source}&utm_medium=${body.utm_medium}&utm_campaign=${body.utm_campaign}?error`
+        `/?utm_source=${body.utm_source}&utm_medium=${body.utm_medium}&utm_campaign=${body.utm_campaign}&error`
       )
       console.error(error)
-      alert(error)
     }
   )
 

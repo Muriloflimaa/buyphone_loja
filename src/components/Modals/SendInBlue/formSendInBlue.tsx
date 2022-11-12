@@ -11,7 +11,7 @@ export default function SendInBlue() {
   return (
     <>
       <form
-        action="/api/email/5" method="post"
+        action="/api/email/35" method="post"
         className={
           'form-control gap-2 w-full my-7 px-7'
         }
@@ -50,7 +50,7 @@ export default function SendInBlue() {
           <input type="hidden" name="utm_medium" value={newCookies?.utm_medium} />
           <input type="hidden" name="utm_campaign" value={newCookies?.utm_campaign} />
         </div>
-        <button type="submit">enviar</button>
+        <button className="btn normal-case py-4 text-white w-56 m-auto mt-5 bg-default shadow-md border-0" type="submit">CADASTRAR</button>
       </form>
     </>
   )

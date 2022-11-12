@@ -6,21 +6,21 @@ import { Carousel } from 'react-responsive-carousel'
 import MeetImg from '../assets/images/BannerMeet.webp'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
-import RegisterMimo from '../components/Modals/Register-Mimo'
+import RegisterMimo from '../components/Modals/SendInBlue'
 import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { IProduct } from '../types'
 
 //*** images
 //*** clientes
+import CAmandaImg from '../assets/images/client_amanda.png'
 import AnaImg from '../assets/images/client_anabrisa.jpg'
 import BarbaraImg from '../assets/images/client_barbara.jpg'
 import BrendaImg from '../assets/images/client_brenda.jpg'
-import CLyviaImg from '../assets/images/client_lyvia.png'
 import CGabrielImg from '../assets/images/client_gabriel.png'
-import CLuizImg from '../assets/images/client_luiz.png'
 import CIgorImg from '../assets/images/client_igor.png'
-import CAmandaImg from '../assets/images/client_amanda.png'
+import CLuizImg from '../assets/images/client_luiz.png'
+import CLyviaImg from '../assets/images/client_lyvia.png'
 //*** banners grandes (desktop)
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
@@ -43,16 +43,18 @@ import BannerInstagramDark from '../assets/images/bannerigdark.webp'
 import BannerLojasDark from '../assets/images/bannerlojasdark.webp'
 import MiniBannerWhatsappDark from '../assets/images/MiniBannerWhatsappDark.webp'
 
-import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
+import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
-import Link from 'next/link'
-import { parseCookies } from 'nookies'
+import { ToastCustom } from '../utils/toastCustom'
 
 interface DataProps {
   data: {
@@ -63,6 +65,8 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
+
+  const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
 
@@ -77,6 +81,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
       setIsUser(true)
     }
   }, [user])
+
 
   const handleCarregarProdutos = async () => {
     if (currentPage !== data.last_page) {
@@ -98,7 +103,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   function next() {
@@ -113,6 +118,48 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   useEffect(() => {
     getProductsMatch()
+  }, [])
+
+  useEffect(() => {
+    if (router.query.success === 'true') {
+      ToastCustom(6000, 'Verifique seu e-mail para validar o desconto', 'success', 'E-mail enviado')
+    }
+    return
+  }, [])
+
+  useEffect(() => {
+    async function dataLead() {
+      if (router.query.name && router.query.email && router.query.tel) {
+        const decodesEmail = window.atob(router.query.email.toString())
+        const decodesPhone = window.atob(router.query.tel.toString())
+        try {
+          const params = {
+            name: router.query.name,
+            email: decodesEmail,
+            whatsapp: decodesPhone,
+            list: 10,
+            utm_source: router.query.utm_source,
+            utm_medium: router.query.utm_medium,
+            utm_campaign: router.query.utm_campaign,
+          }
+          const response = await apiStore.post('leads', params)
+          const convert = response.data[Object.keys(response.data)[0]]
+          console.log(JSON.parse(convert))
+          if (response.data.message === 'success') {
+            ToastCustom(6000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado')
+            return
+          }
+          if (response.data.message === 'error') {
+            ToastCustom(6000, 'Tente novamente para receber um novo e-mail ', 'error', 'Houve um erro!')
+            // router.push(`/?utm_source=${params.utm_source}&utm_medium=${params.utm_medium}&utm_campaign=${params.utm_campaign}`)
+            return
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+    dataLead()
   }, [])
 
   return (
@@ -137,21 +184,21 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             image={
               darkOrLigth
                 ? [
-                    {
-                      ...BannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                    },
-                    Banner1DesktopDark,
-                    Banner2DesktopDark,
-                  ]
+                  {
+                    ...BannerBlackFriday,
+                    link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                  },
+                  Banner1DesktopDark,
+                  Banner2DesktopDark,
+                ]
                 : [
-                    {
-                      ...BannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                    },
-                    Banner1DesktopLight,
-                    Banner2DesktopLight,
-                  ]
+                  {
+                    ...BannerBlackFriday,
+                    link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                  },
+                  Banner1DesktopLight,
+                  Banner2DesktopLight,
+                ]
             }
           />
         </div>
@@ -162,35 +209,35 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                      {
-                        ...MiniBannerBlackFriday,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                      },
-                      {
-                        ...BannerIphone13Dark,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                      {
-                        ...BannerInstagramDark,
-                        link: 'https://www.instagram.com/buyphone.match/',
-                      },
-                      BannerLojasDark,
-                    ]
+                    {
+                      ...MiniBannerBlackFriday,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                    },
+                    {
+                      ...BannerIphone13Dark,
+                      link: '/products/apple/iphones/iphone-13-pro',
+                    },
+                    {
+                      ...BannerInstagramDark,
+                      link: 'https://www.instagram.com/buyphone.match/',
+                    },
+                    BannerLojasDark,
+                  ]
                   : [
-                      {
-                        ...MiniBannerBlackFriday,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                      },
-                      {
-                        ...BannerIphone13Light,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                      {
-                        ...BannerInstagramLight,
-                        link: 'https://www.instagram.com/buyphone.match/',
-                      },
-                      BannerLojasLight,
-                    ]
+                    {
+                      ...MiniBannerBlackFriday,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                    },
+                    {
+                      ...BannerIphone13Light,
+                      link: '/products/apple/iphones/iphone-13-pro',
+                    },
+                    {
+                      ...BannerInstagramLight,
+                      link: 'https://www.instagram.com/buyphone.match/',
+                    },
+                    BannerLojasLight,
+                  ]
               }
             />
           </div>
@@ -199,33 +246,33 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                      {
-                        ...BannerDepoiments,
-                        link: '#depoiments',
-                      },
-                      {
-                        ...MiniBannerWhatsappDark,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                      {
-                        ...MiniBannerConheca,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                    ]
+                    {
+                      ...BannerDepoiments,
+                      link: '#depoiments',
+                    },
+                    {
+                      ...MiniBannerWhatsappDark,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                    {
+                      ...MiniBannerConheca,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                  ]
                   : [
-                      {
-                        ...BannerDepoiments,
-                        link: '#depoiments',
-                      },
-                      {
-                        ...MiniBannerWhatsappLigth,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                      {
-                        ...MiniBannerConheca,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                    ]
+                    {
+                      ...BannerDepoiments,
+                      link: '#depoiments',
+                    },
+                    {
+                      ...MiniBannerWhatsappLigth,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                    {
+                      ...MiniBannerConheca,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                  ]
               }
             />
           </div>

@@ -8,7 +8,7 @@ import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import MailchimpFormContainer from '../Modals/Register-Mimo/SendInBlue'
+import MailchimpFormContainer from '../Modals/SendInBlue/formSendInBlue'
 
 interface ProductCardProps {
   id: number
