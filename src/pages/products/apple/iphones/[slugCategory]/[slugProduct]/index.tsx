@@ -23,7 +23,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
 import { Input } from '../../../../../../components/InputElement'
-import FormSendInBlue from '../../../../../../components/Modals/SendInBlue/formSendInBlue'
+import MailchimpFormContainer from '../../../../../../components/Modals/MailChimp/MailchimpSubscribe'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
@@ -363,9 +363,8 @@ export default function Products({ data, categoryData }: DataProps) {
                     </p>
 
                     <div className="flex gap-3 w-full items-end">
-                      <FormSendInBlue
+                      <MailchimpFormContainer
                         nameProduct={`${data.category_slug} ${data.slug}`}
-                        notPhone
                       />
                     </div>
                   </div>
