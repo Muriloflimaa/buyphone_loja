@@ -74,16 +74,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
-  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+  const [isUser, setIsUser] = useState(false) //state para prevenir erro de renderização no usuário logado
 
-  useEffect(() => {
-    if (user) {
-      setIsUser(true)
-    }
-  }, [user])
-
-
-  const handleCarregarProdutos = async () => {
+  const handleLoadProducts = async () => {
     if (currentPage !== data.last_page) {
       try {
         await apiStore
@@ -117,6 +110,12 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   }
 
   useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
+
+  useEffect(() => {
     getProductsMatch()
   }, [])
 
@@ -124,7 +123,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     if (router.query.success === 'true') {
       ToastCustom(6000, 'Verifique seu e-mail para validar o desconto', 'success', 'E-mail enviado')
     }
-    return
+    if (router.query.error === 'true') {
+      ToastCustom(6000, 'Verifique os dados informados e tente novamente', 'error', 'Houve um erro')
+    }
   }, [])
 
   useEffect(() => {
@@ -136,31 +137,30 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           const params = {
             name: router.query.name,
             email: decodesEmail,
-            phone: `+55${decodesPhone}`,
+            phone: `+55 ${decodesPhone}`,
             list: 10,
             utm_source: router.query.utm_source,
             utm_medium: router.query.utm_medium,
             utm_campaign: router.query.utm_campaign,
           }
-          const response = await apiStore.post('leads', params)
-          console.log(response)
+          const response = await apiStore.post('leads/', params)
           if (response.data.message === 'success') {
             setCookie(null, 'LEAD', 'true', {
               path: '/',
             })
-            ToastCustom(6000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado')
+            ToastCustom(8000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado!')
             return
           }
           if (response.data.message === 'error') {
             if (response.data.response.code === 'duplicate_parameter') {
-              ToastCustom(8000, 'Você já tem acesso a essa promoção', 'error', 'Dados já cadastrados')
+              ToastCustom(8000, 'Você já tem acesso a essa promoção', 'error', 'Dados já cadastrados!')
               return
             }
             ToastCustom(8000, `${response.data.response.message}`, 'error', 'Houve um erro!')
             return
           }
         } catch (error) {
-          console.log(error)
+          ToastCustom(8000, 'Atualize a página ou tente novamente mais tarde', 'error', 'Houve um erro!')
         }
       }
     }
@@ -396,7 +396,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="flex w-full justify-center">
             <button
               className="btn border btn-outline hover:btn-info hover:text-white w-full max-w-[250px] mt-8"
-              onClick={handleCarregarProdutos}
+              onClick={handleLoadProducts}
             >
               Ver mais
             </button>
@@ -520,7 +520,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Conheça a BuyPhone
           </h1>
-          <Link href="/institucional">
+          <Link href="/institucional" passHref>
             <a>
               <Image
                 src={MeetImg}

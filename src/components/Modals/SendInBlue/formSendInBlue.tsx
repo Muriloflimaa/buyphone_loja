@@ -8,6 +8,7 @@ export default function SendInBlue() {
   const [tel, setTel] = useState('')
   const cookies = parseCookies(undefined)
   const newCookies = cookies.UTM && JSON.parse(cookies.UTM)
+
   return (
     <>
       <form
@@ -37,7 +38,6 @@ export default function SendInBlue() {
             placeholder="E-mail"
             required
           />
-
           <input
             className="input input-bordered rounded-md w-full text-info-content"
             onChange={(e) => setTel(e.target.value)}
@@ -45,6 +45,7 @@ export default function SendInBlue() {
             name='tel'
             value={masktel1(tel)}
             placeholder="Telefone"
+            maxLength={15}
             required
           />
           <input type="hidden" name="utm_source" value={newCookies?.utm_source} />

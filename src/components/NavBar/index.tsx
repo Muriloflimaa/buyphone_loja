@@ -26,7 +26,7 @@ import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
 import { apiStore } from '../../services/api'
-import { ICategory, IUser } from '../../types'
+import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
 import LoadingComponent from '../LoadingComponent'
@@ -49,26 +49,6 @@ export default function NavBar() {
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
   const [openDrawer, setOpenDrawer] = useState(false)
-  const [lead, setLead] = useState<number | null>()
-  console.log(lead)
-
-  useEffect(() => {
-    async function DataUser() {
-      if (!lead) {
-        try {
-          const response = await apiStore.get(`users/`)
-          response.data.data.map((user: IUser) => {
-            if (user.id === userData?.id) {
-              setLead(user.lead)
-            }
-          })
-        } catch (error) {
-          setLead(null)
-        }
-      }
-    }
-    DataUser()
-  }, [])
 
   useEffect(() => {
     if (cart) {
@@ -136,9 +116,7 @@ export default function NavBar() {
   }
 
   const handleOpenModalInfo = () => {
-    return document
-      .getElementById('modal-open-cadastre')
-      ?.classList.add('modal-open')
+    return document.getElementById('modal-info-discount')?.classList.add('modal-open')
   }
 
   return (
@@ -226,12 +204,12 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${lead ? 'flex' : 'hidden'
+                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
                         }`}
                     >
                       <div className="ml-3 flex">
                         <label
-                          htmlFor="modal-info-discount"
+                          onClick={handleOpenModalInfo}
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-5 w-5 text-white" />
@@ -472,7 +450,7 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${lead ? 'flex' : 'hidden'
+                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
                         }`}
                     >
                       <div className="">

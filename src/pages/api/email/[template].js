@@ -45,7 +45,7 @@ export default function handler(req, res) {
     },
     function (error) {
       res.redirect(
-        `/?utm_source=${body.utm_source}&utm_medium=${body.utm_medium}&utm_campaign=${body.utm_campaign}&error`
+        `/?utm_source=${body.utm_source}&utm_medium=${body.utm_medium}&utm_campaign=${body.utm_campaign}&error=true`
       )
       console.error(error)
     }
