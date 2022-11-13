@@ -8,7 +8,7 @@ import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import MailchimpFormContainer from '../Modals/SendInBlue/formSendInBlue'
+import FormSendInBlue from '../Modals/SendInBlue/formSendInBlue'
 
 interface ProductCardProps {
   id: number
@@ -80,14 +80,13 @@ const ProductCard = ({
               {price > 0 && (
                 <>
                   <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercase text-[8px] px-0 md:text-xs font-semibold mx-auto">
-                    {`${
-                      changeText
+                    {`${changeText
                         ? resultDiscountPercent !== 'NaN'
                           ? resultDiscountPercent.replace('.0', '') +
-                            '% de desconto'
+                          '% de desconto'
                           : '0' + '% de desconto'
                         : 'parcelamento em ate 12x'
-                    }`}
+                      }`}
                   </span>
                   <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] px-[3px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (
@@ -230,7 +229,7 @@ const ProductCard = ({
                 </p>
 
                 <div className="flex gap-3 w-full items-end">
-                  <MailchimpFormContainer
+                  <FormSendInBlue
                     nameProduct={`${slugCategory} ${slug}`}
                     notPhone
                   />

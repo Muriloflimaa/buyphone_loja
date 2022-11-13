@@ -2,7 +2,12 @@ import { parseCookies } from "nookies"
 import { useState } from "react"
 import { masktel1 } from "../../../utils/masks"
 
-export default function SendInBlue() {
+interface ICustomForm {
+  notPhone?: boolean
+  nameProduct?: string
+}
+
+export default function SendInBlue({ notPhone, nameProduct }: ICustomForm) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [tel, setTel] = useState('')
@@ -38,21 +43,29 @@ export default function SendInBlue() {
             placeholder="E-mail"
             required
           />
-          <input
-            className="input input-bordered rounded-md w-full text-info-content"
-            onChange={(e) => setTel(e.target.value)}
-            type="text"
-            name='tel'
-            value={masktel1(tel)}
-            placeholder="Telefone"
-            maxLength={15}
-            required
-          />
+          {!notPhone && (
+            <input
+              className="input input-bordered rounded-md w-full text-info-content"
+              onChange={(e) => setTel(e.target.value)}
+              type="text"
+              name='tel'
+              value={masktel1(tel)}
+              placeholder="Telefone"
+              maxLength={15}
+              required
+            />
+          )}
           <input type="hidden" name="utm_source" value={newCookies?.utm_source} />
           <input type="hidden" name="utm_medium" value={newCookies?.utm_medium} />
           <input type="hidden" name="utm_campaign" value={newCookies?.utm_campaign} />
         </div>
-        <button className="btn normal-case py-4 text-white w-56 m-auto mt-5 bg-default shadow-md border-0" type="submit">CADASTRAR</button>
+        {!notPhone ? (
+          <button className="btn py-4 text-white w-56 m-auto mt-5 bg-default shadow-md border-0" type="submit">CADASTRAR</button>
+        ) : (
+          <button className="btn btn-info btn-block text-white" type="submit">
+            Enviar
+          </button>
+        )}
       </form>
     </>
   )

@@ -5,7 +5,7 @@ import DollarPack from '../../../assets/images/dollar-pack.svg'
 import LeftDollar from '../../../assets/images/left-dollar.svg'
 import Present from '../../../assets/images/present.svg'
 import RightDollar from '../../../assets/images/right-dollar.svg'
-import FormSendInBlue from './formSendInBlue'
+import FormSendInBlue from '../SendInBlue/formSendInBlue'
 
 export default function SendInBlue() {
   const router = useRouter()
