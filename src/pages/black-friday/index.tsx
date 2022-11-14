@@ -58,6 +58,17 @@ export default function BlackFriday({ data }: BlackFridayProps) {
 }
 
 export const getServerSideProps = async () => {
+  if (
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+    !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
+  ) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
   try {
     const { data } = await apiStore(`products?page=1&per_page=500`)
     return {

@@ -14,7 +14,7 @@ const CountDownComponent = () => {
     | { days: number; minutes: number; seconds: number; hours: number }
     | undefined
   >(undefined)
-  const [changeText, setChangeText] = useState(false)
+  const [changeText, setChangeText] = useState(true)
 
   const getCountDown = () => {
     const terminyBlack = process.env.NEXT_PUBLIC_TIME_COUNT_DOWN ?? ''
