@@ -32,6 +32,7 @@ import MailchimpFormContainer from '../../../../../../components/Modals/Register
 import { parseCookies } from 'nookies'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import Carousel from 'better-react-carousel'
+import CountDownComponent from '../../../../../../components/CountDownComponent'
 
 interface IParams {
   params: {
@@ -278,6 +279,11 @@ export default function Products({ data, categoryData }: DataProps) {
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-4">
               <div>
+                {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                  !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+                  data.blackfriday == 1 && (
+                    <CountDownComponent width="w-full" text=" text-lg p-3 " />
+                  )}
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
@@ -475,7 +481,7 @@ export default function Products({ data, categoryData }: DataProps) {
         </h1>
 
         <Carousel
-          cols={categoryData.length >= 6 ? 6 : categoryData.length - 1}
+          cols={categoryData.length > 6 ? 6 : categoryData.length - 1}
           rows={1}
           gap={20}
           loop={true}
