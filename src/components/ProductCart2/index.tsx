@@ -140,45 +140,6 @@ const ProductCart = ({
     }
   }
 
-  const [changeText, setChangeText] = useState(false)
-
-  setTimeout(() => {
-    setChangeText(!changeText)
-    setCountDownBlackFriday(getCountDown)
-  }, 1400)
-
-  const [countDownBlackFriday, setCountDownBlackFriday] = useState<
-    | { days: number; minutes: number; seconds: number; hours: number }
-    | undefined
-  >(undefined)
-
-  const getCountDown = () => {
-    const terminyBlack = process.env.NEXT_PUBLIC_TIME_COUNT_DOWN ?? ''
-    var countDownDate = new Date(terminyBlack).getTime()
-
-    // Update the count down every 1 second
-
-    // Get today's date and time
-    var now = new Date().getTime()
-
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now
-
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24))
-    var hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    )
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-    return {
-      days,
-      hours,
-      minutes,
-      seconds,
-    }
-  }
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 justify-between w-full">
       <div className="grid col-span-2 gap-3 text-primary">
@@ -194,13 +155,7 @@ const ProductCart = ({
             </div>
             {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
               !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 &&
-              countDownBlackFriday && (
-                <CountDownComponent
-                  changeText={changeText}
-                  countDownBlackFriday={countDownBlackFriday}
-                />
-              )}
+              blackfriday == 1 && <CountDownComponent />}
             <div className="flex items-center gap-2 text-info-content">
               <span>Quantidade</span>
 
