@@ -508,7 +508,7 @@ export default function NavBar() {
                 <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                   {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                     !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-                      <li className="bg-warning text-white font-semibold">
+                      <li className="bg-white text-black font-semibold">
                         <Link href={'/black-friday'}>
                           <a>Black Friday</a>
                         </Link>

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
-import { AuthContext } from '../../../../../context/AuthContext'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
 import { apiStore } from '../../../../../services/api'
@@ -31,8 +30,11 @@ export default function Products({ data }: DataProps) {
       <Head>
         <title>BuyPhone - {data.name}</title>
       </Head>
-      <div className="h-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 mx-auto py-6 gap-6 px-5 md:px-0 max-w-7xl">
+      <div className="h-auto my-10">
+        <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
+          Categoria: {data.name}
+        </h1>
+        <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
           {data.products.length > 0 ? (
             data.products.map((products) => {
               const returnPrice = verificationPrice(products, user, isUser)
