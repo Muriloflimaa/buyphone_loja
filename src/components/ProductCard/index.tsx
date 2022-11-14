@@ -71,7 +71,7 @@ const ProductCard = ({
           <div className="relative z-10 flex justify-center items-center">
             {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
               !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 && <CountDownComponent />}
+              blackfriday == 1 && <CountDownComponent width=" w-full " />}
           </div>
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
