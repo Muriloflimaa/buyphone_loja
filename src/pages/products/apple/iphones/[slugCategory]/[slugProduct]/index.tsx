@@ -282,7 +282,7 @@ export default function Products({ data, categoryData }: DataProps) {
                 {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                   !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
                   data.blackfriday == 1 && (
-                    <CountDownComponent width="w-full" text=" text-lg p-3 " />
+                    <CountDownComponent width="w-4/5" text=" text-base " />
                   )}
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
@@ -501,6 +501,7 @@ export default function Products({ data, categoryData }: DataProps) {
                   slugCategory={data.category_slug}
                   image={product.media[0]?.original_url}
                   memory={product.memory}
+                  blackfriday={product.blackfriday}
                 />
               </Carousel.Item>
             )
