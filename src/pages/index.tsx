@@ -140,7 +140,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                 ? [
                     {
                       ...BannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                      link: '/black-friday',
                     },
                     Banner1DesktopDark,
                     Banner2DesktopDark,
@@ -148,7 +148,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                 : [
                     {
                       ...BannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                      link: '/black-friday',
                     },
                     Banner1DesktopLight,
                     Banner2DesktopLight,
@@ -165,7 +165,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                   ? [
                       {
                         ...MiniBannerBlackFriday,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                        link: '/black-friday',
                       },
                       {
                         ...BannerIphone13Dark,
@@ -180,7 +180,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                   : [
                       {
                         ...MiniBannerBlackFriday,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
+                        link: '/black-friday',
                       },
                       {
                         ...BannerIphone13Light,
