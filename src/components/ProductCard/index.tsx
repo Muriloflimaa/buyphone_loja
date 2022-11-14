@@ -9,6 +9,7 @@ import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
 import CartaImg from '../../assets/images/carta.png'
 import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
+import CountDownComponent from '../CountDownComponent'
 
 interface ProductCardProps {
   id: number
@@ -21,6 +22,7 @@ interface ProductCardProps {
   idCategory: number
   slug: string
   slugCategory: string
+  blackfriday?: number | boolean
 }
 
 const ProductCard = ({
@@ -33,6 +35,7 @@ const ProductCard = ({
   slug,
   slugCategory,
   memory,
+  blackfriday,
 }: ProductCardProps) => {
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
@@ -44,6 +47,7 @@ const ProductCard = ({
 
   setTimeout(() => {
     setChangeText(!changeText)
+    setCountDownBlackFriday(getCountDown)
   }, 1400)
 
   const link = `/products/apple/iphones/${slugCategory}/${slug}`
@@ -58,6 +62,38 @@ const ProductCard = ({
 
   const router = useRouter()
 
+  const [countDownBlackFriday, setCountDownBlackFriday] = useState<
+    | { days: number; minutes: number; seconds: number; hours: number }
+    | undefined
+  >(undefined)
+
+  const getCountDown = () => {
+    const terminyBlack = process.env.NEXT_PUBLIC_TIME_COUNT_DOWN ?? ''
+    var countDownDate = new Date(terminyBlack).getTime()
+
+    // Update the count down every 1 second
+
+    // Get today's date and time
+    var now = new Date().getTime()
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24))
+    var hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    )
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+    return {
+      days,
+      hours,
+      minutes,
+      seconds,
+    }
+  }
+
   return (
     <>
       <div
@@ -65,6 +101,17 @@ const ProductCard = ({
         key={id}
       >
         <div className="card-body md:px-8 px-2 text-center flex flex-col justify-between">
+          <div className="relative z-10 flex justify-center items-center">
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 &&
+              countDownBlackFriday && (
+                <CountDownComponent
+                  changeText={changeText}
+                  countDownBlackFriday={countDownBlackFriday}
+                />
+              )}
+          </div>
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
               <figure className="mb-4">
@@ -76,6 +123,7 @@ const ProductCard = ({
                 />
               </figure>
             </div>
+
             <div>
               {price > 0 && (
                 <>

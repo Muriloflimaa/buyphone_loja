@@ -2,7 +2,8 @@ import { faBars, faHeart, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { parseCookies } from 'nookies'
+import { useEffect, useState } from 'react'
 import GosteiImg from '../../assets/images/gostei.svg'
 import OuterImg from '../../assets/images/outer.svg'
 
@@ -26,6 +27,15 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
       .getElementById('modal-open-match')
       ?.classList.add('modal-open')
   }
+
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
 
   async function noMatch() {
     setFailMatch(false)
@@ -68,7 +78,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
     wrapperFunction(condition)
   }
 
-  const returnPrice = verificationPrice(data)
+  const returnPrice = verificationPrice(data, user, isUser)
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (

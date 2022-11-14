@@ -65,12 +65,13 @@ type shippingOnTypes = {
 export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
-  const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const returnPrice = verificationPrice(data, user, isUser)
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
@@ -84,8 +85,6 @@ export default function Products({ data, categoryData }: DataProps) {
       setDescrition(data.description)
     }
   }, [])
-
-  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
 
   useEffect(() => {
     if (user) {
@@ -482,7 +481,7 @@ export default function Products({ data, categoryData }: DataProps) {
           loop={true}
         >
           {categoryData.map((product) => {
-            const returnPrice = verificationPrice(product)
+            const returnPrice = verificationPrice(product, user, isUser)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard

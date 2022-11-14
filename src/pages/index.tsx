@@ -53,6 +53,7 @@ import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
   data: {
@@ -281,22 +282,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {apiNew.length > 0 ? (
               apiNew.map((products: IProduct) => {
-                const discount =
-                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-                const itens = [
-                  products.price,
-                  products.magalu_price,
-                  products.americanas_price,
-                  products.casasbahia_price,
-                  products.ponto_price,
-                ]
-                const filteredItens = itens.filter((item) => item)
-                const averagePrice =
-                  filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-                const discountPrice = Math.round(
-                  averagePrice * (discount / 100)
-                )
-                const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+                const returnPrice = verificationPrice(products, user, isUser)
 
                 return (
                   <ProductCard
@@ -305,12 +291,13 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                     name={products.name}
                     idCategory={products.category_id}
                     colorPhone={products.color}
-                    price={ourPrice}
-                    averagePrice={averagePrice}
+                    price={returnPrice.ourPrice}
+                    averagePrice={returnPrice.averagePrice}
                     slug={products.slug}
                     slugCategory={products.category_slug}
                     image={products.media[0].original_url}
                     memory={products.memory}
+                    blackfriday={products.blackfriday}
                   />
                 )
               })

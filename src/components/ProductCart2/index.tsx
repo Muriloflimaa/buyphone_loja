@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 import { faLocationDot, faTruckFast } from '@fortawesome/free-solid-svg-icons'
+import CountDownComponent from '../CountDownComponent'
 
 interface ProductProps {
   id: number
@@ -20,6 +21,7 @@ interface ProductProps {
   price: number
   memory: string
   image: string
+  blackfriday?: number | boolean
 }
 
 type GetCepTypes = {
@@ -48,6 +50,7 @@ const ProductCart = ({
   price,
   memory,
   image,
+  blackfriday,
 }: ProductProps) => {
   const router = useRouter()
   const [show, setShow] = useState(false)
@@ -137,6 +140,45 @@ const ProductCart = ({
     }
   }
 
+  const [changeText, setChangeText] = useState(false)
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+    setCountDownBlackFriday(getCountDown)
+  }, 1400)
+
+  const [countDownBlackFriday, setCountDownBlackFriday] = useState<
+    | { days: number; minutes: number; seconds: number; hours: number }
+    | undefined
+  >(undefined)
+
+  const getCountDown = () => {
+    const terminyBlack = process.env.NEXT_PUBLIC_TIME_COUNT_DOWN ?? ''
+    var countDownDate = new Date(terminyBlack).getTime()
+
+    // Update the count down every 1 second
+
+    // Get today's date and time
+    var now = new Date().getTime()
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24))
+    var hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    )
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+    return {
+      days,
+      hours,
+      minutes,
+      seconds,
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 justify-between w-full">
       <div className="grid col-span-2 gap-3 text-primary">
@@ -150,8 +192,18 @@ const ProductCart = ({
               <span>Modelo</span>
               <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
             </div>
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 &&
+              countDownBlackFriday && (
+                <CountDownComponent
+                  changeText={changeText}
+                  countDownBlackFriday={countDownBlackFriday}
+                />
+              )}
             <div className="flex items-center gap-2 text-info-content">
               <span>Quantidade</span>
+
               {!show && (
                 <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
                   <button
