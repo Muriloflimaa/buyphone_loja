@@ -1,15 +1,9 @@
 import { useState } from 'react'
 
 interface CountDownComponentProps {
-  changeText: boolean
-  countDownBlackFriday: {
-    days: number
-    minutes: number
-    seconds: number
-    hours: number
-  }
+  width?: string
 }
-const CountDownComponent = () => {
+const CountDownComponent = ({ width }: CountDownComponentProps) => {
   const [countDownBlackFriday, setCountDownBlackFriday] = useState<
     | { days: number; minutes: number; seconds: number; hours: number }
     | undefined
@@ -52,7 +46,8 @@ const CountDownComponent = () => {
     <span
       className={
         'badge font-semibold text-[8px] px-0 md:text-xs md:px-3 ' +
-        (changeText ? 'bg-black text-white' : 'badge-warning text-black')
+        (width && width) +
+        (changeText ? ' bg-black text-white' : ' badge-warning text-black')
       }
     >
       {changeText

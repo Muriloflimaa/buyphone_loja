@@ -11,6 +11,7 @@ import { useCart } from '../../context/UseCartContext'
 import { IProduct } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { verificationPrice } from '../../utils/verificationPrice'
+import CountDownComponent from '../CountDownComponent'
 
 interface CardMatchProps {
   next: () => void
@@ -125,6 +126,10 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
 
         <div className="flex flex-col gap-2 items-center md:text-start col-span-1  md:items-start">
+          {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+            data.blackfriday == 1 && <CountDownComponent width={'w-2/3'} />}
+
           <span className="badge badge-success w-2/3 bg-primary text-white uppercase text-xs font-semibold">
             {`${
               changeText
