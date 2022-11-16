@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import LogoActiveImg from '../../../assets/images/logo.svg'
+import LogoActiveImg from '../../../assets/images/logo.webp'
 
 interface navBarProps {
   navbar?: boolean
@@ -17,8 +16,6 @@ export default function NavBar({ navbar }: navBarProps) {
     setOpenDrawer((prevState) => !prevState)
   }
 
-  const router = useRouter()
-
   return (
     <>
       <div className="fixed z-20 w-full">
@@ -30,6 +27,7 @@ export default function NavBar({ navbar }: navBarProps) {
                   <Image
                     src={LogoActiveImg}
                     alt="logo"
+                    height={50}
                     width={140}
                     className="object-contain"
                   />
