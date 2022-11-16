@@ -1,14 +1,9 @@
-import { faBell } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import CartaImg from '../../assets/images/carta.png'
-import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
 import CountDownComponent from '../CountDownComponent'
 
 interface ProductRelationProps {
