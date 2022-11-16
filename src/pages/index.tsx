@@ -537,7 +537,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             Conheça a BuyPhone
           </h1>
           <Link href="/institucional" passHref>
-            <a>
+            <a target={'_blank'}>
               <Image
                 src={MeetImg}
                 placeholder="blur"

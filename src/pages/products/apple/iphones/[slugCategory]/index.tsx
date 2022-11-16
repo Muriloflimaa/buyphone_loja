@@ -32,7 +32,7 @@ export default function Products({ data }: DataProps) {
       </Head>
       <div className="h-auto my-10">
         <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
-          Categoria: {data.name}
+          {data.name}
         </h1>
         <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
           {data.products.length > 0 ? (

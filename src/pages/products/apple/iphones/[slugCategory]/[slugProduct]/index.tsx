@@ -281,9 +281,7 @@ export default function Products({ data, categoryData }: DataProps) {
               <div>
                 {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                   !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-                  data.blackfriday == 1 && (
-                    <CountDownComponent width="w-4/5" text=" text-base " />
-                  )}
+                  data.blackfriday == 1 && <CountDownComponent />}
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
@@ -480,7 +478,7 @@ export default function Products({ data, categoryData }: DataProps) {
         </h1>
 
         <Carousel
-          cols={categoryData.length > 6 ? 6 : categoryData.length - 1}
+          cols={categoryData.length >= 4 ? 4 : categoryData.length - 1}
           rows={1}
           gap={20}
           loop={true}

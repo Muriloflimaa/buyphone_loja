@@ -49,11 +49,13 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
         'badge font-semibold px-0 md:px-3 ' +
         (width && width) +
         (text ? text : ' text-[8px] md:text-xs ') +
-        (changeText ? ' bg-black text-white' : ' badge-warning text-black')
+        (changeText
+          ? ' badge-primary bg-black text-white'
+          : ' badge-warning text-black')
       }
     >
       {changeText
-        ? 'Produto da Black Friday'
+        ? 'Produto Black Friday'
         : `Expira em ${
             !!countDownBlackFriday
               ? (countDownBlackFriday.days > 0

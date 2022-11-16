@@ -26,9 +26,9 @@ export default function BlackFriday({ data }: BlackFridayProps) {
       <Image src={BannerBlack} layout="responsive" placeholder="blur" />
       <div className="max-w-7xl mx-auto">
         <h1 className="md:text-4xl text-3xl font-medium text-center mt-10">
-          Ofertas da Black Friday!
+          Ofertas Black Friday!
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10 mb-14">
           {data.data.length > 0 &&
             data.data.map((products: IProduct) => {
               const returnPrice = verificationPrice(products, user, isUser)

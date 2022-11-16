@@ -77,7 +77,9 @@ const ProductRelationCard = ({
             </div>
             {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
               !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 && <CountDownComponent />}
+              blackfriday == 1 && (
+                <CountDownComponent text=" text-[8px] md:text-xs py-4 " />
+              )}
           </div>
 
           {/* //para mobile */}
