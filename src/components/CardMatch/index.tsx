@@ -2,7 +2,8 @@ import { faBars, faHeart, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { parseCookies } from 'nookies'
+import { useEffect, useState } from 'react'
 import GosteiImg from '../../assets/images/gostei.svg'
 import OuterImg from '../../assets/images/outer.svg'
 
@@ -10,6 +11,7 @@ import { useCart } from '../../context/UseCartContext'
 import { IProduct } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { verificationPrice } from '../../utils/verificationPrice'
+import CountDownComponent from '../CountDownComponent'
 
 interface CardMatchProps {
   next: () => void
@@ -26,6 +28,15 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
       .getElementById('modal-open-match')
       ?.classList.add('modal-open')
   }
+
+  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+
+  useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
 
   async function noMatch() {
     setFailMatch(false)
@@ -68,7 +79,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
     wrapperFunction(condition)
   }
 
-  const returnPrice = verificationPrice(data)
+  const returnPrice = verificationPrice(data, user, isUser)
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
@@ -115,6 +126,10 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
         </div>
 
         <div className="flex flex-col gap-2 items-center md:text-start col-span-1  md:items-start">
+          {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+            !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+            data.blackfriday == 1 && <CountDownComponent width={'w-2/3'} />}
+
           <span className="badge badge-success w-2/3 bg-primary text-white uppercase text-xs font-semibold">
             {`${
               changeText

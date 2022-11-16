@@ -63,7 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
         lead,
       })
-      console.log(response.data)
+
       const { type, name, id, profile_photo_url, promotion } =
         response.data.user
 

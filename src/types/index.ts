@@ -38,6 +38,7 @@ export interface IProduct {
   updated_at: string
   slug: string
   category_slug: string
+  blackfriday: number | boolean
 }
 
 export interface IMedia {

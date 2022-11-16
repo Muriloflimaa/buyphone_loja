@@ -8,6 +8,7 @@ import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
+import CountDownComponent from '../CountDownComponent'
 import MailchimpFormContainer from '../Modals/MailChimp/MailchimpSubscribe'
 
 interface ProductCardProps {
@@ -21,6 +22,7 @@ interface ProductCardProps {
   idCategory: number
   slug: string
   slugCategory: string
+  blackfriday?: number | boolean
 }
 
 const ProductCard = ({
@@ -33,6 +35,7 @@ const ProductCard = ({
   slug,
   slugCategory,
   memory,
+  blackfriday,
 }: ProductCardProps) => {
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
@@ -65,6 +68,12 @@ const ProductCard = ({
         key={id}
       >
         <div className="card-body md:px-8 px-2 text-center flex flex-col justify-between">
+          <div className="relative z-10 flex justify-center items-center">
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              price > 0 &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 && <CountDownComponent width=" w-full " />}
+          </div>
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
               <figure className="mb-4">
@@ -76,17 +85,19 @@ const ProductCard = ({
                 />
               </figure>
             </div>
+
             <div>
               {price > 0 && (
                 <>
                   <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercase text-[8px] px-0 md:text-xs font-semibold mx-auto">
-                    {`${changeText
-                      ? resultDiscountPercent !== 'NaN'
-                        ? resultDiscountPercent.replace('.0', '') +
-                        '% de desconto'
-                        : '0' + '% de desconto'
-                      : 'parcelamento em ate 12x'
-                      }`}
+                    {`${
+                      changeText
+                        ? resultDiscountPercent !== 'NaN'
+                          ? resultDiscountPercent.replace('.0', '') +
+                            '% de desconto'
+                          : '0' + '% de desconto'
+                        : 'parcelamento em ate 12x'
+                    }`}
                   </span>
                   <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] px-[3px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (

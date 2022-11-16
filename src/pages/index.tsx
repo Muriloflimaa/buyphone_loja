@@ -55,6 +55,7 @@ import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import { ToastCustom } from '../utils/toastCustom'
+import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
   data: {
@@ -65,7 +66,6 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
-
   const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
@@ -96,7 +96,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   function next() {
@@ -121,10 +121,20 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
 
   useEffect(() => {
     if (router.query.success === 'true') {
-      ToastCustom(6000, 'Verifique seu e-mail para validar o desconto', 'success', 'E-mail enviado')
+      ToastCustom(
+        6000,
+        'Verifique seu e-mail para validar o desconto',
+        'success',
+        'E-mail enviado'
+      )
     }
     if (router.query.error === 'true') {
-      ToastCustom(6000, 'Verifique os dados informados e tente novamente', 'error', 'Houve um erro')
+      ToastCustom(
+        6000,
+        'Verifique os dados informados e tente novamente',
+        'error',
+        'Houve um erro'
+      )
     }
   }, [])
 
@@ -148,19 +158,39 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             setCookie(null, 'LEAD', 'true', {
               path: '/',
             })
-            ToastCustom(8000, 'Maravilha! Agora você tem um mega desconto', 'success', 'Desconto ativado!')
+            ToastCustom(
+              8000,
+              'Maravilha! Agora você tem um mega desconto',
+              'success',
+              'Desconto ativado!'
+            )
             return
           }
           if (response.data.message === 'error') {
             if (response.data.response.code === 'duplicate_parameter') {
-              ToastCustom(8000, 'Você já tem acesso a essa promoção', 'error', 'Dados já cadastrados!')
+              ToastCustom(
+                8000,
+                'Você já tem acesso a essa promoção',
+                'error',
+                'Dados já cadastrados!'
+              )
               return
             }
-            ToastCustom(8000, `${response.data.response.message}`, 'error', 'Houve um erro!')
+            ToastCustom(
+              8000,
+              `${response.data.response.message}`,
+              'error',
+              'Houve um erro!'
+            )
             return
           }
         } catch (error) {
-          ToastCustom(8000, 'Atualize a página ou tente novamente mais tarde', 'error', 'Houve um erro!')
+          ToastCustom(
+            8000,
+            'Atualize a página ou tente novamente mais tarde',
+            'error',
+            'Houve um erro!'
+          )
         }
       }
     }
@@ -189,21 +219,21 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             image={
               darkOrLigth
                 ? [
-                  {
-                    ...BannerBlackFriday,
-                    link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                  },
-                  Banner1DesktopDark,
-                  Banner2DesktopDark,
-                ]
+                    {
+                      ...BannerBlackFriday,
+                      link: '/black-friday',
+                    },
+                    Banner1DesktopDark,
+                    Banner2DesktopDark,
+                  ]
                 : [
-                  {
-                    ...BannerBlackFriday,
-                    link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                  },
-                  Banner1DesktopLight,
-                  Banner2DesktopLight,
-                ]
+                    {
+                      ...BannerBlackFriday,
+                      link: '/black-friday',
+                    },
+                    Banner1DesktopLight,
+                    Banner2DesktopLight,
+                  ]
             }
           />
         </div>
@@ -214,35 +244,35 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                    {
-                      ...MiniBannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                    },
-                    {
-                      ...BannerIphone13Dark,
-                      link: '/products/apple/iphones/iphone-13-pro',
-                    },
-                    {
-                      ...BannerInstagramDark,
-                      link: 'https://www.instagram.com/buyphone.match/',
-                    },
-                    BannerLojasDark,
-                  ]
+                      {
+                        ...MiniBannerBlackFriday,
+                        link: '/black-friday',
+                      },
+                      {
+                        ...BannerIphone13Dark,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                      {
+                        ...BannerInstagramDark,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+                      BannerLojasDark,
+                    ]
                   : [
-                    {
-                      ...MiniBannerBlackFriday,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275&text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20BlackFriday.',
-                    },
-                    {
-                      ...BannerIphone13Light,
-                      link: '/products/apple/iphones/iphone-13-pro',
-                    },
-                    {
-                      ...BannerInstagramLight,
-                      link: 'https://www.instagram.com/buyphone.match/',
-                    },
-                    BannerLojasLight,
-                  ]
+                      {
+                        ...MiniBannerBlackFriday,
+                        link: '/black-friday',
+                      },
+                      {
+                        ...BannerIphone13Light,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                      {
+                        ...BannerInstagramLight,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+                      BannerLojasLight,
+                    ]
               }
             />
           </div>
@@ -251,33 +281,33 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                    {
-                      ...BannerDepoiments,
-                      link: '#depoiments',
-                    },
-                    {
-                      ...MiniBannerWhatsappDark,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                    {
-                      ...MiniBannerConheca,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                  ]
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappDark,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      {
+                        ...MiniBannerConheca,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
                   : [
-                    {
-                      ...BannerDepoiments,
-                      link: '#depoiments',
-                    },
-                    {
-                      ...MiniBannerWhatsappLigth,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                    {
-                      ...MiniBannerConheca,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                  ]
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappLigth,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      {
+                        ...MiniBannerConheca,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
               }
             />
           </div>
@@ -333,22 +363,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
             {apiNew.length > 0 ? (
               apiNew.map((products: IProduct) => {
-                const discount =
-                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-                const itens = [
-                  products.price,
-                  products.magalu_price,
-                  products.americanas_price,
-                  products.casasbahia_price,
-                  products.ponto_price,
-                ]
-                const filteredItens = itens.filter((item) => item)
-                const averagePrice =
-                  filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-                const discountPrice = Math.round(
-                  averagePrice * (discount / 100)
-                )
-                const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+                const returnPrice = verificationPrice(products, user, isUser)
 
                 return (
                   <ProductCard
@@ -357,12 +372,13 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
                     name={products.name}
                     idCategory={products.category_id}
                     colorPhone={products.color}
-                    price={ourPrice}
-                    averagePrice={averagePrice}
+                    price={returnPrice.ourPrice}
+                    averagePrice={returnPrice.averagePrice}
                     slug={products.slug}
                     slugCategory={products.category_slug}
                     image={products.media[0].original_url}
                     memory={products.memory}
+                    blackfriday={products.blackfriday}
                   />
                 )
               })

@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 import { faLocationDot, faTruckFast } from '@fortawesome/free-solid-svg-icons'
+import CountDownComponent from '../CountDownComponent'
 
 interface ProductProps {
   id: number
@@ -20,6 +21,7 @@ interface ProductProps {
   price: number
   memory: string
   image: string
+  blackfriday?: number | boolean
 }
 
 type GetCepTypes = {
@@ -48,6 +50,7 @@ const ProductCart = ({
   price,
   memory,
   image,
+  blackfriday,
 }: ProductProps) => {
   const router = useRouter()
   const [show, setShow] = useState(false)
@@ -150,8 +153,12 @@ const ProductCart = ({
               <span>Modelo</span>
               <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
             </div>
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 && <CountDownComponent />}
             <div className="flex items-center gap-2 text-info-content">
               <span>Quantidade</span>
+
               {!show && (
                 <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
                   <button

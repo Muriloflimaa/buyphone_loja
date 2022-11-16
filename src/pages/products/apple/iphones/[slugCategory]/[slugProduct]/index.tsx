@@ -1,14 +1,14 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
   faCircleExclamation,
   faEnvelope,
   faLocationDot,
-  faTruckFast
+  faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
+import CountDownComponent from '../../../../../../components/CountDownComponent'
 import { Input } from '../../../../../../components/InputElement'
 import MailchimpFormContainer from '../../../../../../components/Modals/MailChimp/MailchimpSubscribe'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
@@ -32,8 +33,8 @@ import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
-interface IParams {
 
+interface IParams {
   params: {
     slugCategory: string
     slugProduct: string
@@ -65,12 +66,13 @@ type shippingOnTypes = {
 export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
-  const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const returnPrice = verificationPrice(data, user, isUser)
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
@@ -84,8 +86,6 @@ export default function Products({ data, categoryData }: DataProps) {
       setDescrition(data.description)
     }
   }, [])
-
-  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
 
   useEffect(() => {
     if (user) {
@@ -165,8 +165,9 @@ export default function Products({ data, categoryData }: DataProps) {
         ></meta>
         <meta
           property="og:title"
-          content={`BuyPhone - ${data.name + ' Apple ' + data.memory + ' ' + data.color
-            }`}
+          content={`BuyPhone - ${
+            data.name + ' Apple ' + data.memory + ' ' + data.color
+          }`}
         ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -278,6 +279,11 @@ export default function Products({ data, categoryData }: DataProps) {
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-4">
               <div>
+                {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                  !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+                  data.blackfriday == 1 && (
+                    <CountDownComponent width="w-4/5" text=" text-base " />
+                  )}
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
@@ -411,8 +417,9 @@ export default function Products({ data, categoryData }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
@@ -473,13 +480,13 @@ export default function Products({ data, categoryData }: DataProps) {
         </h1>
 
         <Carousel
-          cols={categoryData.length >= 6 ? 6 : categoryData.length - 1}
+          cols={categoryData.length > 6 ? 6 : categoryData.length - 1}
           rows={1}
           gap={20}
           loop={true}
         >
           {categoryData.map((product) => {
-            const returnPrice = verificationPrice(product)
+            const returnPrice = verificationPrice(product, user, isUser)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
@@ -493,6 +500,7 @@ export default function Products({ data, categoryData }: DataProps) {
                   slugCategory={data.category_slug}
                   image={product.media[0]?.original_url}
                   memory={product.memory}
+                  blackfriday={product.blackfriday}
                 />
               </Carousel.Item>
             )

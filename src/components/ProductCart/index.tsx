@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
+import CountDownComponent from '../CountDownComponent'
 
 interface ProductProps {
   id: number
@@ -12,6 +13,7 @@ interface ProductProps {
   price: number
   memory: string
   image: string
+  blackfriday?: number | boolean
 }
 
 const ProductCart = ({
@@ -22,6 +24,7 @@ const ProductCart = ({
   price,
   memory,
   image,
+  blackfriday,
 }: ProductProps) => {
   const router = useRouter()
   const [show, setShow] = useState(false)
@@ -71,6 +74,12 @@ const ProductCart = ({
     removeProduct(productId, name, color, memory)
   } //remove produto do carrinho
 
+  const [changeText, setChangeText] = useState(false)
+
+  setTimeout(() => {
+    setChangeText(!changeText)
+  }, 1400)
+
   return (
     <div
       className={
@@ -78,7 +87,10 @@ const ProductCart = ({
       }
       key={id}
     >
-      <div className="grid grid-cols-3" data-testid="product">
+      {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+        blackfriday == 1 && <CountDownComponent />}
+      <div className="grid grid-cols-3">
         <div className="grid col-span-2 gap-3">
           <div className="flex items-center gap-2">
             <div className="w-12 h-full flex items-center">

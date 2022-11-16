@@ -233,6 +233,7 @@ export default function creditFinally({
                         price={res.subTotal}
                         memory={res.product.memory}
                         image={res.product.media[0].original_url}
+                        blackfriday={res.product.blackfriday}
                       />
                     </React.Fragment>
                   )

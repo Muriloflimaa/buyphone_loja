@@ -9,6 +9,7 @@ import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
 import CartaImg from '../../assets/images/carta.png'
 import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
+import CountDownComponent from '../CountDownComponent'
 
 interface ProductRelationProps {
   id: number
@@ -21,6 +22,7 @@ interface ProductRelationProps {
   idCategory: number
   slug: string
   slugCategory: string
+  blackfriday?: number | boolean
 }
 
 const ProductRelationCard = ({
@@ -33,6 +35,7 @@ const ProductRelationCard = ({
   slug,
   slugCategory,
   memory,
+  blackfriday,
 }: ProductRelationProps) => {
   const [color, setColor] = useState<string | undefined>()
 
@@ -47,12 +50,12 @@ const ProductRelationCard = ({
   return (
     <>
       <div
-        className="card card-compact cursor-pointer w-full max-w-[300px] mx-auto text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
+        className="card card-compact cursor-pointer w-full max-w-[300px] max-h-[400px] min-h-[400px] mx-auto text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
         key={id}
       >
         <div
           onClick={() => router.push(link)}
-          className="card-body text-center flex flex-col justify-between gap-7"
+          className="card-body text-center flex flex-col justify-between gap-5"
         >
           <div>
             <div className="w-[50%] mx-auto">
@@ -63,7 +66,7 @@ const ProductRelationCard = ({
                 height={350}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <h2 className="card-title text-base justify-center flex-col font-medium">
                 {name}
               </h2>
@@ -77,6 +80,9 @@ const ProductRelationCard = ({
                 <span className="badge badge-outline text-xs">{memory}</span>
               </div>
             </div>
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 && <CountDownComponent />}
           </div>
 
           {/* //para mobile */}

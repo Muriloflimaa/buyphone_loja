@@ -370,6 +370,7 @@ export default function NavBar() {
                                         image={
                                           res.product.media[0].original_url
                                         }
+                                        blackfriday={res.product.blackfriday}
                                       />
                                     </li>
                                   )
@@ -500,11 +501,22 @@ export default function NavBar() {
               <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                 <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
-                    <li>
-                      <Link href={'/'}>
-                        <a>Início</a>
-                      </Link>
-                    </li>
+                    <>
+                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+                          <li>
+                            <Link href={'/black-friday'}>
+                              <a>Black Friday</a>
+                            </Link>
+                          </li>
+                        )}
+
+                      <li>
+                        <Link href={'/'}>
+                          <a>Início</a>
+                        </Link>
+                      </li>
+                    </>
                   )}
                   {dataApi && dataApi?.length > 0 ? (
                     dataApi?.map((category) => (

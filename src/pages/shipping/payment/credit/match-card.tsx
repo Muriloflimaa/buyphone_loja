@@ -191,6 +191,7 @@ export default function CreditCheckout({ address }: Address) {
                           price={res.subTotal}
                           memory={res.product.memory}
                           image={res.product.media[0].original_url}
+                          blackfriday={res.product.blackfriday}
                         />
                       </React.Fragment>
                     )
