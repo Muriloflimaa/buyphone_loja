@@ -10,10 +10,10 @@ export function WithSSRGuest<P>(fn: GetServerSideProps<any>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const cookies = parseCookies(ctx)
+    const { '@BuyPhone:Token': token } = parseCookies(ctx)
 
-    if (cookies['@BuyPhone:Token']) {
-      const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
+    if (token && token !== 'undefined' && token !== 'null') {
+      const decodedToken = jwt_decode<any>(token) //decodifica o token
 
       //se existir um token e estiver expirado, mandar para o login
       if (Date.now() >= decodedToken.exp * 1000) {

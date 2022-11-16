@@ -67,43 +67,29 @@ export default function Depoimentos() {
   //duvidas frequentes
   const data = [
     {
-      title: 'Porque são tão baratos?',
+      title: 'São produtos novos?',
       paragraph:
-        'Nós compramos através de pontos de cartão de crédito e milhas de nossos associados em promoções nas principais lojas do Brasil!            ',
+        'Os produtos são novos(lacrados) não são de vitrine! Comprados nas principais lojas do Brasil.',
     },
     {
-      title: 'Os produtos possuem nota fiscal?',
+      title: 'Porque são tão baratos?',
+      paragraph:
+        'Os produtos da BuyPhone são gerados através de estratégias promocionais que entregam bônus de pontos no cartão de crédito e/ou milhas para nossos associados. Essas promoções acontecem nas principais lojas do Brasil! O interesse do associado é ganhar muitas milhas para utilizar como quiser. E o interesse dos nossos clientes é pagar mais barato na compra desses produtos. Sendo assim, é por isso que conseguimos vender mais barato que o normal.',
+    },
+    {
+      title: 'Possui nota fiscal?',
       paragraph:
         'Sim, enviamos uma declaração de conteúdo com a chave de acesso da NF-e emitida em nome do nosso associado pelas principais lojas (Magalu, Casas Bahia, Ponto, Extra, Americanas), para possíveis consultas no site da receita federal https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx',
     },
     {
-      title: 'Aparelhos tem garantia?',
+      title: 'Qual o prazo de entrega?',
       paragraph:
-        'Com os produtos da Apple você não precisa se preocupar com nota fiscal, pois assim que você ativa o iCloud, consegue ter acesso a todos os benefícios de garantia. Todos os aparelhos possuem garantia mundial de 1 ano da Apple.',
+        'Assim que o pagamento é confirmado, o prazo é de 7 a 10 dias úteis!',
     },
     {
-      title: 'Qual a forma de pagamento?',
+      title: 'Preciso ter milhas para comprar?',
       paragraph:
-        'Pix, cartão de crédito e pagamento personalizado (Entrada no PIX + parcelas no cartão).',
-    },
-    {
-      title: 'Qual prazo de entrega?',
-      paragraph:
-        'Assim que o pagamento é confirmado o prazo é de 7 a 15 dias úteis.',
-    },
-    {
-      title: 'Só trabalham com aparelhos novos?',
-      paragraph:
-        'Os produtos são novos (lacrados) não são de vitrine! Comprados nas principais lojas do Brasil.',
-    },
-    {
-      title: 'Qual endereço físico?',
-      paragraph:
-        'A BuyPhone é uma Startup, não somos uma loja física e trabalhamos de forma digital em todo o Brasil. O endereço de nossa operação, onde nossa equipe trabalha, fica localizado em R: Av Brasilia 2121 Sala 1116, Jardim Nova Yorque, Araçatuba-SP, CEP: 16018-000.',
-    },
-    {
-      title: 'Qual CNPJ da BuyPhone?         ',
-      paragraph: 'CNPJ: 45.679.637/0001-94.',
+        'Não, vendemos os produtos sempre no cash. Os produtos que são gerados ou geram milhas para nossos associados vendedores.',
     },
   ]
 

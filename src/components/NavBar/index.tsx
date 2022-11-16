@@ -10,13 +10,12 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
 import { useContext, useEffect, useState } from 'react'
 import { Divider } from 'react-daisyui'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -50,7 +49,6 @@ export default function NavBar() {
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
   const [openDrawer, setOpenDrawer] = useState(false)
-  const cookies = parseCookies(undefined)
 
   useEffect(() => {
     if (cart) {
@@ -118,9 +116,7 @@ export default function NavBar() {
   }
 
   const handleOpenModalInfo = () => {
-    return document
-      .getElementById('modal-open-cadastre')
-      ?.classList.add('modal-open')
+    return document.getElementById('modal-info-discount')?.classList.add('modal-open')
   }
 
   return (
@@ -208,13 +204,12 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${
-                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
-                      }`}
+                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
+                        }`}
                     >
                       <div className="ml-3 flex">
                         <label
-                          htmlFor="modal-info-discount"
+                          onClick={handleOpenModalInfo}
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-5 w-5 text-white" />
@@ -325,8 +320,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                  ? cartSize + ' item'
-                                  : 'Carrinho está vazio'}
+                                    ? cartSize + ' item'
+                                    : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -375,6 +370,7 @@ export default function NavBar() {
                                         image={
                                           res.product.media[0].original_url
                                         }
+                                        blackfriday={res.product.blackfriday}
                                       />
                                     </li>
                                   )
@@ -455,13 +451,12 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${
-                        cookies.LEAD === 'true' ? 'flex' : 'hidden'
-                      }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
+                        }`}
                     >
                       <div className="">
                         <label
-                          htmlFor="modal-info-discount"
+                          onClick={handleOpenModalInfo}
                           className="cursor-pointer"
                         >
                           <TagIcon className="h-7 w-7 text-white hidden md:block" />
@@ -506,11 +501,22 @@ export default function NavBar() {
               <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
                 <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
-                    <li>
-                      <Link href={'/'}>
-                        <a>Início</a>
-                      </Link>
-                    </li>
+                    <>
+                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+                          <li>
+                            <Link href={'/black-friday'}>
+                              <a>Black Friday</a>
+                            </Link>
+                          </li>
+                        )}
+
+                      <li>
+                        <Link href={'/'}>
+                          <a>Início</a>
+                        </Link>
+                      </li>
+                    </>
                   )}
                   {dataApi && dataApi?.length > 0 ? (
                     dataApi?.map((category) => (

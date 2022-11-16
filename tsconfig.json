@@ -32,6 +32,6 @@
         "src/components/Card/index.jsx",
         "src/pages/register.jsx",
         "src/utils/RefctDescript.js"
-    ],
+, "src/pages/api/sendinblue.jsx"    ],
     "exclude": ["node_modules"]
 }

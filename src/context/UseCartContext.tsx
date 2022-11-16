@@ -1,4 +1,4 @@
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import {
   createContext,
@@ -6,13 +6,14 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
 import { useLocalStorage } from '../utils/useLocalStorage'
+import { verificationPrice } from '../utils/verificationPrice'
 import { AuthContext } from './AuthContext'
 
 interface CartProviderProps {
@@ -78,22 +79,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       try {
         const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
 
-        const discount =
-          !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-        const itens = [
-          data.price,
-          data.magalu_price,
-          data.americanas_price,
-          data.casasbahia_price,
-          data.ponto_price,
-        ]
-        const filteredItens = itens.filter((item) => item)
-        const averagePrice =
-          filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-        const discountPrice = Math.round(averagePrice * (discount / 100))
-        const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+        const returnPrice = verificationPrice(data, user, isUser)
 
-        if (ourPrice <= 0) {
+        if (returnPrice.ourPrice <= 0) {
           CleanCart()
           window.location.href = '/'
           return
@@ -102,8 +90,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const response = {
           ...item, //adicionando amount e id que está no localstorage
           product: data, //data vem da api que é chamada
-          priceFormated: ourPrice, //formatação de preços
-          subTotal: ourPrice * item.amount, //total simples
+          priceFormated: returnPrice.ourPrice, //formatação de preços
+          subTotal: returnPrice.ourPrice * item.amount, //total simples
         }
 
         setData((data) => [...data, response]) //gravando response no state
@@ -184,8 +172,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           const products = addProduct.data
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'
@@ -197,8 +184,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'

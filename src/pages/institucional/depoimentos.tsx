@@ -40,7 +40,7 @@ export default function Depoimentos() {
               linkVideo="https://www.youtube.com/embed/pMftaexP7RY?autoplay=0&controls=0&showinfo=0&playlist=pMftaexP7RY"
               image={AnaImg}
               depoiment="Foi uma experiência muito boa de compra!"
-              date="12 de novembro de 2022"
+              date="29 de junho de 2022"
             />
             <CardDepoiment2
               name="Brendha Crizel"
@@ -48,7 +48,7 @@ export default function Depoimentos() {
               linkVideo="https://www.youtube.com/embed/VswfBYbeWFU?autoplay=0&controls=0&showinfo=0&playlist=VswfBYbeWFU"
               image={BrendaImg}
               depoiment="A BuyPhone tem o melhor preço do mercado e você pode escolher como quer pagar"
-              date="12 de novembro de 2022"
+              date="5 de Setembro de 2022"
             />
             <CardDepoiment2
               name="Bárbara Brunca"
@@ -66,7 +66,7 @@ export default function Depoimentos() {
               depoiment="Comprei dois celulares, um pra mim e um pra
                     minha irmã, dois iPhones 11. O preço é muito
                     abaixo. Vale muito a pena!"
-              date="12 de novembro de 2022"
+              date="17 de dezembro de 2021"
             />
             <CardDepoiment2
               name="Gabriel Martins"
@@ -76,7 +76,7 @@ export default function Depoimentos() {
               depoiment="Celular zero, lacrado na caixa! Pesquisei
                     bastante em vários lugares e o preço deles é bem
                     abaixo do mercado."
-              date="12 de novembro de 2022"
+              date="8 de dezembro de 2021"
             />
             <CardDepoiment2
               name="Luiz Henrique Puertas"
@@ -85,7 +85,7 @@ export default function Depoimentos() {
               image={CLuizImg}
               depoiment="Um preço muito bom, paguei muito barato no
                      Iphone original lacrado!"
-              date="12 de novembro de 2022"
+              date="20 de novembro de 2021"
             />
             <CardDepoiment2
               name="Igor Fortin"
@@ -95,7 +95,7 @@ export default function Depoimentos() {
               depoiment="IPhone 12 que adquiri na BuyPhone, perfeito!
                     Novo, com ótimas condições de preço e
                     parcelamento."
-              date="12 de novembro de 2022"
+              date="14 de novembro de 2021"
             />
             <CardDepoiment2
               name="Amanda L. Prado"
@@ -104,7 +104,7 @@ export default function Depoimentos() {
               image={CAmandaImg}
               depoiment="A Amanda adorou o produto que comprou na
                    BuyPhone."
-              date="12 de novembro de 2022"
+              date="26 de outubro de 2021"
             />
           </div>
         </div>

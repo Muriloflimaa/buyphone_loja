@@ -13,14 +13,19 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
+import Carousel from 'better-react-carousel'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { parseCookies } from 'nookies'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
+import CountDownComponent from '../../../../../../components/CountDownComponent'
 import { Input } from '../../../../../../components/InputElement'
+import MailchimpFormContainer from '../../../../../../components/Modals/MailChimp/MailchimpSubscribe'
+import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
@@ -28,10 +33,6 @@ import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
-import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
-import { parseCookies } from 'nookies'
-import ProductRelationCard from '../../../../../../components/ProductRelationCard'
-import Carousel from 'better-react-carousel'
 
 interface IParams {
   params: {
@@ -65,12 +66,13 @@ type shippingOnTypes = {
 export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
-  const returnPrice = verificationPrice(data)
   const [description, setDescrition] = useState('')
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const returnPrice = verificationPrice(data, user, isUser)
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
@@ -84,8 +86,6 @@ export default function Products({ data, categoryData }: DataProps) {
       setDescrition(data.description)
     }
   }, [])
-
-  const [isUser, setIsUser] = useState(false) //state para verificar se existe user
 
   useEffect(() => {
     if (user) {
@@ -279,14 +279,25 @@ export default function Products({ data, categoryData }: DataProps) {
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-4">
               <div>
+                <div className="flex justify-center md:justify-start my-4 md:mb-2 md:my-0">
+                  {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+                    data.blackfriday == 1 && (
+                      <CountDownComponent
+                        width=" w-2/4 md:w-3/4 "
+                        text=" text-xs "
+                      />
+                    )}
+                </div>
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
-
-                <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
-                  PARCELAMENTO EM&nbsp;
-                  <span className="text-[#CF9836]">ATÉ 12X</span>
-                </span>
+                <div className="flex flex-col">
+                  <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
+                    PARCELAMENTO EM&nbsp;
+                    <span className="text-[#CF9836]">ATÉ 12X</span>
+                  </span>
+                </div>
 
                 {/* <div className="flex items-center  mt-2 text-xs">
                   <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
@@ -366,7 +377,6 @@ export default function Products({ data, categoryData }: DataProps) {
                     <div className="flex gap-3 w-full items-end">
                       <MailchimpFormContainer
                         nameProduct={`${data.category_slug} ${data.slug}`}
-                        notPhone
                       />
                     </div>
                   </div>
@@ -476,13 +486,13 @@ export default function Products({ data, categoryData }: DataProps) {
         </h1>
 
         <Carousel
-          cols={categoryData.length >= 6 ? 6 : categoryData.length - 1}
+          cols={categoryData.length >= 4 ? 4 : categoryData.length - 1}
           rows={1}
           gap={20}
           loop={true}
         >
           {categoryData.map((product) => {
-            const returnPrice = verificationPrice(product)
+            const returnPrice = verificationPrice(product, user, isUser)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
@@ -496,6 +506,7 @@ export default function Products({ data, categoryData }: DataProps) {
                   slugCategory={data.category_slug}
                   image={product.media[0]?.original_url}
                   memory={product.memory}
+                  blackfriday={product.blackfriday}
                 />
               </Carousel.Item>
             )

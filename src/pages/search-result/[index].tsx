@@ -5,6 +5,7 @@ import JuninhoImg from '../../assets/images/juninho.webp'
 import ProductCard from '../../components/ProductCard'
 import { apiStore } from '../../services/api'
 import { IProduct } from '../../types'
+import { verificationPrice } from '../../utils/verificationPrice'
 
 interface IParams {
   params: {
@@ -74,28 +75,13 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
     <div className="my-5">
       {!!products ? (
         <>
-          <h1 className="md:text-4xl text-3xl font-medium text-center">
+          <h1 className="md:text-4xl text-3xl font-medium text-center my-10">
             Você buscou por {query}
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl my-5">
             {products &&
               products.data.map((products: IProduct) => {
-                const discount =
-                  !!isUser && user && JSON.parse(user)?.type === 1 ? 12.5 : 7
-                const itens = [
-                  products.price,
-                  products.magalu_price,
-                  products.americanas_price,
-                  products.casasbahia_price,
-                  products.ponto_price,
-                ]
-                const filteredItens = itens.filter((item) => item)
-                const averagePrice =
-                  filteredItens.length > 0 ? Math.min(...filteredItens) : 0
-                const discountPrice = Math.round(
-                  averagePrice * (discount / 100)
-                )
-                const ourPrice = averagePrice - discountPrice //realiza a verificacao de preco, nao foi possivel usar a existente
+                const returnPrice = verificationPrice(products, user, isUser)
 
                 return (
                   <ProductCard
@@ -104,8 +90,8 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                     name={products.name}
                     idCategory={products.category_id}
                     colorPhone={products.color}
-                    price={ourPrice}
-                    averagePrice={averagePrice}
+                    price={returnPrice.ourPrice}
+                    averagePrice={returnPrice.averagePrice}
                     slug={products.slug}
                     slugCategory={products.category_slug}
                     image={products.media[0]?.original_url}
@@ -114,7 +100,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                 )
               })}
           </div>
-          <div className="btn-group max-w-7xl mx-auto rounded-b-md">
+          <div className="btn-group max-w-7xl flex justify-center mx-auto rounded-b-md">
             {products?.links.map((link) => (
               <button
                 key={link.label}

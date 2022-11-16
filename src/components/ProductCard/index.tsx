@@ -4,11 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import CartaImg from '../../assets/images/carta.png'
-import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
+import CountDownComponent from '../CountDownComponent'
+import MailchimpFormContainer from '../Modals/MailChimp/MailchimpSubscribe'
 
 interface ProductCardProps {
   id: number
@@ -21,6 +22,7 @@ interface ProductCardProps {
   idCategory: number
   slug: string
   slugCategory: string
+  blackfriday?: number | boolean
 }
 
 const ProductCard = ({
@@ -33,6 +35,7 @@ const ProductCard = ({
   slug,
   slugCategory,
   memory,
+  blackfriday,
 }: ProductCardProps) => {
   const [color, setColor] = useState<string | undefined>()
   const { addProduct } = useCart()
@@ -65,6 +68,12 @@ const ProductCard = ({
         key={id}
       >
         <div className="card-body md:px-8 px-2 text-center flex flex-col justify-between">
+          <div className="relative z-10 flex justify-center items-center">
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              price > 0 &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 && <CountDownComponent width=" w-full " />}
+          </div>
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
               <figure className="mb-4">
@@ -76,6 +85,7 @@ const ProductCard = ({
                 />
               </figure>
             </div>
+
             <div>
               {price > 0 && (
                 <>
@@ -232,7 +242,6 @@ const ProductCard = ({
                 <div className="flex gap-3 w-full items-end">
                   <MailchimpFormContainer
                     nameProduct={`${slugCategory} ${slug}`}
-                    notPhone
                   />
                 </div>
               </div>

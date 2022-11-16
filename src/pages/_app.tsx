@@ -76,6 +76,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         router.route === `/account/register` ||
         router.route === `/account/terms` ||
         router.route === `/account/politics` ||
+        router.route === `/reset-password/[index]` ||
         router.route === `/account/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
