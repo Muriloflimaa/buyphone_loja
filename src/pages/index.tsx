@@ -431,7 +431,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             swipeable={false}
             showStatus={false}
             showThumbs={false}
-            className="max-w-7xl mx-auto mb-8"
+            className="max-w-7xl mx-auto md:mb-8"
             renderArrowPrev={(onClickHandler, hasPrev, label) =>
               hasPrev && (
                 <button
@@ -532,8 +532,8 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           </Carousel>
         </div>
 
-        <div className="max-w-7xl mx-auto my-10 px-4">
-          <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
+        <div className="max-w-7xl mx-auto md:my-10 my-4 px-4">
+          <h1 className="md:text-4xl text-3xl font-medium text-center md:mb-8 mb-2">
             Conheça a BuyPhone
           </h1>
           <Link href="/institucional" passHref>
