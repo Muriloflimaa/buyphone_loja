@@ -11,10 +11,19 @@ interface InputProps
   error?: { message?: string | undefined }
   type?: string
   placeholder?: string
+  classNameLabel?: string
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, type, placeholder, error = null, ...rest },
+  {
+    name,
+    label,
+    type,
+    placeholder,
+    classNameLabel = 'text-[#201942]',
+    error = null,
+    ...rest
+  },
   ref
 ) => {
   const [show, setShow] = useState(true)
@@ -24,7 +33,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       <div className="w-full">
         {!!label && (
           <label className="label">
-            <span className="label-text">{label}</span>
+            <span className={`label-text  ${classNameLabel}`}>{label}</span>
           </label>
         )}
         <label className="input-group">
