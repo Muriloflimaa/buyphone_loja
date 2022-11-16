@@ -7,8 +7,7 @@ export default function handler(req, res) {
   const SibApiV3Sdk = require('sib-api-v3-sdk')
   const defaultClient = SibApiV3Sdk.ApiClient.instance
   const apiKey = defaultClient.authentications['api-key']
-  apiKey.apiKey =
-    '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'
+  apiKey.apiKey = process.env.KEY_API_SENDIBLUE
 
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
   var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail() // SendSmtpEmail | Values to send a transactional email
