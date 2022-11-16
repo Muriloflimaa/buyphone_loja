@@ -6,21 +6,21 @@ import { Carousel } from 'react-responsive-carousel'
 import MeetImg from '../assets/images/BannerMeet.webp'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
-import RegisterMimo from '../components/Modals/Register-Mimo'
+import RegisterMimo from '../components/Modals/Discount300'
 import ProductCard from '../components/ProductCard'
 import { apiStore } from '../services/api'
 import { IProduct } from '../types'
 
 //*** images
 //*** clientes
+import CAmandaImg from '../assets/images/client_amanda.png'
 import AnaImg from '../assets/images/client_anabrisa.jpg'
 import BarbaraImg from '../assets/images/client_barbara.jpg'
 import BrendaImg from '../assets/images/client_brenda.jpg'
-import CLyviaImg from '../assets/images/client_lyvia.png'
 import CGabrielImg from '../assets/images/client_gabriel.png'
-import CLuizImg from '../assets/images/client_luiz.png'
 import CIgorImg from '../assets/images/client_igor.png'
-import CAmandaImg from '../assets/images/client_amanda.png'
+import CLuizImg from '../assets/images/client_luiz.png'
+import CLyviaImg from '../assets/images/client_lyvia.png'
 //*** banners grandes (desktop)
 //light
 import Banner1DesktopLight from '../assets/images/banner1desktoplight.webp'
@@ -43,16 +43,18 @@ import BannerInstagramDark from '../assets/images/bannerigdark.webp'
 import BannerLojasDark from '../assets/images/bannerlojasdark.webp'
 import MiniBannerWhatsappDark from '../assets/images/MiniBannerWhatsappDark.webp'
 
-import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
+import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { parseCookies, setCookie } from 'nookies'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
 import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
-import Link from 'next/link'
-import { parseCookies } from 'nookies'
+import { ToastCustom } from '../utils/toastCustom'
 import { verificationPrice } from '../utils/verificationPrice'
 
 interface DataProps {
@@ -64,6 +66,7 @@ interface DataProps {
 }
 
 const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
+  const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
 
@@ -71,15 +74,9 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
-  const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
+  const [isUser, setIsUser] = useState(false) //state para prevenir erro de renderização no usuário logado
 
-  useEffect(() => {
-    if (user) {
-      setIsUser(true)
-    }
-  }, [user])
-
-  const handleCarregarProdutos = async () => {
+  const handleLoadProducts = async () => {
     if (currentPage !== data.last_page) {
       try {
         await apiStore
@@ -113,7 +110,91 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   }
 
   useEffect(() => {
+    if (user) {
+      setIsUser(true)
+    }
+  }, [user])
+
+  useEffect(() => {
     getProductsMatch()
+  }, [])
+
+  useEffect(() => {
+    if (router.query.success === 'true') {
+      ToastCustom(
+        6000,
+        'Verifique seu e-mail para validar o desconto',
+        'success',
+        'E-mail enviado'
+      )
+    }
+    if (router.query.error === 'true') {
+      ToastCustom(
+        6000,
+        'Verifique os dados informados e tente novamente',
+        'error',
+        'Houve um erro'
+      )
+    }
+  }, [])
+
+  useEffect(() => {
+    async function dataLead() {
+      if (router.query.name && router.query.email && router.query.tel) {
+        const decodesEmail = window.atob(router.query.email.toString())
+        const decodesPhone = window.atob(router.query.tel.toString())
+        try {
+          const params = {
+            name: router.query.name,
+            email: decodesEmail,
+            phone: `+55 ${decodesPhone}`,
+            list: 10,
+            utm_source: router.query.utm_source,
+            utm_medium: router.query.utm_medium,
+            utm_campaign: router.query.utm_campaign,
+          }
+          const response = await apiStore.post('leads/', params)
+          if (response.data.message === 'success') {
+            setCookie(null, 'LEAD', 'true', {
+              path: '/',
+            })
+            ToastCustom(
+              8000,
+              'Maravilha! Agora você tem um mega desconto',
+              'success',
+              'Desconto ativado!'
+            )
+            return
+          }
+          if (response.data.message === 'error') {
+            if (response.data.response.code === 'duplicate_parameter') {
+              ToastCustom(
+                8000,
+                'Você já tem acesso a essa promoção',
+                'error',
+                'Dados já cadastrados!'
+              )
+              return
+            }
+            ToastCustom(
+              8000,
+              `${response.data.response.message}`,
+              'error',
+              'Houve um erro!'
+            )
+            return
+          }
+        } catch (error) {
+          ToastCustom(
+            8000,
+            'Atualize a página ou tente novamente mais tarde',
+            'error',
+            'Houve um erro!'
+          )
+        }
+      }
+    }
+    dataLead()
   }, [])
 
   return (
@@ -331,7 +412,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <div className="flex w-full justify-center">
             <button
               className="btn border btn-outline hover:btn-info hover:text-white w-full max-w-[250px] mt-8"
-              onClick={handleCarregarProdutos}
+              onClick={handleLoadProducts}
             >
               Ver mais
             </button>
@@ -455,7 +536,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
           <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Conheça a BuyPhone
           </h1>
-          <Link href="/institucional">
+          <Link href="/institucional" passHref>
             <a>
               <Image
                 src={MeetImg}
