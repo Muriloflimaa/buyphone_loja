@@ -150,12 +150,13 @@ const ProductCart = ({
 
           <div className="flex flex-col items-start gap-8 h-full">
             <div className="flex flex-col text-info-content">
+              {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+                blackfriday == 1 && <CountDownComponent />}
               <span>Modelo</span>
               <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
             </div>
-            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 && <CountDownComponent />}
+
             <div className="flex items-center gap-2 text-info-content">
               <span>Quantidade</span>
 

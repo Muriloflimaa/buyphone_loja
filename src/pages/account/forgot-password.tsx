@@ -56,7 +56,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="grid gap-3 pt-3">
-      <h1>
+      <h1 className="text-[#201942]">
         Esqueceu sua senha? Sem problemas. Apenas informe seu endereço de e-mail
         que enviaremos um link que permitirá definir uma nova senha.
       </h1>

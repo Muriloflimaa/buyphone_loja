@@ -279,19 +279,25 @@ export default function Products({ data, categoryData }: DataProps) {
           <div className="flex flex-col gap-5 text-info-content w-full col-span-2">
             <div className="flex flex-col gap-4">
               <div>
-                {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-                  !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-                  data.blackfriday == 1 && (
-                    <CountDownComponent width="w-4/5" text=" text-base " />
-                  )}
+                <div className="flex justify-center md:justify-start my-4 md:mb-2 md:my-0">
+                  {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+                    !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+                    data.blackfriday == 1 && (
+                      <CountDownComponent
+                        width=" w-2/4 md:w-3/4 "
+                        text=" text-xs "
+                      />
+                    )}
+                </div>
                 <h1 className="text-2xl font-medium">
                   {data.name} Apple {data.color} {data.memory}
                 </h1>
-
-                <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
-                  PARCELAMENTO EM&nbsp;
-                  <span className="text-[#CF9836]">ATÉ 12X</span>
-                </span>
+                <div className="flex flex-col">
+                  <span className="badge bg-[#F8F5BD] border-transparent rounded-xl text-xs font-medium p-3 mt-2 uppercase text-[#E1BF70]">
+                    PARCELAMENTO EM&nbsp;
+                    <span className="text-[#CF9836]">ATÉ 12X</span>
+                  </span>
+                </div>
 
                 {/* <div className="flex items-center  mt-2 text-xs">
                   <StarIcon className="w-5 h-5 text-yellow-500"></StarIcon>
@@ -480,7 +486,7 @@ export default function Products({ data, categoryData }: DataProps) {
         </h1>
 
         <Carousel
-          cols={categoryData.length > 6 ? 6 : categoryData.length - 1}
+          cols={categoryData.length >= 4 ? 4 : categoryData.length - 1}
           rows={1}
           gap={20}
           loop={true}

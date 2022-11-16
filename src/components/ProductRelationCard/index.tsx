@@ -1,14 +1,9 @@
-import { faBell } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
-import CartaImg from '../../assets/images/carta.png'
-import MailchimpFormContainer from '../Modals/Register-Mimo/MailchimpSubscribe'
 import CountDownComponent from '../CountDownComponent'
 
 interface ProductRelationProps {
@@ -82,7 +77,9 @@ const ProductRelationCard = ({
             </div>
             {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
               !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 && <CountDownComponent />}
+              blackfriday == 1 && (
+                <CountDownComponent text=" text-[8px] md:text-xs py-4 " />
+              )}
           </div>
 
           {/* //para mobile */}

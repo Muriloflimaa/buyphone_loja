@@ -27,6 +27,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
+  const { '@BuyPhone:Token': token } = parseCookies(undefined)
   const [isUser, setIsUser] = useState(false)
 
   const [userData, setUserData] = useState<IUser | null>(() => {
@@ -39,11 +40,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return null
   })
 
+  const [userToken, setUserToken] = useState<string | null>(() => {
+    // Verificando se existe user nos cookies
+
+    if (token) {
+      //Se existir configurar o useData
+      return token
+    }
+    return null
+  })
+
   useEffect(() => {
     if (user && JSON.parse(user) !== userData) {
       setCookies('@BuyPhone:User', JSON.stringify(userData), 60 * 60 * 24 * 90)
     }
-  }, [userData])
+    if (userToken) {
+      setCookies('@BuyPhone:Token', userToken, 60 * 60 * 24 * 90)
+    }
+  }, [userData, userToken])
 
   useEffect(() => {
     if (userData === null) {
@@ -79,6 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const token = response.data.authorization.token
 
       setUserData(UserObject)
+      setUserToken(token)
 
       setCookies('@BuyPhone:User', UserObject, 60 * 60 * 24 * 90) //chama a função setCookies para gravar os dados
       setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 90)
@@ -131,6 +146,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       destroyCookie(null, '@BuyPhone:Token')
       destroyCookie(null, '@BuyPhone:User')
       setUserData(null)
+      setUserToken(null)
       Router.push('/')
     } catch (error) {
       destroyCookie(undefined, '@BuyPhone:User')
@@ -140,6 +156,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       destroyCookie(null, '@BuyPhone:Token')
       destroyCookie(null, '@BuyPhone:User')
       setUserData(null)
+      setUserToken(null)
       Router.push('/')
     }
   }

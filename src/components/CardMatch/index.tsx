@@ -10,6 +10,7 @@ import OuterImg from '../../assets/images/outer.svg'
 import { useCart } from '../../context/UseCartContext'
 import { IProduct } from '../../types'
 import { moneyMask } from '../../utils/masks'
+import { verificationColor } from '../../utils/verificationColors'
 import { verificationPrice } from '../../utils/verificationPrice'
 import CountDownComponent from '../CountDownComponent'
 
@@ -80,12 +81,17 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
   }
 
   const returnPrice = verificationPrice(data, user, isUser)
+  const [color, setColor] = useState<string | undefined>()
   const link = `/products/apple/iphones/${data.category_slug}/${data.slug}`
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
+
+  useEffect(() => {
+    setColor(verificationColor(data.color))
+  }, [])
 
   return (
     <>
@@ -164,9 +170,10 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
               <span className="badge md:p-3 bg-transparent border border-info-content text-info-content">
                 {data.memory}
               </span>
-              <span className="badge md:p-3 bg-transparent border border-info-content text-info-content">
-                {data.color}
-              </span>
+              <div className="badge badge-outline h-auto">
+                <div className={`h-2 w-2 rounded-full mr-2 ${color}`}></div>
+                <span className="w-max">{data.color}</span>
+              </div>
             </div>
           </div>
           <div className="text-center md:text-start">
