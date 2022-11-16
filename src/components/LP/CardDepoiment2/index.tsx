@@ -1,4 +1,8 @@
-import { faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCirclePlay,
+  faQuoteLeft,
+  faQuoteRight,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image, { StaticImageData } from 'next/image'
 
@@ -56,6 +60,12 @@ const CardDepoiment2 = ({
               <p>{name}</p>
               <span className="text-white/50 font-light text-xs">{date}</span>
             </div>
+          </div>
+          <div className="flex justify-end">
+            <label className="btn bg-white text-[#201942]" htmlFor={linkVideo}>
+              <FontAwesomeIcon icon={faCirclePlay} className="w-5 h-5 mr-2" />
+              ver vídeo
+            </label>
           </div>
         </div>
       </label>

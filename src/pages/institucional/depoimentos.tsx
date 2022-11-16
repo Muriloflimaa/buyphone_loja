@@ -40,7 +40,7 @@ export default function Depoimentos() {
               linkVideo="https://www.youtube.com/embed/pMftaexP7RY?autoplay=0&controls=0&showinfo=0&playlist=pMftaexP7RY"
               image={AnaImg}
               depoiment="Foi uma experiência muito boa de compra!"
-              date="12 de novembro de 2022"
+              date="29 de junho de 2022"
             />
             <CardDepoiment2
               name="Brendha Crizel"
@@ -48,7 +48,7 @@ export default function Depoimentos() {
               linkVideo="https://www.youtube.com/embed/VswfBYbeWFU?autoplay=0&controls=0&showinfo=0&playlist=VswfBYbeWFU"
               image={BrendaImg}
               depoiment="A BuyPhone tem o melhor preço do mercado e você pode escolher como quer pagar"
-              date="12 de novembro de 2022"
+              date="5 de Setembro de 2022"
             />
             <CardDepoiment2
               name="Bárbara Brunca"
