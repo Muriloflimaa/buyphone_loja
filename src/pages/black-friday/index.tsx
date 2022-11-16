@@ -33,20 +33,22 @@ export default function BlackFriday({ data }: BlackFridayProps) {
             data.data.map((products: IProduct) => {
               const returnPrice = verificationPrice(products, user, isUser)
               return (
-                <ProductCard
-                  key={products.id}
-                  id={products.id}
-                  name={products.name}
-                  idCategory={products.category_id}
-                  colorPhone={products.color}
-                  price={returnPrice.ourPrice}
-                  averagePrice={returnPrice.averagePrice}
-                  slug={products.slug}
-                  slugCategory={products.category_slug}
-                  image={products.media[0].original_url}
-                  memory={products.memory}
-                  blackfriday={products.blackfriday}
-                />
+                returnPrice.ourPrice > 0 && (
+                  <ProductCard
+                    key={products.id}
+                    id={products.id}
+                    name={products.name}
+                    idCategory={products.category_id}
+                    colorPhone={products.color}
+                    price={returnPrice.ourPrice}
+                    averagePrice={returnPrice.averagePrice}
+                    slug={products.slug}
+                    slugCategory={products.category_slug}
+                    image={products.media[0].original_url}
+                    memory={products.memory}
+                    blackfriday={products.blackfriday}
+                  />
+                )
               )
             })}
         </div>
