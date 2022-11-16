@@ -1,26 +1,30 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp,
+  faWhatsapp
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
   faCircleExclamation,
   faEnvelope,
   faLocationDot,
-  faTruckFast,
+  faTruckFast
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
+import Carousel from 'better-react-carousel'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { parseCookies } from 'nookies'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
 import { Input } from '../../../../../../components/InputElement'
+import MailchimpFormContainer from '../../../../../../components/Modals/MailChimp/MailchimpSubscribe'
+import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
@@ -28,12 +32,8 @@ import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
-import MailchimpFormContainer from '../../../../../../components/Modals/Register-Mimo/MailchimpSubscribe'
-import { parseCookies } from 'nookies'
-import ProductRelationCard from '../../../../../../components/ProductRelationCard'
-import Carousel from 'better-react-carousel'
-
 interface IParams {
+
   params: {
     slugCategory: string
     slugProduct: string
@@ -165,9 +165,8 @@ export default function Products({ data, categoryData }: DataProps) {
         ></meta>
         <meta
           property="og:title"
-          content={`BuyPhone - ${
-            data.name + ' Apple ' + data.memory + ' ' + data.color
-          }`}
+          content={`BuyPhone - ${data.name + ' Apple ' + data.memory + ' ' + data.color
+            }`}
         ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -366,7 +365,6 @@ export default function Products({ data, categoryData }: DataProps) {
                     <div className="flex gap-3 w-full items-end">
                       <MailchimpFormContainer
                         nameProduct={`${data.category_slug} ${data.slug}`}
-                        notPhone
                       />
                     </div>
                   </div>
@@ -413,9 +411,8 @@ export default function Products({ data, categoryData }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${
-                            address?.City
-                          }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${address?.City
+                            }, ${address?.UF}`}
                         </p>
                       </div>
                     )}

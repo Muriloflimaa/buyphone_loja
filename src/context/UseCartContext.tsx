@@ -1,4 +1,4 @@
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import {
   createContext,
@@ -6,7 +6,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
@@ -184,8 +184,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           const products = addProduct.data
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'
@@ -197,8 +196,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
           ToastCustom(
             300,
-            `${products?.name} ${
-              products?.color
+            `${products?.name} ${products?.color
             } - ${products?.memory.toUpperCase()} adicionado ao carrinho!`,
             'success',
             'Sucesso'
