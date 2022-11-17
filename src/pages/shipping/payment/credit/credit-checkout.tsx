@@ -150,7 +150,7 @@ export default function creditFinally({
       {stateModalSuccess && (
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
           <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-            <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
+            <div className="bg-primary w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
               <FontAwesomeIcon
                 icon={faCircleCheck}
                 className="h-20 w-h-20 mx-auto"
@@ -159,17 +159,17 @@ export default function creditFinally({
             </div>
 
             <div className="m-0 mt-44"></div>
-            <p className="font-bold text-lg text-success">
+            <p className="font-bold text-lg text-primary">
               Obrigado pela sua compra!
             </p>
-            <span className="mb-6 text-success">
+            <span className="mb-6 text-primary">
               O seu pedido foi aceito. <br />
               Você irá receber uma notificação com os detalhes do pedido no seu
               e-mail.
             </span>
 
             <Link href={'/purchased'} passHref>
-              <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
+              <button className="btn btn-primary max-w-xs text-white w-full shadow-md shadow-primary/60">
                 Ok
               </button>
             </Link>

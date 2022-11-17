@@ -36,14 +36,18 @@ import Banner2MobileLight from '../assets/images/banner2mobilelight.webp'
 import BannerInstagramLight from '../assets/images/banneriglight.webp'
 import BannerLojasLight from '../assets/images/bannerlojaslight.webp'
 import MiniBannerWhatsappLigth from '../assets/images/MiniBannerWhatsappLigth.webp'
+import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
+import BannerIphone14Light from '../assets/images/banner2desktoplight.webp'
 //dark
 import Banner1MobileDark from '../assets/images/banner1mobiledark.webp'
 import Banner2MobileDark from '../assets/images/banner2mobiledark.webp'
 import BannerInstagramDark from '../assets/images/bannerigdark.webp'
 import BannerLojasDark from '../assets/images/bannerlojasdark.webp'
 import MiniBannerWhatsappDark from '../assets/images/MiniBannerWhatsappDark.webp'
+import MiniBannerConhecaDark from '../assets/images/entendaMiniBanner.webp'
+import MeetImgDark from '../assets/images/meetdark.webp'
+import BannerIphone14Dark from '../assets/images/banner3desktopdark.webp'
 
-import MiniBannerConheca from '../assets/images/conhecabuyphone.webp'
 import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 
 import Link from 'next/link'
@@ -56,6 +60,7 @@ import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import { ToastCustom } from '../utils/toastCustom'
 import { verificationPrice } from '../utils/verificationPrice'
+import BannerProductPromotion from '../components/BannerProductPromotion'
 
 interface DataProps {
   data: {
@@ -64,15 +69,21 @@ interface DataProps {
   }
   darkOrLigth: boolean
   dataLead: {
-    message: string,
+    message: string
     response: {
-      code: string,
+      code: string
       message: string
     }
   }
+  productBlack: Array<IProduct>
 }
 
-const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
+const Home: NextPage<DataProps> = ({
+  data,
+  darkOrLigth,
+  dataLead,
+  productBlack,
+}) => {
   const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
@@ -99,11 +110,15 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
     }
   }
 
+  useEffect(() => {
+    getProductsMatch()
+  }, [])
+
   async function getProductsMatch() {
     try {
       const { data } = await apiStore.get(`carousel`)
-      setProductsMatch(data)
-    } catch (error) { }
+      setProductsMatch(data.data)
+    } catch (error) {}
   }
 
   function next() {
@@ -121,10 +136,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
       setIsUser(true)
     }
   }, [user])
-
-  useEffect(() => {
-    getProductsMatch()
-  }, [])
 
   useEffect(() => {
     if (router.query.success === 'true') {
@@ -196,109 +207,227 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        <div className="block md:hidden">
-          <CarouselComponent
-            image={
-              darkOrLigth
-                ? [Banner1MobileDark, Banner2MobileDark]
-                : [Banner1MobileLight, Banner2MobileLight]
-            }
-          />
-        </div>
-        <div className="md:block hidden">
-          <CarouselComponent
-            image={
-              darkOrLigth
-                ? [
-                  {
-                    ...BannerBlackFriday,
-                    link: '/black-friday',
-                  },
-                  Banner1DesktopDark,
-                  Banner2DesktopDark,
-                ]
-                : [
-                  {
-                    ...BannerBlackFriday,
-                    link: '/black-friday',
-                  },
-                  Banner1DesktopLight,
-                  Banner2DesktopLight,
-                ]
-            }
-          />
-        </div>
+        {/* banner principal mobile quando não for black friday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="block md:hidden">
+              <CarouselComponent
+                image={
+                  darkOrLigth
+                    ? [Banner1MobileDark, Banner2MobileDark]
+                    : [Banner1MobileLight, Banner2MobileLight]
+                }
+              />
+            </div>
+          )}
+        {/* banner principal desktop quando não for black friday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="md:block hidden max-w-[2000px] mx-auto">
+              <CarouselComponent
+                image={
+                  darkOrLigth
+                    ? [
+                        {
+                          ...BannerIphone14Dark,
+                          link: '/products/apple/iphones/iphone-14',
+                        },
+                        {
+                          ...BannerBlackFriday,
+                          link: '/black-friday',
+                        },
+                        Banner1DesktopDark,
+                        Banner2DesktopDark,
+                      ]
+                    : [
+                        {
+                          ...BannerIphone14Light,
+                          link: '/products/apple/iphones/iphone-14',
+                        },
+                        {
+                          ...BannerBlackFriday,
+                          link: '/black-friday',
+                        },
+                        Banner1DesktopLight,
+                        Banner2DesktopLight,
+                      ]
+                }
+              />
+            </div>
+          )}
+        {/* banner principal desktop quando for blackFriday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="carousel-wrapper max-w-[2000px] mx-auto relative mt-8 hidden md:block">
+              <Carousel
+                infiniteLoop
+                autoPlay
+                interval={4000}
+                showIndicators={false}
+                showStatus={false}
+                showThumbs={false}
+                swipeable={false}
+              >
+                {productBlack &&
+                  productBlack.map((res) => {
+                    const returnPrice = verificationPrice(res, user, isUser)
+                    return (
+                      <BannerProductPromotion
+                        key={res.id}
+                        mobileOrDesktop={'desktop'}
+                        link={`/${res.category_slug}/${res.slug}`}
+                        color={res.color}
+                        name={res.name}
+                        memory={res.memory}
+                        price={returnPrice.ourPrice}
+                        oudPrice={returnPrice.averagePrice}
+                        image={res.media[0].original_url}
+                      />
+                    )
+                  })}
+              </Carousel>
+            </div>
+          )}
+        {/* banner principal mobile quando for blackFriday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="carousel-wrapper max-w-[2000px] mx-auto relative block md:hidden mt-4">
+              <Carousel
+                infiniteLoop
+                autoPlay
+                interval={4000}
+                showIndicators={false}
+                showStatus={false}
+                showThumbs={false}
+                swipeable={false}
+              >
+                {productBlack &&
+                  productBlack.map((res) => {
+                    const returnPrice = verificationPrice(res, user, isUser)
 
+                    return (
+                      <BannerProductPromotion
+                        key={res.id}
+                        mobileOrDesktop={'mobile'}
+                        link={`/${res.category_slug}/${res.slug}`}
+                        color={res.color}
+                        name={res.name}
+                        memory={res.memory}
+                        price={returnPrice.ourPrice}
+                        oudPrice={returnPrice.averagePrice}
+                        image={res.media[0].original_url}
+                      />
+                    )
+                  })}
+              </Carousel>
+            </div>
+          )}
+        {/* mini banners (mobile e desktop) */}
         <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 md:mt-1 gap-1">
           <div className="md:w-1/2">
-            <CarouselComponent
-              image={
-                darkOrLigth
-                  ? [
-                    {
-                      ...MiniBannerBlackFriday,
-                      link: '/black-friday',
-                    },
-                    {
-                      ...BannerIphone13Dark,
-                      link: '/products/apple/iphones/iphone-13-pro',
-                    },
-                    {
-                      ...BannerInstagramDark,
-                      link: 'https://www.instagram.com/buyphone.match/',
-                    },
-                    BannerLojasDark,
-                  ]
-                  : [
-                    {
-                      ...MiniBannerBlackFriday,
-                      link: '/black-friday',
-                    },
-                    {
-                      ...BannerIphone13Light,
-                      link: '/products/apple/iphones/iphone-13-pro',
-                    },
-                    {
-                      ...BannerInstagramLight,
-                      link: 'https://www.instagram.com/buyphone.match/',
-                    },
-                    BannerLojasLight,
-                  ]
-              }
-            />
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+                <CarouselComponent
+                  image={
+                    darkOrLigth
+                      ? [
+                          {
+                            ...MiniBannerBlackFriday,
+                            link: '/black-friday',
+                          },
+                          {
+                            ...BannerIphone13Dark,
+                            link: '/products/apple/iphones/iphone-13-pro',
+                          },
+                        ]
+                      : [
+                          {
+                            ...MiniBannerBlackFriday,
+                            link: '/black-friday',
+                          },
+                          {
+                            ...BannerIphone13Light,
+                            link: '/products/apple/iphones/iphone-13-pro',
+                          },
+                        ]
+                  }
+                />
+              )}
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+                <Carousel
+                  infiniteLoop
+                  // autoPlay
+                  showIndicators={false}
+                  showStatus={false}
+                  showThumbs={false}
+                  swipeable={false}
+                >
+                  {productBlack &&
+                    productBlack.map((res) => {
+                      const returnPrice = verificationPrice(res, user, isUser)
+
+                      return (
+                        <BannerProductPromotion
+                          key={res.id}
+                          miniBanner
+                          mobileOrDesktop={'desktop'}
+                          link={`/${res.category_slug}/${res.slug}`}
+                          color={res.color}
+                          name={res.name}
+                          memory={res.memory}
+                          price={returnPrice.ourPrice}
+                          oudPrice={returnPrice.averagePrice}
+                          image={res.media[0].original_url}
+                        />
+                      )
+                    })}
+                </Carousel>
+              )}
           </div>
           <div className="md:w-1/2">
             <CarouselComponent
               image={
                 darkOrLigth
                   ? [
-                    {
-                      ...BannerDepoiments,
-                      link: '#depoiments',
-                    },
-                    {
-                      ...MiniBannerWhatsappDark,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                    {
-                      ...MiniBannerConheca,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                  ]
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappDark,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      BannerLojasDark,
+                      {
+                        ...BannerInstagramDark,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+
+                      {
+                        ...MiniBannerConhecaDark,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
                   : [
-                    {
-                      ...BannerDepoiments,
-                      link: '#depoiments',
-                    },
-                    {
-                      ...MiniBannerWhatsappLigth,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                    {
-                      ...MiniBannerConheca,
-                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                    },
-                  ]
+                      {
+                        ...BannerDepoiments,
+                        link: '#depoiments',
+                      },
+                      {
+                        ...MiniBannerWhatsappLigth,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                      BannerLojasLight,
+                      {
+                        ...BannerInstagramLight,
+                        link: 'https://www.instagram.com/buyphone.match/',
+                      },
+                      {
+                        ...MiniBannerConheca,
+                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                      },
+                    ]
               }
             />
           </div>
@@ -327,7 +456,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
               })}
           </Carousel>
         </div>
-
         <div className="md:mt-8">
           <div className="max-w-7xl md:mb-12 mb-6 px-4 mx-auto">
             <div className="hidden md:flex justify-center items-center h-32 md:h-48 overflow-y-hidden md:w-full rounded-3xl shadow-black/40 shadow-md">
@@ -522,7 +650,6 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
             />
           </Carousel>
         </div>
-
         <div className="max-w-7xl mx-auto md:my-10 my-4 px-4">
           <h1 className="md:text-4xl text-3xl font-medium text-center md:mb-8 mb-2">
             Conheça a BuyPhone
@@ -530,7 +657,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
           <Link href="/institucional" passHref>
             <a target={'_blank'}>
               <Image
-                src={MeetImg}
+                src={darkOrLigth ? MeetImgDark : MeetImg}
                 placeholder="blur"
                 layout="responsive"
                 className="md:rounded-3xl cursor-pointer"
@@ -544,9 +671,15 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
   )
 }
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const decodesEmail = context.query.email && new Buffer(context.query.email.toString(), 'base64').toString('ascii')
-  const decodesPhone = context.query.tel && new Buffer(context.query.tel.toString(), 'base64').toString('ascii')
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const decodesEmail =
+    context.query.email &&
+    new Buffer(context.query.email.toString(), 'base64').toString('ascii')
+  const decodesPhone =
+    context.query.tel &&
+    new Buffer(context.query.tel.toString(), 'base64').toString('ascii')
 
   const params = {
     name: context.query.name,
@@ -557,21 +690,27 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     utm_medium: context.query.utm_medium,
     utm_campaign: context.query.utm_campaign,
   }
+
   try {
     const data = apiStore.get(`products?per_page=10&page=1`)
     const dataLead = apiStore.post('leads/', params)
     const [dataProducts, dataLeads] = await Promise.all([data, dataLead])
+    const productBlack = await apiStore(
+      'products?blackfriday=true&page=1&per_page=100'
+    )
     return {
       props: {
         data: dataProducts.data,
-        dataLead: dataLeads.data
+        dataLead: dataLeads.data,
+        productBlack: productBlack.data.data,
       },
     }
   } catch (error) {
     return {
       props: {
         data: null,
-        dataLead: null
+        dataLead: null,
+        productBlack: null,
       },
     }
   }

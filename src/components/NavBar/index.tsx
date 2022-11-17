@@ -10,7 +10,7 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
@@ -117,16 +117,25 @@ export default function NavBar() {
   }
 
   const handleOpenModalInfo = () => {
-    return document.getElementById('modal-info-discount')?.classList.add('modal-open')
+    return document
+      .getElementById('modal-info-discount')
+      ?.classList.add('modal-open')
   }
 
   const handleOpenModalInstagram = () => {
-    return document.getElementById('modal-access-instagram')?.classList.add('modal-open')
+    return document
+      .getElementById('modal-access-instagram')
+      ?.classList.add('modal-open')
   }
 
   useEffect(() => {
-    const elementOpenModalInstagram = document.getElementById('line-open-modal-instagram')
-    elementOpenModalInstagram?.addEventListener('mouseover', handleOpenModalInstagram)
+    const elementOpenModalInstagram = document.getElementById(
+      'line-open-modal-instagram'
+    )
+    elementOpenModalInstagram?.addEventListener(
+      'mouseover',
+      handleOpenModalInstagram
+    )
   }, [])
 
   return (
@@ -134,7 +143,10 @@ export default function NavBar() {
       <div className="fixed z-20 w-full">
         <div className="glass">
           <div className="bg-primary/[.9] relative">
-            <span id="line-open-modal-instagram" className="md:h-3 block"></span>
+            <span
+              id="line-open-modal-instagram"
+              className="md:h-3 block"
+            ></span>
             <div className="navbar">
               <div className="max-w-7xl mx-auto w-full justify-between">
                 {/* NAVBAR LADO ESQUERDO */}
@@ -215,8 +227,9 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="ml-3 flex">
                         <label
@@ -331,8 +344,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -462,8 +475,9 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="">
                         <label
@@ -513,18 +527,16 @@ export default function NavBar() {
                 <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
                     <>
-                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-                        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-                          <li>
-                            <Link href={'/black-friday'}>
-                              <a>Black Friday</a>
-                            </Link>
-                          </li>
-                        )}
-
+                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (
+                        <li>
+                          <Link href={'/black-friday'}>
+                            <a className="w-max">Black Friday</a>
+                          </Link>
+                        </li>
+                      )}
                       <li>
                         <Link href={'/'}>
-                          <a>Início</a>
+                          <a className="w-max">Início</a>
                         </Link>
                       </li>
                     </>
