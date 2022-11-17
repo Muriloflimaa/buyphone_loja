@@ -9,7 +9,7 @@ function cn(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 interface blurImageProps extends ImageProps {
-  classname?: HTMLAttributes<HTMLDivElement>
+  classname?: HTMLAttributes<HTMLDivElement> | string
 }
 
 function BlurImage({ src, classname, ...props }: blurImageProps) {

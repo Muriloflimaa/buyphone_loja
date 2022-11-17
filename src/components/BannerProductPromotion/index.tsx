@@ -114,7 +114,7 @@ const BannerProductPromotion = ({
             }`}
           >
             <BlurImage
-              classname={`absolute object-contain w-full  ${
+              classname={`absolute object-contain w-full ${
                 mobileOrDesktop == 'mobile' && 'mt-12'
               }`}
               src={image}
