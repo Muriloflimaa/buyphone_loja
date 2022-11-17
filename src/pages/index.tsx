@@ -87,7 +87,6 @@ const Home: NextPage<DataProps> = ({
   const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
-
   const [apiNew, setApiNew] = useState<Array<IProduct>>(data?.data)
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)

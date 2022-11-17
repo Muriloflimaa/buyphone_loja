@@ -37,7 +37,7 @@ const BannerProductPromotion = ({
         <div
           className={`flex ${
             miniBanner
-              ? 'items-end px-4 -mt-2 justify-around'
+              ? 'items-end px-4 justify-around'
               : 'items-center justify-center'
           } lg:gap-10 absolute h-full w-full z-10 ${
             mobileOrDesktop == 'desktop' ? 'flex-row' : 'flex-col mt-14 w-full'
@@ -45,7 +45,7 @@ const BannerProductPromotion = ({
         >
           <div
             className={`relative flex flex-col ${
-              miniBanner ? 'md:gap-4 gap-1' : 'gap-3'
+              miniBanner ? 'md:gap-2 gap-1 lg:mb-8' : 'gap-3'
             } ${
               mobileOrDesktop == 'desktop'
                 ? 'text-start max-w-xs '
@@ -54,14 +54,18 @@ const BannerProductPromotion = ({
           >
             <h1
               className={`${
-                miniBanner ? 'text-2xl md:text-4xl' : 'text-3xl lg:text-5xl'
+                miniBanner
+                  ? 'text-2xl md:text-3xl xl:text-5xl'
+                  : 'text-3xl lg:text-5xl'
               }  text-[#FF316A] font-bold`}
             >
               {name}
             </h1>
             <h2
               className={`${
-                miniBanner ? 'text-md md:text-xl' : 'text-2xl lg:text-3xl'
+                miniBanner
+                  ? 'text-md md:text-xl xl:text-2xl'
+                  : 'text-2xl lg:text-3xl'
               }  text-white flex flex-row gap-3 items-center justify-start`}
             >
               {color} <FontAwesomeIcon icon={faCircle} className="text-xs" />{' '}
@@ -70,7 +74,9 @@ const BannerProductPromotion = ({
 
             <p
               className={`${
-                miniBanner ? 'text-md md:text-lg' : 'text-xl lg:text-3xl'
+                miniBanner
+                  ? 'text-md md:text-lg xl:text-xl'
+                  : 'text-xl lg:text-3xl'
               }  line-through decoration-red-600`}
             >
               {oudPrice > 0
@@ -80,7 +86,9 @@ const BannerProductPromotion = ({
 
             <p
               className={`${
-                miniBanner ? 'text-xl md:text-3xl' : 'text-2xl lg:text-5xl'
+                miniBanner
+                  ? 'text-xl md:text-3xl xl:text-4xl'
+                  : 'text-2xl lg:text-5xl'
               } text-white font-semibold `}
             >
               {price > 0 ? `R$ ${moneyMask(price.toString())}` : 'Confira'}
