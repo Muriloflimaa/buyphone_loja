@@ -60,23 +60,24 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Theme
-      dataTheme={`${process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+      dataTheme={`${
+        process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
         !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-        ? 'dark'
-        : !!isUser && user && JSON.parse(user).type === 1
+          ? 'dark'
+          : !!isUser && user && JSON.parse(user).type === 1
           ? 'dark'
           : 'light'
-        }`}
+      }`}
       className="bg-base-100"
     >
       <Toaster position="top-right" reverseOrder={false} />
       <AuthProvider>
         {router.route === `/account/login` ||
-          router.route === `/account/register` ||
-          router.route === `/account/terms` ||
-          router.route === `/account/politics` ||
-          router.route === `/reset-password/[index]` ||
-          router.route === `/account/forgot-password` ? (
+        router.route === `/account/register` ||
+        router.route === `/account/terms` ||
+        router.route === `/account/politics` ||
+        router.route === `/reset-password/[index]` ||
+        router.route === `/account/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>

@@ -12,6 +12,7 @@ import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 import { faLocationDot, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import CountDownComponent from '../CountDownComponent'
+import BlurImage from '../BlurImage'
 
 interface ProductProps {
   id: number
@@ -145,7 +146,14 @@ const ProductCart = ({
       <div className="grid col-span-2 gap-3 text-primary">
         <div className="flex items-center gap-2">
           <div className="w-36 h-full flex items-center">
-            <img src={image} alt={name} />
+            <BlurImage
+              src={image}
+              className="object-contain"
+              width={120}
+              height={150}
+              layout="fixed"
+              alt={name}
+            />
           </div>
 
           <div className="flex flex-col items-start gap-8 h-full">
