@@ -523,8 +523,8 @@ export default function NavBar() {
                 (showSearch === false ? 'mt-0' : 'mt-12')
               }
             >
-              <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
-                <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
+              <div className="w-full border-t border-base-200 border-opacity-10 flex text-primary-content max-w-7xl mx-auto">
+                <ul className="menu menu-horizontal flex justify-center w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
                     <>
                       {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (

@@ -68,7 +68,8 @@ const BannerProductPromotion = ({
                   : 'text-2xl lg:text-3xl'
               }  text-white flex flex-row gap-3 items-center justify-start`}
             >
-              {color} <FontAwesomeIcon icon={faCircle} className="text-xs" />{' '}
+              {color}{' '}
+              <FontAwesomeIcon icon={faCircle} className="text-xs w-3 h-3" />{' '}
               {memory}
             </h2>
 
