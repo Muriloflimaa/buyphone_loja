@@ -83,6 +83,7 @@ const ProductCard = ({
                   className="object-contain"
                   width={350}
                   height={450}
+                  alt={name}
                 />
               </figure>
             </div>
