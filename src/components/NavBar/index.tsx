@@ -131,10 +131,10 @@ export default function NavBar() {
 
   return (
     <>
-      <div id="line-open-modal-instagram" className="h-1"></div>
       <div className="fixed z-20 w-full">
         <div className="glass">
           <div className="bg-primary/[.9] relative">
+            <span id="line-open-modal-instagram" className="md:h-3 block"></span>
             <div className="navbar">
               <div className="max-w-7xl mx-auto w-full justify-between">
                 {/* NAVBAR LADO ESQUERDO */}
