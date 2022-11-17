@@ -11,12 +11,12 @@ import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
 // import NavBar from '../components/NavBar'
 import dynamic from 'next/dynamic'
+import { hotjar } from 'react-hotjar'
+import * as gtag from '../../gtag'
 import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import { LightOrDark } from '../utils/verifyDarkLight'
-import * as gtag from '../../gtag'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
-import { hotjar } from 'react-hotjar'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { '@BuyPhone:User': user } = parseCookies(undefined)
@@ -60,24 +60,23 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Theme
-      dataTheme={`${
-        process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+      dataTheme={`${process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
         !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
-          ? 'dark'
-          : !!isUser && user && JSON.parse(user).type === 1
+        ? 'dark'
+        : !!isUser && user && JSON.parse(user).type === 1
           ? 'dark'
           : 'light'
-      }`}
+        }`}
       className="bg-base-100"
     >
       <Toaster position="top-right" reverseOrder={false} />
       <AuthProvider>
         {router.route === `/account/login` ||
-        router.route === `/account/register` ||
-        router.route === `/account/terms` ||
-        router.route === `/account/politics` ||
-        router.route === `/reset-password/[index]` ||
-        router.route === `/account/forgot-password` ? (
+          router.route === `/account/register` ||
+          router.route === `/account/terms` ||
+          router.route === `/account/politics` ||
+          router.route === `/reset-password/[index]` ||
+          router.route === `/account/forgot-password` ? (
           <LoginRegister>
             <Component {...pageProps} />
           </LoginRegister>
