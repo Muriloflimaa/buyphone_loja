@@ -7,6 +7,7 @@ import BannerPromotionMobile from '../../assets/images/bannerblackmobile.webp'
 import MiniBannerPromotion from '../../assets/images/miniBannerBlack.webp'
 import { moneyMask } from '../../utils/masks'
 import Link from 'next/link'
+import BlurImage from '../BlurImage'
 
 interface BannerProductPromotionProps {
   name: string
@@ -112,15 +113,13 @@ const BannerProductPromotion = ({
                 : 'w-72 max-w-xs'
             }`}
           >
-            <Image
-              className={`absolute object-contain w-full  ${
+            <BlurImage
+              classname={`absolute object-contain w-full  ${
                 mobileOrDesktop == 'mobile' && 'mt-12'
               }`}
               src={image}
-              quality={100}
               width={775}
               height={1038}
-              layout="intrinsic"
             />
           </div>
         </div>

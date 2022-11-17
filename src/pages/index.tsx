@@ -76,6 +76,7 @@ interface DataProps {
     }
   }
   productBlack: Array<IProduct>
+  productsCarousel: Array<IProduct>
 }
 
 const Home: NextPage<DataProps> = ({
@@ -83,9 +84,9 @@ const Home: NextPage<DataProps> = ({
   darkOrLigth,
   dataLead,
   productBlack,
+  productsCarousel,
 }) => {
   const router = useRouter()
-  const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
   const [apiNew, setApiNew] = useState<Array<IProduct>>(data?.data)
   const [currentSlide, setCurrentSlide] = useState(1)
@@ -107,17 +108,6 @@ const Home: NextPage<DataProps> = ({
         return
       }
     }
-  }
-
-  useEffect(() => {
-    getProductsMatch()
-  }, [])
-
-  async function getProductsMatch() {
-    try {
-      const { data } = await apiStore.get(`carousel`)
-      setProductsMatch(data.data)
-    } catch (error) {}
   }
 
   function next() {
@@ -449,8 +439,8 @@ const Home: NextPage<DataProps> = ({
             centerSlidePercentage={80}
             selectedItem={currentSlide}
           >
-            {productsMatch &&
-              productsMatch.map((res) => {
+            {productsCarousel &&
+              productsCarousel.map((res) => {
                 return <CardMatch key={res.id} data={res} next={next} />
               })}
           </Carousel>
@@ -697,11 +687,14 @@ export const getServerSideProps = async (
     const productBlack = await apiStore(
       'products?blackfriday=true&page=1&per_page=100'
     )
+    const productsCarousel = await apiStore.get(`carousel`)
+
     return {
       props: {
         data: dataProducts.data,
         dataLead: dataLeads.data,
         productBlack: productBlack.data.data,
+        productsCarousel: productsCarousel.data,
       },
     }
   } catch (error) {
@@ -710,6 +703,7 @@ export const getServerSideProps = async (
         data: null,
         dataLead: null,
         productBlack: null,
+        productsCarousel: null,
       },
     }
   }
