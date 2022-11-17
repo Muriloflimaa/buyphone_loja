@@ -23,7 +23,7 @@ export default function AccessInstagram() {
               ✕
             </label>
             <div className="relative col-span-5">
-              <Image src={ImageInstagram} layout="fixed" width={400} />
+              <Image src={ImageInstagram} layout="fixed" width={400} className="rounded-xl" />
             </div>
             <div className="flex items-center justify-center flex-col col-span-7 mx-8">
               <h1 className="text-black font-bold text-2xl">
