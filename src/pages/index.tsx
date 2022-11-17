@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -63,14 +63,21 @@ interface DataProps {
     last_page: number
   }
   darkOrLigth: boolean
+  dataLead: {
+    message: string,
+    response: {
+      code: string,
+      message: string
+    }
+  }
 }
 
-const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
+const Home: NextPage<DataProps> = ({ data, darkOrLigth, dataLead }) => {
   const router = useRouter()
   const [productsMatch, setProductsMatch] = useState<Array<IProduct>>()
   const currentRefCarroussel = useRef<any>()
 
-  const [apiNew, setApiNew] = useState<Array<IProduct>>(data.data)
+  const [apiNew, setApiNew] = useState<Array<IProduct>>(data?.data)
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
@@ -96,7 +103,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
     try {
       const { data } = await apiStore.get(`carousel`)
       setProductsMatch(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   function next() {
@@ -139,62 +146,46 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   }, [])
 
   useEffect(() => {
-    async function dataLead() {
-      if (router.query.name && router.query.email && router.query.tel) {
-        const decodesEmail = window.atob(router.query.email.toString())
-        const decodesPhone = window.atob(router.query.tel.toString())
-        try {
-          const params = {
-            name: router.query.name,
-            email: decodesEmail,
-            phone: `+55 ${decodesPhone}`,
-            list: 10,
-            utm_source: router.query.utm_source,
-            utm_medium: router.query.utm_medium,
-            utm_campaign: router.query.utm_campaign,
-          }
-          const response = await apiStore.post('leads/', params)
-          if (response.data.message === 'success') {
-            setCookie(null, 'LEAD', 'true', {
-              path: '/',
-            })
-            ToastCustom(
-              8000,
-              'Maravilha! Agora você tem um mega desconto',
-              'success',
-              'Desconto ativado!'
-            )
-            return
-          }
-          if (response.data.message === 'error') {
-            if (response.data.response.code === 'duplicate_parameter') {
-              ToastCustom(
-                8000,
-                'Você já tem acesso a essa promoção',
-                'error',
-                'Dados já cadastrados!'
-              )
-              return
-            }
-            ToastCustom(
-              8000,
-              `${response.data.response.message}`,
-              'error',
-              'Houve um erro!'
-            )
-            return
-          }
-        } catch (error) {
+    if (router.query.name && router.query.email && router.query.tel) {
+      if (dataLead?.message === 'success') {
+        setCookie(null, 'LEAD', 'true', {
+          path: '/',
+        })
+        ToastCustom(
+          8000,
+          'Maravilha! Agora você tem um mega desconto',
+          'success',
+          'Desconto ativado!'
+        )
+        return
+      }
+      if (dataLead?.message === 'error') {
+        if (dataLead?.response.code === 'duplicate_parameter') {
           ToastCustom(
             8000,
-            'Atualize a página ou tente novamente mais tarde',
+            'Você já tem acesso a essa promoção',
             'error',
-            'Houve um erro!'
+            'Dados já cadastrados!'
           )
+          return
         }
+        ToastCustom(
+          8000,
+          `${dataLead?.response.message}`,
+          'error',
+          'Houve um erro!'
+        )
+        return
+      }
+      if (!dataLead) {
+        ToastCustom(
+          8000,
+          'Atualize a página ou tente novamente mais tarde',
+          'error',
+          'Houve um erro!'
+        )
       }
     }
-    dataLead()
   }, [])
 
   return (
@@ -219,21 +210,21 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             image={
               darkOrLigth
                 ? [
-                    {
-                      ...BannerBlackFriday,
-                      link: '/black-friday',
-                    },
-                    Banner1DesktopDark,
-                    Banner2DesktopDark,
-                  ]
+                  {
+                    ...BannerBlackFriday,
+                    link: '/black-friday',
+                  },
+                  Banner1DesktopDark,
+                  Banner2DesktopDark,
+                ]
                 : [
-                    {
-                      ...BannerBlackFriday,
-                      link: '/black-friday',
-                    },
-                    Banner1DesktopLight,
-                    Banner2DesktopLight,
-                  ]
+                  {
+                    ...BannerBlackFriday,
+                    link: '/black-friday',
+                  },
+                  Banner1DesktopLight,
+                  Banner2DesktopLight,
+                ]
             }
           />
         </div>
@@ -244,35 +235,35 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                      {
-                        ...MiniBannerBlackFriday,
-                        link: '/black-friday',
-                      },
-                      {
-                        ...BannerIphone13Dark,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                      {
-                        ...BannerInstagramDark,
-                        link: 'https://www.instagram.com/buyphone.match/',
-                      },
-                      BannerLojasDark,
-                    ]
+                    {
+                      ...MiniBannerBlackFriday,
+                      link: '/black-friday',
+                    },
+                    {
+                      ...BannerIphone13Dark,
+                      link: '/products/apple/iphones/iphone-13-pro',
+                    },
+                    {
+                      ...BannerInstagramDark,
+                      link: 'https://www.instagram.com/buyphone.match/',
+                    },
+                    BannerLojasDark,
+                  ]
                   : [
-                      {
-                        ...MiniBannerBlackFriday,
-                        link: '/black-friday',
-                      },
-                      {
-                        ...BannerIphone13Light,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                      {
-                        ...BannerInstagramLight,
-                        link: 'https://www.instagram.com/buyphone.match/',
-                      },
-                      BannerLojasLight,
-                    ]
+                    {
+                      ...MiniBannerBlackFriday,
+                      link: '/black-friday',
+                    },
+                    {
+                      ...BannerIphone13Light,
+                      link: '/products/apple/iphones/iphone-13-pro',
+                    },
+                    {
+                      ...BannerInstagramLight,
+                      link: 'https://www.instagram.com/buyphone.match/',
+                    },
+                    BannerLojasLight,
+                  ]
               }
             />
           </div>
@@ -281,33 +272,33 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
               image={
                 darkOrLigth
                   ? [
-                      {
-                        ...BannerDepoiments,
-                        link: '#depoiments',
-                      },
-                      {
-                        ...MiniBannerWhatsappDark,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                      {
-                        ...MiniBannerConheca,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                    ]
+                    {
+                      ...BannerDepoiments,
+                      link: '#depoiments',
+                    },
+                    {
+                      ...MiniBannerWhatsappDark,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                    {
+                      ...MiniBannerConheca,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                  ]
                   : [
-                      {
-                        ...BannerDepoiments,
-                        link: '#depoiments',
-                      },
-                      {
-                        ...MiniBannerWhatsappLigth,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                      {
-                        ...MiniBannerConheca,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
-                      },
-                    ]
+                    {
+                      ...BannerDepoiments,
+                      link: '#depoiments',
+                    },
+                    {
+                      ...MiniBannerWhatsappLigth,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                    {
+                      ...MiniBannerConheca,
+                      link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                    },
+                  ]
               }
             />
           </div>
@@ -361,7 +352,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             Todos os produtos!
           </h1>
           <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
-            {apiNew.length > 0 ? (
+            {apiNew?.length > 0 ? (
               apiNew.map((products: IProduct) => {
                 const returnPrice = verificationPrice(products, user, isUser)
 
@@ -408,7 +399,7 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
             )}
           </div>
         </div>
-        {currentPage !== data.last_page && (
+        {currentPage !== data?.last_page && (
           <div className="flex w-full justify-center">
             <button
               className="btn border btn-outline hover:btn-info hover:text-white w-full max-w-[250px] mt-8"
@@ -553,18 +544,34 @@ const Home: NextPage<DataProps> = ({ data, darkOrLigth }) => {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const decodesEmail = context.query.email && new Buffer(context.query.email.toString(), 'base64').toString('ascii')
+  const decodesPhone = context.query.tel && new Buffer(context.query.tel.toString(), 'base64').toString('ascii')
+
+  const params = {
+    name: context.query.name,
+    email: decodesEmail,
+    phone: `+55${decodesPhone}`,
+    list: 10,
+    utm_source: context.query.utm_source,
+    utm_medium: context.query.utm_medium,
+    utm_campaign: context.query.utm_campaign,
+  }
   try {
-    const { data } = await apiStore.get(`products?per_page=10&page=1`)
+    const data = apiStore.get(`products?per_page=10&page=1`)
+    const dataLead = apiStore.post('leads/', params)
+    const [dataProducts, dataLeads] = await Promise.all([data, dataLead])
     return {
       props: {
-        data,
+        data: dataProducts.data,
+        dataLead: dataLeads.data
       },
     }
   } catch (error) {
     return {
       props: {
         data: null,
+        dataLead: null
       },
     }
   }
