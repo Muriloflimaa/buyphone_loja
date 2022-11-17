@@ -57,7 +57,7 @@ export default function BlackFriday({ data }: BlackFridayProps) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   if (
     process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
     !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
@@ -77,6 +77,7 @@ export const getServerSideProps = async () => {
       props: {
         data,
       },
+      revalidate: 60 * 30,
     }
   } catch (error) {
     return {
