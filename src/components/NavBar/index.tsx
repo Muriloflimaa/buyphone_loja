@@ -52,6 +52,7 @@ export default function NavBar() {
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
   const [openDrawer, setOpenDrawer] = useState(false)
+  const { '@BuyPhone:ModalInstagram': ModalInstagram } = parseCookies(undefined)
 
   useEffect(() => {
     if (cart) {
@@ -125,8 +126,6 @@ export default function NavBar() {
   }
 
   const handleOpenModalInstagram = () => {
-    const { '@BuyPhone:ModalInstagram': ModalInstagram } =
-      parseCookies(undefined) //pega os cookies
     if (ModalInstagram === 'open') {
       //verificar se está com o parametro open
       return
@@ -142,11 +141,12 @@ export default function NavBar() {
     const elementOpenModalInstagram = document.getElementById(
       'line-open-modal-instagram'
     )
+
     elementOpenModalInstagram?.addEventListener(
       'mouseover',
       handleOpenModalInstagram
-    )
-  }, [])
+    ) //CHAMA A FUNÇÃO COM O PARAMETRO MOUSEOVER
+  }, [ModalInstagram])
 
   return (
     <>
