@@ -146,7 +146,7 @@ export default function Cart() {
 
               <div className="w-full flex justify-end mt-2">
                 <Link href={'/shipping'}>
-                  <a className="btn w-64 btn-success font-medium normal-case">
+                  <a className="btn w-full md:w-64 btn-success font-medium normal-case">
                     Finalizar Compra
                   </a>
                 </Link>

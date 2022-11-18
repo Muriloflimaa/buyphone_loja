@@ -1,6 +1,6 @@
 export default function handler(req, res) {
   // Get data submitted in request's body.
-  console.log(req)
+
   const body = req.body
   var criptEmail = new Buffer(body.email).toString('base64')
   var criptTel = new Buffer(body.tel).toString('base64')
@@ -39,7 +39,6 @@ export default function handler(req, res) {
 
   apiInstance.sendTransacEmail(sendSmtpEmail).then(
     function (data) {
-      console.log('API called successfully. Returned data: ' + data)
       res.redirect('/?success=true')
     },
     function (error) {

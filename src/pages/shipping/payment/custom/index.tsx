@@ -66,8 +66,6 @@ export default function custom({ address }: Address) {
     }
   }
 
-  console.log(userData)
-
   return (
     <>
       {loading && (
