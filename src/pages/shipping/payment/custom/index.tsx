@@ -4,9 +4,10 @@ import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
+import { AuthContext } from '../../../../context/AuthContext'
 import { useCart } from '../../../../context/UseCartContext'
 import { apiStore } from '../../../../services/api'
 import { Address, ProductPayment } from '../../../../types'
@@ -19,6 +20,7 @@ export default function custom({ address }: Address) {
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
+  const { userData, isUser } = useContext(AuthContext)
   const [cartSize, setCartSize] = useState<number>()
   const router = useRouter()
   const discountValue = 15000
@@ -82,34 +84,34 @@ export default function custom({ address }: Address) {
       )}
       {stateModalSuccess && (
         <div className="modal pointer-events-auto visible opacity-100 modal-bottom sm:modal-middle">
-          <div className="flex flex-col gap-2 items-center text-center rounded-2xl p-10 bg-white relative z-50 max-w-md">
-            <div className="bg-success shadow-sm shadow-success w-full h-fit absolute text-white -mt-10 py-10 z-10 rounded-t-2xl">
+          <div className="flex flex-col gap-2 items-center text-center rounded-2xl bg-white relative z-50 max-w-md">
+            <div className="bg-primary w-full h-fit text-white py-10 z-10 rounded-t-2xl">
               <FontAwesomeIcon
                 icon={faCircleCheck}
                 className="h-20 w-h-20 mx-auto"
               />
-              <h3 className="font-bold text-2xl mt-3">Sucesso!</h3>
+              <h3 className="font-bold text-2xl mt-3">
+                Pedido realizado com sucesso!
+              </h3>
             </div>
+            <div className="px-10 py-5">
+              <span className="mb-6 text-primary">
+                Para concluir sua compra no modo de pagamento personalizado,
+                clique em finalizar pagamento e fala diretamente com nosso
+                consultor.
+              </span>
 
-            <div className="m-0 mt-44"></div>
-            <p className="font-bold text-lg text-success">
-              Obrigado pelo pedido de compra!
-            </p>
-            <span className="mb-6 text-success">
-              O seu pedido foi aceito. <br />
-              Iremos redireciona-lo(a) para o whatsapp para finalizar-mos o
-              pagamento.
-            </span>
-
-            <a
-              onClick={() => router.push('/user/myshopping')}
-              href={`https://api.whatsapp.com/send?phone=5518981367275&text=Olá,%20Realizei%20uma%20compra%20no%20modo%20personalizado%20meu%20nome%20é%20${user.name}%20e%20meu%20email%20${user.email}`}
-              target={'_blank'}
-            >
-              <button className="btn btn-success max-w-xs text-white w-full rounded-full shadow-md shadow-success/60">
+              <a
+                onClick={() => router.push('/user/myshopping')}
+                href={`https://api.whatsapp.com/send?phone=5518981367275&text=Olá,%20Realizei%20um%20pedido%20no%20modo%20personalizado%20e%20gostaria%20de%20uma%20simulação%20de%20pagamento.%20Meu%20nome%20é%20${
+                  isUser && userData && userData.name
+                }%20e%20meu%20email%20${isUser && userData && userData.email}`}
+                target={'_blank'}
+                className="btn btn-primary max-w- mt-5 text-white w-full shadow-md shadow-primary/60"
+              >
                 Finalizar pagamento
-              </button>
-            </a>
+              </a>
+            </div>
           </div>
         </div>
       )}
@@ -230,7 +232,7 @@ export default function custom({ address }: Address) {
                   onClick={() => handlePayment()}
                   className="flex btn btn-info text-white w-full"
                 >
-                  {loading ? 'Processando pedido...' : 'Finalizar Compra'}
+                  {loading ? 'Processando pedido...' : 'Finalizar pedido'}
                 </a>
               </div>
             </div>

@@ -171,7 +171,6 @@ export default function credit({ address }: Address) {
                       setCode(event.target.value), maskMustNumber(event)
                     )}
                     onFocus={() => setFocus(!focus)}
-                    // onBlur={() => setFocus(!focus)}
                   />
                 </div>
                 <Input

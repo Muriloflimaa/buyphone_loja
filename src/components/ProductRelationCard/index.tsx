@@ -45,7 +45,7 @@ const ProductRelationCard = ({
   return (
     <>
       <div
-        className="card card-compact cursor-pointer w-full max-w-[300px] max-h-[400px] min-h-[400px] mx-auto text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
+        className="card card-compact m-12 cursor-pointer w-full max-w-[300px] max-h-[430px] min-h-[430px] mx-auto text-info-content bg-accent shadow-black md:hover:shadow-2xl md:hover:drop-shadow-lg md:hover:scale-105 transition-all duration-200 relative overflow-visible rounded-lg"
         key={id}
       >
         <div
@@ -78,7 +78,10 @@ const ProductRelationCard = ({
             {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
               !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
               blackfriday == 1 && (
-                <CountDownComponent text=" text-[8px] md:text-xs py-4 " />
+                <CountDownComponent
+                  text=" text-xs "
+                  width=" w-full max-w-[200px] mx-auto "
+                />
               )}
           </div>
 

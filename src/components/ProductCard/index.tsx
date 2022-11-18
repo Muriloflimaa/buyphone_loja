@@ -8,6 +8,7 @@ import CartaImg from '../../assets/images/carta.png'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
+import BlurImage from '../BlurImage'
 import CountDownComponent from '../CountDownComponent'
 import MailchimpFormContainer from '../Modals/MailChimp/MailchimpSubscribe'
 
@@ -77,11 +78,12 @@ const ProductCard = ({
           <div>
             <div onClick={() => router.push(link)} className="w-[80%] mx-auto">
               <figure className="mb-4">
-                <Image
+                <BlurImage
                   src={image}
                   className="object-contain"
                   width={350}
                   height={450}
+                  alt={name}
                 />
               </figure>
             </div>
@@ -219,7 +221,7 @@ const ProductCard = ({
             <label className="modal-box overflow-y-visible relative" htmlFor="">
               <div className="absolute bg-transparent shadow-none -top-14 md:-top-32 left-0 z-50 flex justify-center w-full">
                 <div className="relative md:w-[200px] w-[130px]">
-                  <Image
+                  <BlurImage
                     src={CartaImg}
                     quality={100}
                     layout="responsive"

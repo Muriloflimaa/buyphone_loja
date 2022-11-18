@@ -124,16 +124,25 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 type="text"
                 label="CEP"
                 maxLength={9}
-                onChange={(e) => mascaraCep(e.target, '#####-####')}
+                onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
                 error={errors.cep}
               />
-              <button
-                type="submit"
-                className="btn btn-info text-white self-end"
-              >
-                Avançar{' '}
-                <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
-              </button>
+              {formState.isSubmitting ? (
+                <button
+                  type="submit"
+                  className="btn btn-info loading text-white self-end"
+                >
+                  Carregando{' '}
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="btn btn-info text-white self-end"
+                >
+                  Avançar{' '}
+                  <FontAwesomeIcon icon={faAngleRight} className="w-4 h-4" />
+                </button>
+              )}
             </form>
 
             <div className="mx-auto flex flex-col w-full items-center gap-4 sm:w-6/12">

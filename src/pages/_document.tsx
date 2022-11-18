@@ -5,6 +5,8 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <title>BuyPhone - Seu match perfeito</title>
+
           <meta
             name="description"
             content="Iphone em promoção que você procura? Na Buy Phone você encontra as melhores ofertas de produtos com entrega rápida e frete grátis!"

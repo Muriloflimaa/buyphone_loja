@@ -12,6 +12,7 @@ import { IProduct } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
 import { verificationPrice } from '../../utils/verificationPrice'
+import BlurImage from '../BlurImage'
 import CountDownComponent from '../CountDownComponent'
 
 interface CardMatchProps {
@@ -98,19 +99,21 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
       <div className="card py-5 my-8 mx-auto grid grid-cols-1 text-info-content bg-accent drop-shadow-xl rounded-lg md:px-36 md:py-14 md:gap-10 md:grid-cols-2 md:max-w-5xl">
         <div className="relative flex justify-center md:justify-end col-span-1">
           <div className="hidden md:block">
-            <Image
+            <BlurImage
               src={data.media[0].original_url}
               layout="fixed"
               width={250}
               height={300}
+              alt={data.name}
             />
           </div>
           <div className="md:hidden">
-            <Image
+            <BlurImage
               src={data.media[0].original_url}
               layout="fixed"
               width={150}
               height={200}
+              alt={data.name}
             />
           </div>
           <div

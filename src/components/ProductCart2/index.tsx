@@ -12,6 +12,7 @@ import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 import { faLocationDot, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import CountDownComponent from '../CountDownComponent'
+import BlurImage from '../BlurImage'
 
 interface ProductProps {
   id: number
@@ -144,15 +145,22 @@ const ProductCart = ({
     <div className="grid grid-cols-1 md:grid-cols-3 justify-between w-full">
       <div className="grid col-span-2 gap-3 text-primary">
         <div className="flex items-center gap-2">
-          <div className="w-36 h-full flex items-center">
-            <img src={image} alt={name} />
+          <div className="w-[125px] h-full flex items-center">
+            <BlurImage
+              src={image}
+              className="object-contain"
+              width={120}
+              height={150}
+              layout="fixed"
+              alt={name}
+            />
           </div>
 
           <div className="flex flex-col items-start gap-8 h-full">
             <div className="flex flex-col text-info-content">
               {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                 !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-                blackfriday == 1 && <CountDownComponent />}
+                blackfriday == 1 && <CountDownComponent text=" text-xs " />}
               <span>Modelo</span>
               <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
             </div>

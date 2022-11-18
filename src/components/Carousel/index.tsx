@@ -2,14 +2,12 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 interface imageProps {
   image: Array<StaticImageData & { link?: string }>
 }
 
 const CarouselComponent = (image: imageProps) => {
-  const router = useRouter()
   return (
     <div className="carousel-wrapper">
       <Carousel

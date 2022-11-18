@@ -10,12 +10,13 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
 import { useContext, useEffect, useState } from 'react'
 import { Divider } from 'react-daisyui'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -29,7 +30,9 @@ import { apiStore } from '../../services/api'
 import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
+import { setCookies } from '../../utils/useCookies'
 import LoadingComponent from '../LoadingComponent'
+import AccessInstagram from '../Modals/AccessInstagram'
 import InfoDiscount from '../Modals/Info-Discount'
 import ProductCart from '../ProductCart'
 import styles from './styles.module.scss'
@@ -49,6 +52,8 @@ export default function NavBar() {
   const [notShowCart, setNotShowCart] = useState(false)
   const router = useRouter()
   const [openDrawer, setOpenDrawer] = useState(false)
+  const { '@BuyPhone:ModalInstagram': ModalInstagramCookies } =
+    parseCookies(undefined)
 
   useEffect(() => {
     if (cart) {
@@ -116,14 +121,44 @@ export default function NavBar() {
   }
 
   const handleOpenModalInfo = () => {
-    return document.getElementById('modal-info-discount')?.classList.add('modal-open')
+    return document
+      .getElementById('modal-info-discount')
+      ?.classList.add('modal-open')
   }
+
+  const handleOpenModalInstagram = () => {
+    if (ModalInstagramCookies === 'open') {
+      //verificar se está com o parametro open
+      return
+    } else {
+      setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60) //se nao tiver seta os cookies
+      return document
+        .getElementById('modal-access-instagram')
+        ?.classList.add('modal-open') //executa a função de abrir o modal
+    }
+  }
+
+  useEffect(() => {}, [handleOpenModalInstagram])
+
+  useEffect(() => {
+    const elementOpenModalInstagram = document.getElementById(
+      'line-open-modal-instagram'
+    )
+    elementOpenModalInstagram?.addEventListener(
+      'mouseover',
+      handleOpenModalInstagram
+    ) //CHAMA A FUNÇÃO COM O PARAMETRO MOUSEOVER
+  }, [ModalInstagramCookies])
 
   return (
     <>
       <div className="fixed z-20 w-full">
         <div className="glass">
           <div className="bg-primary/[.9] relative">
+            <span
+              id="line-open-modal-instagram"
+              className="md:h-3 block"
+            ></span>
             <div className="navbar">
               <div className="max-w-7xl mx-auto w-full justify-between">
                 {/* NAVBAR LADO ESQUERDO */}
@@ -204,8 +239,9 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="ml-3 flex">
                         <label
@@ -320,8 +356,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -451,8 +487,9 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="">
                         <label
@@ -498,22 +535,20 @@ export default function NavBar() {
                 (showSearch === false ? 'mt-0' : 'mt-12')
               }
             >
-              <div className="w-full border-t border-base-200 border-opacity-10 text-primary-content max-w-7xl mx-auto">
-                <ul className="menu menu-horizontal w-full text-md overflow-auto sm:text-sm">
+              <div className="w-full border-t border-base-200 border-opacity-10 flex text-primary-content max-w-7xl mx-auto">
+                <ul className="menu menu-horizontal flex justify-center w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
                     <>
-                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-                        !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-                          <li>
-                            <Link href={'/black-friday'}>
-                              <a>Black Friday</a>
-                            </Link>
-                          </li>
-                        )}
-
+                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (
+                        <li>
+                          <Link href={'/black-friday'}>
+                            <a className="w-max">Black Friday</a>
+                          </Link>
+                        </li>
+                      )}
                       <li>
                         <Link href={'/'}>
-                          <a>Início</a>
+                          <a className="w-max">Início</a>
                         </Link>
                       </li>
                     </>
@@ -682,6 +717,7 @@ export default function NavBar() {
         </ul>
       </Drawer>
       <InfoDiscount />
+      <AccessInstagram />
     </>
   )
 }

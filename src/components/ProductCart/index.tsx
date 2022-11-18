@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { moneyMask } from '../../utils/masks'
+import BlurImage from '../BlurImage'
 import CountDownComponent from '../CountDownComponent'
 
 interface ProductProps {
@@ -94,7 +95,13 @@ const ProductCart = ({
         <div className="grid col-span-2 gap-3">
           <div className="flex items-center gap-2">
             <div className="w-12 h-full flex items-center">
-              <img src={image} alt={name} />
+              <BlurImage
+                src={image}
+                layout="fixed"
+                width={48}
+                height={65}
+                alt={name}
+              />
             </div>
 
             <div className="flex flex-col gap-2 justify-between">
