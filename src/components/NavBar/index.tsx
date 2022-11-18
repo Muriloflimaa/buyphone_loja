@@ -126,14 +126,15 @@ export default function NavBar() {
 
   const handleOpenModalInstagram = () => {
     const { '@BuyPhone:ModalInstagram': ModalInstagram } =
-      parseCookies(undefined)
+      parseCookies(undefined) //pega os cookies
     if (ModalInstagram === 'open') {
+      //verificar se está com o parametro open
       return
     } else {
-      setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60)
+      setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60) //se nao tiver seta os cookies
       return document
         .getElementById('modal-access-instagram')
-        ?.classList.add('modal-open')
+        ?.classList.add('modal-open') //executa a função de abrir o modal
     }
   }
 
