@@ -11,9 +11,9 @@ import VisaSvg from '../../assets/images/visa.svg'
 import McSvg from '../../assets/images/mc.svg'
 import EloSvg from '../../assets/images/elo.svg'
 import AESvg from '../../assets/images/americanexpress.svg'
-import Parc1Svg from '../../assets/images/Group115.svg'
-import Parc2Svg from '../../assets/images/image28.svg'
-import Parc3Svg from '../../assets/images/image29.svg'
+import Parc1Svg from '../../assets/images/cloudflare.webp'
+import Parc2Svg from '../../assets/images/starkbank.webp'
+import Parc3Svg from '../../assets/images/pagarme.webp'
 import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
 import { apiStore } from '../../services/api'
@@ -167,15 +167,36 @@ export default function Footer() {
           <div className="flex flex-col gap-10">
             <div>
               <h3 className="font-medium text-lg mb-3">Parceiros</h3>
-              <ul className="menu menu-vertical text-sm flex gap-2">
-                <li>
-                  <Image src={Parc1Svg} layout="fixed" quality={100}></Image>
+              <ul className="menu menu-horizontal md:menu-vertical text-sm flex gap-2">
+                <li className="bg-white p-2 rounded-md w-fit">
+                  <Image
+                    src={Parc1Svg}
+                    width={60}
+                    height={30}
+                    className="object-contain"
+                    layout="fixed"
+                    quality={100}
+                  ></Image>
                 </li>
-                <li>
-                  <Image src={Parc2Svg} layout="fixed" quality={100}></Image>
+                <li className="bg-white p-2 rounded-md w-fit">
+                  <Image
+                    src={Parc2Svg}
+                    width={60}
+                    height={30}
+                    className="object-contain "
+                    layout="fixed"
+                    quality={100}
+                  ></Image>
                 </li>
-                <li>
-                  <Image src={Parc3Svg} layout="fixed" quality={100}></Image>
+                <li className="bg-white p-2 rounded-md w-fit">
+                  <Image
+                    src={Parc3Svg}
+                    width={60}
+                    height={30}
+                    className="object-contain"
+                    layout="fixed"
+                    quality={100}
+                  ></Image>
                 </li>
               </ul>
               <small className="text-xs text-info-content">
