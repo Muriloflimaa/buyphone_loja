@@ -46,7 +46,7 @@ const BannerProductPromotion = ({
         >
           <div
             className={`relative flex flex-col ${
-              miniBanner ? 'md:gap-2 gap-1 lg:mb-8 xl:mb-14' : 'gap-3'
+              miniBanner ? 'md:gap-2 gap-1 lg:mb-8 xl:mb-14 mb-2' : 'gap-3'
             } ${
               mobileOrDesktop == 'desktop'
                 ? 'text-start max-w-xs '
@@ -55,8 +55,10 @@ const BannerProductPromotion = ({
           >
             <h1
               className={`${
-                miniBanner
-                  ? 'text-2xl md:text-3xl xl:text-6xl'
+                name.length > 9
+                  ? 'text-xl md:text-2xl xl:text-3xl 2xl:text-5xl'
+                  : miniBanner
+                  ? 'text-2xl md:text-3xl xl:text-5xl 2xl:text-6xl'
                   : 'text-3xl lg:text-5xl'
               }  text-[#FF316A] font-bold`}
             >
@@ -65,7 +67,7 @@ const BannerProductPromotion = ({
             <h2
               className={`${
                 miniBanner
-                  ? 'text-md md:text-xl xl:text-2xl'
+                  ? 'text-xs md:text-xl xl:text-2xl'
                   : 'text-2xl lg:text-3xl'
               }  text-white flex flex-row gap-3 items-center justify-start`}
             >

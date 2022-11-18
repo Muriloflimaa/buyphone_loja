@@ -46,7 +46,7 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
   return (
     <span
       className={
-        'badge font-semibold px-0 md:px-3 ' +
+        'badge font-semibold px-2 md:px-3 ' +
         (width && width) +
         (text ? text : ' text-[8px] md:text-xs ') +
         (changeText
@@ -62,10 +62,11 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
                   ? countDownBlackFriday.days + ' dias '
                   : '') +
                 +countDownBlackFriday.hours +
-                ':' +
+                'h ' +
                 countDownBlackFriday.minutes +
-                ':' +
-                countDownBlackFriday.seconds
+                'm ' +
+                countDownBlackFriday.seconds +
+                's '
               : '00:00:00'
           }`}
     </span>
