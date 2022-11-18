@@ -141,7 +141,6 @@ export default function NavBar() {
     const elementOpenModalInstagram = document.getElementById(
       'line-open-modal-instagram'
     )
-
     elementOpenModalInstagram?.addEventListener(
       'mouseover',
       handleOpenModalInstagram
