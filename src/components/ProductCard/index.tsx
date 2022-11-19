@@ -1,6 +1,5 @@
 import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -10,7 +9,7 @@ import { moneyMask } from '../../utils/masks'
 import { verificationColor } from '../../utils/verificationColors'
 import BlurImage from '../BlurImage'
 import CountDownComponent from '../CountDownComponent'
-import MailchimpFormContainer from '../Modals/MailChimp/MailchimpSubscribe'
+import ProductUnavailable from '../Modals/SendInBlue/Notices/ProductUnavailable'
 
 interface ProductCardProps {
   id: number
@@ -92,14 +91,13 @@ const ProductCard = ({
               {price > 0 && (
                 <>
                   <span className="badge badge-success md:py-0 leading-0 w-full bg-primary text-white uppercase text-[8px] px-0 md:text-xs font-semibold mx-auto">
-                    {`${
-                      changeText
-                        ? resultDiscountPercent !== 'NaN'
-                          ? resultDiscountPercent.replace('.0', '') +
-                            '% de desconto'
-                          : '0' + '% de desconto'
-                        : 'parcelamento em ate 12x'
-                    }`}
+                    {`${changeText
+                      ? resultDiscountPercent !== 'NaN'
+                        ? resultDiscountPercent.replace('.0', '') +
+                        '% de desconto'
+                        : '0' + '% de desconto'
+                      : 'parcelamento em ate 12x'
+                      }`}
                   </span>
                   <span className="badge badge-success w-full bg-[#D5FDC7] text-[#004907] uppercase text-[8px] px-[3px] md:text-xs md:py-0 font-semibold mx-auto">
                     {changeText ? (
@@ -242,7 +240,7 @@ const ProductCard = ({
                 </p>
 
                 <div className="flex gap-3 w-full items-end">
-                  <MailchimpFormContainer
+                  <ProductUnavailable
                     nameProduct={`${slugCategory} ${slug}`}
                   />
                 </div>
