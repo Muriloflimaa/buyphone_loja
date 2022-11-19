@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
-import { ToastCustom } from '../../../utils/toastCustom'
+import { ToastCustom } from '../../../../utils/toastCustom'
 
 interface IFormFields {
   EMAIL: string
