@@ -10,7 +10,7 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
@@ -54,7 +54,7 @@ export default function NavBar() {
   const [openDrawer, setOpenDrawer] = useState(false)
   const { '@BuyPhone:ModalInstagram': ModalInstagramCookies } =
     parseCookies(undefined)
-
+  const [showModalCookies, setShowModalCookies] = useState(ModalInstagramCookies)
   useEffect(() => {
     if (cart) {
       setCartSize(cart.length)
@@ -127,18 +127,18 @@ export default function NavBar() {
   }
 
   const handleOpenModalInstagram = () => {
-    if (ModalInstagramCookies === 'open') {
-      //verificar se está com o parametro open
-      return
-    } else {
-      setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60) //se nao tiver seta os cookies
-      return document
-        .getElementById('modal-access-instagram')
-        ?.classList.add('modal-open') //executa a função de abrir o modal
+    const elementOpenModalInstagram = document.getElementById(
+      'line-open-modal-instagram'
+    )
+    if (!showModalCookies) {
+      setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60)
+      elementOpenModalInstagram?.removeEventListener(
+        'mouseover',
+        handleOpenModalInstagram,
+      )
+      return document.getElementById('modal-access-instagram')?.classList.add('modal-open')
     }
   }
-
-  useEffect(() => {}, [handleOpenModalInstagram])
 
   useEffect(() => {
     const elementOpenModalInstagram = document.getElementById(
@@ -146,9 +146,9 @@ export default function NavBar() {
     )
     elementOpenModalInstagram?.addEventListener(
       'mouseover',
-      handleOpenModalInstagram
-    ) //CHAMA A FUNÇÃO COM O PARAMETRO MOUSEOVER
-  }, [ModalInstagramCookies])
+      handleOpenModalInstagram,
+    )
+  }, [])
 
   return (
     <>
@@ -239,9 +239,8 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${
-                        userData?.promotion ? 'flex' : 'hidden'
-                      }`}
+                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
+                        }`}
                     >
                       <div className="ml-3 flex">
                         <label
@@ -356,8 +355,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                  ? cartSize + ' item'
-                                  : 'Carrinho está vazio'}
+                                    ? cartSize + ' item'
+                                    : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -487,9 +486,8 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${
-                        userData?.promotion ? 'flex' : 'hidden'
-                      }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
+                        }`}
                     >
                       <div className="">
                         <label
