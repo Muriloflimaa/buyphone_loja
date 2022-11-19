@@ -1,12 +1,12 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
+import JuninhoImg from '../../assets/images/juninho.webp'
 import ListProducts from '../../components/ListProducts'
 import { apiStore } from '../../services/api'
 import { IInvoice } from '../../types'
-import JuninhoImg from '../../assets/images/juninho.webp'
 import { PersistentLogin } from '../../utils/PersistentLogin'
-import Image from 'next/image'
 
 interface DataProps {
   current_page: number
@@ -92,7 +92,7 @@ function MyShopping() {
           )}`
       )
       setData(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   return (
@@ -107,7 +107,7 @@ function MyShopping() {
               <React.Fragment key={pedido.id}>
                 <ListProducts
                   created={pedido.created_at}
-                  statuspayment={pedido.invoice?.status}
+                  statuspayment={pedido.invoice?.status.toLowerCase()}
                   number={pedido.id}
                   value={pedido.total}
                   method={pedido.method}
@@ -173,9 +173,8 @@ function MyShopping() {
                 )
                 window.scrollTo(0, 0)
               }}
-              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
-                link.active === true ? 'btn-disabled' : ''
-              }`}
+              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${link.active === true ? 'btn-disabled' : ''
+                }`}
             >
               {link.label
                 .replace('&laquo; Previous', 'Anterior')

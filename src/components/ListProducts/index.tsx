@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { apiStore, link } from '../../services/api'
+import { apiStore } from '../../services/api'
 import { GetUseType } from '../../utils/getUserType'
 import { date, moneyMask } from '../../utils/masks'
 
@@ -90,7 +90,7 @@ const ListProducts = ({
       try {
         const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
         setImage(data.qrcode)
-      } catch (error) {}
+      } catch (error) { }
     }
   }
 
@@ -110,8 +110,8 @@ const ListProducts = ({
             {(method === 'PIX' &&
               statuspayment !== 'paid' &&
               expired !== 'expired') ??
-            'manual_paid' ??
-            'captured' ? (
+              'manual_paid' ??
+              'captured' ? (
               <>
                 <div className="justify-end flex-col items-center cursor-pointer z-10">
                   <label
@@ -274,9 +274,8 @@ const ListProducts = ({
                     icon={faTruckFast}
                     className="w-4 h-4 mr-2"
                   />
-                  {`Chegará grátis em até ${
-                    shippingDays?.days ? shippingDays?.days : '10 à 15 '
-                  } dias úteis`}
+                  {`Chegará grátis em até ${shippingDays?.days ? shippingDays?.days : '10 à 15 '
+                    } dias úteis`}
                 </p>
               </div>
             </div>
@@ -301,7 +300,7 @@ const ListProducts = ({
                   <span className="badge badge-warning badge-sm h-auto text-center">
                     Registrado
                   </span>
-                ) : statuspayment == 'paid' ?? 'manual_paid' ?? 'captured' ? (
+                ) : statuspayment == 'paid' ?? 'manual_paid' ?? 'captured' ?? 'approved' ?? 'authorized' ?? 'confirmed' ? (
                   <span className="badge badge-success badge-sm h-auto text-center">
                     Pagamento aprovado
                   </span>
@@ -309,7 +308,7 @@ const ListProducts = ({
                   <span className="badge badge-error badge-sm h-auto text-center">
                     Falha ao efetuar pagamento
                   </span>
-                ) : statuspayment == 'not_authorized' ? (
+                ) : statuspayment == 'not_authorized' ?? 'denied' ? (
                   <span className="badge badge-error badge-sm h-auto text-center">
                     Não autorizada
                   </span>
