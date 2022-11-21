@@ -513,6 +513,7 @@ export default function Products({ data, categoryData }: DataProps) {
         >
           {categoryData.map((product) => {
             const returnPrice = verificationPrice(product, user, isUser)
+            console.log(product)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
@@ -546,15 +547,11 @@ export const getStaticProps = async ({ params }: IParams) => {
     const categoryData = await apiStore.get(
       `categories/${params.slugCategory}?per_page=18`
     )
-    const response = await apiStore.get(`checkout/installments`, {
-      params: data,
-    })
 
     return {
       props: {
         data: data.data,
         categoryData: categoryData.data.products,
-
       },
       revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
