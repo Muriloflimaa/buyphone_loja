@@ -23,7 +23,6 @@ export default function ModalPaymentOptions({isOpen, closeModal, installmentsPro
   const handleCloseModalItsMatch = () => {
     return closeModal(false)
   }
-  console.log(installmentsProduct)
   return (
     <>
       <div className={`modal modal-middle ${isOpen && 'modal-open'}`} id="modal-open-match">
@@ -37,10 +36,15 @@ export default function ModalPaymentOptions({isOpen, closeModal, installmentsPro
             <div className='border-solid border-2 border-primary rounded px-4 py-2'>
                 <h2 className='text-primary'>Cartão de crédito</h2>
                 <ul className='my-4'>
-                    <li className='flex justify-between'>
-                        <span>`${installmentsProduct && Object.values(installmentsProduct).length}x sem juros`</span>
-                        <span>R$ 1.699,00</span>
-                    </li>
+                    {installmentsProduct && Object.values(installmentsProduct).map((installment) => {
+                        return (
+                            <li className='flex justify-between'>
+                                <span>{`x sem juros`}</span>
+                                <span>{installment}</span>
+                            </li>
+                        )
+                    })}
+                    
                 </ul>
             </div>
             </div>

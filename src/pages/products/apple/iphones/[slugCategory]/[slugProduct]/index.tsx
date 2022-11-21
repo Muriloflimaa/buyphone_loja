@@ -352,7 +352,7 @@ export default function Products({ data, categoryData }: DataProps) {
                         -{resultDiscountPercent.replace('.0', '')}%
                       </span>
                     </div>
-                    <span>ou até {Object.values(installments).length}x de R$169,90 sem juros <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
+                    <span>ou até {installments && Object.values(installments).length}x de {installments && Object.values(installments)[Object.values(installments).length - 1]} sem juros <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
                   </>
                 )}
               </div>
@@ -534,7 +534,6 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
-      {console.log(openModalPaymentOption)}
       <ModalPaymentOptions installmentsProduct={installments} isOpen={openModalPaymentOption} closeModal={(value) => setOpenModalPaymentOption(value)}/>
     </>
   )
@@ -548,11 +547,15 @@ export const getStaticProps = async ({ params }: IParams) => {
     const categoryData = await apiStore.get(
       `categories/${params.slugCategory}?per_page=18`
     )
+    const response = await apiStore.get(`checkout/installments`, {
+      params: data,
+    })
 
     return {
       props: {
         data: data.data,
         categoryData: categoryData.data.products,
+
       },
       revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
