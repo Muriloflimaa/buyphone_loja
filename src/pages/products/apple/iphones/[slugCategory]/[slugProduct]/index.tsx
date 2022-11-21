@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Carousel from 'better-react-carousel'
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,6 +25,7 @@ import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
 import CountDownComponent from '../../../../../../components/CountDownComponent'
 import { Input } from '../../../../../../components/InputElement'
+import ModalPaymentOptions from '../../../../../../components/Modals/PaymentOptions'
 import ProductUnavailable from '../../../../../../components/Modals/SendInBlue/Notices/ProductUnavailable'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
@@ -66,7 +68,9 @@ type shippingOnTypes = {
 export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
+  const [openModalPaymentOption, setOpenModalPaymentOption] = useState(false)
   const [description, setDescrition] = useState('')
+  const [installments, setInstallments] = useState()
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
@@ -143,6 +147,24 @@ export default function Products({ data, categoryData }: DataProps) {
       )
     }
   }
+
+  useEffect(() => {
+    async function handleDataInstallments() {
+      try {
+        const data = {
+          amount: returnPrice.ourPrice,
+        }
+  
+        const response = await apiStore.get(`checkout/installments`, {
+          params: data,
+        })
+        setInstallments(response.data)
+      } catch (error){
+        console.log(error)
+      }
+    }
+    handleDataInstallments()
+  }, [])
 
   return (
     <>
@@ -330,6 +352,7 @@ export default function Products({ data, categoryData }: DataProps) {
                         -{resultDiscountPercent.replace('.0', '')}%
                       </span>
                     </div>
+                    <span>ou até {Object.values(installments).length}x de R$169,90 sem juros <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
                   </>
                 )}
               </div>
@@ -511,6 +534,8 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
+      {console.log(openModalPaymentOption)}
+      <ModalPaymentOptions installmentsProduct={installments} isOpen={openModalPaymentOption} closeModal={(value) => setOpenModalPaymentOption(value)}/>
     </>
   )
 }
