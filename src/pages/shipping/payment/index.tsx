@@ -60,8 +60,8 @@ export default function payment() {
                     • Com o pix à vista você paga muito mais barato!
                   </span>
                 </div>
-                <div>
-                  <Link href={'/shipping/payment/credit/new-card'}>
+                {/* <div>
+                  <Link href={'/shipping/payment/credit/match-card'}>
                     <a className="btn btn-info text-white w-full justify-between">
                       <span>Cartão de crédito</span>
                       <svg
@@ -78,7 +78,7 @@ export default function payment() {
                   <span className="mt-2 block text-xs font-normal">
                     • Parcele em até 12x no cartão de crédito
                   </span>
-                </div>
+                </div> */}
                 <div>
                   <Link href={'/shipping/payment/custom'}>
                     <a className="btn btn-info text-white w-full justify-between">
