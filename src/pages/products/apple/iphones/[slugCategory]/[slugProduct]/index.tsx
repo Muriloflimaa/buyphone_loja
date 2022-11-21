@@ -513,7 +513,6 @@ export default function Products({ data, categoryData }: DataProps) {
         >
           {categoryData.map((product) => {
             const returnPrice = verificationPrice(product, user, isUser)
-            console.log(product)
             return (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
