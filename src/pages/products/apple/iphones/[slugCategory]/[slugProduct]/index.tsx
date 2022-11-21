@@ -351,7 +351,7 @@ export default function Products({ data, categoryData }: DataProps) {
                         -{resultDiscountPercent.replace('.0', '')}%
                       </span>
                     </div>
-                    <span>ou até {installments && Object.values(installments).length}x de {installments && Object.values(installments)[Object.values(installments).length - 1]} sem juros <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
+                    <span>ou até {installments && Object.values(installments).length}x de {installments && Object.values(installments)[Object.values(installments).length - 1]} <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
                   </>
                 )}
               </div>
@@ -533,7 +533,7 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
-      <ModalPaymentOptions installmentsProduct={installments} isOpen={openModalPaymentOption} closeModal={(value) => setOpenModalPaymentOption(value)}/>
+      <ModalPaymentOptions colorProduct={data.color} memoryProduct={data.memory} nameProduct={data.name} installmentsProduct={installments} isOpen={openModalPaymentOption} closeModal={(value) => setOpenModalPaymentOption(value)}/>
     </>
   )
 }
