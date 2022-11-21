@@ -1,3 +1,6 @@
+
+import { moneyMask } from "../../../utils/masks";
+
 interface IInstallmentsProduct {
     1: string;
     2: string;
@@ -17,36 +20,45 @@ interface IModalPaymentOptions {
     isOpen: boolean;
     closeModal: (value: boolean) => void
     installmentsProduct: IInstallmentsProduct | undefined;
+    nameProduct: string;
+    memoryProduct: string;
+    colorProduct: string;
 }
 
-export default function ModalPaymentOptions({isOpen, closeModal, installmentsProduct}: IModalPaymentOptions) {
+export default function ModalPaymentOptions({isOpen, closeModal, installmentsProduct, nameProduct, memoryProduct, colorProduct}: IModalPaymentOptions) {
   const handleCloseModalItsMatch = () => {
     return closeModal(false)
   }
   return (
     <>
-      <div className={`modal modal-middle ${isOpen && 'modal-open'}`} id="modal-open-match">
+      <div className={`modal sm:modal-middle modal-bottom ${isOpen && 'modal-open'}`}>
         <div className="modal-box bg-white text-black p-0">
-            <div className='flex justify-between bg-primary p-5'>
-                <h1 className='text-white'>Opções de pagamento</h1>
+            <div className='flex justify-between p-5'>
+                <h1 className='text-black text-xl px-4 font-medium'>{nameProduct} {memoryProduct} {colorProduct}</h1>
                 <button onClick={() => handleCloseModalItsMatch()} className="btn border-transparent text-xl text-[#CCCCCC] bg-inherit btn-circle absolute right-3 top-3">✕</button>
             </div>
-            <div className='p-4'>
-            <span className='mb-4 block'>nome do produto</span>
-            <div className='border-solid border-2 border-primary rounded px-4 py-2'>
-                <h2 className='text-primary'>Cartão de crédito</h2>
-                <ul className='my-4'>
+            <div className='px-4'>
+                <div className="overflow-x-auto" data-theme="light">
+                  <table className="table w-full mb-16">
+                    <thead>
+                      <tr>
+                        <th className="font-medium text-lg normal-case">Parcelas</th>
+                        <th className="font-medium text-lg normal-case text-right">Valor Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                     {installmentsProduct && Object.values(installmentsProduct).map((installment, index) => {
+                      const formatNumber = parseFloat(installment.replace(/[^\d]+/g,'')).toFixed(2)
                         return (
-                            <li className='flex justify-between'>
-                                <span>{`${index} x sem juros`}</span>
-                                <span>{installment}</span>
-                            </li>
+                            <tr>
+                                <td><span className="font-semibold">{`${index + 1} x`}</span>{` de ${installment}`}</td>
+                                <td className="text-right"><span  className="badge badge-ghost">{`R$ ${moneyMask((Number(formatNumber) * (index + 1)).toString())}`}</span></td>
+                            </tr>
                         )
                     })}
-                    
-                </ul>
-            </div>
+                    </tbody>
+                  </table>
+                </div>
             </div>
         </div>
       </div>
