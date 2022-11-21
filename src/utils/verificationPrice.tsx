@@ -8,8 +8,9 @@ export const verificationPrice = (
   const discount =
     process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
     !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+    process.env.NEXT_PUBLIC_PERCENT_DISCOUNT &&
     products.blackfriday == 1
-      ? 12.5
+      ? parseFloat(process.env.NEXT_PUBLIC_PERCENT_DISCOUNT)
       : !!isUser && user && JSON.parse(user)?.type === 1
       ? 12.5
       : 7 //calcula o desconto
