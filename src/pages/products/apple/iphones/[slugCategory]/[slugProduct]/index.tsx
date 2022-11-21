@@ -78,7 +78,7 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
-
+//envio Pablo
   useEffect(() => {
     geturl()
     // setColor(verificationColor(data.color))
