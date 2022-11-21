@@ -37,7 +37,6 @@ export default function ModalPaymentOptions({isOpen, closeModal, installmentsPro
                 <h2 className='text-primary'>Cartão de crédito</h2>
                 <ul className='my-4'>
                     {installmentsProduct && Object.values(installmentsProduct).map((installment, index) => {
-                        console.log(index)
                         return (
                             <li className='flex justify-between'>
                                 <span>{`${index} x sem juros`}</span>
