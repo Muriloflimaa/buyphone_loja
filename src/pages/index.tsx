@@ -639,7 +639,7 @@ const Home: NextPage<DataProps> = ({
             />
           </Carousel>
         </div>
-        <div className="max-w-7xl mx-auto md:my-10 my-4 px-4">
+        <div className="max-w-7xl mx-auto md:my-10 my-4 px-4 hidden md:block">
           <h1 className="md:text-4xl text-3xl font-medium text-center md:mb-10 mb-4">
             Conheça a BuyPhone
           </h1>
