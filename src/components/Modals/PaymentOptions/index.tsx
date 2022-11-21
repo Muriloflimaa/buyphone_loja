@@ -36,10 +36,11 @@ export default function ModalPaymentOptions({isOpen, closeModal, installmentsPro
             <div className='border-solid border-2 border-primary rounded px-4 py-2'>
                 <h2 className='text-primary'>Cartão de crédito</h2>
                 <ul className='my-4'>
-                    {installmentsProduct && Object.values(installmentsProduct).map((installment) => {
+                    {installmentsProduct && Object.values(installmentsProduct).map((installment, index) => {
+                        console.log(index)
                         return (
                             <li className='flex justify-between'>
-                                <span>{`x sem juros`}</span>
+                                <span>{`${index} x sem juros`}</span>
                                 <span>{installment}</span>
                             </li>
                         )
