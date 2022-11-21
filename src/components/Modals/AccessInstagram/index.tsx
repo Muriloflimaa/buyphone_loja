@@ -28,11 +28,11 @@ export default function AccessInstagram() {
             <div className="flex items-center justify-center flex-col col-span-7 mx-8">
               <h1 className="text-black font-bold text-2xl">
                 Antes de ir, nos siga no{' '}
-                <span className="text-[#FF316A] text-6xl">Instagram</span>
               </h1>
-              <h2 className="text-[#808080] text-2xl text-center">
+              <h2 className="text-[#FF316A] font-bold text-6xl">Instagram</h2>
+              <h3 className="text-[#808080] text-2xl text-center">
                 Para ter acesso a cupons e sorteios exclusivos
-              </h2>
+              </h3>
               <span className="text-[#808080]">@buyphone.match</span>
               <Link href={'https://instagram.com/buyphone.match'}>
                 <a
