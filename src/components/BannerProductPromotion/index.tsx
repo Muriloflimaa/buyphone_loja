@@ -33,7 +33,7 @@ const BannerProductPromotion = ({
   miniBanner,
 }: BannerProductPromotionProps) => {
   return (
-    <>
+    <Link href={`/products/apple/iphones${link}`}>
       <div className="carousel-wrapper relative h-full">
         <div
           className={`flex ${
@@ -138,7 +138,7 @@ const BannerProductPromotion = ({
           layout="responsive"
         ></Image>
       </div>
-    </>
+    </Link>
   )
 }
 
