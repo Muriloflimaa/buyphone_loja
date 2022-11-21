@@ -323,7 +323,9 @@ export default function creditFinally({
                 <div className="flex justify-between gap-4 w-full text-xl">
                   <span>Total</span>
                   <span>
-                    {installments &&
+                    {cartSize &&
+                      cartSize > 0 &&
+                      installments &&
                       maskReais(installments, GetInfoCredit.installments)}
                   </span>
                 </div>

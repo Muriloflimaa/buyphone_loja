@@ -226,7 +226,12 @@ export default function custom({ address }: Address) {
               <div className="card-body bg-primary/90 ">
                 <div className="flex gap-4 w-full justify-between text-xl">
                   <span>Total</span>
-                  <span> R$ {moneyMask(somaTotal.toString())}</span>
+                  <span>
+                    R${' '}
+                    {cartSize &&
+                      cartSize > 0 &&
+                      moneyMask(somaTotal.toString())}
+                  </span>
                 </div>
                 <a
                   onClick={() => handlePayment()}
