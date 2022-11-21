@@ -96,6 +96,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                     slugCategory={products.category_slug}
                     image={products.media[0]?.original_url}
                     memory={products.memory}
+                    blackfriday={products.blackfriday}
                   />
                 )
               })}

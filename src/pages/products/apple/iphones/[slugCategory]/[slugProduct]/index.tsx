@@ -1,14 +1,14 @@
 import {
   faFacebook,
   faTwitter,
-  faWhatsapp
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import {
   faChevronLeft,
   faCircleExclamation,
   faEnvelope,
   faLocationDot,
-  faTruckFast
+  faTruckFast,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -81,7 +81,7 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
-//envio Pablo
+  //envio Pablo
   useEffect(() => {
     geturl()
     // setColor(verificationColor(data.color))
@@ -153,12 +153,12 @@ export default function Products({ data, categoryData }: DataProps) {
         const data = {
           amount: returnPrice.ourPrice,
         }
-  
+
         const response = await apiStore.get(`checkout/installments`, {
           params: data,
         })
         setInstallments(response.data)
-      } catch (error){
+      } catch (error) {
         console.log(error)
       }
     }
@@ -186,8 +186,9 @@ export default function Products({ data, categoryData }: DataProps) {
         ></meta>
         <meta
           property="og:title"
-          content={`BuyPhone - ${data.name + ' Apple ' + data.memory + ' ' + data.color
-            }`}
+          content={`BuyPhone - ${
+            data.name + ' Apple ' + data.memory + ' ' + data.color
+          }`}
         ></meta>
       </Head>
       <div className="max-w-4xl mx-auto p-4 my-4 w-full">
@@ -204,7 +205,14 @@ export default function Products({ data, categoryData }: DataProps) {
           <div className="flex-col items-center gap-3 hidden md:flex col-span-1">
             {data.media &&
               data.media.map((res) => {
-                return <Image src={res?.original_url} width={60} height={75} />
+                return (
+                  <Image
+                    key={res.id}
+                    src={res?.original_url}
+                    width={60}
+                    height={75}
+                  />
+                )
               })}
 
             <ChevronDownIcon className="w-5 h-5 text-info-content" />
@@ -351,7 +359,20 @@ export default function Products({ data, categoryData }: DataProps) {
                         -{resultDiscountPercent.replace('.0', '')}%
                       </span>
                     </div>
-                    <span>ou até {installments && Object.values(installments).length}x de {installments && Object.values(installments)[Object.values(installments).length - 1]} <a className='cursor-pointer underline' onClick={() => setOpenModalPaymentOption(true)}>ver parcelamento</a></span>
+                    <span>
+                      ou até{' '}
+                      {installments && Object.values(installments).length}x de{' '}
+                      {installments &&
+                        Object.values(installments)[
+                          Object.values(installments).length - 1
+                        ]}{' '}
+                      <a
+                        className="cursor-pointer underline"
+                        onClick={() => setOpenModalPaymentOption(true)}
+                      >
+                        ver parcelamento
+                      </a>
+                    </span>
                   </>
                 )}
               </div>
@@ -444,8 +465,9 @@ export default function Products({ data, categoryData }: DataProps) {
                           className="w-4 h-4"
                         />
                         <p>
-                          {`${address?.Street && address?.Street + '-'} ${address?.City
-                            }, ${address?.UF}`}
+                          {`${address?.Street && address?.Street + '-'} ${
+                            address?.City
+                          }, ${address?.UF}`}
                         </p>
                       </div>
                     )}
@@ -533,7 +555,14 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
-      <ModalPaymentOptions colorProduct={data.color} memoryProduct={data.memory} nameProduct={data.name} installmentsProduct={installments} isOpen={openModalPaymentOption} closeModal={(value) => setOpenModalPaymentOption(value)}/>
+      <ModalPaymentOptions
+        colorProduct={data.color}
+        memoryProduct={data.memory}
+        nameProduct={data.name}
+        installmentsProduct={installments}
+        isOpen={openModalPaymentOption}
+        closeModal={(value) => setOpenModalPaymentOption(value)}
+      />
     </>
   )
 }
