@@ -395,7 +395,7 @@ const Home: NextPage<DataProps> = ({
 
                       {
                         ...MiniBannerConhecaDark,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                        link: '/institucional',
                       },
                     ]
                   : [
@@ -414,7 +414,7 @@ const Home: NextPage<DataProps> = ({
                       },
                       {
                         ...MiniBannerConheca,
-                        link: 'https://api.whatsapp.com/send?phone=5518981367275',
+                        link: '/institucional',
                       },
                     ]
               }
