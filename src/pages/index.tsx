@@ -264,7 +264,10 @@ const Home: NextPage<DataProps> = ({
                       <BannerProductPromotion
                         key={res.id}
                         mobileOrDesktop={'desktop'}
-                        link={`/${res.category_slug}/${res.slug}`}
+                        link={`/${res.category_slug.replace(
+                          '-3-geracao',
+                          ''
+                        )}/${res.slug}`}
                         color={res.color}
                         name={res.name}
                         memory={res.memory}
@@ -361,7 +364,10 @@ const Home: NextPage<DataProps> = ({
                           key={res.id}
                           miniBanner
                           mobileOrDesktop={'desktop'}
-                          link={`/${res.category_slug}/${res.slug}`}
+                          link={`/${res.category_slug.replace(
+                            '-3-geracao',
+                            ''
+                          )}/${res.slug}`}
                           color={res.color}
                           name={res.name}
                           memory={res.memory}
@@ -483,7 +489,10 @@ const Home: NextPage<DataProps> = ({
                     price={returnPrice.ourPrice}
                     averagePrice={returnPrice.averagePrice}
                     slug={products.slug}
-                    slugCategory={products.category_slug}
+                    slugCategory={products.category_slug.replace(
+                      '-3-geracao',
+                      ''
+                    )}
                     image={products.media[0].original_url}
                     memory={products.memory}
                     blackfriday={products.blackfriday}
