@@ -14,13 +14,18 @@ export default function SendInBlue() {
     <>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
       <div
-        className={`modal backdrop-blur bg-opacity-30 sm:modal-middle ${router.query.utm_source &&
+        className={`modal backdrop-blur bg-opacity-30 sm:modal-middle ${
+          router.query.utm_source &&
           router.query.utm_medium &&
-          router.query.utm_campaign && !router.query.name && !router.query.email && !router.query.tel && router.query.utm_source !== 'sendinblue' &&
+          router.query.utm_campaign &&
+          !router.query.name &&
+          !router.query.email &&
+          !router.query.tel &&
+          router.query.utm_source !== 'sendinblue' &&
           'modal-open'
-          }`}
+        }`}
       >
-        <div className="modal-box h-full max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0 p-0 relative">
+        <div className="modal-box bg-white h-full max-w-lg flex flex-col items-center overflow-hidden m-5 sm:m-0 p-0 relative">
           <div className="w-full h-auto">
             <Image
               src={BackgroundTop}
