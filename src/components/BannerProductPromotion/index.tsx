@@ -35,6 +35,24 @@ const BannerProductPromotion = ({
   return (
     <Link href={`/products/apple/iphones${link}`}>
       <div className="carousel-wrapper relative h-full">
+        <div className="absolute top-0 z-50 left-4 md:left-14">
+          <div
+            className={`relative ${
+              miniBanner
+                ? 'w-[50px] h-[70px] md:w-[70px] md:h-[120px]'
+                : 'w-[70px] h-[120px]'
+            } bg-[#FF316A] rounded-b-full shadow-[#FF316A]/80 shadow-2xl flex justify-center items-center`}
+          >
+            <div
+              className={`${
+                miniBanner ? 'text-md md:text-2xl' : 'text-2xl'
+              } font-semibold flex flex-col items-center`}
+            >
+              <span>{process.env.NEXT_PUBLIC_PERCENT_DISCOUNT}%</span>
+              <span className="uppercase">OFF</span>
+            </div>
+          </div>
+        </div>
         <div
           className={`flex ${
             miniBanner
@@ -64,6 +82,7 @@ const BannerProductPromotion = ({
             >
               {name}
             </h1>
+
             <h2
               className={`${
                 miniBanner

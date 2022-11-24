@@ -247,10 +247,10 @@ const Home: NextPage<DataProps> = ({
         {/* banner principal desktop quando for blackFriday */}
         {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
           !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="carousel-wrapper max-w-[2000px] mx-auto relative mt-8 hidden md:block">
+            <div className="carousel-wrapper max-w-[2000px] mx-auto relative mt-14 hidden md:block">
               <Carousel
                 infiniteLoop
-                autoPlay
+                // autoPlay
                 interval={4000}
                 showIndicators={false}
                 showStatus={false}
