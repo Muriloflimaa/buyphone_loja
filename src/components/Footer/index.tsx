@@ -89,12 +89,12 @@ export default function Footer() {
             Mais informações
           </h3>
           <ul className="gap-1 opacity-90 text-info-content">
-            <Link href={'/politics'} passHref>
+            <Link href={'/account/politics'} passHref>
               <li className="link link-hover cursor-pointer">
                 Política de privacidade
               </li>
             </Link>
-            <Link href={'/terms'} passHref>
+            <Link href={'/account/terms'} passHref>
               <li className="link link-hover cursor-pointer">
                 Termos e condições
               </li>
