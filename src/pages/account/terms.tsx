@@ -1,6 +1,6 @@
 export default function Terms() {
   return (
-    <div className="py-10 px-4 text-default gap-2 relative flex flex-col">
+    <div className="py-10 px-4 text-[#201942] gap-2 relative flex flex-col">
       <div className="opacity-0 absolute bg-red-500 ">
         <span className="bg-gray-900"></span>
         <span className="bg-sky-800"></span>

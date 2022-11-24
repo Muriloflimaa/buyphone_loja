@@ -186,13 +186,13 @@ export default function register() {
           <div className="flex items-center">
             <div className="ml-2 text-xs">
               Eu li e concordo com os{' '}
-              <Link href={'/terms'} passHref>
+              <Link href={'/account/terms'} passHref>
                 <a className="underline text-gray-600 hover:text-gray-900">
                   Termos de Serviço
                 </a>
               </Link>{' '}
               e{' '}
-              <Link href={'/politics'} passHref>
+              <Link href={'/account/politics'} passHref>
                 <a
                   href="https://pedidos.buyphone.com.br/privacy-policy"
                   className="underline text-gray-600 hover:text-gray-900"
