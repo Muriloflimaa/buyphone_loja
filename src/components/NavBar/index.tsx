@@ -10,7 +10,7 @@ import {
   TagIcon,
   UserCircleIcon,
   UserIcon,
-  XIcon
+  XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
@@ -54,7 +54,9 @@ export default function NavBar() {
   const [openDrawer, setOpenDrawer] = useState(false)
   const { '@BuyPhone:ModalInstagram': ModalInstagramCookies } =
     parseCookies(undefined)
-  const [showModalCookies, setShowModalCookies] = useState(ModalInstagramCookies)
+  const [showModalCookies, setShowModalCookies] = useState(
+    ModalInstagramCookies
+  )
   useEffect(() => {
     if (cart) {
       setCartSize(cart.length)
@@ -134,9 +136,11 @@ export default function NavBar() {
       setCookies('@BuyPhone:ModalInstagram', 'open', 60 * 60)
       elementOpenModalInstagram?.removeEventListener(
         'mouseover',
-        handleOpenModalInstagram,
+        handleOpenModalInstagram
       )
-      return document.getElementById('modal-access-instagram')?.classList.add('modal-open')
+      return document
+        .getElementById('modal-access-instagram')
+        ?.classList.add('modal-open')
     }
   }
 
@@ -146,7 +150,7 @@ export default function NavBar() {
     )
     elementOpenModalInstagram?.addEventListener(
       'mouseover',
-      handleOpenModalInstagram,
+      handleOpenModalInstagram
     )
   }, [])
 
@@ -239,8 +243,9 @@ export default function NavBar() {
                       />
                     )}
                     <div
-                      className={`items-center flex-col ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="ml-3 flex">
                         <label
@@ -355,8 +360,8 @@ export default function NavBar() {
                                 {cartSize && cartSize > 1
                                   ? cartSize + ' itens'
                                   : cartSize == 1
-                                    ? cartSize + ' item'
-                                    : 'Carrinho está vazio'}
+                                  ? cartSize + ' item'
+                                  : 'Carrinho está vazio'}
                               </span>
                             </div>
                           </div>
@@ -486,8 +491,9 @@ export default function NavBar() {
                       </div>
                     )}
                     <div
-                      className={`items-center flex-col mt-6 -ml-7 ${userData?.promotion ? 'flex' : 'hidden'
-                        }`}
+                      className={`items-center flex-col mt-6 -ml-7 ${
+                        userData?.promotion ? 'flex' : 'hidden'
+                      }`}
                     >
                       <div className="">
                         <label
@@ -534,7 +540,7 @@ export default function NavBar() {
               }
             >
               <div className="w-full border-t border-base-200 border-opacity-10 flex text-primary-content max-w-7xl mx-auto">
-                <ul className="menu menu-horizontal flex justify-center w-full text-md overflow-auto sm:text-sm">
+                <ul className="menu menu-horizontal md:flex md:justify-center w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
                     <>
                       {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (
