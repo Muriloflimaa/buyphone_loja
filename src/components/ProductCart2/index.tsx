@@ -156,7 +156,7 @@ const ProductCart = ({
             />
           </div>
 
-          <div className="flex flex-col items-start gap-8 h-full">
+          <div className="flex flex-col items-start gap-6 h-full">
             <div className="flex flex-col text-info-content">
               {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
                 !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
@@ -164,42 +164,41 @@ const ProductCart = ({
               <span>Modelo</span>
               <strong className="text-xl">{`${name} (${color}, ${memory})`}</strong>
             </div>
-
-            <div className="flex items-center gap-2 text-info-content">
-              <span>Quantidade</span>
-
-              {!show && (
-                <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
-                  <button
-                    className="btn btn-accent min-h-0 bg-[#9A9A9A]/10 text-xs h-auto p-2"
-                    type="button"
-                    disabled={amount <= 1}
-                    onClick={() => handleProductDecrement(id, amount)}
-                  >
-                    -
-                  </button>
-                  <button className="btn btn-accent min-h-0 font-normal text-xs h-auto p-2">
-                    {' '}
-                    {amount}
-                  </button>
-                  <button
-                    className="btn btn-accent min-h-0 bg-[#9A9A9A]/10 text-xs h-auto p-2"
-                    type="button"
-                    onClick={() => handleProductIncrement(id, amount)}
-                  >
-                    +
-                  </button>
-                </div>
-              )}
+            <div className="flex flex-col gap-1 md:flex-row-reverse md:items-center md:gap-3">
               {!show && (
                 <button
-                  type="button"
-                  data-testid="remove-product"
+                  className="flex text-info-content items-center text-xs"
                   onClick={() => handleRemoveProduct(id, name, color, memory)}
                 >
                   <TrashIcon className="h-4 w-4 text-red-600" />
                 </button>
               )}
+              <div className="flex items-center gap-2 text-info-content">
+                <span>Quantidade</span>
+
+                {!show && (
+                  <div className="btn-group max-h-8 shadow-sm shadow-black/20 rounded-lg">
+                    <button
+                      className="btn btn-accent min-h-0 bg-[#9A9A9A]/10 text-xs h-auto p-2"
+                      type="button"
+                      disabled={amount <= 1}
+                      onClick={() => handleProductDecrement(id, amount)}
+                    >
+                      -
+                    </button>
+                    <button className="btn btn-accent min-h-0 font-normal text-xs h-auto p-2">
+                      {amount}
+                    </button>
+                    <button
+                      className="btn btn-accent min-h-0 bg-[#9A9A9A]/10 text-xs h-auto p-2"
+                      type="button"
+                      onClick={() => handleProductIncrement(id, amount)}
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
