@@ -92,7 +92,9 @@ export default function address({ cepJson }: CepJsonProps) {
       setCookies('@BuyPhone:GetCep', data, 60 * 60)
       router.push('/shipping/payment')
     } catch (error) {
-      toast.error('Erro no servidor, entre em contato com o suporte')
+      toast.error(
+        'Por favor revise os dados inseridos, caso o problema persistir entre em contato conosco.'
+      )
     }
   }
 
