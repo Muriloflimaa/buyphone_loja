@@ -114,10 +114,10 @@ export function maskExpirationDate(evt: any) {
   evt.target.value = v
 }
 
-export function maskMustNumber(evt: any) {
+export function maskMustNumber(evt: any, maxNumber = 5) {
   var v = evt?.target.value
   v = v.replace(/\D/g, '') // Permite apenas dígitos
-  v = v.substring(0, 5) // Limita o tamanho
+  v = v.substring(0, maxNumber) // Limita o tamanho
   evt.target.value = v
 }
 

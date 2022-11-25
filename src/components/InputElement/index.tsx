@@ -15,15 +15,7 @@ interface InputProps
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  {
-    name,
-    label,
-    type,
-    placeholder,
-    classNameLabel = 'text-[#201942]',
-    error = null,
-    ...rest
-  },
+  { name, label, type, placeholder, classNameLabel, error = null, ...rest },
   ref
 ) => {
   const [show, setShow] = useState(true)
@@ -42,9 +34,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             ref={ref}
             {...rest}
             type={type === 'password' ? (show ? type : 'text') : type}
-            className={
-              'input input-bordered rounded-md !important w-full text-info-content relative'
-            }
+            className="input input-bordered rounded-md w-full relative text-info-content"
             placeholder={placeholder}
           />
           {type === 'password' ? (

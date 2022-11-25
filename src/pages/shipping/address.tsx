@@ -12,7 +12,7 @@ import { PersistentLogin } from '../../utils/PersistentLogin'
 import ProductCart from '../../components/ProductCart'
 import React, { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
-import { moneyMask } from '../../utils/masks'
+import { maskMustNumber, moneyMask } from '../../utils/masks'
 import { Input } from '../../components/InputElement'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
@@ -61,7 +61,12 @@ export default function address({ cepJson }: CepJsonProps) {
   const SaveAddressSchema = yup.object().shape({
     address: yup.string().required('Campo endereço é obrigatório'),
     neighborhood: yup.string().required('Campo bairro é obrigatório'),
-    number: yup.string().required('Campo número é obrigatório'),
+    number: yup
+      .number()
+      .typeError(
+        'Campo aceita apenas números, caso precise informar algo, informe no campo complemento'
+      )
+      .required('Campo número é obrigatório'),
     complement: yup.string(),
     city: yup.string().required('Campo cidade é obrigatório'),
     uf: yup.string().required('Campo estado é obrigatório'),
@@ -118,9 +123,10 @@ export default function address({ cepJson }: CepJsonProps) {
               />
               <Input
                 {...register('number')}
-                type="text"
+                type="tel"
                 label="Número"
                 error={errors.number}
+                onChange={(event) => maskMustNumber(event)}
               />
               <Input
                 {...register('complement')}
