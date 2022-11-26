@@ -137,12 +137,14 @@ export default function register() {
           type="text"
           label="Nome"
           error={errors.name}
+          classNameLabel="text-[#201942]"
         />
         <Input
           {...register('email')}
           type="text"
           label="email"
           error={errors.email}
+          classNameLabel="text-[#201942]"
         />
         <Input
           {...register('document')}
@@ -151,6 +153,7 @@ export default function register() {
           error={errors.document}
           onKeyUp={(e) => maskCpfInput(e)}
           maxLength={14}
+          classNameLabel="text-[#201942]"
         />
         <Input
           {...register('mobile_phone')}
@@ -159,12 +162,14 @@ export default function register() {
           error={errors.mobile_phone}
           onKeyUp={(e) => masktel(e)}
           maxLength={15}
+          classNameLabel="text-[#201942]"
         />
         <Input
           {...register('birthdate')}
           type="date"
           label="Data de nascimento"
           error={errors.birthdate}
+          classNameLabel="text-[#201942]"
         />
 
         <Input
@@ -172,12 +177,14 @@ export default function register() {
           label="Senha"
           type="password"
           error={errors.password}
+          classNameLabel="text-[#201942]"
         />
         <Input
           {...register('confirm_password')}
           type="password"
           label="Confirmar senha"
           error={errors.confirm_password}
+          classNameLabel="text-[#201942]"
         />
         <label
           className="block font-semibold text-[10px] text-gray-500"

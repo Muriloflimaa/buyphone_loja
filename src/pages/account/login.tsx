@@ -53,6 +53,7 @@ export default function login() {
             type="text"
             label="Email"
             error={errors.password}
+            classNameLabel="text-[#201942]"
           />
 
           <Input
@@ -60,6 +61,7 @@ export default function login() {
             type="password"
             label="Senha"
             error={errors.password}
+            classNameLabel="text-[#201942]"
           />
           <div className="flex justify-end w-full">
             <Link href={'/account/forgot-password'} passHref>

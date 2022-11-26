@@ -556,7 +556,12 @@ export default function Products({ data, categoryData }: DataProps) {
       </div>
       <div className="max-w-7xl mx-auto px-4 my-8">
         <div className="flex justify-center p-8 mb-10 bg-white rounded-lg">
-          <div className="fb-comments" data-href="https://www.buyphone.com.br/" data-width="800" data-numposts="10"></div>
+          <div
+            className="fb-comments"
+            data-href="https://www.buyphone.com.br/"
+            data-width="800"
+            data-numposts="10"
+          ></div>
         </div>
       </div>
       <ModalPaymentOptions
