@@ -73,6 +73,7 @@ export default function Products({ data, categoryData }: DataProps) {
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
+  const [loading, setLoading] = useState(false)
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const returnPrice = verificationPrice(data, user, isUser)
@@ -164,6 +165,21 @@ export default function Products({ data, categoryData }: DataProps) {
     }
     handleDataInstallments()
   }, [])
+  // useEffect(() => {
+  //   const script = document.createElement("script");
+  //   script.type = "text/javascript";
+  //   script.id = "fb-root";
+  //   script.src = "https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v15.0&appId=490525613047275&autoLogAppEvents=1";
+  //   script.async = true;
+  //   script.defer = true;
+  //   script.crossOrigin = "anonymous";
+  //   script.nonce = "275tpfbL";
+  //   document.body.appendChild(script);
+  //   console.log(true)
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -554,7 +570,7 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
-      <div className="max-w-7xl mx-auto px-4 my-8">
+        {/* <div className="max-w-7xl mx-auto px-4 my-8">
         <div className="flex justify-center p-8 mb-10 bg-white rounded-lg">
           <div
             className="fb-comments"
@@ -563,7 +579,7 @@ export default function Products({ data, categoryData }: DataProps) {
             data-numposts="10"
           ></div>
         </div>
-      </div>
+      </div>  */}
       <ModalPaymentOptions
         colorProduct={data.color}
         memoryProduct={data.memory}
