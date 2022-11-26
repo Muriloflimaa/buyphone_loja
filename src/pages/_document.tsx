@@ -64,8 +64,6 @@ export default class MyDocument extends Document {
               __html: `(function(n,r,l,d){try{var h=r.head||r.getElementsByTagName("head")[0],s=r.createElement("script");s.defer=true;s.setAttribute("type","text/javascript");s.setAttribute("src",l);n.neuroleadId=d;h.appendChild(s);}catch(e){}})(window,document,"https://cdn.leadster.com.br/neurolead/neurolead.min.js", 65127);`,
             }}
           ></script>
-          <div id="fb-root"></div>
-          <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v15.0&appId=490525613047275&autoLogAppEvents=1" nonce="275tpfbL"></script>
         </Head>
         <body>
           <Main />
