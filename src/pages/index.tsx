@@ -94,6 +94,8 @@ const Home: NextPage<DataProps> = ({
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para prevenir erro de renderização no usuário logado
 
+  console.log(data, productBlack)
+
   const handleLoadProducts = async () => {
     if (currentPage !== data.last_page) {
       try {

@@ -7,7 +7,7 @@ export const ToastCustom = (
   duration: number,
   message: string | any,
   state: string,
-  alert?: string
+  alert = 'Verifique o alerta abaixo'
 ) => {
   return toast.custom(
     (t) => (
@@ -44,7 +44,7 @@ export const ToastCustom = (
                   }
                 `}
               >
-                {!!alert ? alert : 'Verifique o alerta abaixo'}
+                {alert}
               </p>
               <div className="text-xs">
                 <p

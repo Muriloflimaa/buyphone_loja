@@ -41,7 +41,7 @@ export default function register() {
     password: yup
       .string()
       .required('Campo obrigatório')
-      .min(6, 'Minímo 6 digitos'),
+      .min(9, 'Minímo 9 digitos'),
     confirm_password: yup
       .string()
       .required('Campo obrigatório')
@@ -119,7 +119,7 @@ export default function register() {
           return [resposta[key]]
         })
 
-        ToastCustom(8000, MessageErrorArray, 'error')
+        ToastCustom(8000, MessageErrorArray, 'error', 'Atenção')
         return
       }
       ToastCustom(8000, 'Erro no servidor, contate o suporte.', 'error')
@@ -142,7 +142,7 @@ export default function register() {
         <Input
           {...register('email')}
           type="text"
-          label="email"
+          label="Email"
           error={errors.email}
           classNameLabel="text-[#201942]"
         />
@@ -158,7 +158,7 @@ export default function register() {
         <Input
           {...register('mobile_phone')}
           type="tel"
-          label="Telefone Celular"
+          label="Telefone celular"
           error={errors.mobile_phone}
           onKeyUp={(e) => masktel(e)}
           maxLength={15}
@@ -222,7 +222,7 @@ export default function register() {
             Registrar
           </button>
         )}
-        <div className="text-center text-sm">
+        <div className="text-center text-sm text-[#201942]">
           Já é registrado?{' '}
           <Link href={'/account/login'} passHref>
             <a className="font-semibold text-blue-700 hover:text-blue-600">
