@@ -48,6 +48,9 @@ import MiniBannerConhecaDark from '../assets/images/entendaMiniBanner.webp'
 import MeetImgDark from '../assets/images/meetdark.webp'
 import BannerIphone14Dark from '../assets/images/banner3desktopdark.webp'
 
+import BannerCopaDesktop from '../assets/images/BannerCopaDesktop.webp'
+import BannerCopaMobile from '../assets/images/BannerCopaMobile.webp'
+
 import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
 
 import Link from 'next/link'
@@ -93,8 +96,6 @@ const Home: NextPage<DataProps> = ({
   const [currentPage, setCurrentPage] = useState(2)
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para prevenir erro de renderização no usuário logado
-
-  console.log(data, productBlack)
 
   const handleLoadProducts = async () => {
     if (currentPage !== data.last_page) {
@@ -247,7 +248,7 @@ const Home: NextPage<DataProps> = ({
             </div>
           )}
         {/* banner principal desktop quando for blackFriday */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+        {/* {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
           !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
             <div className="carousel-wrapper max-w-[2000px] mx-auto relative mt-14 hidden md:block">
               <Carousel
@@ -281,9 +282,8 @@ const Home: NextPage<DataProps> = ({
                   })}
               </Carousel>
             </div>
-          )}
-        {/* banner principal mobile quando for blackFriday */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          )} */}
+        {/* {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
           JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
             <div className="carousel-wrapper max-w-[2000px] mx-auto relative block md:hidden mt-4">
               <Carousel
@@ -315,7 +315,36 @@ const Home: NextPage<DataProps> = ({
                   })}
               </Carousel>
             </div>
+          )} */}
+
+        {/* banner desktop quando for black para a copa */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="md:block hidden max-w-[2000px] mx-auto mt-14">
+              <Image
+                placeholder="blur"
+                className="object-contain"
+                src={BannerCopaDesktop}
+                layout="responsive"
+                quality={100}
+              />
+            </div>
           )}
+        {/* banner mobile quando for black para a copa */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="block md:hidden">
+              <Image
+                placeholder="blur"
+                className="object-contain"
+                src={BannerCopaMobile}
+                layout="responsive"
+                quality={100}
+              />
+            </div>
+          )}
+        {/* banner principal mobile quando for blackFriday */}
+
         {/* mini banners (mobile e desktop) */}
         <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 md:mt-1 gap-1">
           <div className="md:w-1/2">

@@ -159,9 +159,7 @@ export default function Products({ data, categoryData }: DataProps) {
           params: data,
         })
         setInstallments(response.data)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
     }
     handleDataInstallments()
   }, [])
@@ -570,7 +568,7 @@ export default function Products({ data, categoryData }: DataProps) {
           })}
         </Carousel>
       </div>
-        {/* <div className="max-w-7xl mx-auto px-4 my-8">
+      {/* <div className="max-w-7xl mx-auto px-4 my-8">
         <div className="flex justify-center p-8 mb-10 bg-white rounded-lg">
           <div
             className="fb-comments"
