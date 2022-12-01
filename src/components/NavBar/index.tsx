@@ -545,8 +545,8 @@ export default function NavBar() {
                     <>
                       {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (
                         <li>
-                          <Link href={'/black-friday'}>
-                            <a className="w-max">Black Friday</a>
+                          <Link href={'/black-da-copa'}>
+                            <a className="w-max">Black da Copa</a>
                           </Link>
                         </li>
                       )}

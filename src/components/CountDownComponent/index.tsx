@@ -6,7 +6,12 @@ interface CountDownComponentProps {
 }
 const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
   const [countDownBlackFriday, setCountDownBlackFriday] = useState<
-    | { days: number; minutes: number; seconds: number; hours: number }
+    | {
+        days: number | string
+        minutes: number | string
+        seconds: number | string
+        hours: number | string
+      }
     | undefined
   >(undefined)
   const [changeText, setChangeText] = useState(true)
@@ -25,11 +30,15 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
 
     // Time calculations for days, hours, minutes and seconds
     var days = Math.floor(distance / (1000 * 60 * 60 * 24))
+
     var hours = Math.floor(
       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     )
+
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+
     var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
     return {
       days,
       hours,
@@ -56,18 +65,24 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
     >
       {changeText
         ? 'Produto Black Friday'
-        : `Expira em ${
-            !!countDownBlackFriday
-              ? (countDownBlackFriday.days > 0
-                  ? countDownBlackFriday.days + ' dias '
-                  : '') +
-                +countDownBlackFriday.hours +
-                'h ' +
-                countDownBlackFriday.minutes +
-                'm ' +
-                countDownBlackFriday.seconds +
-                's '
-              : '00:00:00'
+        : `${
+            !!countDownBlackFriday && countDownBlackFriday.seconds < 1
+              ? 'Expirado'
+              : `Expira em ${
+                  !!countDownBlackFriday
+                    ? (countDownBlackFriday.days == 1
+                        ? countDownBlackFriday.days + ' dia '
+                        : countDownBlackFriday.days > 0
+                        ? countDownBlackFriday.days + ' dias '
+                        : '') +
+                      +countDownBlackFriday.hours +
+                      'h ' +
+                      countDownBlackFriday.minutes +
+                      'm ' +
+                      countDownBlackFriday.seconds +
+                      's '
+                    : '00:00:00'
+                }`
           }`}
     </span>
   )

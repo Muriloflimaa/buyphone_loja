@@ -321,13 +321,17 @@ const Home: NextPage<DataProps> = ({
         {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
           JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
             <div className="md:block hidden max-w-[2000px] mx-auto mt-14">
-              <Image
-                placeholder="blur"
-                className="object-contain"
-                src={BannerCopaDesktop}
-                layout="responsive"
-                quality={100}
-              />
+              <Link href={'/black-da-copa'}>
+                <a>
+                  <Image
+                    placeholder="blur"
+                    className="object-contain"
+                    src={BannerCopaDesktop}
+                    layout="responsive"
+                    quality={100}
+                  />
+                </a>
+              </Link>
             </div>
           )}
         {/* banner mobile quando for black para a copa */}
@@ -505,7 +509,7 @@ const Home: NextPage<DataProps> = ({
           <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Todos os produtos!
           </h1>
-          <div className="grid grid-cols-2  md:grid-cols-4 mx-auto gap-6 px-5 md:px-0 max-w-7xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 mx-auto gap-2 md:gap-6 px-4 md:px-0 max-w-7xl">
             {apiNew?.length > 0 ? (
               apiNew.map((products: IProduct) => {
                 const returnPrice = verificationPrice(products, user, isUser)
