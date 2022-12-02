@@ -38,6 +38,7 @@ interface CartContextData {
   CleanCart: () => void
   values: ArrayProduct[]
   somaTotal: number
+  somaTotalInteger: number
   discountValue: number
   isAttCart: boolean
 }
@@ -46,7 +47,8 @@ const CartContext = createContext<CartContextData>({} as CartContextData)
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const storagedCart = useLocalStorage('@BuyPhone:cart') //pegando carrinho no storage
-  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho
+  const [somaTotal, setSomaTotal] = useState(0) //soma do total para aparecer no card carrinho com disconto
+  const [somaTotalInteger, setSomaTotalInteger] = useState(0) //soma do total para aparecer no card carrinho sem disconto
   const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
@@ -116,6 +118,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     for (var i = 0; i < total.length; i++) {
       soma += total[i]
     }
+    setSomaTotalInteger(soma)
     userData?.promotion
       ? setSomaTotal(soma - discountValue)
       : setSomaTotal(soma) //somando produtos e setando no state
@@ -309,6 +312,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         somaTotal,
         discountValue,
         isAttCart,
+        somaTotalInteger,
       }}
     >
       {children}

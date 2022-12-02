@@ -152,6 +152,7 @@ const ProductCart = ({
               width={120}
               height={150}
               layout="fixed"
+              priority
               alt={name}
             />
           </div>

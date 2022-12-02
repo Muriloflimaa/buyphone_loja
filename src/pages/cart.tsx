@@ -64,6 +64,7 @@ export default function Cart() {
               (res: ArrayProduct) =>
                 res.id && (
                   <ProductCart
+                    key={res.id}
                     id={res.id}
                     amount={res.amount}
                     name={res.product.name}

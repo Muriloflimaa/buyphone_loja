@@ -14,6 +14,7 @@ import {
   maskCreditCard,
   maskExpirationDate,
   maskMustNumber,
+  masktel,
 } from '../../../../utils/masks'
 import { GetUseType } from '../../../../utils/getUserType'
 import { useRouter } from 'next/router'
@@ -62,6 +63,10 @@ export default function credit({ address }: Address) {
       .typeError('Digite um código de segurança válido')
       .required('Campo código de segurança é obrigatório'),
     document: yup.string().required('O campo CPF é obrigatório'),
+    card_holder_phone: yup.string().required('O campo Telefone é obrigatório'),
+    card_holder_birthdate: yup
+      .string()
+      .required('O campo data de nascimento é obrigatório'),
   })
 
   const { register, handleSubmit, formState } = useForm({
@@ -79,7 +84,7 @@ export default function credit({ address }: Address) {
       shippingPrice: 0,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 180)
+    setCookies('@BuyPhone:CreditCardInfo', data, 180 * 50)
     router.push('/shipping/payment/credit/match-installments')
   }
 
@@ -173,6 +178,21 @@ export default function credit({ address }: Address) {
                     onFocus={() => setFocus(!focus)}
                   />
                 </div>
+                <Input
+                  {...register('card_holder_phone')}
+                  type="text"
+                  label="Telefone para contato"
+                  error={errors.card_holder_phone}
+                  onChange={(e) => masktel(e)}
+                  maxLength={15}
+                />
+                <Input
+                  {...register('card_holder_birthdate')}
+                  type="date"
+                  label="Data de nascimento do titular"
+                  error={errors.card_holder_birthdate}
+                  maxLength={18}
+                />
                 <Input
                   {...register('document')}
                   type="text"

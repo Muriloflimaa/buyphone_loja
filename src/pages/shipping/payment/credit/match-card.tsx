@@ -42,13 +42,14 @@ export default function CreditCheckout({ address }: Address) {
     }
   }, [values])
 
-  useEffect(() => {
-    GetCreditCard()
-  }, [])
+  // useEffect(() => {
+  //   GetCreditCard()
+  // }, [])
 
   async function handleRemoveCard(id: number) {
     try {
       setCards((oldState) => oldState.filter((card) => card.id !== id))
+      setMatchCard(null)
       await apiStore.delete(`cards/${id}`)
     } catch (error) {
       return
@@ -97,7 +98,7 @@ export default function CreditCheckout({ address }: Address) {
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-3">
-            {cards.map((res) => {
+            {/* {cards.map((res) => {
               return (
                 <div key={res.id} className="flex gap-2 w-full items-center">
                   <FontAwesomeIcon
@@ -128,7 +129,7 @@ export default function CreditCheckout({ address }: Address) {
                 </div>
               )
             })}
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent />} */}
 
             <div className="flex gap-2 w-full items-center">
               <div className="w-5 h-5" />

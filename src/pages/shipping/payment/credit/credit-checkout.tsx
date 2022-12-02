@@ -26,6 +26,8 @@ interface GetInfoCreditProps {
     shippingPrice: number
     user_id: number
     installments: number
+    card_holder_birthdate?: string
+    card_holder_phone?: string
   }
   address: {
     address: string
@@ -61,7 +63,7 @@ export default function creditFinally({
   installments,
 }: GetInfoCreditProps) {
   const user = GetUseType()
-  const { values, somaTotal, CleanCart } = useCart()
+  const { values, somaTotal, CleanCart, somaTotalInteger } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
@@ -91,7 +93,8 @@ export default function creditFinally({
     try {
       const infoData = {
         ...GetInfoCredit,
-        amount: maskRl(installments, GetInfoCredit.installments),
+        card_holder_phone: '+55' + GetInfoCredit.card_holder_phone,
+        amount: somaTotalInteger,
         items: setDat,
       }
 
@@ -102,6 +105,11 @@ export default function creditFinally({
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
+      setDisableFinally(false)
+      setProducts(setDat)
+      setLoading(false)
+      setProducts(setDat)
+      setStateModalError(true)
       if (data.status === 'paid') {
         setCookies('@BuyPhone:SuccessShipping', 'true', 180)
         setStateModalSuccess(true)
