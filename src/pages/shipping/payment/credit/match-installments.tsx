@@ -73,8 +73,8 @@ export default function MatchInstallment({
       installments: matchInstallments,
     }
     destroyCookie(null, '@BuyPhone:CreditCardInfo')
-    setCookies('@BuyPhone:CreditCardInfo', infoData, 180 * 50)
-    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 180 * 50)
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 5)
+    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 60 * 5)
     router.push('/shipping/payment/credit/credit-checkout')
   }
 
@@ -95,8 +95,17 @@ export default function MatchInstallment({
         'Ocorreu algum erro para calcular as parcelas, tente novamente ou contate o suporte.',
         'error'
       )
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-      router.push('/shipping/payment')
+      try {
+        const data = {
+          amount: somaTotal,
+        }
+
+        const response = await apiStore.get(`checkout/installments`, {
+          params: data,
+        })
+        setLoading(false)
+        setInstallments(response.data)
+      } catch (error) {}
     }
   }
 
@@ -108,7 +117,7 @@ export default function MatchInstallment({
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-2">
-            {installments && (
+            {cartSize && cartSize > 0 && installments && (
               <Installments
                 setMatchInstallments={setMatchInstallments}
                 setValueInstallments={setValueInstallments}

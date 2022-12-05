@@ -10,7 +10,7 @@ import { useCart } from '../../../../context/UseCartContext'
 import { apiStore } from '../../../../services/api'
 import { ArrayProduct, ProductPayment } from '../../../../types'
 import { GetUseType } from '../../../../utils/getUserType'
-import { maskReais, maskRl, moneyMask } from '../../../../utils/masks'
+import { moneyMask } from '../../../../utils/masks'
 import { setCookies } from '../../../../utils/useCookies'
 
 interface GetInfoCreditProps {
@@ -42,7 +42,6 @@ interface GetInfoCreditProps {
     updated_at: string
     user_id: number
   }
-  installments: string
 }
 
 interface DataProps {
@@ -60,7 +59,6 @@ interface DataProps {
 export default function creditFinally({
   GetInfoCredit,
   address,
-  installments,
 }: GetInfoCreditProps) {
   const user = GetUseType()
   const { values, somaTotal, CleanCart, somaTotalInteger } = useCart()
@@ -71,12 +69,32 @@ export default function creditFinally({
   const [products, setProducts] = useState<ProductPayment[]>([])
   const [disableFinally, setDisableFinally] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [loadingInstallments, setLoadingInstallments] = useState(true)
+  const [installments, setInstallments] = useState(0)
 
   useEffect(() => {
     if (values) {
       setCartSize(values.length)
     }
   }, [values])
+
+  async function getPriceInstallments() {
+    try {
+      const data = {
+        amount: somaTotal,
+      }
+
+      const { data: response } = await apiStore.get(
+        `checkout/installments/${GetInfoCredit.installments}`,
+        {
+          params: data,
+        }
+      )
+      setInstallments(response[0])
+      setLoadingInstallments(false)
+    } catch (error) {}
+  }
+  getPriceInstallments()
 
   async function handlePayment() {
     setDisableFinally(true)
@@ -102,6 +120,7 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
+
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
@@ -110,18 +129,15 @@ export default function creditFinally({
       setLoading(false)
       setProducts(setDat)
       setStateModalError(true)
-      if (data.status === 'paid') {
-        setCookies('@BuyPhone:SuccessShipping', 'true', 180)
+      if (data.status === 'created' || data.status === 'paid') {
+        setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
         destroyCookie(null, '@BuyPhone:CreditCardInfo')
-        destroyCookie(null, '@BuyPhone:CreditInstallments')
         destroyCookie(undefined, '@BuyPhone:GetCep')
         destroyCookie(undefined, '@BuyPhone:CreditCardInfo')
-        destroyCookie(undefined, '@BuyPhone:CreditInstallments')
         destroyCookie({}, '@BuyPhone:CreditCardInfo')
-        destroyCookie({}, '@BuyPhone:CreditInstallments')
         destroyCookie({}, '@BuyPhone:GetCep')
       } else {
         setDisableFinally(false)
@@ -208,15 +224,17 @@ export default function creditFinally({
               Tentar novamente
             </button>
 
-            <a
+            {/* <a
               target={'_blank'}
               href={`https://api.whatsapp.com/send?phone=5518981367275&text=${
                 products && JSON.stringify(products)
-              }${maskReais(installments, GetInfoCredit?.installments)}`}
+              }${maskReais(
+                GetInfoCredit?.installments && GetInfoCredit?.installments
+              )}`}
               className="link  md:mb-0 text-error"
             >
               Contatar o suporte
-            </a>
+            </a> */}
           </div>
         </div>
       )}
@@ -299,7 +317,13 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col items-end">
                 <strong>Condição:</strong>
-                <span>{installments}</span>
+                {loadingInstallments ? (
+                  <LoadingComponent />
+                ) : (
+                  <span>{`${GetInfoCredit.installments}x de ${moneyMask(
+                    installments.toString()
+                  )}`}</span>
+                )}
               </div>
             </div>
           </div>
@@ -330,12 +354,15 @@ export default function creditFinally({
               <div className="card-body bg-primary/90 ">
                 <div className="flex justify-between gap-4 w-full text-xl">
                   <span>Total</span>
-                  <span>
-                    {cartSize &&
-                      cartSize > 0 &&
-                      installments &&
-                      maskReais(installments, GetInfoCredit.installments)}
-                  </span>
+                  {loadingInstallments ? (
+                    <LoadingComponent />
+                  ) : (
+                    <span>
+                      {moneyMask(
+                        (installments * GetInfoCredit.installments).toString()
+                      )}
+                    </span>
+                  )}
                 </div>
                 <a
                   onClick={() => handlePayment()}
@@ -361,13 +388,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:GetCep': getDataUser } = parseCookies(ctx)
   const { '@BuyPhone:cart': cart } = parseCookies(ctx)
   const { '@BuyPhone:CreditCardInfo': GetInfo } = parseCookies(ctx)
-  const { '@BuyPhone:CreditInstallments': installments } = parseCookies(ctx)
 
   if (getDataUser && cart !== '[]' && GetInfo) {
     const GetInfoCredit = JSON.parse(GetInfo)
     const address = JSON.parse(getDataUser)
     return {
-      props: { GetInfoCredit, address, installments },
+      props: { GetInfoCredit, address },
     }
   } else {
     return {

@@ -1,16 +1,14 @@
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
-import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
-import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
 import { TotalPayment } from '../../../../components/TotalPayment'
 import { AuthContext } from '../../../../context/AuthContext'
 import { useCart } from '../../../../context/UseCartContext'
-import { apiStore } from '../../../../services/api'
 import { Address } from '../../../../types'
 import { moneyMask } from '../../../../utils/masks'
 import { ToastCustom } from '../../../../utils/toastCustom'
@@ -34,7 +32,7 @@ export default function CreditCheckout({ address }: Address) {
   const { values, somaTotal, CleanCart, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const { userData } = useContext(AuthContext)
-  const [loading, setLoading] = useState(true)
+  // const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (values) {
@@ -46,26 +44,26 @@ export default function CreditCheckout({ address }: Address) {
   //   GetCreditCard()
   // }, [])
 
-  async function handleRemoveCard(id: number) {
-    try {
-      setCards((oldState) => oldState.filter((card) => card.id !== id))
-      setMatchCard(null)
-      await apiStore.delete(`cards/${id}`)
-    } catch (error) {
-      return
-    }
-  }
+  // async function handleRemoveCard(id: number) {
+  //   try {
+  //     setCards((oldState) => oldState.filter((card) => card.id !== id))
+  //     setMatchCard(null)
+  //     await apiStore.delete(`cards/${id}`)
+  //   } catch (error) {
+  //     return
+  //   }
+  // }
 
-  async function GetCreditCard() {
-    try {
-      const { data } = await apiStore.get(`cards/user/${address.user_id}`)
-      setCards(data)
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      setCards([])
-    }
-  }
+  // async function GetCreditCard() {
+  //   try {
+  //     const { data } = await apiStore.get(`cards/user/${address.user_id}`)
+  //     setCards(data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     setLoading(false)
+  //     setCards([])
+  //   }
+  // }
 
   function handleCard() {
     if (matchCard === 'newCard') {
@@ -80,7 +78,7 @@ export default function CreditCheckout({ address }: Address) {
         shippingPrice: 0,
       }
 
-      setCookies('@BuyPhone:CreditCardInfo', data, 180)
+      setCookies('@BuyPhone:CreditCardInfo', data, 60 * 5)
       router.push('/shipping/payment/credit/match-installments')
 
       return
@@ -132,9 +130,9 @@ export default function CreditCheckout({ address }: Address) {
             {loading && <LoadingComponent />} */}
 
             <div className="flex gap-2 w-full items-center">
-              <div className="w-5 h-5" />
+              {/* <div className="w-5 h-5" /> */}
               <div className="form-control w-full stat p-0 flex shadow-md rounded-lg">
-                <label className="label gap-2  py-5 px-6 cursor-pointer justify-start">
+                <label className="label gap-2 py-5 px-6 cursor-pointer justify-start">
                   <input
                     type="radio"
                     name="radio-6"

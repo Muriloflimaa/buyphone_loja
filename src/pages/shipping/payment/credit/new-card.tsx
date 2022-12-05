@@ -84,7 +84,7 @@ export default function credit({ address }: Address) {
       shippingPrice: 0,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 180 * 50)
+    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 5)
     router.push('/shipping/payment/credit/match-installments')
   }
 
@@ -157,7 +157,7 @@ export default function credit({ address }: Address) {
                 <div className="flex flex-col md:flex-row gap-2 w-full">
                   <Input
                     {...register('expiration_date')}
-                    type="text"
+                    type="tel"
                     name="expiration_date"
                     label="MM/AA"
                     error={errors.expiration_date}
@@ -195,7 +195,7 @@ export default function credit({ address }: Address) {
                 />
                 <Input
                   {...register('document')}
-                  type="text"
+                  type="tel"
                   label="CPF ou CNPJ do titular do cartão"
                   error={errors.document}
                   onChange={(e) => maskCpfCnpjInput(e)}
