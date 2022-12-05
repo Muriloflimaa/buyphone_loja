@@ -5,6 +5,7 @@ import { useWindowSize } from '../utils/useWindowSize'
 import GifPng from '../assets/images/giphy.gif'
 import { destroyCookie, parseCookies } from 'nookies'
 import { GetServerSidePropsContext } from 'next'
+import BlurImage from '../components/BlurImage'
 
 export default function Purchased() {
   const size = useWindowSize()
@@ -33,28 +34,26 @@ export default function Purchased() {
             <a className="link">Ir para minhas compras</a>
           </Link>
 
-          <Image className="rounded-lg" src={GifPng} />
+          <BlurImage className="rounded-lg" src={GifPng} />
         </div>
       </div>
     </>
   )
 }
 
-//descomente para iniciar validação nos cookies
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
 
-// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-//   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
-
-//   if (success) {
-//     return {
-//       props: {},
-//     }
-//   } else {
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       },
-//     }
-//   }
-// }
+  if (success) {
+    return {
+      props: {},
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+}

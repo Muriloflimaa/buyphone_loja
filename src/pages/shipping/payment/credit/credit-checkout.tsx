@@ -124,11 +124,6 @@ export default function creditFinally({
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
-      setDisableFinally(false)
-      setProducts(setDat)
-      setLoading(false)
-      setProducts(setDat)
-      setStateModalError(true)
       if (data.status === 'created' || data.status === 'paid') {
         setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
         setStateModalSuccess(true)
