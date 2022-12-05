@@ -139,6 +139,7 @@ export default function creditFinally({
         destroyCookie(undefined, '@BuyPhone:CreditCardInfo')
         destroyCookie({}, '@BuyPhone:CreditCardInfo')
         destroyCookie({}, '@BuyPhone:GetCep')
+        return
       } else {
         setDisableFinally(false)
         setProducts(setDat)
