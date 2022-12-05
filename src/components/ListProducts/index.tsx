@@ -90,7 +90,7 @@ const ListProducts = ({
       try {
         const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
         setImage(data.qrcode)
-      } catch (error) { }
+      } catch (error) {}
     }
   }
 
@@ -110,8 +110,8 @@ const ListProducts = ({
             {(method === 'PIX' &&
               statuspayment !== 'paid' &&
               expired !== 'expired') ??
-              'manual_paid' ??
-              'captured' ? (
+            'manual_paid' ??
+            'captured' ? (
               <>
                 <div className="justify-end flex-col items-center cursor-pointer z-10">
                   <label
@@ -163,12 +163,13 @@ const ListProducts = ({
                               >
                                 Copiar QRCode
                               </a>
-
-                              <Link href={pdf}>
-                                <a className="btn btn-info text-white">
-                                  Baixar PDF
-                                </a>
-                              </Link>
+                              {pdf && (
+                                <Link href={pdf}>
+                                  <a className="btn btn-info text-white">
+                                    Baixar PDF
+                                  </a>
+                                </Link>
+                              )}
                             </div>
                           </div>
                           <div className="divider md:divider-horizontal"></div>
@@ -274,8 +275,9 @@ const ListProducts = ({
                     icon={faTruckFast}
                     className="w-4 h-4 mr-2"
                   />
-                  {`Chegará grátis em até ${shippingDays?.days ? shippingDays?.days : '10 à 15 '
-                    } dias úteis`}
+                  {`Chegará grátis em até ${
+                    shippingDays?.days ? shippingDays?.days : '10 à 15 '
+                  } dias úteis`}
                 </p>
               </div>
             </div>
@@ -300,7 +302,12 @@ const ListProducts = ({
                   <span className="badge badge-warning badge-sm h-auto text-center">
                     Registrado
                   </span>
-                ) : statuspayment == 'paid' ?? 'manual_paid' ?? 'captured' ?? 'approved' ?? 'authorized' ?? 'confirmed' ? (
+                ) : statuspayment == 'paid' ??
+                  'manual_paid' ??
+                  'captured' ??
+                  'approved' ??
+                  'authorized' ??
+                  'confirmed' ? (
                   <span className="badge badge-success badge-sm h-auto text-center">
                     Pagamento aprovado
                   </span>

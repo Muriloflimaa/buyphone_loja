@@ -92,7 +92,7 @@ function MyShopping() {
           )}`
       )
       setData(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   return (
@@ -173,8 +173,9 @@ function MyShopping() {
                 )
                 window.scrollTo(0, 0)
               }}
-              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${link.active === true ? 'btn-disabled' : ''
-                }`}
+              className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
+                link.active === true ? 'btn-disabled' : ''
+              }`}
             >
               {link.label
                 .replace('&laquo; Previous', 'Anterior')
