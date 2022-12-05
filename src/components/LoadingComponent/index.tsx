@@ -5,7 +5,7 @@ const LoadingComponent = ({
 }) => {
   return (
     <div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <svg
           className="animate-spin h-5 w-5 text-white"
           xmlns="http://www.w3.org/2000/svg"

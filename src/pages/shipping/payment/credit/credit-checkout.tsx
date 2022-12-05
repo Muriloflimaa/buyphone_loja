@@ -78,6 +78,10 @@ export default function creditFinally({
     }
   }, [values])
 
+  useEffect(() => {
+    getPriceInstallments()
+  }, [])
+
   async function getPriceInstallments() {
     try {
       const data = {
@@ -94,7 +98,6 @@ export default function creditFinally({
       setLoadingInstallments(false)
     } catch (error) {}
   }
-  getPriceInstallments()
 
   async function handlePayment() {
     setDisableFinally(true)
