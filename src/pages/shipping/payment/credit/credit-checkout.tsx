@@ -83,7 +83,7 @@ export default function creditFinally({
 
   useEffect(() => {
     getPriceInstallments()
-  }, [])
+  }, [somaTotal])
 
   async function getPriceInstallments() {
     try {
@@ -126,7 +126,7 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
-      console.log(data)
+
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
@@ -149,26 +149,27 @@ export default function creditFinally({
         return
       }
     } catch (error: any) {
-      console.log(error, 'erro')
-      if (error.response.data.errors.document) {
-        ToastCustom(5000, 'O campo de CPF é inválido!', 'error')
-        router.push('/shipping/payment/credit/new-card')
-        setCookies(
-          '@BuyPhone:RedirectCheckout',
-          '/shipping/payment/credit/credit-checkout',
-          60 * 5
-        )
-        return
-      }
-      if (error.response.data.errors.card_holder_phone) {
-        ToastCustom(5000, 'O campo de Telefone é inválido!', 'error')
-        router.push('/shipping/payment/credit/new-card')
-        setCookies(
-          '@BuyPhone:RedirectCheckout',
-          '/shipping/payment/credit/credit-checkout',
-          60 * 5
-        )
-        return
+      if (error.response.data.errors) {
+        if (error.response.data.errors.document) {
+          ToastCustom(5000, 'O campo de CPF é inválido!', 'error')
+          router.push('/shipping/payment/credit/new-card')
+          setCookies(
+            '@BuyPhone:RedirectCheckout',
+            '/shipping/payment/credit/credit-checkout',
+            60 * 5
+          )
+          return
+        }
+        if (error.response.data.errors.card_holder_phone) {
+          ToastCustom(5000, 'O campo de Telefone é inválido!', 'error')
+          router.push('/shipping/payment/credit/new-card')
+          setCookies(
+            '@BuyPhone:RedirectCheckout',
+            '/shipping/payment/credit/credit-checkout',
+            60 * 5
+          )
+          return
+        }
       }
       setDisableFinally(false)
       setProducts(setDat)
@@ -246,18 +247,15 @@ export default function creditFinally({
             >
               Tentar novamente
             </button>
-
-            {/* <a
-              target={'_blank'}
-              href={`https://api.whatsapp.com/send?phone=5518981367275&text=${
-                products && JSON.stringify(products)
-              }${maskReais(
-                GetInfoCredit?.installments && GetInfoCredit?.installments
-              )}`}
-              className="link  md:mb-0 text-error"
+            <button
+              onClick={() => (
+                setStateModalError(false),
+                router.push('/shipping/payment/credit/new-card')
+              )}
+              className="btn btn-error max-w-xs text-white w-full rounded-full shadow-md shadow-error/60"
             >
-              Contatar o suporte
-            </a> */}
+              Alterar dados do cartão
+            </button>
           </div>
         </div>
       )}

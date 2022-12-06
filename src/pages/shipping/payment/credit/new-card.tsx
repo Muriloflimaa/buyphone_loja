@@ -53,9 +53,10 @@ export default function credit({ address }: Address) {
   const creditSchema = yup.object().shape({
     card_holder_name: yup.string().required('Campo nome é obrigatório'),
     card_number: yup
-      .number()
+      .string()
       .typeError('Digite um número de cartão válido')
-      .required('Campo número do cartão é obrigatório'),
+      .required('Campo número do cartão é obrigatório')
+      .min(19, 'Campo número do cartão precisa ter 16 digitos'),
     expiration_date: yup
       .string()
       .required('Campo Data de validade é obrigatório')
@@ -102,6 +103,7 @@ export default function credit({ address }: Address) {
 
     const data = {
       ...value,
+      card_number: parseInt(value.card_number),
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
