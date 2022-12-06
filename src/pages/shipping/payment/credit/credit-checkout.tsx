@@ -2,6 +2,7 @@ import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import LoadingComponent from '../../../../components/LoadingComponent'
@@ -11,6 +12,7 @@ import { apiStore } from '../../../../services/api'
 import { ArrayProduct, ProductPayment } from '../../../../types'
 import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
+import { ToastCustom } from '../../../../utils/toastCustom'
 import { setCookies } from '../../../../utils/useCookies'
 
 interface GetInfoCreditProps {
@@ -71,6 +73,7 @@ export default function creditFinally({
   const [loading, setLoading] = useState(false)
   const [loadingInstallments, setLoadingInstallments] = useState(true)
   const [installments, setInstallments] = useState(0)
+  const router = useRouter()
 
   useEffect(() => {
     if (values) {
@@ -123,7 +126,7 @@ export default function creditFinally({
         `checkout/credit-card`,
         infoData
       )
-
+      console.log(data)
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)
@@ -146,6 +149,27 @@ export default function creditFinally({
         return
       }
     } catch (error: any) {
+      console.log(error, 'erro')
+      if (error.response.data.errors.document) {
+        ToastCustom(5000, 'O campo de CPF é inválido!', 'error')
+        router.push('/shipping/payment/credit/new-card')
+        setCookies(
+          '@BuyPhone:RedirectCheckout',
+          '/shipping/payment/credit/credit-checkout',
+          60 * 10
+        )
+        return
+      }
+      if (error.response.data.errors.card_holder_phone) {
+        ToastCustom(5000, 'O campo de Telefone é inválido!', 'error')
+        router.push('/shipping/payment/credit/new-card')
+        setCookies(
+          '@BuyPhone:RedirectCheckout',
+          '/shipping/payment/credit/credit-checkout',
+          60 * 10
+        )
+        return
+      }
       setDisableFinally(false)
       setProducts(setDat)
       setLoading(false)

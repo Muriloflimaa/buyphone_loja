@@ -64,7 +64,7 @@ const CountDownComponent = ({ width, text }: CountDownComponentProps) => {
       }
     >
       {changeText
-        ? 'Produto Black Friday'
+        ? 'Produto Black da Copa'
         : `${
             !!countDownBlackFriday && countDownBlackFriday.seconds < 1
               ? 'Expirado'

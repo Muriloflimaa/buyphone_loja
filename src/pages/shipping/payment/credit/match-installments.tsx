@@ -73,7 +73,7 @@ export default function MatchInstallment({
       installments: matchInstallments,
     }
     destroyCookie(null, '@BuyPhone:CreditCardInfo')
-    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 5)
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 10)
     setCookies('@BuyPhone:CreditInstallments', valueInstallments, 60 * 5)
     router.push('/shipping/payment/credit/credit-checkout')
   }

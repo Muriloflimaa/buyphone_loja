@@ -211,3 +211,19 @@ export interface UserData {
   updated_at: string
   user_id: number
 }
+
+export interface GetInfoCredit {
+  address_id: number
+  amount: number
+  card_cvv: number
+  card_holder_name: string
+  card_number: number
+  document: string
+  expiration_date: string
+  items: Array<{}>
+  shippingPrice: number
+  user_id: number
+  installments: number
+  card_holder_birthdate?: string
+  card_holder_phone?: string
+}

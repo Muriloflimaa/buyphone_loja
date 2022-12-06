@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '../../../../components/Card/index'
 import { TotalPayment } from '../../../../components/TotalPayment'
-import { Address } from '../../../../types'
+import { Address, GetInfoCredit } from '../../../../types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -30,6 +30,7 @@ export default function credit({ address }: Address) {
   const [code, setCode] = useState('')
   const [flag, setFlag] = useState('')
   const [focus, setFocus] = useState(false)
+  const [infoCredit, setInfoCredit] = useState<GetInfoCredit>()
   const router = useRouter()
   const user = GetUseType()
 
@@ -57,13 +58,21 @@ export default function credit({ address }: Address) {
       .required('Campo número do cartão é obrigatório'),
     expiration_date: yup
       .string()
-      .required('Campo Data de validade é obrigatório'),
+      .required('Campo Data de validade é obrigatório')
+      .min(5, 'Campo data de validade precisa ter 4 digitos'),
     card_cvv: yup
       .number()
       .typeError('Digite um código de segurança válido')
-      .required('Campo código de segurança é obrigatório'),
-    document: yup.string().required('O campo CPF é obrigatório'),
-    card_holder_phone: yup.string().required('O campo Telefone é obrigatório'),
+      .required('Campo código de segurança é obrigatório')
+      .min(3, 'Campo código de segurança precisa ter minimo de 3 digitos'),
+    document: yup
+      .string()
+      .required('O campo CPF é obrigatório')
+      .min(14, 'Campo CPF precisa ter 11 digitos'),
+    card_holder_phone: yup
+      .string()
+      .required('O campo Telefone é obrigatório')
+      .min(14, 'O campo telefone precisa ter no minimo 10 digitos'),
     card_holder_birthdate: yup
       .string()
       .required('O campo data de nascimento é obrigatório'),
@@ -72,6 +81,20 @@ export default function credit({ address }: Address) {
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(creditSchema),
   })
+
+  useEffect(() => {
+    getInfoCreditRedirect()
+  }, [])
+
+  function getInfoCreditRedirect() {
+    const { '@BuyPhone:CreditCardInfo': CardInfo } = parseCookies(undefined)
+    const { '@BuyPhone:RedirectCheckout': Redirect } = parseCookies(undefined)
+
+    if (Redirect && CardInfo) {
+      setInfoCredit(JSON.parse(CardInfo))
+      return
+    }
+  }
 
   const handleSubmitCredit: SubmitHandler<any> = async (value, event) => {
     event?.preventDefault()
@@ -82,9 +105,17 @@ export default function credit({ address }: Address) {
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
+      infoCredit: infoCredit?.installments,
     }
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 5)
+    const { '@BuyPhone:RedirectCheckout': Redirect } = parseCookies(undefined)
+
+    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 10)
+
+    if (Redirect) {
+      router.push(Redirect)
+      return
+    }
     router.push('/shipping/payment/credit/match-installments')
   }
 
@@ -140,6 +171,7 @@ export default function credit({ address }: Address) {
                   label="Nome impresso no cartão"
                   error={errors.card_holder_name}
                   onChange={(event) => setName(event.target.value)}
+                  defaultValue={infoCredit && infoCredit.card_holder_name}
                 />
 
                 <Input
@@ -153,6 +185,7 @@ export default function credit({ address }: Address) {
                     setCard(event.target.value), checksFlag(event.target.value)
                   )}
                   onKeyUp={(e) => maskCreditCard(e)}
+                  defaultValue={infoCredit && infoCredit.card_number}
                 />
                 <div className="flex flex-col md:flex-row gap-2 w-full">
                   <Input
@@ -164,6 +197,7 @@ export default function credit({ address }: Address) {
                     onKeyUp={(e) => maskExpirationDate(e)}
                     maxLength={5}
                     onChange={(event) => setExpiration_date(event.target.value)}
+                    defaultValue={infoCredit && infoCredit.expiration_date}
                   />
                   <Input
                     {...register('card_cvv')}
@@ -176,15 +210,17 @@ export default function credit({ address }: Address) {
                       setCode(event.target.value), maskMustNumber(event)
                     )}
                     onFocus={() => setFocus(!focus)}
+                    defaultValue={infoCredit && infoCredit.card_cvv}
                   />
                 </div>
                 <Input
                   {...register('card_holder_phone')}
-                  type="text"
+                  type="tel"
                   label="Telefone para contato"
                   error={errors.card_holder_phone}
                   onChange={(e) => masktel(e)}
                   maxLength={15}
+                  defaultValue={infoCredit && infoCredit.card_holder_phone}
                 />
                 <Input
                   {...register('card_holder_birthdate')}
@@ -192,6 +228,7 @@ export default function credit({ address }: Address) {
                   label="Data de nascimento do titular"
                   error={errors.card_holder_birthdate}
                   maxLength={18}
+                  defaultValue={infoCredit && infoCredit.card_holder_birthdate}
                 />
                 <Input
                   {...register('document')}
@@ -200,10 +237,11 @@ export default function credit({ address }: Address) {
                   error={errors.document}
                   onChange={(e) => maskCpfCnpjInput(e)}
                   maxLength={18}
+                  defaultValue={infoCredit && infoCredit.document}
                 />
               </div>
               <div className="flex flex-col">
-                <Link href={'/shipping/payment/pix'} passHref>
+                <Link href={'/shipping/payment/pix/pix-checkout'} passHref>
                   <a className="alert border-2 border-warning my-2 md:mt-5 md:flex flex-row justify-start hidden">
                     <FontAwesomeIcon
                       icon={faLightbulb}
