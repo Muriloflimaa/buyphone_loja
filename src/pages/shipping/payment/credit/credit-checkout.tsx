@@ -149,6 +149,7 @@ export default function creditFinally({
         return
       }
     } catch (error: any) {
+      console.log(error)
       if (error.response.data.errors) {
         if (error.response.data.errors.document) {
           ToastCustom(5000, 'O campo de CPF é inválido!', 'error')

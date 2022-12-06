@@ -53,7 +53,7 @@ export default function credit({ address }: Address) {
   const creditSchema = yup.object().shape({
     card_holder_name: yup.string().required('Campo nome é obrigatório'),
     card_number: yup
-      .string()
+      .number()
       .typeError('Digite um número de cartão válido')
       .required('Campo número do cartão é obrigatório')
       .min(19, 'Campo número do cartão precisa ter 16 digitos'),
@@ -103,7 +103,6 @@ export default function credit({ address }: Address) {
 
     const data = {
       ...value,
-      card_number: parseInt(value.card_number),
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
