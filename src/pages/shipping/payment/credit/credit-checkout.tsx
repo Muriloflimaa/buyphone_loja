@@ -156,7 +156,7 @@ export default function creditFinally({
         setCookies(
           '@BuyPhone:RedirectCheckout',
           '/shipping/payment/credit/credit-checkout',
-          60 * 10
+          60 * 5
         )
         return
       }
@@ -166,7 +166,7 @@ export default function creditFinally({
         setCookies(
           '@BuyPhone:RedirectCheckout',
           '/shipping/payment/credit/credit-checkout',
-          60 * 10
+          60 * 5
         )
         return
       }

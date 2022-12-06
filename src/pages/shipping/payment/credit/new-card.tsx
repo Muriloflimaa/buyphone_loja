@@ -110,7 +110,7 @@ export default function credit({ address }: Address) {
 
     const { '@BuyPhone:RedirectCheckout': Redirect } = parseCookies(undefined)
 
-    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 10)
+    setCookies('@BuyPhone:CreditCardInfo', data, 60 * 5)
 
     if (Redirect) {
       router.push(Redirect)

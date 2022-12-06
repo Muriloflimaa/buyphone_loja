@@ -47,10 +47,9 @@ interface GetInfoCreditProps {
 export default function MatchInstallment({
   GetInfoCredit,
 }: GetInfoCreditProps) {
-  const { values, somaTotal, CleanCart, discountValue } = useCart()
+  const { values, somaTotal, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const [matchInstallments, setMatchInstallments] = useState<string>('')
-  const [valueInstallments, setValueInstallments] = useState<string>('')
   const [installments, setInstallments] = useState<installmentsProps>()
   const [loading, setLoading] = useState(true)
   const { userData } = useContext(AuthContext)
@@ -73,8 +72,7 @@ export default function MatchInstallment({
       installments: matchInstallments,
     }
     destroyCookie(null, '@BuyPhone:CreditCardInfo')
-    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 10)
-    setCookies('@BuyPhone:CreditInstallments', valueInstallments, 60 * 5)
+    setCookies('@BuyPhone:CreditCardInfo', infoData, 60 * 5)
     router.push('/shipping/payment/credit/credit-checkout')
   }
 
@@ -120,7 +118,6 @@ export default function MatchInstallment({
             {cartSize && cartSize > 0 && installments && (
               <Installments
                 setMatchInstallments={setMatchInstallments}
-                setValueInstallments={setValueInstallments}
                 props={installments}
               />
             )}
