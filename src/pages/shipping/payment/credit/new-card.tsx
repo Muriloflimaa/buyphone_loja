@@ -106,7 +106,7 @@ export default function credit({ address }: Address) {
       user_id: user.id,
       address_id: address.id,
       shippingPrice: 0,
-      infoCredit: infoCredit?.installments,
+      installments: infoCredit?.installments,
     }
 
     const { '@BuyPhone:RedirectCheckout': Redirect } = parseCookies(undefined)
