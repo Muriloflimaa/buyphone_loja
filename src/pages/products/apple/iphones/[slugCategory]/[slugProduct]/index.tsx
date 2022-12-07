@@ -68,12 +68,10 @@ export default function Products({ data, categoryData }: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
   const [openModalPaymentOption, setOpenModalPaymentOption] = useState(false)
-  const [description, setDescrition] = useState('')
   const [installments, setInstallments] = useState()
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
-  const [loading, setLoading] = useState(false)
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
   const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
   const returnPrice = verificationPrice(data, user, isUser)
@@ -82,13 +80,9 @@ export default function Products({ data, categoryData }: DataProps) {
     (resultDiscount / returnPrice.averagePrice) *
     100
   ).toFixed(1)
-  //envio Pablo
+
   useEffect(() => {
     geturl()
-    // setColor(verificationColor(data.color))
-    if (data.description) {
-      setDescrition(data.description)
-    }
   }, [])
 
   useEffect(() => {
@@ -162,7 +156,7 @@ export default function Products({ data, categoryData }: DataProps) {
       } catch (error) {}
     }
     handleDataInstallments()
-  }, [])
+  }, [data])
   // useEffect(() => {
   //   const script = document.createElement("script");
   //   script.type = "text/javascript";
@@ -506,9 +500,13 @@ export default function Products({ data, categoryData }: DataProps) {
                   <h1 className="text-xl font-light">Descrição</h1>
 
                   <div className="transition-all flex flex-col items-start text-xs">
-                    {showMore
-                      ? refact(description)
-                      : `${description.substring(0, 150)}` + '...'}
+                    {data.description &&
+                      (showMore
+                        ? refact(data.description)
+                        : `${(data.description
+                            ? data.description
+                            : ''
+                          ).substring(0, 150)}` + '...')}
                   </div>
 
                   <div className="flex flex-col w-full justify-center ">
@@ -531,7 +529,7 @@ export default function Products({ data, categoryData }: DataProps) {
             <h1 className="text-base font-medium">Descrição</h1>
           </div>
           <div className="text-sm px-4 text-info-content">
-            {description ? refact(description) : 'Sem descrição'}
+            {data.description ? refact(data.description) : 'Sem descrição'}
           </div>
         </div>
       </div>
