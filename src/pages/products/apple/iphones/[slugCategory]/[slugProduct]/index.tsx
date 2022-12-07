@@ -17,6 +17,7 @@ import Carousel from 'better-react-carousel'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -28,12 +29,27 @@ import ModalPaymentOptions from '../../../../../../components/Modals/PaymentOpti
 import ProductUnavailable from '../../../../../../components/Modals/SendInBlue/Notices/ProductUnavailable'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
-import { apiStore } from '../../../../../../services/api'
+import { api, apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
 import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
+
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Label,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import PreviewGraphImg from '../../../../../../assets/images/previewGraph.webp'
+import BlurImage from '../../../../../../components/BlurImage'
+import { setCookies } from '../../../../../../utils/useCookies'
 
 interface IParams {
   params: {
@@ -45,6 +61,13 @@ interface IParams {
 interface DataProps {
   data: IProduct
   categoryData: Array<IProduct>
+  productGraphPrice: Array<{
+    name: string
+    americanas: number
+    pontofrio: number
+    casasbahia: number
+    magazineluiza: number
+  }>
 }
 
 type GetCepTypes = {
@@ -64,9 +87,14 @@ type shippingOnTypes = {
   days: string
 }
 
-export default function Products({ data, categoryData }: DataProps) {
+export default function Products({
+  data,
+  categoryData,
+  productGraphPrice,
+}: DataProps) {
   const [showMore, setShowMore] = useState(false)
   const [onShare, setOnShare] = useState(false)
+  const router = useRouter()
   const [openModalPaymentOption, setOpenModalPaymentOption] = useState(false)
   const [installments, setInstallments] = useState()
   const [address, setAddress] = useState<addressTypes>()
@@ -173,6 +201,40 @@ export default function Products({ data, categoryData }: DataProps) {
   //   };
   // }, []);
 
+  const CustomToolTip = (props: any) => {
+    const { payload, label } = props
+
+    return (
+      <div className="rounded-md bg-white/90 font-medium">
+        <p className="text-black border-b-[1px] bg-[#eceff1] border-[#ddd] p-[6px] rounded-t-md">
+          <span className="text-xs font-normal">{label}</span>
+        </p>
+        <div className="p-2 text-xs font-normal text-black grid gap-2">
+          {payload.map((item: { value: string; name: string }, i: number) => (
+            <div className="flex items-center gap-1">
+              <span
+                className={`h-3 w-3 rounded-full ${
+                  (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
+                  (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
+                  (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
+                  (item.name == 'Americanas' && 'bg-[#D33131]')
+                }  `}
+              ></span>
+
+              <p key={i}>
+                {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  const renderColorfulLegendText = (value: string) => {
+    return <span className="text-info-content">{value}</span>
+  } //gráfico
+
   return (
     <>
       <Head>
@@ -199,7 +261,7 @@ export default function Products({ data, categoryData }: DataProps) {
           }`}
         ></meta>
       </Head>
-      <div className="max-w-4xl mx-auto p-4 my-4 w-full">
+      <div className="max-w-4xl mx-auto p-4 mt-4 w-full">
         <h1 className="font-medium flex items-start gap-2">
           <Link href={'/'} passHref>
             <a className="flex items-center normal-case lg:gap-2 my-2">
@@ -532,8 +594,156 @@ export default function Products({ data, categoryData }: DataProps) {
             {data.description ? refact(data.description) : 'Sem descrição'}
           </div>
         </div>
+
+        <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:gap-2 mt-20">
+          <div className="alert flex flex-row justify-start gap-[2px] items-center bg-accent w-full">
+            <span className="text-lg md:text-base md:font-medium font-medium">
+              Acompanhamento de preço
+            </span>
+            <span className="text-xs font-light">(Semanal)</span>
+          </div>
+        </div>
+
+        {isUser && user && JSON.parse(user) ? (
+          isUser && (
+            <div className="my-10" style={{ width: '100%', height: 250 }}>
+              <ResponsiveContainer>
+                <AreaChart
+                  data={productGraphPrice}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient
+                      id="coloramericanas"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#D33131" stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient
+                      id="colorpontofrio"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#ED981A" stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient
+                      id="colorcasasbahia"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#0026AE" stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient
+                      id="colormagazineluiza"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#4595DE" stopOpacity={0.2} />
+                    </linearGradient>
+
+                    {/* cor dos graficos acima */}
+                  </defs>
+                  <XAxis dataKey="name" />
+                  <YAxis
+                    tickFormatter={(value) =>
+                      new Intl.NumberFormat('pt-BR', {
+                        notation: 'compact',
+                        compactDisplay: 'short',
+                      }).format(value / 100)
+                    }
+                    domain={['dataMin', 'dataMax']}
+                  />
+                  <CartesianGrid vertical={false} strokeDasharray="0" />
+
+                  <Tooltip
+                    wrapperStyle={{
+                      outline: 'none',
+                    }}
+                    content={<CustomToolTip />}
+                  />
+
+                  <Legend
+                    iconType={'circle'}
+                    formatter={renderColorfulLegendText}
+                  />
+
+                  <Area
+                    strokeWidth={4}
+                    name="Americanas"
+                    type="monotone"
+                    dataKey="americanas"
+                    stroke="#D33131"
+                    fillOpacity={1}
+                    fill="url(#coloramericanas)"
+                  />
+                  <Area
+                    strokeWidth={4}
+                    name="Ponto Frio"
+                    type="monotone"
+                    dataKey="pontofrio"
+                    stroke="#ED981A"
+                    fillOpacity={1}
+                    fill="url(#colorpontofrio)"
+                  />
+                  <Area
+                    strokeWidth={4}
+                    name="Casas Bahia"
+                    type="monotone"
+                    dataKey="casasbahia"
+                    stroke="#0026AE"
+                    fillOpacity={1}
+                    fill="url(#colorcasasbahia)"
+                  />
+                  <Area
+                    strokeWidth={4}
+                    name="Magazine Luiza"
+                    type="monotone"
+                    dataKey="magazineluiza"
+                    stroke="#4595DE"
+                    fillOpacity={1}
+                    fill="url(#colormagazineluiza)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )
+        ) : (
+          <div className="max-w-7xl mx-auto relative">
+            <div className="w-[100%] blur mx-auto">
+              <BlurImage
+                src={PreviewGraphImg}
+                layout="responsive"
+                className="object-contain"
+              />
+            </div>
+            <div className="absolute top-0 w-full h-full flex flex-col gap-8 justify-center text-center items-center">
+              <h1 className="md:text-xl text-md font-medium text-white">
+                Entre em sua conta para acompanhar os preços
+              </h1>
+              <Link href="/account/login">
+                <button
+                  onClick={() =>
+                    setCookies('@BuyPhone:Router', router.asPath, 60 * 60)
+                  }
+                  className="btn btn-info text-white w-40"
+                >
+                  Entrar
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
-      <div className="max-w-7xl mx-auto px-4 my-8">
+      <div className="max-w-7xl mx-auto px-4 mb-8">
         <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
           Produtos relacionados
         </h1>
@@ -597,10 +807,15 @@ export const getStaticProps = async ({ params }: IParams) => {
       `categories/${params.slugCategory}?per_page=18`
     )
 
+    const { data: productGraphPrice } = await api.get(
+      `/report/prices/${data.data.id}`
+    )
+
     return {
       props: {
         data: data.data,
         categoryData: categoryData.data.products,
+        productGraphPrice: productGraphPrice,
       },
       revalidate: 60 * 30, //30 minutos, se omitir o valor de revalidate, a página nao atualizará,
     }
