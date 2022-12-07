@@ -62,7 +62,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </LoginRegister>
           ) : router.route === `/institucional` ||
-            router.route === `/institucional/depoimentos` ? (
+            router.route === `/institucional/depoimentos` ||
+            router.route === `/bill-of-sale/[index]` ? (
             <Component {...pageProps} />
           ) : (
             <CartProvider>
