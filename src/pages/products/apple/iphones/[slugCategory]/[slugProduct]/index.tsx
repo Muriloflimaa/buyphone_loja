@@ -172,16 +172,18 @@ export default function Products({
 
   useEffect(() => {
     async function handleDataInstallments() {
-      try {
-        const data = {
-          amount: returnPrice.ourPrice,
-        }
+      if (returnPrice.ourPrice > 0) {
+        try {
+          const data = {
+            amount: returnPrice.ourPrice,
+          }
 
-        const response = await apiStore.get(`checkout/installments`, {
-          params: data,
-        })
-        setInstallments(response.data)
-      } catch (error) {}
+          const response = await apiStore.get(`checkout/installments`, {
+            params: data,
+          })
+          setInstallments(response.data)
+        } catch (error) {}
+      }
     }
     handleDataInstallments()
   }, [data])
@@ -210,22 +212,23 @@ export default function Products({
           <span className="text-xs font-normal">{label}</span>
         </p>
         <div className="p-2 text-xs font-normal text-black grid gap-2">
-          {payload.map((item: { value: string; name: string }, i: number) => (
-            <div className="flex items-center gap-1">
-              <span
-                className={`h-3 w-3 rounded-full ${
-                  (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
-                  (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
-                  (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
-                  (item.name == 'Americanas' && 'bg-[#D33131]')
-                }  `}
-              ></span>
+          {payload &&
+            payload.map((item: { value: string; name: string }, i: number) => (
+              <div className="flex items-center gap-1">
+                <span
+                  className={`h-3 w-3 rounded-full ${
+                    (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
+                    (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
+                    (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
+                    (item.name == 'Americanas' && 'bg-[#D33131]')
+                  }  `}
+                ></span>
 
-              <p key={i}>
-                {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
-              </p>
-            </div>
-          ))}
+                <p key={i}>
+                  {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
+                </p>
+              </div>
+            ))}
         </div>
       </div>
     )
@@ -426,10 +429,10 @@ export default function Products({
                         R$ {moneyMask(returnPrice.ourPrice.toString())}
                       </h2>
                       <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
-                        -{resultDiscountPercent.replace('.0', '')}%
+                        -{resultDiscountPercent.replace('.0', '')}% no pix
                       </span>
                     </div>
-                    <span>
+                    <span className="flex flex-col">
                       ou até{' '}
                       {installments && Object.values(installments).length}x de{' '}
                       {installments &&
@@ -440,7 +443,7 @@ export default function Products({
                         className="cursor-pointer underline"
                         onClick={() => setOpenModalPaymentOption(true)}
                       >
-                        ver parcelamento
+                        Ver mais formas de pagamento
                       </a>
                     </span>
                   </>
@@ -558,8 +561,8 @@ export default function Products({
               )}
 
               <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:flex-row  md:gap-2 md:hidden">
-                <div className="alert items-start bg-accent w-full grid ">
-                  <h1 className="text-xl font-light">Descrição</h1>
+                <div className="items-start bg-accent w-full grid ">
+                  <h1 className="text-base font-semibold">Descrição</h1>
 
                   <div className="transition-all flex flex-col items-start text-xs">
                     {data.description &&
@@ -595,12 +598,12 @@ export default function Products({
           </div>
         </div>
 
-        <div className="alert md:p-0 bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:gap-2 mt-20">
-          <div className="alert flex flex-row justify-start gap-[2px] items-center bg-accent w-full">
-            <span className="text-lg md:text-base md:font-medium font-medium">
+        <div className="alert bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:gap-2 mt-20">
+          <div className="flex flex-col items-start md:flex-row justify-start gap-[2px] md:items-center bg-accent w-full">
+            <span className="text-base font-semibold md:text-base md:font-medium">
               Acompanhamento de preço
             </span>
-            <span className="text-xs font-light">(Semanal)</span>
+            <span className="text-xs font-light">(14 dias)</span>
           </div>
         </div>
 
@@ -744,7 +747,7 @@ export default function Products({
         )}
       </div>
       <div className="max-w-7xl mx-auto px-4 mb-8">
-        <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
+        <h1 className="md:text-4xl text-3xl font-medium text-center">
           Produtos relacionados
         </h1>
 
