@@ -206,7 +206,6 @@ export default function Products({
 
   const CustomToolTip = (props: any) => {
     const { payload, label } = props
-    console.log(payload)
 
     return (
       <div className="rounded-md bg-white/90 font-medium">
@@ -219,17 +218,23 @@ export default function Products({
               (
                 item: { value: string; name: string; stroke: string },
                 i: number
-              ) => (
-                <div className="flex items-center gap-1">
-                  <span
-                    className={`h-3 w-3 rounded-full bg-[${item.stroke}]`}
-                  ></span>
+              ) => {
+                console.log(item)
+                return (
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`h-3 w-3 rounded-full bg-[${item.stroke.replace(
+                        /"/g,
+                        ''
+                      )}]`}
+                    ></span>
 
-                  <p key={i}>
-                    {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
-                  </p>
-                </div>
-              )
+                    <p key={i}>
+                      {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
+                    </p>
+                  </div>
+                )
+              }
             )}
         </div>
       </div>
@@ -692,11 +697,6 @@ export default function Products({
                     }}
                     content={<CustomToolTip />}
                   />
-
-                  {/* <Legend
-                    iconType={'circle'}
-                    formatter={renderColorfulLegendText}
-                  /> */}
 
                   <Legend content={renderLegend} />
 
