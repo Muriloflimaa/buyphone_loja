@@ -54,10 +54,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (user && JSON.parse(user) !== userData) {
       setCookies('@BuyPhone:User', JSON.stringify(userData), 60 * 60 * 24 * 90)
     }
-    if (userToken) {
-      setCookies('@BuyPhone:Token', userToken, 60 * 60 * 24 * 90)
+  }, [userData])
+
+  useEffect(() => {
+    if (token !== userToken) {
+      setCookies(
+        '@BuyPhone:Token',
+        JSON.stringify(userToken),
+        60 * 60 * 24 * 90
+      )
     }
-  }, [userData, userToken])
+  }, [userToken])
 
   useEffect(() => {
     if (userData === null) {
@@ -105,6 +112,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       ) {
         window.location.href = cookies['@BuyPhone:Router']
         destroyCookie(undefined, '@BuyPhone:Router')
+        destroyCookie(null, '@BuyPhone:Router')
+        destroyCookie({}, '@BuyPhone:Router')
         return
       }
       window.location.href = '/'
