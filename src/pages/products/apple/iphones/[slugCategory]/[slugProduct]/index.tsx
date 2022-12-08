@@ -598,7 +598,7 @@ export default function Products({
           </div>
         </div>
 
-        <div className="alert bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:gap-2 mt-20">
+        <div className="alert bg-accent border-[1px] border-[#00000014] text-info-content flex items-start justify-start gap-4 flex-col md:gap-2 mt-4 md:mt-10">
           <div className="flex flex-col items-start md:flex-row justify-start gap-[2px] md:items-center bg-accent w-full">
             <span className="text-base font-semibold md:text-base md:font-medium">
               Acompanhamento de preço

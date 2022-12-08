@@ -115,7 +115,7 @@ export default function custom({ address }: Address) {
           </div>
         </div>
       )}
-      <div className="max-w-7xl mx-auto px-4 grid">
+      <div className="max-w-7xl mx-auto px-4 grid md:my-10">
         <div className="relative w-full">
           <h2 className="text-2xl md:text-3xl text-center font-medium my-6">
             Conferir e Finalizar
