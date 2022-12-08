@@ -223,10 +223,12 @@ export default function Products({
                 return (
                   <div className="flex items-center gap-1">
                     <span
-                      className={`h-3 w-3 rounded-full bg-[${item.stroke.replace(
-                        /"/g,
-                        ''
-                      )}]`}
+                      className={`h-3 w-3 rounded-full ${
+                        (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
+                        (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
+                        (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
+                        (item.name == 'Americanas' && 'bg-[#D33131]')
+                      }  `}
                     ></span>
 
                     <p key={i}>
@@ -250,7 +252,12 @@ export default function Products({
           {payload.map((entry: any, index: any) => (
             <li key={`item-${index}`} className="flex items-center gap-1">
               <span
-                className={`h-3 w-3 rounded-full bg-[${entry.payload.stroke}]`}
+                className={`h-3 w-3 rounded-full ${
+                  (entry.value == 'Casas Bahia' && 'bg-[#0026AE]') ||
+                  (entry.value == 'Magazine Luiza' && 'bg-[#4595DE]') ||
+                  (entry.value == 'Ponto Frio' && 'bg-[#ED981A]') ||
+                  (entry.value == 'Americanas' && 'bg-[#D33131]')
+                }  `}
               ></span>
 
               <p>{entry.value}</p>
