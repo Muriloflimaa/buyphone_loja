@@ -50,6 +50,7 @@ import {
 import PreviewGraphImg from '../../../../../../assets/images/previewGraph.webp'
 import BlurImage from '../../../../../../components/BlurImage'
 import { setCookies } from '../../../../../../utils/useCookies'
+import { ContentType } from 'recharts/types/component/DefaultLegendContent'
 
 interface IParams {
   params: {
@@ -205,6 +206,7 @@ export default function Products({
 
   const CustomToolTip = (props: any) => {
     const { payload, label } = props
+    console.log(payload)
 
     return (
       <div className="rounded-md bg-white/90 font-medium">
@@ -213,30 +215,46 @@ export default function Products({
         </p>
         <div className="p-2 text-xs font-normal text-black grid gap-2">
           {payload &&
-            payload.map((item: { value: string; name: string }, i: number) => (
-              <div className="flex items-center gap-1">
-                <span
-                  className={`h-3 w-3 rounded-full ${
-                    (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
-                    (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
-                    (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
-                    (item.name == 'Americanas' && 'bg-[#D33131]')
-                  }  `}
-                ></span>
+            payload.map(
+              (
+                item: { value: string; name: string; stroke: string },
+                i: number
+              ) => (
+                <div className="flex items-center gap-1">
+                  <span
+                    className={`h-3 w-3 rounded-full bg-[${item.stroke}]`}
+                  ></span>
 
-                <p key={i}>
-                  {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
-                </p>
-              </div>
-            ))}
+                  <p key={i}>
+                    {item.name}: <strong>R$ {moneyMask(item.value)}</strong>
+                  </p>
+                </div>
+              )
+            )}
         </div>
       </div>
     )
   }
 
-  const renderColorfulLegendText = (value: string) => {
-    return <span className="text-info-content">{value}</span>
-  } //gráfico
+  const renderLegend = (props: any) => {
+    const { payload }: any = props
+
+    return (
+      <div className="flex justify-end w-full md:justify-center">
+        <ul className="grid grid-cols-2 text-md md:flex md:gap-3">
+          {payload.map((entry: any, index: any) => (
+            <li key={`item-${index}`} className="flex items-center gap-1">
+              <span
+                className={`h-3 w-3 rounded-full bg-[${entry.payload.stroke}]`}
+              ></span>
+
+              <p>{entry.value}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -429,9 +447,10 @@ export default function Products({
                         R$ {moneyMask(returnPrice.ourPrice.toString())}
                       </h2>
                       <span className="badge py-3 px-[7px] border-transparent bg-[#D5FDC7] rounded-xl badge-warning text-[#8DC679] font-medium">
-                        -{resultDiscountPercent.replace('.0', '')}% no pix
+                        -{resultDiscountPercent.replace('.0', '')}%
                       </span>
                     </div>
+                    <span>Desconto válido no pix</span>
                     <span className="flex flex-col">
                       ou até{' '}
                       {installments && Object.values(installments).length}x de{' '}
@@ -443,7 +462,7 @@ export default function Products({
                         className="cursor-pointer underline"
                         onClick={() => setOpenModalPaymentOption(true)}
                       >
-                        Ver mais formas de pagamento
+                        ver parcelamento
                       </a>
                     </span>
                   </>
@@ -609,7 +628,7 @@ export default function Products({
 
         {isUser && user && JSON.parse(user) ? (
           isUser && (
-            <div className="my-10" style={{ width: '100%', height: 250 }}>
+            <div className="my-10" style={{ width: '100%', height: 350 }}>
               <ResponsiveContainer>
                 <AreaChart
                   data={productGraphPrice}
@@ -674,10 +693,12 @@ export default function Products({
                     content={<CustomToolTip />}
                   />
 
-                  <Legend
+                  {/* <Legend
                     iconType={'circle'}
                     formatter={renderColorfulLegendText}
-                  />
+                  /> */}
+
+                  <Legend content={renderLegend} />
 
                   <Area
                     strokeWidth={4}

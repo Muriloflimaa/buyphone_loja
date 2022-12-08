@@ -53,6 +53,14 @@ const ProductRelationCard = ({
           className="card-body text-center flex flex-col justify-between gap-5"
         >
           <div>
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
+              blackfriday == 1 && (
+                <CountDownComponent
+                  text=" text-xs "
+                  width=" w-full max-w-[200px] mx-auto "
+                />
+              )}
             <div className="w-[50%] mx-auto">
               <Image
                 src={image}
@@ -75,14 +83,6 @@ const ProductRelationCard = ({
                 <span className="badge badge-outline text-xs">{memory}</span>
               </div>
             </div>
-            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) &&
-              blackfriday == 1 && (
-                <CountDownComponent
-                  text=" text-xs "
-                  width=" w-full max-w-[200px] mx-auto "
-                />
-              )}
           </div>
 
           {/* //para mobile */}
