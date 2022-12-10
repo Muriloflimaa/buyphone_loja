@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import Logo from '../../assets/images/LogoPurple.webp'
 import { apiStore } from '../../services/api'
 import { IInvoice } from '../../types'
-import { cpfMask, maskCep, maskNewCep, moneyMask } from '../../utils/masks'
+import { cpfMask, maskNewCep, moneyMask } from '../../utils/masks'
 
 interface IParams {
   params: {
