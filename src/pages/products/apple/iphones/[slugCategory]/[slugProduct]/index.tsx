@@ -29,7 +29,7 @@ import ProductUnavailable from '../../../../../../components/Modals/SendInBlue/N
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
 import { IProduct } from '../../../../../../types'
-import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
+import { maskCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
 import { ToastCustom } from '../../../../../../utils/toastCustom'
 import { verificationPrice } from '../../../../../../utils/verificationPrice'
@@ -528,7 +528,7 @@ export default function Products({
                       type="text"
                       maxLength={9}
                       placeholder="00000-000"
-                      onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                      onKeyUp={(e) => maskCep(e.target, '#####-####')}
                       error={errors.cep}
                     />
                     {formState.isSubmitting ? (

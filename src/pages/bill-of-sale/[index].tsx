@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import Logo from '../../assets/images/LogoPurple.webp'
 import { apiStore } from '../../services/api'
 import { IInvoice } from '../../types'
+import { cpfMask, maskCep, maskNewCep, moneyMask } from '../../utils/masks'
 
 interface IParams {
   params: {
@@ -61,8 +62,8 @@ interface PedidosProps {
 }
 
 export default function BillOfSale({ data }) {
-  const [order, setOrder] = useState<DataProps>(data.order)
-  console.log(data.order)
+  const [order, setOrder] = useState<DataProps>(data)
+  console.log(data)
   const handleDownload = () => {
     window.print()
   }
@@ -125,24 +126,28 @@ export default function BillOfSale({ data }) {
             <tbody>
               <tr>
                 <td>
-                  <span className="font-semibold">DESTINATÁRIO:</span> Lucas de
-                  Souza Lopes
+                  <span className="font-semibold">DESTINATÁRIO:</span>{' '}
+                  {data.user.name}
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">CPF/CNPJ:</span> 3854596809
+                  <span className="font-semibold">CPF/CNPJ:</span>{' '}
+                  {cpfMask(data.user.document)}
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">ENDEREÇO:</span> Rua João
-                  Factur, 800, 16.201-471, JArt Ville
+                  <span className="font-semibold">ENDEREÇO:</span>{' '}
+                  {data.address.address}, {data.address.number},{' '}
+                  {maskNewCep(data.address.postal_code)},{' '}
+                  {data.address.neighborhood}
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">CIDADE:</span> Birigui-SP
+                  <span className="font-semibold">CIDADE:</span>{' '}
+                  {data.address.city}-{data.address.uf}
                 </td>
               </tr>
             </tbody>
@@ -152,24 +157,25 @@ export default function BillOfSale({ data }) {
             <tbody>
               <tr>
                 <td>
-                  <span className="font-semibold">REMETENTE::</span> Lucas de
-                  Souza Lopes
+                  <span className="font-semibold">REMETENTE::</span> Buyp
+                  Programas de vantagens e tecnologia LTDA
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">CPF/CNPJ:</span> 3854596809
+                  <span className="font-semibold">CPF/CNPJ:</span>{' '}
+                  45.679.637/0001-94
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">ENDEREÇO:</span> Rua João
-                  Factur, 800, 16.201-471, JArt Ville
+                  <span className="font-semibold">ENDEREÇO:</span> Avenida
+                  Brasilia, 2121, Sala 12, 16.018-000, Jardim Nova Yorque
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span className="font-semibold">CIDADE:</span> Birigui-SP
+                  <span className="font-semibold">CIDADE:</span> Araçatuba-SP
                 </td>
               </tr>
             </tbody>
@@ -187,9 +193,13 @@ export default function BillOfSale({ data }) {
             </thead>
             <tbody>
               <tr>
-                <td>Cartão de crédito</td>
+                <td>
+                  {data.method === 'PIX' && 'PIX'}
+                  {data.method === 'CREDIT' && 'Crédito'}
+                  {data.method === 'CUSTOM' && 'Personalizado'}
+                </td>
                 <td>1</td>
-                <td>2.691,58</td>
+                <td>{moneyMask(data.total)}</td>
               </tr>
             </tbody>
           </table>

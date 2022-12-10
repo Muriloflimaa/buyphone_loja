@@ -3,7 +3,7 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
-import { mascaraCep, moneyMask } from '../../utils/masks'
+import { maskCep } from '../../utils/masks'
 import { Input } from '../InputElement'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -219,7 +219,7 @@ const ProductCart = ({
                 type="text"
                 maxLength={9}
                 placeholder="00000-000"
-                onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                onKeyUp={(e) => maskCep(e.target, '#####-####')}
                 error={errors.cep}
               />
               {formState.isSubmitting ? (

@@ -1,8 +1,4 @@
-import {
-  faAngleRight,
-  faArrowRight,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
@@ -16,7 +12,7 @@ import { TotalPayment } from '../../components/TotalPayment'
 import { faMap } from '@fortawesome/free-regular-svg-icons'
 import { PersistentLogin } from '../../utils/PersistentLogin'
 import { Input } from '../../components/InputElement'
-import { mascaraCep } from '../../utils/masks'
+import { maskCep } from '../../utils/masks'
 import axios from 'axios'
 import { setupAPIClient } from '../../services/newApi/api'
 
@@ -127,7 +123,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
                 type="text"
                 label="CEP"
                 maxLength={9}
-                onKeyUp={(e) => mascaraCep(e.target, '#####-####')}
+                onKeyUp={(e) => maskCep(e.target, '#####-####')}
                 error={errors.cep}
               />
               {formState.isSubmitting ? (
