@@ -199,221 +199,59 @@ const Home: NextPage<DataProps> = ({
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        {/* banner principal mobile quando não for black friday */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="block md:hidden">
-              <CarouselComponent
-                image={
-                  darkOrLigth
-                    ? [Banner1MobileDark, Banner2MobileDark]
-                    : [Banner1MobileLight, Banner2MobileLight]
-                }
-              />
-            </div>
-          )}
-        {/* banner principal desktop quando não for black friday */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="md:block hidden max-w-[2000px] mx-auto">
-              <CarouselComponent
-                image={
-                  darkOrLigth
-                    ? [
-                        {
-                          ...BannerIphone14Dark,
-                          link: '/products/apple/iphones/iphone-14',
-                        },
-                        {
-                          ...BannerBlackFriday,
-                          link: '/black-friday',
-                        },
-                        Banner1DesktopDark,
-                        Banner2DesktopDark,
-                      ]
-                    : [
-                        {
-                          ...BannerIphone14Light,
-                          link: '/products/apple/iphones/iphone-14',
-                        },
-                        {
-                          ...BannerBlackFriday,
-                          link: '/black-friday',
-                        },
-                        Banner1DesktopLight,
-                        Banner2DesktopLight,
-                      ]
-                }
-              />
-            </div>
-          )}
-        {/* banner principal desktop quando for blackFriday */}
-        {/* {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="carousel-wrapper max-w-[2000px] mx-auto relative mt-14 hidden md:block">
-              <Carousel
-                infiniteLoop
-                // autoPlay
-                interval={4000}
-                showIndicators={false}
-                showStatus={false}
-                showThumbs={false}
-                swipeable={false}
-              >
-                {productBlack &&
-                  productBlack.map((res) => {
-                    const returnPrice = verificationPrice(res, user, isUser)
-                    return (
-                      <BannerProductPromotion
-                        key={res.id}
-                        mobileOrDesktop={'desktop'}
-                        link={`/${res.category_slug.replace(
-                          '-3-geracao',
-                          ''
-                        )}/${res.slug}`}
-                        color={res.color}
-                        name={res.name}
-                        memory={res.memory}
-                        price={returnPrice.ourPrice}
-                        oudPrice={returnPrice.averagePrice}
-                        image={res.media[0].original_url}
-                      />
-                    )
-                  })}
-              </Carousel>
-            </div>
-          )} */}
-        {/* {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="carousel-wrapper max-w-[2000px] mx-auto relative block md:hidden mt-4">
-              <Carousel
-                infiniteLoop
-                autoPlay
-                interval={4000}
-                showIndicators={false}
-                showStatus={false}
-                showThumbs={false}
-                swipeable={false}
-              >
-                {productBlack &&
-                  productBlack.map((res) => {
-                    const returnPrice = verificationPrice(res, user, isUser)
+        <div className="block md:hidden">
+          <CarouselComponent
+            image={
+              darkOrLigth
+                ? [Banner1MobileDark, Banner2MobileDark]
+                : [Banner1MobileLight, Banner2MobileLight]
+            }
+          />
+        </div>
 
-                    return (
-                      <BannerProductPromotion
-                        key={res.id}
-                        mobileOrDesktop={'mobile'}
-                        link={`/${res.category_slug}/${res.slug}`}
-                        color={res.color}
-                        name={res.name}
-                        memory={res.memory}
-                        price={returnPrice.ourPrice}
-                        oudPrice={returnPrice.averagePrice}
-                        image={res.media[0].original_url}
-                      />
-                    )
-                  })}
-              </Carousel>
-            </div>
-          )} */}
-
-        {/* banner desktop quando for black para a copa */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="md:block hidden max-w-[2000px] mx-auto mt-14">
-              <Link href={'/black-da-copa'}>
-                <a>
-                  <Image
-                    placeholder="blur"
-                    className="object-contain"
-                    src={BannerCopaDesktop}
-                    layout="responsive"
-                    quality={100}
-                  />
-                </a>
-              </Link>
-            </div>
-          )}
-        {/* banner mobile quando for black para a copa */}
-        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-          JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-            <div className="block md:hidden">
-              <Image
-                placeholder="blur"
-                className="object-contain"
-                src={BannerCopaMobile}
-                layout="responsive"
-                quality={100}
-              />
-            </div>
-          )}
-        {/* banner principal mobile quando for blackFriday */}
-
+        <div className="md:block hidden max-w-[2000px] mx-auto">
+          <CarouselComponent
+            image={
+              darkOrLigth
+                ? [
+                    {
+                      ...BannerIphone14Dark,
+                      link: '/products/apple/iphones/iphone-14',
+                    },
+                    Banner1DesktopDark,
+                    Banner2DesktopDark,
+                  ]
+                : [
+                    {
+                      ...BannerIphone14Light,
+                      link: '/products/apple/iphones/iphone-14',
+                    },
+                    Banner1DesktopLight,
+                    Banner2DesktopLight,
+                  ]
+            }
+          />
+        </div>
         {/* mini banners (mobile e desktop) */}
         <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 md:mt-1 gap-1">
           <div className="md:w-1/2">
-            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-              !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-                <CarouselComponent
-                  image={
-                    darkOrLigth
-                      ? [
-                          {
-                            ...MiniBannerBlackFriday,
-                            link: '/black-friday',
-                          },
-                          {
-                            ...BannerIphone13Dark,
-                            link: '/products/apple/iphones/iphone-13-pro',
-                          },
-                        ]
-                      : [
-                          {
-                            ...MiniBannerBlackFriday,
-                            link: '/black-friday',
-                          },
-                          {
-                            ...BannerIphone13Light,
-                            link: '/products/apple/iphones/iphone-13-pro',
-                          },
-                        ]
-                  }
-                />
-              )}
-            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
-              !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
-                <Carousel
-                  infiniteLoop
-                  // autoPlay
-                  showIndicators={false}
-                  showStatus={false}
-                  showThumbs={false}
-                  swipeable={false}
-                >
-                  {productBlack &&
-                    productBlack.map((res) => {
-                      const returnPrice = verificationPrice(res, user, isUser)
-
-                      return (
-                        <BannerProductPromotion
-                          key={res.id}
-                          miniBanner
-                          mobileOrDesktop={'desktop'}
-                          link={`/${res.category_slug.replace(
-                            '-3-geracao',
-                            ''
-                          )}/${res.slug}`}
-                          color={res.color}
-                          name={res.name}
-                          memory={res.memory}
-                          price={returnPrice.ourPrice}
-                          oudPrice={returnPrice.averagePrice}
-                          image={res.media[0].original_url}
-                        />
-                      )
-                    })}
-                </Carousel>
-              )}
+            <CarouselComponent
+              image={
+                darkOrLigth
+                  ? [
+                      {
+                        ...BannerIphone13Dark,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                    ]
+                  : [
+                      {
+                        ...BannerIphone13Light,
+                        link: '/products/apple/iphones/iphone-13-pro',
+                      },
+                    ]
+              }
+            />
           </div>
           <div className="md:w-1/2">
             <CarouselComponent
