@@ -543,13 +543,6 @@ export default function NavBar() {
                 <ul className="menu menu-horizontal md:flex md:justify-center w-full text-md overflow-auto sm:text-sm">
                   {dataApi && dataApi?.length > 0 && (
                     <>
-                      {process.env.NEXT_PUBLIC_BLACK_FRIDAY && (
-                        <li>
-                          <Link href={'/black-da-copa'}>
-                            <a className="w-max">Black da Copa</a>
-                          </Link>
-                        </li>
-                      )}
                       <li>
                         <Link href={'/'}>
                           <a className="w-max">Início</a>
