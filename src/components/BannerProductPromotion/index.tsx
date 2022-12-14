@@ -48,7 +48,9 @@ const BannerProductPromotion = ({
                 miniBanner ? 'text-md md:text-2xl' : 'text-2xl'
               } font-semibold flex flex-col items-center`}
             >
-              <span>{process.env.NEXT_PUBLIC_PERCENT_DISCOUNT}%</span>
+              <span>
+                {process.env.NEXT_PUBLIC_PERCENT_DISCOUNT_BLACK_FRIDAY}%
+              </span>
               <span className="uppercase">OFF</span>
             </div>
           </div>
