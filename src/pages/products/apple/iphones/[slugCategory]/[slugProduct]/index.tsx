@@ -219,7 +219,6 @@ export default function Products({
                 item: { value: string; name: string; stroke: string },
                 i: number
               ) => {
-                console.log(item)
                 return (
                   <div className="flex items-center gap-1">
                     <span
@@ -694,7 +693,11 @@ export default function Products({
                         compactDisplay: 'short',
                       }).format(value / 100)
                     }
-                    domain={['dataMin', 'dataMax']}
+                    type="number"
+                    domain={[
+                      (dataMin: number) => dataMin,
+                      (dataMax: number) => dataMax + 100000,
+                    ]}
                   />
                   <CartesianGrid vertical={false} strokeDasharray="0" />
 
@@ -757,7 +760,7 @@ export default function Products({
               />
             </div>
             <div className="absolute top-0 w-full h-full flex flex-col gap-8 justify-center text-center items-center">
-              <h1 className="md:text-xl text-md font-medium text-white">
+              <h1 className="md:text-xl text-md font-medium text-info-content">
                 Entre em sua conta para acompanhar os preços
               </h1>
               <Link href="/account/login">

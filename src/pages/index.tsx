@@ -64,6 +64,10 @@ import ItsModal from '../components/Modals/Its-Match'
 import { ToastCustom } from '../utils/toastCustom'
 import { verificationPrice } from '../utils/verificationPrice'
 import BannerProductPromotion from '../components/BannerProductPromotion'
+import BlurImage from '../components/BlurImage'
+import ProductComponentPromotion from '../components/ProductComponentPromotion'
+import BannerDesktopPromotion from '../components/BannerDesktopPromotion'
+import BannerMobilePromotion from '../components/BannerMobilePromotion'
 
 interface DataProps {
   data: {
@@ -199,60 +203,86 @@ const Home: NextPage<DataProps> = ({
         <title>BuyPhone - Seu match perfeito</title>
       </Head>
       <div className="h-auto -mt-8">
-        <div className="block md:hidden">
-          <CarouselComponent
-            image={
-              darkOrLigth
-                ? [Banner1MobileDark, Banner2MobileDark]
-                : [Banner1MobileLight, Banner2MobileLight]
-            }
-          />
-        </div>
+        {/* banner principal mobile quando não for black friday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="block md:hidden">
+              <CarouselComponent
+                image={
+                  darkOrLigth
+                    ? [Banner1MobileDark, Banner2MobileDark]
+                    : [Banner1MobileLight, Banner2MobileLight]
+                }
+              />
+            </div>
+          )}
+        {/* banner principal desktop quando não for black friday */}
+        {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+          !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+            <div className="md:block hidden max-w-[2000px] mx-auto">
+              <CarouselComponent
+                image={
+                  darkOrLigth
+                    ? [
+                        {
+                          ...BannerIphone14Dark,
+                          link: '/products/apple/iphones/iphone-14',
+                        },
 
-        <div className="md:block hidden max-w-[2000px] mx-auto">
-          <CarouselComponent
-            image={
-              darkOrLigth
-                ? [
-                    {
-                      ...BannerIphone14Dark,
-                      link: '/products/apple/iphones/iphone-14',
-                    },
-                    Banner1DesktopDark,
-                    Banner2DesktopDark,
-                  ]
-                : [
-                    {
-                      ...BannerIphone14Light,
-                      link: '/products/apple/iphones/iphone-14',
-                    },
-                    Banner1DesktopLight,
-                    Banner2DesktopLight,
-                  ]
-            }
-          />
-        </div>
+                        Banner1DesktopDark,
+                        Banner2DesktopDark,
+                      ]
+                    : [
+                        {
+                          ...BannerIphone14Light,
+                          link: '/products/apple/iphones/iphone-14',
+                        },
+
+                        Banner1DesktopLight,
+                        Banner2DesktopLight,
+                      ]
+                }
+              />
+            </div>
+          )}
+        {/* banner principal desktop e mobile quando for blackFriday */}
+        <BannerDesktopPromotion
+          isUser={isUser}
+          user={user}
+          productBlack={productBlack}
+        />
+        <BannerMobilePromotion
+          isUser={isUser}
+          user={user}
+          productBlack={productBlack}
+        />
+
         {/* mini banners (mobile e desktop) */}
         <div className="flex flex-col md:flex-row w-full max-w-[2000px] mx-auto mt-1 md:mt-1 gap-1">
+          {/* miniBanner lateral esquerdo */}
           <div className="md:w-1/2">
-            <CarouselComponent
-              image={
-                darkOrLigth
-                  ? [
-                      {
-                        ...BannerIphone13Dark,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                    ]
-                  : [
-                      {
-                        ...BannerIphone13Light,
-                        link: '/products/apple/iphones/iphone-13-pro',
-                      },
-                    ]
-              }
+            {/* MiniBanner quando black friday for false */}
+            {process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
+              !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY) && (
+                <Link href={'/products/apple/iphones/iphone-13-pro'}>
+                  <a>
+                    <BlurImage
+                      src={
+                        darkOrLigth ? BannerIphone13Dark : BannerIphone13Light
+                      }
+                    />
+                  </a>
+                </Link>
+              )}
+
+            {/* MiniBanner quando black friday for true */}
+            <ProductComponentPromotion
+              productBlack={productBlack}
+              user={user}
+              isUser={isUser}
             />
           </div>
+          {/* MiniBanner lateral direito */}
           <div className="md:w-1/2">
             <CarouselComponent
               image={
@@ -300,6 +330,7 @@ const Home: NextPage<DataProps> = ({
             />
           </div>
         </div>
+
         <div className="mt-10">
           <h1 className="md:text-4xl text-3xl font-medium text-center mb-8">
             Encontre seu Match!

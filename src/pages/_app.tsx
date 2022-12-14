@@ -9,7 +9,6 @@ import '../../styles/globals.scss'
 import Footer from '../components/Footer'
 import LoginRegister from '../components/Login-Register'
 import MyBottomNavigation from '../components/MyBottomNavigation'
-// import NavBar from '../components/NavBar'
 import dynamic from 'next/dynamic'
 import { hotjar } from 'react-hotjar'
 import * as gtag from '../../gtag'
@@ -64,7 +63,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
         !!JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
           ? 'dark'
-          : !!isUser && user && JSON.parse(user).type === 1
+          : !!isUser &&
+            user &&
+            !!JSON.parse(user) &&
+            JSON.parse(user).type === 1
           ? 'dark'
           : 'light'
       }`}
