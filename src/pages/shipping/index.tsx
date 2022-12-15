@@ -11,13 +11,14 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
-import { apiStore } from '../../services/api'
 import { setCookies } from '../../utils/useCookies'
 import { TotalPayment } from '../../components/TotalPayment'
 import { faMap } from '@fortawesome/free-regular-svg-icons'
 import { PersistentLogin } from '../../utils/PersistentLogin'
 import { Input } from '../../components/InputElement'
 import { mascaraCep } from '../../utils/masks'
+import axios from 'axios'
+import { setupAPIClient } from '../../services/newApi/api'
 
 type GetCepTypes = {
   cep: string
@@ -51,7 +52,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
   async function handleRemoveAddress(id: number) {
     try {
       setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
-      await apiStore.delete(`addresses/${id}`)
+      await axios.delete(`/api/store/addresses/${id}`)
     } catch (error) {
       return
     }
@@ -62,7 +63,9 @@ export default function Shipping({ userJson }: userJsonTypes) {
   }, [])
 
   const getAddress = async () => {
-    const userAddress = await apiStore.get(`addresses/user/${userJson.id}`)
+    const userAddress = await axios.get(
+      `/api/store/addresses/user/${userJson.id}`
+    )
     setAddress(userAddress.data)
   }
 
@@ -85,7 +88,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const cep = value.cep.replace('-', '')
     try {
-      const response = await apiStore.get(`addresses/cep/${cep}`)
+      const response = await axios.get(`/api/store/addresses/cep/${cep}`)
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
         return
@@ -196,7 +199,8 @@ export default function Shipping({ userJson }: userJsonTypes) {
 
 export const getServerSideProps = PersistentLogin(async (ctx) => {
   const { '@BuyPhone:cart': cartCookies } = parseCookies(ctx)
-  const { '@BuyPhone:User': userCookies } = parseCookies(ctx)
+  const { '@BuyPhone:Token': token } = parseCookies(ctx)
+  const api = setupAPIClient(ctx)
 
   if (cartCookies === '[]') {
     return {
@@ -207,8 +211,9 @@ export const getServerSideProps = PersistentLogin(async (ctx) => {
     }
   }
 
-  if (userCookies) {
-    const userJson = JSON.parse(userCookies)
+  if (token) {
+    const { data } = await api.get('/store/me')
+    const userJson = data
     return {
       props: { userJson },
     }

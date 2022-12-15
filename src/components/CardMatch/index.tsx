@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import GosteiImg from '../../assets/images/gostei.svg'
 import OuterImg from '../../assets/images/outer.svg'
+import { AuthContext } from '../../context/AuthContext'
 
 import { useCart } from '../../context/UseCartContext'
 import { IProduct } from '../../types'
@@ -30,8 +31,7 @@ const CardMatch = ({ next, data }: CardMatchProps) => {
       .getElementById('modal-open-match')
       ?.classList.add('modal-open')
   }
-
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const { user } = useContext(AuthContext)
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
 
   useEffect(() => {

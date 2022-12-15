@@ -1,10 +1,10 @@
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
 import JuninhoImg from '../../assets/images/juninho.webp'
 import ListProducts from '../../components/ListProducts'
-import { apiStore } from '../../services/api'
 import { IInvoice } from '../../types'
 import { PersistentLogin } from '../../utils/PersistentLogin'
 
@@ -59,14 +59,15 @@ interface PedidosProps {
 function MyShopping() {
   const [data, setData] = useState<DataProps>()
   const [errorData, setErrorData] = useState(false)
-  const cookies = parseCookies(undefined)
 
   async function GetInvoice() {
     try {
-      if (cookies['@BuyPhone:User']) {
-        const user = JSON.parse(cookies['@BuyPhone:User'])
-        const { data } = await apiStore(`orders/user/${user?.id}`)
-        setData(data)
+      const { data: user } = await axios.get('/api/store/me')
+      if (user) {
+        const { data: Orders } = await axios.get(
+          `/api/store/orders/user/${user?.id}`
+        )
+        setData(Orders)
       }
     } catch (error) {
       setErrorData(true)
@@ -79,19 +80,21 @@ function MyShopping() {
 
   async function handleChangePagination(page: string) {
     try {
-      const user = JSON.parse(cookies['@BuyPhone:User'])
-      const { data } = await apiStore(
-        `orders/user/${user?.id}?page=${page
-          .replace(
-            `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-            ''
-          )
-          .replace(
-            `https://api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-            ''
-          )}`
-      )
-      setData(data)
+      const { data: user } = await axios.get('/api/store/me')
+      if (user) {
+        const { data } = await axios.get(
+          `/api/store/orders/user/${user?.id}?page=${page
+            .replace(
+              `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+              ''
+            )
+            .replace(
+              `https://api.buyphone.com.br/store/orders/user/${user.id}?page=`,
+              ''
+            )}`
+        )
+        setData(data)
+      }
     } catch (error) {}
   }
 

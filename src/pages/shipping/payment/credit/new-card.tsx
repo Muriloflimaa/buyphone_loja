@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Card from '../../../../components/Card/index'
 import { TotalPayment } from '../../../../components/TotalPayment'
 import { Address, GetInfoCredit } from '../../../../types'
@@ -16,12 +16,12 @@ import {
   maskMustNumber,
   masktel,
 } from '../../../../utils/masks'
-import { GetUseType } from '../../../../utils/getUserType'
 import { useRouter } from 'next/router'
 import { setCookies } from '../../../../utils/useCookies'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
+import { AuthContext } from '../../../../context/AuthContext'
 
 export default function credit({ address }: Address) {
   const [name, setName] = useState('')
@@ -32,7 +32,7 @@ export default function credit({ address }: Address) {
   const [focus, setFocus] = useState(false)
   const [infoCredit, setInfoCredit] = useState<GetInfoCredit>()
   const router = useRouter()
-  const user = GetUseType()
+  const { user } = useContext(AuthContext)
 
   const checksFlag = (card: string) => {
     const cardnumber = card.replace(/[^0-9]+/g, '')
@@ -103,7 +103,7 @@ export default function credit({ address }: Address) {
 
     const data = {
       ...value,
-      user_id: user.id,
+      user_id: user && user.id,
       address_id: address.id,
       shippingPrice: 0,
       installments: infoCredit?.installments,

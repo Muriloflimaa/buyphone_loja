@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import {
@@ -8,7 +9,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import { apiStore } from '../services/api'
 import { ArrayProduct, Product } from '../types'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
@@ -51,10 +51,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [somaTotalInteger, setSomaTotalInteger] = useState(0) //soma do total para aparecer no card carrinho sem disconto
   const [data, setData] = useState<ArrayProduct[]>([]) //state que recebe os produtos chamados da api
   const [values, setValues] = useState<ArrayProduct[]>([]) //recebe o values do useEffect sem o item duplicado
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
   const [isAttCart, setIsAttCart] = useState(false) //state para mostrar que esta buscando produtos na api
-  const { userData } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const router = useRouter()
   const discountValue = 15000
 
@@ -79,7 +78,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     setIsAttCart(true)
     cart.map(async (item) => {
       try {
-        const { data } = await apiStore.get(`products/${item.id}`) //chamando o produto pelo id
+        const { data } = await axios.get(`/api/store/products/${item.id}`) //chamando o produto pelo id
 
         const returnPrice = verificationPrice(data, user, isUser)
 
@@ -119,9 +118,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       soma += total[i]
     }
     setSomaTotalInteger(soma)
-    userData?.promotion
-      ? setSomaTotal(soma - discountValue)
-      : setSomaTotal(soma) //somando produtos e setando no state
+    user?.promotion ? setSomaTotal(soma - discountValue) : setSomaTotal(soma) //somando produtos e setando no state
   }, [data]) //effect para somar todos os produtos do carrinho - total / remover duplicados
 
   function CleanCart() {
@@ -173,7 +170,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (productExists) {
           // se sim incrementa a quantidade
           productExists.amount = newAmount
-          const addProduct = await apiStore.get(`products/${productId}`)
+          const addProduct = await axios.get(`/api/store/products/${productId}`)
           const products = addProduct.data
           ToastCustom(
             300,
@@ -185,7 +182,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
-          const addProduct = await apiStore.get(`products/${productId}`)
+          const addProduct = await axios.get(`/api/store/products/${productId}`)
           const products = addProduct.data
 
           ToastCustom(

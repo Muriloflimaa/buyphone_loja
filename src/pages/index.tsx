@@ -1,14 +1,13 @@
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import MeetImg from '../assets/images/BannerMeet.webp'
 import { CardDepoiments } from '../components/CardDepoiment'
 import CarouselComponent from '../components/Carousel'
 import RegisterMimo from '../components/Modals/Discount300'
 import ProductCard from '../components/ProductCard'
-import { apiStore } from '../services/api'
 import { IProduct } from '../types'
 
 //*** images
@@ -68,13 +67,16 @@ import BlurImage from '../components/BlurImage'
 import ProductComponentPromotion from '../components/ProductComponentPromotion'
 import BannerDesktopPromotion from '../components/BannerDesktopPromotion'
 import BannerMobilePromotion from '../components/BannerMobilePromotion'
+import { setupAPIClient } from '../services/newApi/api'
+import axios from 'axios'
+import { AuthContext } from '../context/AuthContext'
+import { LightOrDark } from '../utils/verifyDarkLight'
 
 interface DataProps {
   data: {
     data: Array<IProduct>
     last_page: number
   }
-  darkOrLigth: boolean
   dataLead: {
     message: string
     response: {
@@ -88,7 +90,6 @@ interface DataProps {
 
 const Home: NextPage<DataProps> = ({
   data,
-  darkOrLigth,
   dataLead,
   productBlack,
   productsCarousel,
@@ -98,14 +99,20 @@ const Home: NextPage<DataProps> = ({
   const [apiNew, setApiNew] = useState<Array<IProduct>>(data?.data)
   const [currentSlide, setCurrentSlide] = useState(1)
   const [currentPage, setCurrentPage] = useState(2)
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const { user } = useContext(AuthContext)
+
   const [isUser, setIsUser] = useState(false) //state para prevenir erro de renderização no usuário logado
+  const darkOrLigth = LightOrDark(
+    process.env.NEXT_PUBLIC_BLACK_FRIDAY,
+    user,
+    isUser
+  )
 
   const handleLoadProducts = async () => {
     if (currentPage !== data.last_page) {
       try {
-        await apiStore
-          .get(`products?page=${currentPage}`)
+        await axios
+          .get(`/api/store/products?page=${currentPage}`)
           .then((response) => response.data.data)
           .then((newProducts) =>
             setApiNew((prevData) => [...prevData, ...newProducts])
@@ -573,33 +580,32 @@ const Home: NextPage<DataProps> = ({
   )
 }
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const api = setupAPIClient(ctx)
   const decodesEmail =
-    context.query.email &&
-    new Buffer(context.query.email.toString(), 'base64').toString('ascii')
+    ctx.query.email &&
+    new Buffer(ctx.query.email.toString(), 'base64').toString('ascii')
   const decodesPhone =
-    context.query.tel &&
-    new Buffer(context.query.tel.toString(), 'base64').toString('ascii')
+    ctx.query.tel &&
+    new Buffer(ctx.query.tel.toString(), 'base64').toString('ascii')
 
   const params = {
-    name: context.query.name,
+    name: ctx.query.name,
     email: decodesEmail,
     phone: `+55${decodesPhone}`,
     list: 10,
-    utm_source: context.query.utm_source,
-    utm_medium: context.query.utm_medium,
-    utm_campaign: context.query.utm_campaign,
+    utm_source: ctx.query.utm_source,
+    utm_medium: ctx.query.utm_medium,
+    utm_campaign: ctx.query.utm_campaign,
   }
 
   try {
-    const data = apiStore.get(`products?per_page=10&page=1`)
-    const dataLead = apiStore.post('leads/', params)
-    const productBlack = apiStore(
-      'products?blackfriday=true&page=1&per_page=100'
+    const data = api.get(`/store/products?per_page=10&page=1`)
+    const dataLead = api.post('/store/leads/', params)
+    const productBlack = api(
+      '/store/products?blackfriday=true&page=1&per_page=100'
     )
-    const productsCarousel = apiStore.get(`carousel`)
+    const productsCarousel = api.get(`/store/carousel`)
     const [dataProducts, dataLeads, productBlackFriday, productsCarouselData] =
       await Promise.all([data, dataLead, productBlack, productsCarousel])
 

@@ -8,11 +8,11 @@ import { Input } from '../InputElement'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 import { faLocationDot, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import CountDownComponent from '../CountDownComponent'
 import BlurImage from '../BlurImage'
+import axios from 'axios'
 
 interface ProductProps {
   id: number
@@ -124,8 +124,8 @@ const ProductCart = ({
         qtd_items: 1,
       }
 
-      const { data } = await apiStore.get(`addresses/cep/${cep}`)
-      const shipping = await apiStore.post(`shipping`, infoShippingSend)
+      const { data } = await axios.get(`/api/store/addresses/cep/${cep}`)
+      const shipping = await axios.post(`/api/store/shipping`, infoShippingSend)
       if (data.Message === 'CEP NAO ENCONTRADO') {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return

@@ -10,7 +10,7 @@ import { ArrayProduct } from '../types'
 import { moneyMask } from '../utils/masks'
 
 export default function Cart() {
-  const { userData } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const { cart, values, somaTotal, discountValue, isAttCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
 
@@ -93,7 +93,7 @@ export default function Cart() {
         {cartSize && cartSize > 0 ? (
           <div className="flex flex-col items-end w-full">
             <div className="w-full max-w-md">
-              {userData?.promotion && (
+              {user?.promotion && (
                 <div className="flex justify-between">
                   <span className="text-info-content text-lg">Desconto:</span>
                   <span className="font-semibold text-lg text-green-600">
@@ -120,7 +120,7 @@ export default function Cart() {
                   Grátis
                 </span>
               </div>
-              {userData?.promotion && (
+              {user?.promotion && (
                 <div className="flex justify-between">
                   <span className="text-gray-500 text-sm">Desconto:</span>
                   <span className="font-semibold text-sm text-green-600">

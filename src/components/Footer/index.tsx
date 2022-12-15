@@ -16,9 +16,9 @@ import Parc2Svg from '../../assets/images/starkbank.webp'
 import Parc3Svg from '../../assets/images/pagseguro.png'
 import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
-import { apiStore } from '../../services/api'
 import SeloBlintadoGooglePng from '../../assets/images/google.png'
 import SeloBlintadoPng from '../../assets/images/siteblindado.png'
+import axios from 'axios'
 
 export default function Footer() {
   const [dataApi, setDataApi] = useState<Array<ICategory>>()
@@ -26,7 +26,7 @@ export default function Footer() {
   useEffect(() => {
     async function Data() {
       try {
-        const { data } = await apiStore.get(`categories/`)
+        const { data } = await axios.get(`/api/store/categories/`)
         setDataApi(data.data)
       } catch (error) {
         setDataApi(undefined)

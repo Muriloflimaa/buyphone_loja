@@ -1,20 +1,20 @@
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
+import { AuthContext } from '../../../../context/AuthContext'
 import { useCart } from '../../../../context/UseCartContext'
-import { apiStore } from '../../../../services/api'
 import { Address, ProductPayment } from '../../../../types'
-import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
 import { ToastCustom } from '../../../../utils/toastCustom'
 import { setCookies } from '../../../../utils/useCookies'
 
 export default function pix({ address }: Address) {
   const [loading, setLoading] = useState(false)
-  const user = GetUseType()
+  const { user } = useContext(AuthContext)
   const { values, somaTotal, CleanCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const router = useRouter()
@@ -40,12 +40,12 @@ export default function pix({ address }: Address) {
       })
 
       const items = {
-        user_id: user.id,
+        user_id: user && user.id,
         address_id: address?.id,
         amount: somaTotal,
         items: setDat,
       }
-      const { data } = await apiStore.post('checkout/pix', items)
+      const { data } = await axios.post('/api/store/checkout/pix', items)
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
       destroyCookie(null, '@BuyPhone:GetCep')
       destroyCookie(null, 'USER_LEAD')

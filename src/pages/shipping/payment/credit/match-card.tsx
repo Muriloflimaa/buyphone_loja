@@ -29,41 +29,15 @@ export default function CreditCheckout({ address }: Address) {
   const [cards, setCards] = useState<CardProps[]>([])
   const [matchCard, setMatchCard] = useState<string | null>(null)
   const router = useRouter()
-  const { values, somaTotal, CleanCart, discountValue } = useCart()
+  const { values, somaTotal, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
-  const { userData } = useContext(AuthContext)
-  // const [loading, setLoading] = useState(true)
+  const { user } = useContext(AuthContext)
 
   useEffect(() => {
     if (values) {
       setCartSize(values.length)
     }
   }, [values])
-
-  // useEffect(() => {
-  //   GetCreditCard()
-  // }, [])
-
-  // async function handleRemoveCard(id: number) {
-  //   try {
-  //     setCards((oldState) => oldState.filter((card) => card.id !== id))
-  //     setMatchCard(null)
-  //     await apiStore.delete(`cards/${id}`)
-  //   } catch (error) {
-  //     return
-  //   }
-  // }
-
-  // async function GetCreditCard() {
-  //   try {
-  //     const { data } = await apiStore.get(`cards/user/${address.user_id}`)
-  //     setCards(data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     setLoading(false)
-  //     setCards([])
-  //   }
-  // }
 
   function handleCard() {
     if (matchCard === 'newCard') {
@@ -221,7 +195,7 @@ export default function CreditCheckout({ address }: Address) {
               )}
             </div>
             <div className="card-body bg-base-200">
-              {userData?.promotion && (
+              {user?.promotion && (
                 <>
                   <div className="flex justify-between">
                     <span className="text-gray-500 text-sm">Subtotal:</span>
@@ -240,7 +214,7 @@ export default function CreditCheckout({ address }: Address) {
               <div className="flex justify-between py-4 items-center">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
-                  {userData?.promotion && (
+                  {user?.promotion && (
                     <span className="text-[14px] text-gray-500 line-through text-right">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>

@@ -1,7 +1,7 @@
+import axios from 'axios'
 import Router from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { apiStore } from '../services/api'
 import { IUser } from '../types'
 import { ToastCustom } from '../utils/toastCustom'
 import { setCookies } from '../utils/useCookies'
@@ -14,9 +14,8 @@ type SignInCredentials = {
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>
   signOut: Function
-  user: string | undefined | number
+  user: IUser | null
   isUser: boolean
-  userData: IUser | null
 }
 
 type AuthProviderProps = {
@@ -26,60 +25,39 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { '@BuyPhone:User': user } = parseCookies(undefined)
-  const { '@BuyPhone:Token': token } = parseCookies(undefined)
+  const { '@BuyPhone:Token': token } = parseCookies()
   const [isUser, setIsUser] = useState(false)
 
-  const [userData, setUserData] = useState<IUser | null>(() => {
-    // Verificando se existe user nos cookies
+  const [user, setUser] = useState<IUser | null>(null)
 
-    if (user) {
-      //Se existir configurar o useData
-      return JSON.parse(user)
-    }
-    return null
-  })
-
-  const [userToken, setUserToken] = useState<string | null>(() => {
-    // Verificando se existe user nos cookies
-
+  useEffect(() => {
     if (token) {
-      //Se existir configurar o useData
-      return token
+      axios
+        .get('/api/store/me')
+        .then((response) => {
+          setUser(response.data)
+        })
+        .catch(() => {
+          destroyCookie(null, '@BuyPhone:Token')
+          Router.push('/account/login')
+        })
     }
-    return null
-  })
+  }, []) //effect para buscar usuário pelo token
 
   useEffect(() => {
-    if (user && JSON.parse(user) !== userData) {
-      setCookies('@BuyPhone:User', JSON.stringify(userData), 60 * 60 * 24 * 90)
-    }
-  }, [userData])
-
-  useEffect(() => {
-    if (token !== userToken) {
-      setCookies(
-        '@BuyPhone:Token',
-        JSON.stringify(userToken),
-        60 * 60 * 24 * 90
-      )
-    }
-  }, [userToken])
-
-  useEffect(() => {
-    if (userData === null) {
+    if (user === null) {
       setIsUser(false)
     } else {
       setIsUser(true)
     }
-  }, [userData]) //useEffect para previnir erro de renderização
+  }, [user]) //useEffect para previnir erro de renderização
 
   async function signIn({ email, password }: SignInCredentials) {
     const cookies = parseCookies(undefined)
     const lead = cookies.LEAD ? JSON.parse(cookies.LEAD) : null
 
     try {
-      const response = await apiStore.post('/login', {
+      const response = await axios.post('/api/store/login', {
         email,
         password,
         lead,
@@ -97,26 +75,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         lead: lead,
         promotion: promotion,
       }
+
       const token = response.data.authorization.token
 
-      setUserData(UserObject)
-      setUserToken(token)
-
-      setCookies('@BuyPhone:User', UserObject, 60 * 60 * 24 * 90) //chama a função setCookies para gravar os dados
-      setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 90)
-      const cookies = parseCookies(undefined)
+      setUser(UserObject)
+      setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 30)
 
       if (
         cookies['@BuyPhone:Router'] &&
         cookies['@BuyPhone:Router'] !== 'undefined'
       ) {
-        window.location.href = cookies['@BuyPhone:Router']
+        Router.push(cookies['@BuyPhone:Router'])
         destroyCookie(undefined, '@BuyPhone:Router')
         destroyCookie(null, '@BuyPhone:Router')
         destroyCookie({}, '@BuyPhone:Router')
         return
       }
-      window.location.href = '/'
+      Router.push('/')
     } catch (error: any) {
       if (error.response.data.message === 'Unauthorized.') {
         ToastCustom(
@@ -146,32 +121,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signOut() {
-    try {
-      await apiStore.post('/logout')
-      destroyCookie(undefined, '@BuyPhone:User')
-      destroyCookie(undefined, '@BuyPhone:Token')
-      destroyCookie({}, '@BuyPhone:User')
-      destroyCookie({}, '@BuyPhone:Token')
-      destroyCookie(null, '@BuyPhone:Token')
-      destroyCookie(null, '@BuyPhone:User')
-      setUserData(null)
-      setUserToken(null)
-      Router.push('/')
-    } catch (error) {
-      destroyCookie(undefined, '@BuyPhone:User')
-      destroyCookie(undefined, '@BuyPhone:Token')
-      destroyCookie({}, '@BuyPhone:User')
-      destroyCookie({}, '@BuyPhone:Token')
-      destroyCookie(null, '@BuyPhone:Token')
-      destroyCookie(null, '@BuyPhone:User')
-      setUserData(null)
-      setUserToken(null)
-      Router.push('/')
-    }
-  }
+    destroyCookie(undefined, '@BuyPhone:Token')
+    destroyCookie(null, '@BuyPhone:Token')
+    destroyCookie({}, '@BuyPhone:Token')
+    setUser(null)
+    Router.push('/')
+  } //função para realizar o logout
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, user, userData, isUser }}>
+    <AuthContext.Provider value={{ signIn, signOut, user, isUser }}>
       {children}
     </AuthContext.Provider>
   )

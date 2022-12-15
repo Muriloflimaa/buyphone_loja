@@ -13,6 +13,7 @@ import {
   XIcon,
 } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -26,7 +27,6 @@ import * as yup from 'yup'
 import Logo from '../../assets/images/logo.svg'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/UseCartContext'
-import { apiStore } from '../../services/api'
 import { ICategory } from '../../types'
 import { moneyMask } from '../../utils/masks'
 import { FirstAllUpper, UniqueName } from '../../utils/ReplacesName'
@@ -43,7 +43,7 @@ type SearchFormData = {
 }
 
 export default function NavBar() {
-  const { signOut, userData, isUser } = useContext(AuthContext)
+  const { signOut, user, isUser } = useContext(AuthContext)
   const [showSearch, setShowSearch] = useState(false)
   const { cart, values, somaTotal, discountValue, isAttCart } = useCart()
   const [cartSize, setCartSize] = useState<number>()
@@ -66,7 +66,7 @@ export default function NavBar() {
   useEffect(() => {
     async function Data() {
       try {
-        const { data } = await apiStore.get(`categories/`)
+        const { data } = await axios.get(`/api/store/categories/`)
         setDataApi(data.data)
       } catch (error) {
         setDataApi(null)
@@ -244,7 +244,7 @@ export default function NavBar() {
                     )}
                     <div
                       className={`items-center flex-col ${
-                        userData?.promotion ? 'flex' : 'hidden'
+                        user?.promotion ? 'flex' : 'hidden'
                       }`}
                     >
                       <div className="ml-3 flex">
@@ -278,7 +278,7 @@ export default function NavBar() {
                           className="btn btn-sm bg-rose-500 hover:bg-rose-700 h-auto py-2 rounded-full text-base-100 flex-row gap-2 pr-1"
                         >
                           <span className="normal-case text-white">
-                            Olá, {UniqueName(userData?.name)}
+                            Olá, {UniqueName(user?.name)}
                           </span>
                           <FontAwesomeIcon
                             icon={faCircleUser}
@@ -299,7 +299,7 @@ export default function NavBar() {
                               <a>Minhas Compras</a>
                             </Link>
                           </li>
-                          {userData && (
+                          {user && (
                             <li>
                               <button
                                 className="text-left w-full"
@@ -426,7 +426,7 @@ export default function NavBar() {
                                   Valor Total:
                                 </span>
                                 <div className="flex flex-col">
-                                  {userData?.promotion && (
+                                  {user?.promotion && (
                                     <span className="text-[14px] text-gray-500 line-through text-right">
                                       R${' '}
                                       {moneyMask(
@@ -441,7 +441,7 @@ export default function NavBar() {
                               </div>
                             ) : somaTotal > 0 ? (
                               <>
-                                {userData?.promotion && (
+                                {user?.promotion && (
                                   <div className="flex justify-between">
                                     <span className="text-gray-500 text-sm">
                                       Desconto:
@@ -456,7 +456,7 @@ export default function NavBar() {
                                     Valor Total:
                                   </span>
                                   <div className="flex flex-col">
-                                    {userData?.promotion && (
+                                    {user?.promotion && (
                                       <span className="text-[14px] text-gray-500 line-through text-right">
                                         R${' '}
                                         {moneyMask(
@@ -492,7 +492,7 @@ export default function NavBar() {
                     )}
                     <div
                       className={`items-center flex-col mt-6 -ml-7 ${
-                        userData?.promotion ? 'flex' : 'hidden'
+                        user?.promotion ? 'flex' : 'hidden'
                       }`}
                     >
                       <div className="">
@@ -591,7 +591,7 @@ export default function NavBar() {
                   <UserCircleIcon className="w-10 h-10" />
                 ) : (
                   <img
-                    src={userData?.profile_photo_url}
+                    src={user?.profile_photo_url}
                     alt={'user'}
                     width={40}
                     height={40}
@@ -602,10 +602,10 @@ export default function NavBar() {
               {!!isUser ? (
                 <div className="flex flex-col px-6">
                   <h1 className="text-xl font-semibold text-info-content">
-                    {FirstAllUpper(userData?.name)}
+                    {FirstAllUpper(user?.name)}
                   </h1>
                   <h2 className="text-info-content">
-                    {userData?.type == 1 ? 'Revendedor' : 'Consumidor'}
+                    {user?.type == 1 ? 'Revendedor' : 'Consumidor'}
                   </h2>
                 </div>
               ) : (
@@ -696,7 +696,7 @@ export default function NavBar() {
                 </Link>
               </div>
               <Divider />
-              {userData && (
+              {user && (
                 <div
                   className="flex px-4 cursor-pointer"
                   onClick={toggleDrawer}
