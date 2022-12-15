@@ -13,64 +13,89 @@ interface IParams {
   }
 }
 
-interface DataProps {
-  current_page: number
-  data: Array<PedidosProps>
-  first_page_url: string
-  from: number
-  last_page: number
-  last_page_url: string
-  links: Array<{
-    active: boolean
-    label: string
-    url: string
-  }>
-  next_page_url: string
-  path: string
-  per_page: number
-  prev_page_url: null | number
-  to: number
-  total: number
+interface IProduct {
+  name: string
+  color: string
+  memory: string
 }
 
-interface PedidosProps {
-  address: {
-    address: string
-    city: string
-    complement: string | null
-    created_at: string
-    id: number
-    neighborhood: string
-    number: number
-    postal_code: string | null
-    uf: string
-    updated_at: string
-    user_id: number
-  }
-  address_id: number
+interface IOrder {
+  qty: number
+  price: number
   created_at: string
-  id: number
-  invoice: IInvoice
-  invoice_id: number
-  method: string
-  total: number
   updated_at: string
-  user_id: number
-  utm_campaign: null
-  utm_medium: null
-  utm_source: null
+  shipping_status: null
+  tracking_code: null
+  tracking_url: null
+  product: Array<IProduct>
+  order: {
+    id: number
+    user_id: number
+    address_id: number
+    invoice_id: number
+    total: number
+    method: string
+    created_at: string
+    updated_at: string
+    utm_source: null
+    utm_medium: null
+    utm_campaign: null
+    no_interest_price: number | null
+    installments: number
+    address: {
+      id: number
+      user_id: number
+      postal_code: string
+      address: string
+      number: number
+      complement: null
+      neighborhood: string
+      city: string
+      uf: string
+      created_at: string
+      updated_at: string
+      deleted_at: null
+    }
+    user: {
+      id: number
+      name: string
+      email: string
+      email_verified_at: null
+      two_factor_secret: null
+      two_factor_recovery_codes: null
+      current_team_id: null
+      profile_photo_path: null
+      created_at: string
+      updated_at: string
+      document: string
+      external_id: string
+      birthdate: null
+      mobile_phone: null
+      code: null
+      type: 0
+      utm_source: null
+      utm_medium: null
+      utm_campaign: null
+      lead: 0
+    }
+  }
 }
 
-export default function BillOfSale({ data }) {
-  const [order, setOrder] = useState<DataProps>(data)
-  console.log(data)
+interface DataProps {
+  data: Array<IOrder>
+}
+
+export default function BillOfSale({ data }: DataProps) {
   const handleDownload = () => {
     window.print()
   }
   return (
     <div className="h-screen bg-white text-black artboard">
       <div className="md:px-14 px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          id="media-print-style"
+        >
           <div className="flex items-center md:border-r-2 px-2">
             <Image
               src={Logo}
@@ -122,22 +147,22 @@ export default function BillOfSale({ data }) {
       <div className="md:px-14 px-8 py-4">
         <h1 className="font-semibold">DESTINATÁRIO/REMETENTE</h1>
         <div className="overflow-x-auto mt-5" data-theme="light">
-          <table className="table w-full border p-2 bg-white table-auto">
+          <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <tbody>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">DESTINATÁRIO:</span>{' '}
                   {data[0].order.user.name}
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">CPF/CNPJ:</span>{' '}
                   {cpfMask(data[0].order.user.document)}
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">ENDEREÇO:</span>{' '}
                   {data[0].order.address.address},{' '}
                   {data[0].order.address.number},{' '}
@@ -145,8 +170,8 @@ export default function BillOfSale({ data }) {
                   {data[0].order.address.neighborhood}
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">CIDADE:</span>{' '}
                   {data[0].order.address.city}-{data[0].order.address.uf}
                 </td>
@@ -154,28 +179,28 @@ export default function BillOfSale({ data }) {
             </tbody>
           </table>
 
-          <table className="table w-full border p-2 bg-white mt-5 table-auto">
+          <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <tbody>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">REMETENTE:</span> Buyp
                   Programas de vantagens e tecnologia LTDA
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">CPF/CNPJ:</span>{' '}
                   45.679.637/0001-94
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">ENDEREÇO:</span> Avenida
                   Brasilia, 2121, Sala 12, 16.018-000, Jardim Nova Yorque
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border">
+                <td className="p-3">
                   <span className="font-semibold">CIDADE:</span> Araçatuba-SP
                 </td>
               </tr>
@@ -183,13 +208,74 @@ export default function BillOfSale({ data }) {
           </table>
         </div>
         <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
+        <div className="mt-5">
+          <h1 className="font-semibold mb-2">DADOS DOS PRODUTOS</h1>
+          <div className="overflow-x-auto" data-theme="light">
+            <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
+              <thead>
+                <tr className="bg-[#f2f2f2] border-grey-light border flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full gap-2">
+                  {data.map((_: any, index: number) => {
+                    return (
+                      <>
+                        <th
+                          className={`p-4 text-left text-sm ${
+                            index === 1 && 'sm:hidden'
+                          }`}
+                        >
+                          Descrição do produto
+                        </th>
+                        <th
+                          className={`p-4 text-left sm:text-center text-sm ${
+                            index === 1 && 'sm:hidden'
+                          }`}
+                        >
+                          QTD
+                        </th>
+                        <th
+                          className={`p-4 text-left sm:text-center text-sm ${
+                            index === 1 && 'sm:hidden'
+                          }`}
+                        >
+                          VLR UNIT
+                        </th>
+                      </>
+                    )
+                  })}
+                </tr>
+              </thead>
+              <tbody className="flex-1 sm:flex-none">
+                {data.map((product: IOrder) => {
+                  return (
+                    <tr className="flex flex-col flex-no wrap sm:table-row">
+                      <td className="border-grey-light border p-4">
+                        {product.product[0].name} ({product.product[0].memory} -{' '}
+                        {product.product[0].color})
+                      </td>
+                      <td className="border-grey-light border hover:bg-gray-100 p-4 sm:text-center">
+                        {product.qty}
+                      </td>
+                      <td className="border-grey-light border hover:bg-gray-100 p-4 sm:text-center">
+                        {moneyMask(product.price.toString())}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
         <div className="overflow-x-auto" data-theme="light">
           <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <thead>
               <tr className="bg-[#f2f2f2] border-grey-light border flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full">
-                <th className="p-3 text-left">FORMA DE PAGAMENTO</th>
-                <th className="p-3 text-left">PARCELAS</th>
-                <th className="p-3 text-left">VLR COMPRA</th>
+                <th className="p-3 text-left text-sm">FORMA DE PAGAMENTO</th>
+                <th className="p-3 text-left sm:text-center text-sm">
+                  PARCELAS
+                </th>
+                <th className="p-3 text-left sm:text-center text-sm">
+                  VLR COMPRA
+                </th>
               </tr>
             </thead>
             <tbody className="flex-1 sm:flex-none">
@@ -199,23 +285,23 @@ export default function BillOfSale({ data }) {
                   {data[0].order.method === 'CREDIT' && 'Crédito'}
                   {data[0].order.method === 'CUSTOM' && 'Personalizado'}
                 </td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                <td className="border-grey-light border hover:bg-gray-100 p-3 sm:text-center">
                   {data[0].order.installments}
                 </td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                <td className="border-grey-light border hover:bg-gray-100 p-3 sm:text-center">
                   {moneyMask(
                     data[0].order.no_interest_price
-                      ? data[0].order.no_interest_price
-                      : data[0].order.total
+                      ? data[0].order.no_interest_price.toString()
+                      : data[0].order.total.toString()
                   )}
                 </td>
               </tr>
               <tr className="flex flex-col flex-no wrap sm:table-row">
-                <td className="border-grey-light border p-3"></td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3 text-right">
+                <td className="border-grey-light sm:border sm:p-3"></td>
+                <td className="border-grey-lightsm:border border-r-2 hover:bg-gray-100 p-3 sm:text-right">
                   Taxas:
                 </td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                <td className="border-grey-light sm:border border-r-2 border-b-2  hover:bg-gray-100 p-3 sm:text-center">
                   {moneyMask(
                     data[0].order.no_interest_price
                       ? (
@@ -227,12 +313,12 @@ export default function BillOfSale({ data }) {
                 </td>
               </tr>
               <tr className="flex flex-col flex-no wrap sm:table-row">
-                <td className="border-grey-light border p-3"></td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3 text-right">
+                <td className="border-grey-light sm:border sm:p-3"></td>
+                <td className="border-grey-light sm:border border-r-2 hover:bg-gray-100 p-3 sm:text-right">
                   Total:
                 </td>
-                <td className="border-grey-light border hover:bg-gray-100 p-3">
-                  {moneyMask(data[0].order.total)}
+                <td className="border-grey-light sm:border border-r-2 border-b-2 border-t-none hover:bg-gray-100 p-3 sm:text-center">
+                  {moneyMask(data[0].order.total.toString())}
                 </td>
               </tr>
             </tbody>
@@ -243,10 +329,10 @@ export default function BillOfSale({ data }) {
           <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <thead>
               <tr className="bg-[#f2f2f2] border-grey-light border flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full grid">
-                <th className="p-3 text-left flex items-center sm:table-cell">
+                <th className="p-3 text-left flex items-center sm:table-cell text-sm">
                   TRANSPORTADOR
                 </th>
-                <th className="p-3 text-left flex items-center sm:table-cell">
+                <th className="p-3 text-left flex items-center sm:table-cell text-sm">
                   FRETE POR CONTA
                 </th>
               </tr>
@@ -267,38 +353,6 @@ export default function BillOfSale({ data }) {
           </table>
         </div>
         <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
-        <div className="mt-5">
-          <h1 className="font-semibold mb-2">DADOS DOS PRODUTOS</h1>
-          <div className="overflow-x-auto" data-theme="light">
-            <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
-              <thead>
-                <tr className="bg-[#f2f2f2] border-grey-light border flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full">
-                  <th className="p-3 text-left">Descrição do produto</th>
-                  <th className="p-3 text-left">QTD</th>
-                  <th className="p-3 text-left">VLR UNIT</th>
-                  <th className="p-3 text-left">VLR TOTAL</th>
-                </tr>
-              </thead>
-              <tbody className="flex-1 sm:flex-none">
-                <tr className="flex flex-col flex-no wrap sm:table-row">
-                  <td className="border-grey-light border p-3">
-                    {/* {data.product.name} ({data.product.memory} -{' '}
-                    {data.product.color}) */}
-                  </td>
-                  <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {/* {data.qty} */}
-                  </td>
-                  <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {/* {moneyMask(data.price)} */}
-                  </td>
-                  <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {/* {moneyMask(data.order.total)} */}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
         <div className="mt-5">
           <h1 className="font-semibold mb-2">DADOS ADICIONAIS</h1>
           <div className="rounded-md border p-2">
