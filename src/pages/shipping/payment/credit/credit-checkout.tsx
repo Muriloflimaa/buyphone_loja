@@ -69,7 +69,6 @@ export default function creditFinally({
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const [products, setProducts] = useState<ProductPayment[]>([])
   const [disableFinally, setDisableFinally] = useState(false)
   const [loading, setLoading] = useState(false)
   const [loadingInstallments, setLoadingInstallments] = useState(true)
@@ -125,17 +124,21 @@ export default function creditFinally({
         items: setDat,
       }
 
-      const { data }: DataProps = await axios.post(
+      const { data }: any = await axios.post(
         `/api/store/checkout/credit-card`,
         infoData
       )
 
       setDisableFinally(false)
-      setProducts(setDat)
       setLoading(false)
-      if (data.status === 'created' || data.status === 'paid') {
+      if (
+        data.status === 'created' ||
+        data.status === 'paid' ||
+        data[0].status === 'created' ||
+        data[0].status === 'paid'
+      ) {
         setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
-        setCookies('@BuyPhone:OrderId', data.order_id, 60 * 5)
+        setCookies('@BuyPhone:OrderId', data[0].order_id, 60 * 5)
         setCookies('@BuyPhone:ValueOrder', somaTotalInteger, 60 * 5)
         setStateModalSuccess(true)
         CleanCart()
@@ -148,7 +151,7 @@ export default function creditFinally({
         return
       } else {
         setDisableFinally(false)
-        setProducts(setDat)
+
         setLoading(false)
         setStateModalError(true)
         return
@@ -177,9 +180,7 @@ export default function creditFinally({
         }
       }
       setDisableFinally(false)
-      setProducts(setDat)
       setLoading(false)
-      setProducts(setDat)
       setStateModalError(true)
     }
   }
@@ -343,13 +344,13 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col items-end">
                 <strong>Condição:</strong>
-                {/* {loadingInstallments ? (
+                {loadingInstallments ? (
                   <LoadingComponent />
                 ) : (
                   <span>{`${GetInfoCredit.installments}x de ${moneyMask(
                     installments.toString()
                   )}`}</span>
-                )} */}
+                )}
               </div>
             </div>
           </div>
