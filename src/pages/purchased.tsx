@@ -6,8 +6,9 @@ import GifPng from '../assets/images/giphy.gif'
 import { destroyCookie, parseCookies } from 'nookies'
 import { GetServerSidePropsContext } from 'next'
 import BlurImage from '../components/BlurImage'
+import Head from 'next/head'
 
-export default function Purchased() {
+export default function Purchased({ orderId, valueOrder }: any) {
   const size = useWindowSize()
 
   destroyCookie(null, '@BuyPhone:SuccessShipping')
@@ -16,6 +17,19 @@ export default function Purchased() {
 
   return (
     <>
+      <Head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              gtag('event', 'conversion', {
+                'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
+                'value': ${valueOrder},
+                'currency': 'BRL',
+                'transaction_id': ${orderId}
+            })`,
+          }}
+        ></script>
+      </Head>
       <Confetti
         recycle={false}
         gravity={0.08}
@@ -43,10 +57,15 @@ export default function Purchased() {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
+  const { '@BuyPhone:OrderId': orderId } = parseCookies(ctx)
+  const { '@BuyPhone:ValueOrder': valueOrder } = parseCookies(ctx)
 
   if (success) {
     return {
-      props: {},
+      props: {
+        orderId: orderId,
+        valueOrder: valueOrder,
+      },
     }
   } else {
     return {

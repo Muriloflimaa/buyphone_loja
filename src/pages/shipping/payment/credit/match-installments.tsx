@@ -1,5 +1,6 @@
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
@@ -52,7 +53,7 @@ export default function MatchInstallment({
   const [matchInstallments, setMatchInstallments] = useState<string>('')
   const [installments, setInstallments] = useState<installmentsProps>()
   const [loading, setLoading] = useState(true)
-  const { userData } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const router = useRouter()
 
@@ -82,7 +83,7 @@ export default function MatchInstallment({
         amount: somaTotal,
       }
 
-      const response = await apiStore.get(`checkout/installments`, {
+      const response = await axios.get(`checkout/installments`, {
         params: data,
       })
       setLoading(false)
@@ -194,7 +195,7 @@ export default function MatchInstallment({
               )}
             </div>
             <div className="card-body bg-base-200">
-              {userData?.promotion && (
+              {user?.promotion && (
                 <>
                   <div className="flex justify-between">
                     <span className="text-gray-500 text-sm">Subtotal:</span>
@@ -213,7 +214,7 @@ export default function MatchInstallment({
               {/* <div className="flex justify-between py-4">
                 <span className="text-gray-500 text-lg">Valor Total:</span>
                 <div className="flex flex-col">
-                  {userData?.promotion && (
+                  {user?.promotion && (
                     <span className="text-[14px] text-gray-500 line-through text-right">
                       R$ {moneyMask((somaTotal + discountValue).toString())}
                     </span>

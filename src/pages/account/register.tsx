@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { apiStore } from '../../services/api'
 import { maskCpfInput, masktel } from '../../utils/masks'
 import { ToastCustom } from '../../utils/toastCustom'
 import { WithSSRGuest } from '../../utils/WithSSRGuest'
@@ -88,7 +88,7 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      await apiStore.post('/users', dataUTM)
+      await axios.post('/api/store/users', dataUTM)
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/account/login')
     } catch (error: any) {
@@ -99,7 +99,7 @@ export default function register() {
         !!error.response.data.errors.utm_medium
       ) {
         try {
-          await apiStore.post('/users', data)
+          await axios.post('/api/store/users', data)
           ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
           router.push('/account/login')
         } catch (newError: any) {

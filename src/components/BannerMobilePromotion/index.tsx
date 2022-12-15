@@ -1,11 +1,11 @@
 import { Carousel } from 'react-responsive-carousel'
-import { IProduct } from '../../types'
+import { IProduct, IUser } from '../../types'
 import { verificationPrice } from '../../utils/verificationPrice'
 import BannerProductPromotion from '../BannerProductPromotion'
 
 interface ProductProps {
   productBlack: Array<IProduct>
-  user: string
+  user: IUser | null
   isUser: boolean
 }
 

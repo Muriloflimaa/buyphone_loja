@@ -9,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { apiStore, link } from '../../services/api'
+import { link } from '../../services/newApi/api'
 import { UserData } from '../../types'
 import { masktel } from '../../utils/masks'
 import { ToastCustom } from '../../utils/toastCustom'
@@ -63,7 +63,7 @@ export default function profile({ data }: user) {
     }
 
     try {
-      await apiStore.put(`/users/${data.id}`, value)
+      await axios.put(`/api/store/users/${data.id}`, value)
       ToastCustom(3000, 'Dados alterados com sucesso', 'success', 'Notificação')
     } catch (error: any) {
       if (error.response.data.errors.email) {
@@ -113,7 +113,7 @@ export default function profile({ data }: user) {
       }
 
       try {
-        const response = await apiStore.put(`/users/${data.id}`, userPasswords)
+        await axios.put(`/api/store/users/${data.id}`, userPasswords)
 
         ToastCustom(2000, 'Senha alterada com sucesso', 'success')
         await new Promise((resolve) => setTimeout(resolve, 2000))

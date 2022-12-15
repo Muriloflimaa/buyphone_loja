@@ -1,16 +1,20 @@
+import axios from 'axios'
+import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import JuninhoImg from '../../assets/images/juninho.webp'
 import ProductCard from '../../components/ProductCard'
-import { apiStore } from '../../services/api'
+import { AuthContext } from '../../context/AuthContext'
+import { setupAPIClient } from '../../services/newApi/api'
 import { IProduct } from '../../types'
 import { verificationPrice } from '../../utils/verificationPrice'
 
-interface IParams {
+interface IGetServerProps {
   params: {
     index: string
   }
+  ctx: GetServerSidePropsContext
 }
 
 export interface DataProps {
@@ -40,7 +44,7 @@ interface ResultSearchProps {
 
 export default function SearchResult({ data, query }: ResultSearchProps) {
   const [products, setProducts] = useState(data)
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const { user } = useContext(AuthContext)
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
 
   useEffect(() => {
@@ -55,8 +59,8 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
 
   async function handleChangePagination(page: string) {
     try {
-      const { data } = await apiStore.post(
-        `/search${page
+      const { data } = await axios.post(
+        `/api/store/search${page
           .replace('https://beta-api.buyphone.com.br/store/search', '')
           .replace(`https://api.buyphone.com.br/store/search`, '')}`,
         { query: query }
@@ -148,10 +152,13 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
   )
 }
 
-export const getServerSideProps = async ({ params }: IParams) => {
+export const getServerSideProps = async ({ params, ctx }: IGetServerProps) => {
   const query = params.index
+  const api = setupAPIClient(ctx)
   try {
-    const { data } = await apiStore.post('/search', { query: params.index })
+    const { data } = await api.post('/store/search', {
+      query: params.index,
+    })
     return {
       props: {
         data,

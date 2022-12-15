@@ -1,10 +1,11 @@
-import Head from 'next/head'
+import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import BannerBlack from '../../../assets/images/bannerblack.webp'
 import ProductCard from '../../../components/ProductCard'
-import { apiStore } from '../../../services/api'
+import { AuthContext } from '../../../context/AuthContext'
+import { setupAPIClient } from '../../../services/newApi/api'
 import { IProduct } from '../../../types'
 import { verificationPrice } from '../../../utils/verificationPrice'
 
@@ -13,7 +14,7 @@ interface BlackFridayProps {
 }
 
 export default function BlackFriday({ data }: BlackFridayProps) {
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega dados do usuário logado
+  const { user } = useContext(AuthContext)
   const [isUser, setIsUser] = useState(false) //state para previnir erro de renderização no usuario logado
 
   useEffect(() => {
@@ -58,7 +59,8 @@ export default function BlackFriday({ data }: BlackFridayProps) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const api = setupAPIClient(ctx)
   if (
     process.env.NEXT_PUBLIC_BLACK_FRIDAY &&
     !JSON.parse(process.env.NEXT_PUBLIC_BLACK_FRIDAY)
@@ -71,8 +73,8 @@ export const getServerSideProps = async () => {
     }
   }
   try {
-    const { data } = await apiStore(
-      `products?blackfriday=true&page=1&per_page=100`
+    const { data } = await api(
+      `/store/products?blackfriday=true&page=1&per_page=100`
     )
     return {
       props: {

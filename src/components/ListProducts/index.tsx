@@ -1,12 +1,12 @@
 import { faTruckFast, faWallet } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { apiStore } from '../../services/api'
-import { GetUseType } from '../../utils/getUserType'
+import { AuthContext } from '../../context/AuthContext'
 import { date, moneyMask } from '../../utils/masks'
 
 interface ListProductsProps {
@@ -52,7 +52,7 @@ const ListProducts = ({
   expired,
 }: ListProductsProps) => {
   const router = useRouter()
-  const user = GetUseType()
+  const { user } = useContext(AuthContext)
   const [shippingDays, setShippingDays] = useState<shippingOnTypes>()
   const [image, setImage] = useState()
 
@@ -78,7 +78,7 @@ const ListProducts = ({
         qtd_items: 1,
       }
 
-      const { data } = await apiStore.post(`shipping`, infoShippingSend)
+      const { data } = await axios.post(`/api/store/shipping`, infoShippingSend)
       setShippingDays(data)
     } catch (error) {
       setShippingDays(undefined)
@@ -88,7 +88,9 @@ const ListProducts = ({
   async function handleChangePagination() {
     if (method === 'PIX') {
       try {
-        const { data } = await apiStore.get(`checkout/qrcode/${CodImgPix}`)
+        const { data } = await axios.get(
+          `/api/store/checkout/qrcode/${CodImgPix}`
+        )
         setImage(data.qrcode)
       } catch (error) {}
     }

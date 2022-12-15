@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProductCard from '../../../../../components/ProductCard'
 import { ICategory } from '../../../../../types'
 import Head from 'next/head'
-import { apiStore } from '../../../../../services/api'
 import { verificationPrice } from '../../../../../utils/verificationPrice'
-import { parseCookies } from 'nookies'
+import { setupAPIClient } from '../../../../../services/newApi/api'
+import { AuthContext } from '../../../../../context/AuthContext'
 
 interface DataProps {
   data: ICategory
@@ -18,7 +18,7 @@ interface IParams {
 
 export default function Products({ data }: DataProps) {
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const { user } = useContext(AuthContext)
 
   useEffect(() => {
     if (user) {
@@ -67,8 +67,9 @@ export default function Products({ data }: DataProps) {
 }
 
 export const getStaticProps = async ({ params }: IParams) => {
+  const api = setupAPIClient()
   try {
-    const { data } = await apiStore.get(`categories/${params.slugCategory}`)
+    const { data } = await api.get(`/store/categories/${params.slugCategory}`)
     return {
       props: {
         data,
@@ -85,8 +86,9 @@ export const getStaticProps = async ({ params }: IParams) => {
 }
 
 export async function getStaticPaths() {
+  const api = setupAPIClient()
   try {
-    const { data } = await apiStore.get(`categories?per_page=500`)
+    const { data } = await api.get(`/store/categories?per_page=500`)
 
     const paths = data.data.map((category: ICategory) => {
       return {

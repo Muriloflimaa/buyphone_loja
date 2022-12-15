@@ -1,7 +1,7 @@
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
@@ -9,19 +9,16 @@ import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
 import { AuthContext } from '../../../../context/AuthContext'
 import { useCart } from '../../../../context/UseCartContext'
-import { apiStore } from '../../../../services/api'
 import { Address, ProductPayment } from '../../../../types'
-import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
 import { ToastCustom } from '../../../../utils/toastCustom'
 
 export default function custom({ address }: Address) {
   const [loading, setLoading] = useState(false)
-  const [stateModalSuccess, setStateModalSuccess] = useState(false)
-  const user = GetUseType()
   const { values, somaTotal, CleanCart } = useCart()
-  const { userData, isUser } = useContext(AuthContext)
+  const { user, isUser } = useContext(AuthContext)
   const [cartSize, setCartSize] = useState<number>()
+  const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const router = useRouter()
   const discountValue = 15000
 
@@ -45,12 +42,12 @@ export default function custom({ address }: Address) {
       })
 
       const items = {
-        user_id: user.id,
+        user_id: user && user.id,
         address_id: address?.id,
         amount: somaTotal,
         items: setDat,
       }
-      await apiStore.post('checkout/custom', items)
+      await axios.post('/api/store/checkout/custom', items)
 
       setLoading(false)
       setStateModalSuccess(true)
@@ -104,8 +101,8 @@ export default function custom({ address }: Address) {
               <a
                 onClick={() => router.push('/user/myshopping')}
                 href={`https://api.whatsapp.com/send?phone=5518981367275&text=Olá,%20Realizei%20um%20pedido%20no%20modo%20personalizado%20e%20gostaria%20de%20uma%20simulação%20de%20pagamento.%20Meu%20nome%20é%20${
-                  isUser && userData && userData.name
-                }%20e%20meu%20email%20${isUser && userData && userData.email}`}
+                  isUser && user && user.name
+                }%20e%20meu%20email%20${isUser && user && user.email}`}
                 target={'_blank'}
                 className="btn btn-primary max-w- mt-5 text-white w-full shadow-md shadow-primary/60"
               >

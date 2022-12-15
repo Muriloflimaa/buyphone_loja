@@ -3,19 +3,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { apiStore } from '../../services/api'
-import { GetUseType } from '../../utils/getUserType'
 import toast from 'react-hot-toast'
 import { TotalPayment } from '../../components/TotalPayment'
 import { setCookies } from '../../utils/useCookies'
 import { PersistentLogin } from '../../utils/PersistentLogin'
 import ProductCart from '../../components/ProductCart'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useCart } from '../../context/UseCartContext'
 import { maskMustNumber, moneyMask } from '../../utils/masks'
 import { Input } from '../../components/InputElement'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import { AuthContext } from '../../context/AuthContext'
 
 interface CepJsonProps {
   cepJson: {
@@ -48,7 +48,7 @@ type GetCepTypes = {
 
 export default function address({ cepJson }: CepJsonProps) {
   const router = useRouter()
-  const user = GetUseType()
+  const { user } = useContext(AuthContext)
   const { values, somaTotal } = useCart()
   const [cartSize, setCartSize] = useState<number>()
 
@@ -83,9 +83,9 @@ export default function address({ cepJson }: CepJsonProps) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     try {
-      const { data } = await apiStore.post(`addresses`, {
+      const { data } = await axios.post(`/api/store/addresses`, {
         ...values,
-        user_id: user.id,
+        user_id: user && user.id,
         postal_code: cepJson.CEP ?? cepJson.postal_code,
       })
 

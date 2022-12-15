@@ -3,8 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
+import axios from 'axios'
 
 type ForgoutFormData = {
   password: string
@@ -36,7 +36,7 @@ export default function ResetPassword() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
-      const { data } = await apiStore.post('reset-password', {
+      const { data } = await axios.post('/api/store/reset-password', {
         email: router.query.email,
         token: router.query.index,
         ...values,

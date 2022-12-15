@@ -1,16 +1,17 @@
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { destroyCookie, parseCookies } from 'nookies'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
+import { AuthContext } from '../../../../context/AuthContext'
 import { useCart } from '../../../../context/UseCartContext'
 import { apiStore } from '../../../../services/api'
 import { ArrayProduct, ProductPayment } from '../../../../types'
-import { GetUseType } from '../../../../utils/getUserType'
 import { moneyMask } from '../../../../utils/masks'
 import { ToastCustom } from '../../../../utils/toastCustom'
 import { setCookies } from '../../../../utils/useCookies'
@@ -62,7 +63,7 @@ export default function creditFinally({
   GetInfoCredit,
   address,
 }: GetInfoCreditProps) {
-  const user = GetUseType()
+  const { user } = useContext(AuthContext)
   const { values, somaTotal, CleanCart, somaTotalInteger } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const discountValue = 15000
@@ -92,14 +93,16 @@ export default function creditFinally({
       }
 
       const { data: response } = await apiStore.get(
-        `checkout/installments/${GetInfoCredit.installments}`,
+        `/checkout/installments/${GetInfoCredit.installments}`,
         {
           params: data,
         }
       )
       setInstallments(response[0])
       setLoadingInstallments(false)
-    } catch (error) {}
+    } catch (error) {
+      router.push('/shipping/payment/credit/credit-checkout')
+    }
   }
 
   async function handlePayment() {
@@ -122,8 +125,8 @@ export default function creditFinally({
         items: setDat,
       }
 
-      const { data }: DataProps = await apiStore.post(
-        `checkout/credit-card`,
+      const { data }: DataProps = await axios.post(
+        `/api/store/checkout/credit-card`,
         infoData
       )
 
@@ -132,6 +135,8 @@ export default function creditFinally({
       setLoading(false)
       if (data.status === 'created' || data.status === 'paid') {
         setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
+        setCookies('@BuyPhone:OrderId', data.order_id, 60 * 5)
+        setCookies('@BuyPhone:ValueOrder', somaTotalInteger, 60 * 5)
         setStateModalSuccess(true)
         CleanCart()
         destroyCookie(null, '@BuyPhone:GetCep')
@@ -338,13 +343,13 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col items-end">
                 <strong>Condição:</strong>
-                {loadingInstallments ? (
+                {/* {loadingInstallments ? (
                   <LoadingComponent />
                 ) : (
                   <span>{`${GetInfoCredit.installments}x de ${moneyMask(
                     installments.toString()
                   )}`}</span>
-                )}
+                )} */}
               </div>
             </div>
           </div>

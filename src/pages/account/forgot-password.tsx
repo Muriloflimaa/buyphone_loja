@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { apiStore } from '../../services/api'
 import { ToastCustom } from '../../utils/toastCustom'
 
 type ForgoutFormData = {
@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
-      await apiStore.post('forgot-password', values)
+      await axios.post('/api/store/forgot-password', values)
       ToastCustom(
         4000,
         'Enviamos um link para recuperação de senha no seu e-mail.',

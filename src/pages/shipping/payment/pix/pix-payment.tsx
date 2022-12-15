@@ -1,10 +1,10 @@
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import toast from 'react-hot-toast'
-import { apiStore } from '../../../../services/api'
 import { moneyMask } from '../../../../utils/masks'
 import { setCookies } from '../../../../utils/useCookies'
 
@@ -39,7 +39,7 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
 
   async function AttPayment() {
     try {
-      const { data } = await apiStore.get(`invoices/${pix.id}`)
+      const { data } = await axios.get(`/api/store/invoices/${pix.id}`)
       if (data.status === 'paid') {
         setCookies('@BuyPhone:SuccessShipping', 'true', 180)
         router.push('/purchased')
@@ -51,7 +51,7 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
 
   return (
     <>
-      <div className="my-10 px-4">
+      <div className="mb-14 md:mt-24 mt-10 px-4">
         <div className="flex flex-col gap-4 max-w-5xl mx-auto">
           <div className="flex flex-col w-full md:flex-row justify-evenly">
             <div className="text-center w-full grid gap-3">

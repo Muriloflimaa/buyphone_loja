@@ -18,8 +18,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import InnerImageZoom from 'react-inner-image-zoom'
 import * as yup from 'yup'
@@ -29,7 +28,6 @@ import ModalPaymentOptions from '../../../../../../components/Modals/PaymentOpti
 import ProductUnavailable from '../../../../../../components/Modals/SendInBlue/Notices/ProductUnavailable'
 import ProductRelationCard from '../../../../../../components/ProductRelationCard'
 import { useCart } from '../../../../../../context/UseCartContext'
-import { api, apiStore } from '../../../../../../services/api'
 import { IProduct } from '../../../../../../types'
 import { mascaraCep, moneyMask } from '../../../../../../utils/masks'
 import { refact } from '../../../../../../utils/RefctDescript'
@@ -50,13 +48,17 @@ import {
 import PreviewGraphImg from '../../../../../../assets/images/previewGraph.webp'
 import BlurImage from '../../../../../../components/BlurImage'
 import { setCookies } from '../../../../../../utils/useCookies'
-import { ContentType } from 'recharts/types/component/DefaultLegendContent'
+import axios from 'axios'
+import { setupAPIClient } from '../../../../../../services/newApi/api'
+import { GetServerSidePropsContext } from 'next'
+import { AuthContext } from '../../../../../../context/AuthContext'
 
 interface IParams {
   params: {
     slugCategory: string
     slugProduct: string
   }
+  ctx: GetServerSidePropsContext
 }
 
 interface DataProps {
@@ -102,7 +104,7 @@ export default function Products({
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
   const [url, setUrl] = useState('')
   const [isUser, setIsUser] = useState(false) //state para verificar se existe user
-  const { '@BuyPhone:User': user } = parseCookies(undefined) //pega user dos cookies, cookies atualizado pelo authContext
+  const { user } = useContext(AuthContext)
   const returnPrice = verificationPrice(data, user, isUser)
   const resultDiscount = returnPrice.averagePrice - returnPrice.ourPrice
   const resultDiscountPercent = (
@@ -154,8 +156,8 @@ export default function Products({
         qtd_items: 1,
       }
 
-      const { data } = await apiStore.get(`addresses/cep/${cep}`)
-      const shipping = await apiStore.post(`shipping`, infoShippingSend)
+      const { data } = await axios.get(`/api/store/addresses/cep/${cep}`)
+      const shipping = await axios.post(`/api/storeshipping`, infoShippingSend)
       if (data.Message === 'CEP NAO ENCONTRADO') {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
@@ -179,7 +181,7 @@ export default function Products({
             amount: returnPrice.ourPrice,
           }
 
-          const response = await apiStore.get(`checkout/installments`, {
+          const response = await axios.get(`/api/store/checkout/installments`, {
             params: data,
           })
           setInstallments(response.data)
@@ -188,21 +190,6 @@ export default function Products({
     }
     handleDataInstallments()
   }, [data])
-  // useEffect(() => {
-  //   const script = document.createElement("script");
-  //   script.type = "text/javascript";
-  //   script.id = "fb-root";
-  //   script.src = "https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v15.0&appId=490525613047275&autoLogAppEvents=1";
-  //   script.async = true;
-  //   script.defer = true;
-  //   script.crossOrigin = "anonymous";
-  //   script.nonce = "275tpfbL";
-  //   document.body.appendChild(script);
-  //   console.log(true)
-  //   return () => {
-  //     document.body.removeChild(script);
-  //   };
-  // }, []);
 
   const CustomToolTip = (props: any) => {
     const { payload, label } = props
@@ -637,7 +624,7 @@ export default function Products({
           </div>
         </div>
 
-        {isUser && user && JSON.parse(user) ? (
+        {isUser && user ? (
           isUser && (
             <div className="my-10" style={{ width: '100%', height: 350 }}>
               <ResponsiveContainer>
@@ -833,12 +820,13 @@ export default function Products({
 }
 
 export const getStaticProps = async ({ params }: IParams) => {
+  const api = setupAPIClient()
   try {
-    const data = await apiStore.get(
-      `products/${params.slugCategory}/${params.slugProduct}`
+    const data = await api.get(
+      `/store/products/${params.slugCategory}/${params.slugProduct}`
     )
-    const categoryData = await apiStore.get(
-      `categories/${params.slugCategory}?per_page=18`
+    const categoryData = await api.get(
+      `/store/categories/${params.slugCategory}?per_page=18`
     )
 
     const { data: productGraphPrice } = await api.get(
@@ -859,8 +847,10 @@ export const getStaticProps = async ({ params }: IParams) => {
 }
 
 export const getStaticPaths = async () => {
+  const api = setupAPIClient()
+
   try {
-    const { data } = await apiStore.get(`products?per_page=500`)
+    const { data } = await api.get(`/store/products?per_page=500`)
 
     const paths = data.data.map((product: IProduct) => ({
       params: {
