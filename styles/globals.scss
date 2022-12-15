@@ -42,3 +42,9 @@ a {
 [data-theme] {
   background-color: transparent;
 }
+
+@media print {
+  #media-print-style {
+    display: flex !important;
+  }
+}
