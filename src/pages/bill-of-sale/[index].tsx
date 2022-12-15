@@ -69,9 +69,9 @@ export default function BillOfSale({ data }) {
   }
   return (
     <div className="h-screen bg-white text-black artboard">
-      <div className="px-14 py-12">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="flex items-center border-r-2 px-2">
+      <div className="md:px-14 px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex items-center md:border-r-2 px-2">
             <Image
               src={Logo}
               layout="fixed"
@@ -82,7 +82,7 @@ export default function BillOfSale({ data }) {
               alt="Logo BuyPhone"
             />
           </div>
-          <div className="border-r-2 px-2">
+          <div className="md:border-r-2 px-2">
             <span className="font-semibold">
               Buyphone Programas de vantagens e tecnologia
             </span>
@@ -119,45 +119,45 @@ export default function BillOfSale({ data }) {
         </div>
       </div>
       <div className="divider m-0 before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
-      <div className="px-14 py-4">
+      <div className="md:px-14 px-8 py-4">
         <h1 className="font-semibold">DESTINATÁRIO/REMETENTE</h1>
         <div className="overflow-x-auto mt-5" data-theme="light">
-          <table className="table w-full border p-2 bg-white">
+          <table className="table w-full border p-2 bg-white table-auto">
             <tbody>
               <tr>
                 <td>
                   <span className="font-semibold">DESTINATÁRIO:</span>{' '}
-                  {data.user.name}
+                  {data.order.user.name}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">CPF/CNPJ:</span>{' '}
-                  {cpfMask(data.user.document)}
+                  {cpfMask(data.order.user.document)}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">ENDEREÇO:</span>{' '}
-                  {data.address.address}, {data.address.number},{' '}
-                  {maskNewCep(data.address.postal_code)},{' '}
-                  {data.address.neighborhood}
+                  {data.order.address.address}, {data.order.address.number},{' '}
+                  {maskNewCep(data.order.address.postal_code)},{' '}
+                  {data.order.address.neighborhood}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">CIDADE:</span>{' '}
-                  {data.address.city}-{data.address.uf}
+                  {data.order.address.city}-{data.order.address.uf}
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <table className="table w-full border p-2 bg-white mt-5">
+          <table className="table w-full border p-2 bg-white mt-5 table-auto">
             <tbody>
               <tr>
                 <td>
-                  <span className="font-semibold">REMETENTE::</span> Buyp
+                  <span className="font-semibold">REMETENTE:</span> Buyp
                   Programas de vantagens e tecnologia LTDA
                 </td>
               </tr>
@@ -183,45 +183,55 @@ export default function BillOfSale({ data }) {
         </div>
         <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
         <div className="overflow-x-auto" data-theme="light">
-          <table className="table w-full">
+          <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <thead>
-              <tr>
-                <th>FORMA DE PAGAMENTO</th>
-                <th>PARCELAS</th>
-                <th>VLR COMPRA</th>
+              <tr className="bg-[#f2f2f2] border-grey-light border flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full">
+                <th className="p-3 text-left">FORMA DE PAGAMENTO</th>
+                <th className="p-3 text-left">PARCELAS</th>
+                <th className="p-3 text-left">VLR COMPRA</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  {data.method === 'PIX' && 'PIX'}
-                  {data.method === 'CREDIT' && 'Crédito'}
-                  {data.method === 'CUSTOM' && 'Personalizado'}
+            <tbody className="flex-1 sm:flex-none">
+              <tr className="flex flex-col flex-no wrap sm:table-row">
+                <td className="border-grey-light border p-3">
+                  {data.order.method === 'PIX' && 'PIX'}
+                  {data.order.method === 'CREDIT' && 'Crédito'}
+                  {data.order.method === 'CUSTOM' && 'Personalizado'}
                 </td>
-                <td>1</td>
-                <td>{moneyMask(data.total)}</td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                  -
+                </td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                  {moneyMask(data.order.total)}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
         <div className="overflow-x-auto" data-theme="light">
-          <table className="table w-full">
+          <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
             <thead>
-              <tr>
-                <th>TRANSPORTADOR</th>
-                <th>FRETE POR CONTA</th>
+              <tr className="bg-[#f2f2f2] border-grey-light border flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full grid">
+                <th className="p-3 text-left flex items-center sm:table-cell">
+                  TRANSPORTADOR
+                </th>
+                <th className="p-3 text-left flex items-center sm:table-cell">
+                  FRETE POR CONTA
+                </th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
+            <tbody className="flex-1 sm:flex-none">
+              <tr className="flex flex-col flex-no wrap sm:table-row">
+                <td className="border-grey-light border p-3">
                   {' '}
                   Empresa Brasileira de Correios e Telegrafos,
                   <br />
                   CNPJ 34.028.316/0001-03
                 </td>
-                <td>Remetente</td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                  Remetente
+                </td>
               </tr>
             </tbody>
           </table>
@@ -230,21 +240,30 @@ export default function BillOfSale({ data }) {
         <div className="mt-5">
           <h1 className="font-semibold mb-2">DADOS DOS PRODUTOS</h1>
           <div className="overflow-x-auto" data-theme="light">
-            <table className="table w-full">
+            <table className="overflow-hidden sm:table sm:border sm:p-2 bg-white mt-5 table-auto w-full flex flex-row flex-no-wrap">
               <thead>
-                <tr>
-                  <th>Descrição do produto</th>
-                  <th>QTD</th>
-                  <th>VLR UNIT</th>
-                  <th>VLR TOTAL</th>
+                <tr className="bg-[#f2f2f2] border-grey-light border flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none h-full">
+                  <th className="p-3 text-left">Descrição do produto</th>
+                  <th className="p-3 text-left">QTD</th>
+                  <th className="p-3 text-left">VLR UNIT</th>
+                  <th className="p-3 text-left">VLR TOTAL</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>iPhone 11 (64Gb - Branco)</td>
-                  <td>01</td>
-                  <td>3.000,00</td>
-                  <td>3.000,00</td>
+              <tbody className="flex-1 sm:flex-none">
+                <tr className="flex flex-col flex-no wrap sm:table-row">
+                  <td className="border-grey-light border p-3">
+                    {data.product.name} ({data.product.memory} -{' '}
+                    {data.product.color})
+                  </td>
+                  <td className="border-grey-light border hover:bg-gray-100 p-3">
+                    {data.qty}
+                  </td>
+                  <td className="border-grey-light border hover:bg-gray-100 p-3">
+                    {moneyMask(data.price)}
+                  </td>
+                  <td className="border-grey-light border hover:bg-gray-100 p-3">
+                    {moneyMask(data.order.total)}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -282,7 +301,7 @@ export default function BillOfSale({ data }) {
         </div>
       </div>
       <div className="divider before:bg-[#BCB0C4] after:bg-[#BCB0C4]"></div>
-      <div className="grid grid-cols-2 px-14 mb-5">
+      <div className="grid grid-cols-2 md:px-14 px-8 mb-5">
         <div>
           <p className="text-sm text-[#6F6F84]">
             (18) 98136-7275 <br /> contato@buyphone.com.br <br />{' '}
