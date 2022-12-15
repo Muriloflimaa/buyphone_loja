@@ -127,27 +127,28 @@ export default function BillOfSale({ data }) {
               <tr>
                 <td>
                   <span className="font-semibold">DESTINATÁRIO:</span>{' '}
-                  {data.order.user.name}
+                  {data[0].order.user.name}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">CPF/CNPJ:</span>{' '}
-                  {cpfMask(data.order.user.document)}
+                  {cpfMask(data[0].order.user.document)}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">ENDEREÇO:</span>{' '}
-                  {data.order.address.address}, {data.order.address.number},{' '}
-                  {maskNewCep(data.order.address.postal_code)},{' '}
-                  {data.order.address.neighborhood}
+                  {data[0].order.address.address},{' '}
+                  {data[0].order.address.number},{' '}
+                  {maskNewCep(data[0].order.address.postal_code)},{' '}
+                  {data[0].order.address.neighborhood}
                 </td>
               </tr>
               <tr>
                 <td>
                   <span className="font-semibold">CIDADE:</span>{' '}
-                  {data.order.address.city}-{data.order.address.uf}
+                  {data[0].order.address.city}-{data[0].order.address.uf}
                 </td>
               </tr>
             </tbody>
@@ -194,15 +195,44 @@ export default function BillOfSale({ data }) {
             <tbody className="flex-1 sm:flex-none">
               <tr className="flex flex-col flex-no wrap sm:table-row">
                 <td className="border-grey-light border p-3">
-                  {data.order.method === 'PIX' && 'PIX'}
-                  {data.order.method === 'CREDIT' && 'Crédito'}
-                  {data.order.method === 'CUSTOM' && 'Personalizado'}
+                  {data[0].order.method === 'PIX' && 'PIX'}
+                  {data[0].order.method === 'CREDIT' && 'Crédito'}
+                  {data[0].order.method === 'CUSTOM' && 'Personalizado'}
                 </td>
                 <td className="border-grey-light border hover:bg-gray-100 p-3">
-                  -
+                  {data[0].order.installments}
                 </td>
                 <td className="border-grey-light border hover:bg-gray-100 p-3">
-                  {moneyMask(data.order.total)}
+                  {moneyMask(
+                    data[0].order.no_interest_price
+                      ? data[0].order.no_interest_price
+                      : data[0].order.total
+                  )}
+                </td>
+              </tr>
+              <tr className="flex flex-col flex-no wrap sm:table-row">
+                <td className="border-grey-light border p-3"></td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3 text-right">
+                  Taxas:
+                </td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                  {moneyMask(
+                    data[0].order.no_interest_price
+                      ? (
+                          Number(data[0].order.total) -
+                          Number(data[0].order.no_interest_price)
+                        ).toString()
+                      : '000'
+                  )}
+                </td>
+              </tr>
+              <tr className="flex flex-col flex-no wrap sm:table-row">
+                <td className="border-grey-light border p-3"></td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3 text-right">
+                  Total:
+                </td>
+                <td className="border-grey-light border hover:bg-gray-100 p-3">
+                  {moneyMask(data[0].order.total)}
                 </td>
               </tr>
             </tbody>
@@ -252,17 +282,17 @@ export default function BillOfSale({ data }) {
               <tbody className="flex-1 sm:flex-none">
                 <tr className="flex flex-col flex-no wrap sm:table-row">
                   <td className="border-grey-light border p-3">
-                    {data.product.name} ({data.product.memory} -{' '}
-                    {data.product.color})
+                    {/* {data.product.name} ({data.product.memory} -{' '}
+                    {data.product.color}) */}
                   </td>
                   <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {data.qty}
+                    {/* {data.qty} */}
                   </td>
                   <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {moneyMask(data.price)}
+                    {/* {moneyMask(data.price)} */}
                   </td>
                   <td className="border-grey-light border hover:bg-gray-100 p-3">
-                    {moneyMask(data.order.total)}
+                    {/* {moneyMask(data.order.total)} */}
                   </td>
                 </tr>
               </tbody>
