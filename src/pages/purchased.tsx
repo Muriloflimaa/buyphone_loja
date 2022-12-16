@@ -24,7 +24,7 @@ export default function Purchased({ orderId, valueOrder }: any) {
   return (
     <>
       <Head>
-        <Script
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               gtag('event', 'conversion', {
