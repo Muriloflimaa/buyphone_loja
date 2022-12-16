@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import Confetti from 'react-confetti'
 import { useWindowSize } from '../utils/useWindowSize'
 import GifPng from '../assets/images/giphy.gif'
@@ -14,11 +14,17 @@ export default function Purchased({ orderId, valueOrder }: any) {
   destroyCookie(null, '@BuyPhone:SuccessShipping')
   destroyCookie(undefined, '@BuyPhone:SuccessShipping')
   destroyCookie({}, '@BuyPhone:SuccessShipping')
+  destroyCookie(null, '@BuyPhone:@BuyPhone:OrderId')
+  destroyCookie(undefined, '@BuyPhone:@BuyPhone:OrderId')
+  destroyCookie({}, '@BuyPhone:@BuyPhone:OrderId')
+  destroyCookie(null, '@BuyPhone:@BuyPhone:ValueOrder')
+  destroyCookie(undefined, '@BuyPhone:@BuyPhone:ValueOrder')
+  destroyCookie({}, '@BuyPhone:@BuyPhone:ValueOrder')
 
   return (
     <>
       <Head>
-        <script
+        <Script
           dangerouslySetInnerHTML={{
             __html: `
               gtag('event', 'conversion', {
@@ -28,7 +34,7 @@ export default function Purchased({ orderId, valueOrder }: any) {
                 'transaction_id': ${orderId}
             })`,
           }}
-        ></script>
+        />
       </Head>
       <Confetti
         recycle={false}
