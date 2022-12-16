@@ -357,6 +357,13 @@ const ListProducts = ({
             </div>
           </div>
         </div>
+        <div className="flex justify-center">
+          <a target={'_blank'} href={`/bill-of-sale/${number}`}>
+            <button className="btn py-4 text-white w-56 m-auto mt-5 bg-info shadow-md border-0">
+              Ver detalhes
+            </button>
+          </a>
+        </div>
       </div>
     </div>
   )

@@ -136,11 +136,18 @@ export function masktel1(phone: string) {
     .replace(/(\d)(\d{4})$/, '$1-$2')
 }
 
-export function mascaraCep(t: any, mask: string) {
+export function maskCep(t: any, mask: string) {
   var i = t.value.length
   var saida = mask.substring(1, 0)
   var texto = mask.substring(i)
   if (texto.substring(0, 1) != saida) {
     t.value += texto.substring(0, 1)
   }
+}
+
+export function maskNewCep(value: string) {
+  return value
+    .replace(/\D/g, '')
+    .replace(/(\d{5})(\d)/, '$1-$2')
+    .replace(/(-\d{3})\d+?$/, '$1')
 }
