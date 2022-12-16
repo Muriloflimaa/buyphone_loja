@@ -44,19 +44,18 @@ export default function Purchased({ orderId, valueOrder }: any) {
           <BlurImage className="rounded-lg" src={GifPng} />
         </div>
       </div>
-      <Head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
               gtag('event', 'conversion', {
                 'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
                 'value': 100000,
                 'currency': 'BRL',
                 'transaction_id': 400
             })`,
-          }}
-        />
-      </Head>
+        }}
+      />
     </>
   )
 }
