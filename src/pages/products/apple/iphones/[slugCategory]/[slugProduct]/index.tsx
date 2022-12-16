@@ -52,6 +52,7 @@ import axios from 'axios'
 import { setupAPIClient } from '../../../../../../services/newApi/api'
 import { GetServerSidePropsContext } from 'next'
 import { AuthContext } from '../../../../../../context/AuthContext'
+import { apiStore } from '../../../../../../services/api'
 
 interface IParams {
   params: {
@@ -157,7 +158,10 @@ export default function Products({
       }
 
       const { data } = await axios.get(`/api/api/store/addresses/cep/${cep}`)
-      const shipping = await axios.post(`/api/api/storeshipping`, infoShippingSend)
+      const shipping = await axios.post(
+        `/api/api/store/shipping`,
+        infoShippingSend
+      )
       if (data.Message === 'CEP NAO ENCONTRADO') {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
@@ -181,7 +185,7 @@ export default function Products({
             amount: returnPrice.ourPrice,
           }
 
-          const response = await axios.get(`/api/api/store/checkout/installments`, {
+          const response = await apiStore.get(`/checkout/installments`, {
             params: data,
           })
           setInstallments(response.data)
