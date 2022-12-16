@@ -1,12 +1,10 @@
 import Link from 'next/link'
-import Script from 'next/script'
 import Confetti from 'react-confetti'
 import { useWindowSize } from '../utils/useWindowSize'
 import GifPng from '../assets/images/giphy.gif'
 import { destroyCookie, parseCookies } from 'nookies'
 import { GetServerSidePropsContext } from 'next'
 import BlurImage from '../components/BlurImage'
-import Head from 'next/head'
 
 export default function Purchased({ orderId, valueOrder }: any) {
   const size = useWindowSize()
@@ -50,9 +48,9 @@ export default function Purchased({ orderId, valueOrder }: any) {
           __html: `
               gtag('event', 'conversion', {
                 'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
-                'value': '100000',
+                'value': ${valueOrder},
                 'currency': 'BRL',
-                'transaction_id': '400'
+                'transaction_id': ${orderId.toString()}
             })`,
         }}
       />
@@ -60,24 +58,24 @@ export default function Purchased({ orderId, valueOrder }: any) {
   )
 }
 
-// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-//   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
-//   const { '@BuyPhone:OrderId': orderId } = parseCookies(ctx)
-//   const { '@BuyPhone:ValueOrder': valueOrder } = parseCookies(ctx)
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
+  const { '@BuyPhone:OrderId': orderId } = parseCookies(ctx)
+  const { '@BuyPhone:ValueOrder': valueOrder } = parseCookies(ctx)
 
-//   if (success) {
-//     return {
-//       props: {
-//         orderId: orderId,
-//         valueOrder: valueOrder,
-//       },
-//     }
-//   } else {
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false,
-//       },
-//     }
-//   }
-// }
+  if (success) {
+    return {
+      props: {
+        orderId: orderId,
+        valueOrder: valueOrder,
+      },
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+}
