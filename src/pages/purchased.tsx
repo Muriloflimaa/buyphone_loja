@@ -50,9 +50,9 @@ export default function Purchased({ orderId, valueOrder }: any) {
           __html: `
               gtag('event', 'conversion', {
                 'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
-                'value': 100000,
+                'value': '100000',
                 'currency': 'BRL',
-                'transaction_id': 400
+                'transaction_id': '400'
             })`,
         }}
       />

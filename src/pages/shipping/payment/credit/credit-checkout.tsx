@@ -367,13 +367,25 @@ export default function creditFinally({
               </div>
               <div className="flex flex-col">
                 <span>
-                  R$ {moneyMask((somaTotal + discountValue).toString())}
+                  R${' '}
+                  {loadingInstallments ? (
+                    <LoadingComponent />
+                  ) : (
+                    moneyMask(
+                      (
+                        installments * GetInfoCredit.installments +
+                        (user?.promotion ? discountValue : 0)
+                      ).toString()
+                    )
+                  )}
                 </span>
-                {user?.promotion && (
+                {user && user.promotion ? (
                   <span className="text-green-600">
                     {' '}
                     R$ -{moneyMask(discountValue.toString())}
                   </span>
+                ) : (
+                  'R$ 0,00'
                 )}
                 <span className="text-green-600">Grátis</span>
               </div>
