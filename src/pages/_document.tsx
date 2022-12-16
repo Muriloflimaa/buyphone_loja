@@ -37,7 +37,8 @@ export default class MyDocument extends Document {
    window.dataLayer = window.dataLayer || [];
    function gtag(){dataLayer.push(arguments);}
    gtag('js', new Date());
-   gtag('config', 'G-YNHEGF886T');`,
+   gtag('config', 'G-YNHEGF886T');
+   gtag('config', 'AW-11020041991');`,
             }}
           ></script>
           <script
