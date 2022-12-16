@@ -99,7 +99,7 @@ function MyShopping() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto my-10 h-screen">
+    <div className="max-w-5xl mx-auto my-10">
       <h1 className="text-2xl md:text-3xl text-center font-medium my-6">
         Minhas Compras
       </h1>
