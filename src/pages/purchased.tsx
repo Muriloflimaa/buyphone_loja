@@ -29,9 +29,9 @@ export default function Purchased({ orderId, valueOrder }: any) {
             __html: `
               gtag('event', 'conversion', {
                 'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
-                'value': ${valueOrder},
+                'value': 100000,
                 'currency': 'BRL',
-                'transaction_id': ${orderId}
+                'transaction_id': 400
             })`,
           }}
         />
@@ -61,24 +61,24 @@ export default function Purchased({ orderId, valueOrder }: any) {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
-  const { '@BuyPhone:OrderId': orderId } = parseCookies(ctx)
-  const { '@BuyPhone:ValueOrder': valueOrder } = parseCookies(ctx)
+// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+//   const { '@BuyPhone:SuccessShipping': success } = parseCookies(ctx)
+//   const { '@BuyPhone:OrderId': orderId } = parseCookies(ctx)
+//   const { '@BuyPhone:ValueOrder': valueOrder } = parseCookies(ctx)
 
-  if (success) {
-    return {
-      props: {
-        orderId: orderId,
-        valueOrder: valueOrder,
-      },
-    }
-  } else {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-}
+//   if (success) {
+//     return {
+//       props: {
+//         orderId: orderId,
+//         valueOrder: valueOrder,
+//       },
+//     }
+//   } else {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false,
+//       },
+//     }
+//   }
+// }
