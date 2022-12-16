@@ -28,6 +28,7 @@ export default function Purchased({ orderId, valueOrder }: any) {
           dangerouslySetInnerHTML={{
             __html: `
               gtag('event', 'conversion', {
+                'config', 'G-YNHEGF886T'
                 'send_to': 'AW-11020041991/5bbNCLWv0oEYEIf-4YYp',
                 'value': 100000,
                 'currency': 'BRL',
