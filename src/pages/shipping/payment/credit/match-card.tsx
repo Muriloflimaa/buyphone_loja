@@ -26,7 +26,6 @@ interface CardProps {
 }
 
 export default function CreditCheckout({ address }: Address) {
-  const [cards, setCards] = useState<CardProps[]>([])
   const [matchCard, setMatchCard] = useState<string | null>(null)
   const router = useRouter()
   const { values, somaTotal, discountValue } = useCart()
@@ -47,7 +46,7 @@ export default function CreditCheckout({ address }: Address) {
     if (matchCard !== null) {
       const data = {
         card_id: matchCard,
-        user_id: cards[0].user_id,
+        user_id: user?.id,
         address_id: address.id,
         shippingPrice: 0,
       }

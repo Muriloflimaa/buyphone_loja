@@ -33,7 +33,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (token) {
       axios
-        .get('/api/store/me')
+        .get('/api/api/store/me')
         .then((response) => {
           setUser(response.data)
         })
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const lead = cookies.LEAD ? JSON.parse(cookies.LEAD) : null
 
     try {
-      const response = await axios.post('/api/store/login', {
+      const response = await axios.post('/api/api/store/login', {
         email,
         password,
         lead,

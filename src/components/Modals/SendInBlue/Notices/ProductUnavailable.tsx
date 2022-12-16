@@ -22,7 +22,7 @@ export default function ProductUnavailable({
       product: nameProduct,
     }
     try {
-      const response = await axios.post('/api/store/leads/', params)
+      const response = await axios.post('/api/api/store/leads/', params)
       if (
         response.data.message === 'success' ||
         response.data.message === 'error'

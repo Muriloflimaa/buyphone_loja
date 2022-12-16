@@ -30,7 +30,7 @@ export default function ForgotPassword() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
-      await axios.post('/api/store/forgot-password', values)
+      await axios.post('/api/api/store/forgot-password', values)
       ToastCustom(
         4000,
         'Enviamos um link para recuperação de senha no seu e-mail.',

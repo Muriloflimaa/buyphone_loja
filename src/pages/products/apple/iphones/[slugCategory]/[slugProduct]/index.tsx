@@ -156,8 +156,8 @@ export default function Products({
         qtd_items: 1,
       }
 
-      const { data } = await axios.get(`/api/store/addresses/cep/${cep}`)
-      const shipping = await axios.post(`/api/storeshipping`, infoShippingSend)
+      const { data } = await axios.get(`/api/api/store/addresses/cep/${cep}`)
+      const shipping = await axios.post(`/api/api/storeshipping`, infoShippingSend)
       if (data.Message === 'CEP NAO ENCONTRADO') {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return
@@ -181,7 +181,7 @@ export default function Products({
             amount: returnPrice.ourPrice,
           }
 
-          const response = await axios.get(`/api/store/checkout/installments`, {
+          const response = await axios.get(`/api/api/store/checkout/installments`, {
             params: data,
           })
           setInstallments(response.data)

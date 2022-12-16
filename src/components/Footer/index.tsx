@@ -26,7 +26,7 @@ export default function Footer() {
   useEffect(() => {
     async function Data() {
       try {
-        const { data } = await axios.get(`/api/store/categories/`)
+        const { data } = await axios.get(`/api/api/store/categories/`)
         setDataApi(data.data)
       } catch (error) {
         setDataApi(undefined)

@@ -112,7 +112,7 @@ const Home: NextPage<DataProps> = ({
     if (currentPage !== data.last_page) {
       try {
         await axios
-          .get(`/api/store/products?page=${currentPage}`)
+          .get(`/api/api/store/products?page=${currentPage}`)
           .then((response) => response.data.data)
           .then((newProducts) =>
             setApiNew((prevData) => [...prevData, ...newProducts])

@@ -48,7 +48,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
   async function handleRemoveAddress(id: number) {
     try {
       setAddress((oldState) => oldState.filter((Address) => Address.id !== id))
-      await axios.delete(`/api/store/addresses/${id}`)
+      await axios.delete(`/api/api/store/addresses/${id}`)
     } catch (error) {
       return
     }
@@ -60,7 +60,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
 
   const getAddress = async () => {
     const userAddress = await axios.get(
-      `/api/store/addresses/user/${userJson.id}`
+      `/api/api/store/addresses/user/${userJson.id}`
     )
     setAddress(userAddress.data)
   }
@@ -84,7 +84,7 @@ export default function Shipping({ userJson }: userJsonTypes) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const cep = value.cep.replace('-', '')
     try {
-      const response = await axios.get(`/api/store/addresses/cep/${cep}`)
+      const response = await axios.get(`/api/api/store/addresses/cep/${cep}`)
       if (response.data.Message === 'CEP NAO ENCONTRADO') {
         toast.error('CEP não foi encontrado')
         return

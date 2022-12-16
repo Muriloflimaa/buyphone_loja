@@ -124,8 +124,11 @@ const ProductCart = ({
         qtd_items: 1,
       }
 
-      const { data } = await axios.get(`/api/store/addresses/cep/${cep}`)
-      const shipping = await axios.post(`/api/store/shipping`, infoShippingSend)
+      const { data } = await axios.get(`/api/api/store/addresses/cep/${cep}`)
+      const shipping = await axios.post(
+        `/api/api/store/shipping`,
+        infoShippingSend
+      )
       if (data.Message === 'CEP NAO ENCONTRADO') {
         ToastCustom(2000, 'CEP não foi encontrado', 'error')
         return

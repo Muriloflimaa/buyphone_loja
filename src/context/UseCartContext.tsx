@@ -78,7 +78,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     setIsAttCart(true)
     cart.map(async (item) => {
       try {
-        const { data } = await axios.get(`/api/store/products/${item.id}`) //chamando o produto pelo id
+        const { data } = await axios.get(`/api/api/store/products/${item.id}`) //chamando o produto pelo id
 
         const returnPrice = verificationPrice(data, user, isUser)
 
@@ -170,7 +170,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (productExists) {
           // se sim incrementa a quantidade
           productExists.amount = newAmount
-          const addProduct = await axios.get(`/api/store/products/${productId}`)
+          const addProduct = await axios.get(
+            `/api/api/store/products/${productId}`
+          )
           const products = addProduct.data
           ToastCustom(
             300,
@@ -182,7 +184,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           )
         } else {
           //Se não, obtem o produto da api e add ao carrinho com o valor de 1
-          const addProduct = await axios.get(`/api/store/products/${productId}`)
+          const addProduct = await axios.get(
+            `/api/api/store/products/${productId}`
+          )
           const products = addProduct.data
 
           ToastCustom(

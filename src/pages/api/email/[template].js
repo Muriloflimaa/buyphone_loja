@@ -1,6 +1,4 @@
 export default function handler(req, res) {
-  // Get data submitted in request's body.
-
   const body = req.body
   var criptEmail = new Buffer(body.email).toString('base64')
   var criptTel = new Buffer(body.tel).toString('base64')
@@ -38,17 +36,13 @@ export default function handler(req, res) {
   }
 
   apiInstance.sendTransacEmail(sendSmtpEmail).then(
-    function (data) {
+    function () {
       res.redirect('/?success=true')
     },
-    function (error) {
+    function () {
       res.redirect(
         `/?utm_source=${body.utm_source}&utm_medium=${body.utm_medium}&utm_campaign=${body.utm_campaign}&error=true`
       )
-      console.error(error)
     }
   )
-
-  // Sends a HTTP success code
-  // res.status(200).json({ data: ${body.first} ${body.last} });
 }

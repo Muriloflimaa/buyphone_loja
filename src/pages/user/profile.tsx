@@ -63,7 +63,7 @@ export default function profile({ data }: user) {
     }
 
     try {
-      await axios.put(`/api/store/users/${data.id}`, value)
+      await axios.put(`/api/api/store/users/${data.id}`, value)
       ToastCustom(3000, 'Dados alterados com sucesso', 'success', 'Notificação')
     } catch (error: any) {
       if (error.response.data.errors.email) {
@@ -113,7 +113,7 @@ export default function profile({ data }: user) {
       }
 
       try {
-        await axios.put(`/api/store/users/${data.id}`, userPasswords)
+        await axios.put(`/api/api/store/users/${data.id}`, userPasswords)
 
         ToastCustom(2000, 'Senha alterada com sucesso', 'success')
         await new Promise((resolve) => setTimeout(resolve, 2000))

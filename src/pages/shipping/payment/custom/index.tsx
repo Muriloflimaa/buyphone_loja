@@ -47,7 +47,7 @@ export default function custom({ address }: Address) {
         amount: somaTotal,
         items: setDat,
       }
-      await axios.post('/api/store/checkout/custom', items)
+      await axios.post('/api/api/store/checkout/custom', items)
 
       setLoading(false)
       setStateModalSuccess(true)

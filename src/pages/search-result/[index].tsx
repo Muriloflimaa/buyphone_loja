@@ -60,7 +60,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
   async function handleChangePagination(page: string) {
     try {
       const { data } = await axios.post(
-        `/api/store/search${page
+        `/api/api/store/search${page
           .replace('https://beta-api.buyphone.com.br/store/search', '')
           .replace(`https://api.buyphone.com.br/store/search`, '')}`,
         { query: query }

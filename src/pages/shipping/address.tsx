@@ -83,7 +83,7 @@ export default function address({ cepJson }: CepJsonProps) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     try {
-      const { data } = await axios.post(`/api/store/addresses`, {
+      const { data } = await axios.post(`/api/api/store/addresses`, {
         ...values,
         user_id: user && user.id,
         postal_code: cepJson.CEP ?? cepJson.postal_code,

@@ -86,21 +86,23 @@ export default function creditFinally({
   }, [somaTotal])
 
   async function getPriceInstallments() {
-    try {
-      const data = {
-        amount: somaTotal,
-      }
-
-      const { data: response } = await apiStore.get(
-        `/checkout/installments/${GetInfoCredit.installments}`,
-        {
-          params: data,
+    if (somaTotal > 0) {
+      try {
+        const data = {
+          amount: somaTotal,
         }
-      )
-      setInstallments(response[0])
-      setLoadingInstallments(false)
-    } catch (error) {
-      router.push('/shipping/payment/credit/credit-checkout')
+
+        const { data: response } = await apiStore.get(
+          `/checkout/installments/${GetInfoCredit.installments}`,
+          {
+            params: data,
+          }
+        )
+        setInstallments(response[0])
+        setLoadingInstallments(false)
+      } catch (error) {
+        router.push('/shipping/payment/credit/credit-checkout')
+      }
     }
   }
 
@@ -119,13 +121,14 @@ export default function creditFinally({
     try {
       const infoData = {
         ...GetInfoCredit,
+        user_id: user?.id,
         card_holder_phone: '+55' + GetInfoCredit.card_holder_phone,
         amount: somaTotalInteger,
         items: setDat,
       }
 
       const { data }: any = await axios.post(
-        `/api/store/checkout/credit-card`,
+        `/api/api/store/checkout/credit-card`,
         infoData
       )
 

@@ -39,9 +39,11 @@ export default function PixCheckout({ pix }: PixPaymentProps) {
 
   async function AttPayment() {
     try {
-      const { data } = await axios.get(`/api/store/invoices/${pix.id}`)
+      const { data } = await axios.get(`/api/api/store/invoices/${pix.id}`)
       if (data.status === 'paid') {
         setCookies('@BuyPhone:SuccessShipping', 'true', 180)
+        setCookies('@BuyPhone:OrderId', data.order_id, 60 * 5)
+        setCookies('@BuyPhone:ValueOrder', data.amount, 60 * 5)
         router.push('/purchased')
       }
     } catch (error) {

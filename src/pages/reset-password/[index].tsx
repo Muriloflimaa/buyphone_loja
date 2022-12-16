@@ -36,7 +36,7 @@ export default function ResetPassword() {
     event?.preventDefault()
     await new Promise((resolve) => setTimeout(resolve, 1000))
     try {
-      const { data } = await axios.post('/api/store/reset-password', {
+      const { data } = await axios.post('/api/api/store/reset-password', {
         email: router.query.email,
         token: router.query.index,
         ...values,

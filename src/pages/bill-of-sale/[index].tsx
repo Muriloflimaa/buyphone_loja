@@ -1,9 +1,11 @@
+import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { useEffect, useState } from 'react'
 import Logo from '../../assets/images/LogoPurple.webp'
 import { apiStore } from '../../services/api'
+import { setupAPIClient } from '../../services/newApi/api'
 import { IInvoice } from '../../types'
 import { cpfMask, maskNewCep, moneyMask } from '../../utils/masks'
 
@@ -11,6 +13,7 @@ interface IParams {
   params: {
     index: string
   }
+  ctx: GetServerSidePropsContext
 }
 
 interface IProduct {
@@ -407,10 +410,11 @@ export default function BillOfSale({ data }: DataProps) {
   )
 }
 
-export const getServerSideProps = async ({ params }: IParams) => {
+export const getServerSideProps = async ({ params, ctx }: IParams) => {
   const idOrder = params.index
+  const api = setupAPIClient(ctx)
   try {
-    const { data } = await apiStore.get(`/orders/${idOrder}/`)
+    const { data } = await api.get(`/store/orders/${idOrder}/`)
     return {
       props: {
         data,

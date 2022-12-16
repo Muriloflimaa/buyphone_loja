@@ -62,10 +62,10 @@ function MyShopping() {
 
   async function GetInvoice() {
     try {
-      const { data: user } = await axios.get('/api/store/me')
+      const { data: user } = await axios.get('/api/api/store/me')
       if (user) {
         const { data: Orders } = await axios.get(
-          `/api/store/orders/user/${user?.id}`
+          `/api/api/store/orders/user/${user?.id}`
         )
         setData(Orders)
       }
@@ -80,10 +80,10 @@ function MyShopping() {
 
   async function handleChangePagination(page: string) {
     try {
-      const { data: user } = await axios.get('/api/store/me')
+      const { data: user } = await axios.get('/api/api/store/me')
       if (user) {
         const { data } = await axios.get(
-          `/api/store/orders/user/${user?.id}?page=${page
+          `/api/api/store/orders/user/${user?.id}?page=${page
             .replace(
               `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
               ''

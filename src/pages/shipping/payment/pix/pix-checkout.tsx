@@ -45,7 +45,7 @@ export default function pix({ address }: Address) {
         amount: somaTotal,
         items: setDat,
       }
-      const { data } = await axios.post('/api/store/checkout/pix', items)
+      const { data } = await axios.post('/api/api/store/checkout/pix', items)
       setCookies('@BuyPhone:Pix', data, 60 * 10, '/')
       destroyCookie(null, '@BuyPhone:GetCep')
       destroyCookie(null, 'USER_LEAD')

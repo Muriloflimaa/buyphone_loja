@@ -83,7 +83,7 @@ export default function MatchInstallment({
         amount: somaTotal,
       }
 
-      const response = await axios.get(`checkout/installments`, {
+      const response = await apiStore.get(`checkout/installments`, {
         params: data,
       })
       setLoading(false)

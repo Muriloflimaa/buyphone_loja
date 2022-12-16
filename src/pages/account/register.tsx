@@ -88,7 +88,7 @@ export default function register() {
 
     try {
       //precisa formatar os dados antes de enviar
-      await axios.post('/api/store/users', dataUTM)
+      await axios.post('/api/api/store/users', dataUTM)
       ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
       router.push('/account/login')
     } catch (error: any) {
@@ -99,7 +99,7 @@ export default function register() {
         !!error.response.data.errors.utm_medium
       ) {
         try {
-          await axios.post('/api/store/users', data)
+          await axios.post('/api/api/store/users', data)
           ToastCustom(8000, 'Cadastro realizado com sucesso!', 'success')
           router.push('/account/login')
         } catch (newError: any) {

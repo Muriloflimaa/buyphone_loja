@@ -78,7 +78,7 @@ const ListProducts = ({
         qtd_items: 1,
       }
 
-      const { data } = await axios.post(`/api/store/shipping`, infoShippingSend)
+      const { data } = await axios.post(`/api/api/store/shipping`, infoShippingSend)
       setShippingDays(data)
     } catch (error) {
       setShippingDays(undefined)
@@ -89,7 +89,7 @@ const ListProducts = ({
     if (method === 'PIX') {
       try {
         const { data } = await axios.get(
-          `/api/store/checkout/qrcode/${CodImgPix}`
+          `/api/api/store/checkout/qrcode/${CodImgPix}`
         )
         setImage(data.qrcode)
       } catch (error) {}
