@@ -100,6 +100,7 @@ export default function Products({
   const [onShare, setOnShare] = useState(false)
   const router = useRouter()
   const [openModalPaymentOption, setOpenModalPaymentOption] = useState(false)
+  const [newProductGraphPrice, setNewProductGraphPrice] = useState<any>()
   const [installments, setInstallments] = useState()
   const [address, setAddress] = useState<addressTypes>()
   const [shippingOn, setShippingOn] = useState<shippingOnTypes>()
@@ -116,6 +117,32 @@ export default function Products({
   useEffect(() => {
     geturl()
   }, [])
+
+  useEffect(() => {
+    const newProductGraphInitial = productGraphPrice.map((product) => {
+      const data: any = {
+        //definido como any pois nao tem as propriedades de IProduct
+        magalu_price: product.magazineluiza,
+        americanas_price: product.americanas,
+        casasbahia_price: product.casasbahia,
+        ponto_price: product.pontofrio,
+      }
+
+      const returnPrice = verificationPrice(data, user, user ? true : false)
+
+      let properties = {
+        name: product.name,
+        americanas: product.americanas,
+        pontofrio: product.pontofrio,
+        casasbahia: product.casasbahia,
+        magazineluiza: product.magazineluiza,
+        buyphone: returnPrice.ourPrice,
+      }
+
+      return properties
+    })
+    setNewProductGraphPrice(newProductGraphInitial)
+  }, [user, data])
 
   useEffect(() => {
     if (user) {
@@ -211,13 +238,14 @@ export default function Products({
                 i: number
               ) => {
                 return (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1" key={i}>
                     <span
                       className={`h-3 w-3 rounded-full ${
                         (item.name == 'Casas Bahia' && 'bg-[#0026AE]') ||
                         (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
                         (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
-                        (item.name == 'Americanas' && 'bg-[#D33131]')
+                        (item.name == 'Americanas' && 'bg-[#D33131]') ||
+                        (item.name == 'Buy Phone' && 'bg-[#201942]')
                       }  `}
                     ></span>
 
@@ -246,7 +274,8 @@ export default function Products({
                   (entry.value == 'Casas Bahia' && 'bg-[#0026AE]') ||
                   (entry.value == 'Magazine Luiza' && 'bg-[#4595DE]') ||
                   (entry.value == 'Ponto Frio' && 'bg-[#ED981A]') ||
-                  (entry.value == 'Americanas' && 'bg-[#D33131]')
+                  (entry.value == 'Americanas' && 'bg-[#D33131]') ||
+                  (entry.value == 'Buy Phone' && 'bg-[#201942]')
                 }  `}
               ></span>
 
@@ -633,7 +662,7 @@ export default function Products({
             <div className="my-10" style={{ width: '100%', height: 350 }}>
               <ResponsiveContainer>
                 <AreaChart
-                  data={productGraphPrice}
+                  data={newProductGraphPrice}
                   margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                 >
                   <defs>
@@ -673,6 +702,15 @@ export default function Products({
                     >
                       <stop offset="5%" stopColor="#4595DE" stopOpacity={0.2} />
                     </linearGradient>
+                    <linearGradient
+                      id="colorbuyphone"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#201942" stopOpacity={0.2} />
+                    </linearGradient>
 
                     {/* cor dos graficos acima */}
                   </defs>
@@ -703,15 +741,6 @@ export default function Products({
 
                   <Area
                     strokeWidth={4}
-                    name="Americanas"
-                    type="monotone"
-                    dataKey="americanas"
-                    stroke="#D33131"
-                    fillOpacity={1}
-                    fill="url(#coloramericanas)"
-                  />
-                  <Area
-                    strokeWidth={4}
                     name="Ponto Frio"
                     type="monotone"
                     dataKey="pontofrio"
@@ -719,6 +748,16 @@ export default function Products({
                     fillOpacity={1}
                     fill="url(#colorpontofrio)"
                   />
+                  <Area
+                    strokeWidth={4}
+                    name="Americanas"
+                    type="monotone"
+                    dataKey="americanas"
+                    stroke="#D33131"
+                    fillOpacity={1}
+                    fill="url(#coloramericanas)"
+                  />
+
                   <Area
                     strokeWidth={4}
                     name="Casas Bahia"
@@ -736,6 +775,15 @@ export default function Products({
                     stroke="#4595DE"
                     fillOpacity={1}
                     fill="url(#colormagazineluiza)"
+                  />
+                  <Area
+                    strokeWidth={4}
+                    name="Buy Phone"
+                    type="monotone"
+                    dataKey="buyphone"
+                    stroke="#201942"
+                    fillOpacity={1}
+                    fill="url(#colorbuyphone)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -862,7 +910,6 @@ export const getStaticPaths = async () => {
         slugProduct: product.slug,
       },
     }))
-
     return {
       paths,
       fallback: false,
