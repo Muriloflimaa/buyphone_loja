@@ -124,6 +124,14 @@ const Home: NextPage<DataProps> = ({
     }
   }
 
+  useEffect(() => {
+    async function GetItem() {
+      const data = localStorage.getItem('@BuyPhone:Token')
+      console.log(data)
+    }
+    GetItem()
+  }, [])
+
   function next() {
     const maxCurrent = currentRefCarroussel.current?.itemsRef.length
 

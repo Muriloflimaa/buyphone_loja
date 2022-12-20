@@ -18,6 +18,7 @@ import { ICategory } from '../../types'
 import React, { useEffect, useState } from 'react'
 import SeloBlintadoGooglePng from '../../assets/images/google.png'
 import SeloBlintadoPng from '../../assets/images/siteblindado.png'
+import SeloReclameAqui from '../../assets/images/selo-reclame-aqui.webp'
 import axios from 'axios'
 
 export default function Footer() {
@@ -225,7 +226,7 @@ export default function Footer() {
             </ul>
             <div className="mt-8">
               <h3 className="font-medium text-lg mb-3">Verificações</h3>
-              <ul className="flex items-center">
+              <ul className="flex md:flex-wrap md:flex-row items-center flex-col">
                 <li className="w-[50%]">
                   <a
                     target={'_blank'}
@@ -245,6 +246,18 @@ export default function Footer() {
                   >
                     <Image
                       src={SeloBlintadoGooglePng}
+                      layout="responsive"
+                      quality={100}
+                    ></Image>
+                  </a>
+                </li>
+                <li className="w-[100%]">
+                  <a
+                    target={'_blank'}
+                    href="https://www.reclameaqui.com.br/empresa/elo-comercio-e-servicos-ltda-buyphone/"
+                  >
+                    <Image
+                      src={SeloReclameAqui}
                       layout="responsive"
                       quality={100}
                     ></Image>
