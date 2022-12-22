@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import ImageInstagram from '../../../assets/images/image-modal-instagram.svg'
+import ImageInstagram from '../../../assets/images/image-modal-instagram.webp'
 
 export default function AccessInstagram() {
   const handleCloseModalInfoDiscount = () => {
@@ -22,8 +22,15 @@ export default function AccessInstagram() {
             >
               ✕
             </label>
-            <div className="relative col-span-5">
-              <Image src={ImageInstagram} layout="fixed" width={400} className="rounded-xl" />
+            <div className="relative col-span-5 flex justify-center items-center">
+              <div className="w-[100%]">
+                <Image
+                  src={ImageInstagram}
+                  layout="responsive"
+                  quality={100}
+                  className="rounded-xl"
+                />
+              </div>
             </div>
             <div className="flex items-center justify-center flex-col col-span-7 mx-8">
               <h1 className="text-black font-bold text-2xl">
