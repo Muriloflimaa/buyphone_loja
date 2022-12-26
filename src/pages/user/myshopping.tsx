@@ -1,9 +1,8 @@
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { parseCookies } from 'nookies'
 import React, { useEffect, useState } from 'react'
-import JuninhoImg from '../../assets/images/juninho.webp'
+import BelaSad from '../../assets/images/bela_sad.webp'
 import ListProducts from '../../components/ListProducts'
 import { IInvoice } from '../../types'
 import { PersistentLogin } from '../../utils/PersistentLogin'
@@ -131,7 +130,14 @@ function MyShopping() {
           })
         ) : !!errorData ? (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
-            <Image src={JuninhoImg} layout="fixed" width={200} height={250} />
+            <Image
+              src={BelaSad}
+              layout="fixed"
+              width={220}
+              height={250}
+              quality={100}
+              alt="Imagem personagem Belatriz"
+            />
             <div>
               <h3 className="font-bold text-2xl">Sorria para a foto!</h3>
               <p className="opacity-50">Seu carrinho está vazio</p>

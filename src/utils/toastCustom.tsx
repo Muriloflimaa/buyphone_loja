@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import toast from 'react-hot-toast'
-import ErrorImg from '../assets/images/error.webp'
-import SuccessImg from '../assets/images/success.webp'
+import BelaError from '../assets/images/bela_error_toast.webp'
+import BelaSuccess from '../assets/images/bela_success_toast.webp'
 
 export const ToastCustom = (
   duration: number,
@@ -26,11 +26,23 @@ export const ToastCustom = (
           <div className="flex gap-3">
             {state === 'error' ? (
               <div className="h-full">
-                <Image src={ErrorImg} width="60px" height="70px"></Image>
+                <Image
+                  src={BelaError}
+                  quality={100}
+                  width="60px"
+                  height="70px"
+                  alt="Imagem personagem Belatriz"
+                ></Image>
               </div>
             ) : (
               <div className="h-full">
-                <Image src={SuccessImg} width="60px" height="70px"></Image>
+                <Image
+                  src={BelaSuccess}
+                  quality={100}
+                  width="60px"
+                  height="70px"
+                  alt="Imagem personagem Belatriz"
+                ></Image>
               </div>
             )}
             <div>
