@@ -94,7 +94,7 @@ export default function custom({ address }: Address) {
             <div className="px-10 py-5">
               <span className="mb-6 text-primary">
                 Para concluir sua compra no modo de pagamento personalizado,
-                clique em finalizar pagamento e fala diretamente com nosso
+                clique em finalizar pagamento e fale diretamente com nosso
                 consultor.
               </span>
 
