@@ -63,22 +63,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         lead,
       })
 
-      const { type, name, id, profile_photo_url, promotion } =
-        response.data.user
-
-      const UserObject = {
-        name: name,
-        id: id,
-        type: type,
-        profile_photo_url: profile_photo_url,
-        email: email,
-        lead: lead,
-        promotion: promotion,
-      }
-
       const token = response.data.authorization.token
 
-      setUser(UserObject)
+      setUser(response.data.user)
       setCookies('@BuyPhone:Token', token, 60 * 60 * 24 * 30)
 
       if (

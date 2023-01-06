@@ -1,10 +1,12 @@
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons'
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import React, { useContext, useEffect, useState } from 'react'
+import LoadingComponent from '../../../../components/LoadingComponent'
 import ProductCart from '../../../../components/ProductCart'
 import { TotalPayment } from '../../../../components/TotalPayment'
 import { AuthContext } from '../../../../context/AuthContext'
@@ -28,15 +30,43 @@ interface CardProps {
 export default function CreditCheckout({ address }: Address) {
   const [matchCard, setMatchCard] = useState<string | null>(null)
   const router = useRouter()
+  const [cards, setCards] = useState<CardProps[]>([])
   const { values, somaTotal, discountValue } = useCart()
   const [cartSize, setCartSize] = useState<number>()
   const { user } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (values) {
       setCartSize(values.length)
     }
   }, [values])
+
+  useEffect(() => {
+    GetCreditCard()
+  }, [])
+
+  async function handleRemoveCard(id: number) {
+    try {
+      setCards((oldState) => oldState.filter((card) => card.id !== id))
+      await axios.delete(`/api/api/store/cards/${id}`)
+    } catch (error) {
+      return
+    }
+  }
+
+  async function GetCreditCard() {
+    try {
+      const { data } = await axios.get(
+        `/api/api/store/cards/user/${address.user_id}`
+      )
+      setCards(data)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      setCards([])
+    }
+  }
 
   function handleCard() {
     if (matchCard === 'newCard') {
@@ -69,7 +99,7 @@ export default function CreditCheckout({ address }: Address) {
         </h2>
         <div className="flex flex-col-reverse md:flex-row mx-auto my-12 gap-4">
           <div className="flex flex-col w-full gap-3">
-            {/* {cards.map((res) => {
+            {cards.map((res) => {
               return (
                 <div key={res.id} className="flex gap-2 w-full items-center">
                   <FontAwesomeIcon
@@ -100,7 +130,7 @@ export default function CreditCheckout({ address }: Address) {
                 </div>
               )
             })}
-            {loading && <LoadingComponent />} */}
+            {loading && <LoadingComponent />}
 
             <div className="flex gap-2 w-full items-center">
               {/* <div className="w-5 h-5" /> */}
