@@ -46,13 +46,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     hotjar.initialize(3219704, 6)
-    const { '@BuyPhone:Error-Bill-Of-Sale': error } = parseCookies()
+    const { '@BuyPhone:Error': error } = parseCookies()
     if (error) {
-      ToastCustom(
-        6000,
-        'Você precisa ser dono da nota fiscal para visualizá-la',
-        'error'
-      )
+      ToastCustom(6000, error, 'error')
     }
   }, [])
 

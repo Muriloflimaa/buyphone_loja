@@ -408,6 +408,7 @@ export default function NavBar() {
                                         price={res.subTotal}
                                         memory={res.product.memory}
                                         image={
+                                          res.product.media[0] &&
                                           res.product.media[0].original_url
                                         }
                                         blackfriday={res.product.blackfriday}

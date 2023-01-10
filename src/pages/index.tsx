@@ -398,7 +398,7 @@ const Home: NextPage<DataProps> = ({
                       '-3-geracao',
                       ''
                     )}
-                    image={products.media[0].original_url}
+                    image={products.media[0] && products.media[0].original_url}
                     memory={products.memory}
                     blackfriday={products.blackfriday}
                   />
