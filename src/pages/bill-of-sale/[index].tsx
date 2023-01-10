@@ -1,20 +1,15 @@
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useEffect, useState } from 'react'
 import Logo from '../../assets/images/LogoPurple.webp'
 import { apiStore } from '../../services/api'
 import { setupAPIClient } from '../../services/newApi/api'
 import { IInvoice } from '../../types'
 import { cpfMask, maskNewCep, moneyMask } from '../../utils/masks'
-
-interface IParams {
-  params: {
-    index: string
-  }
-  ctx: GetServerSidePropsContext
-}
+import { ToastCustom } from '../../utils/toastCustom'
+import { useCookies } from '../../utils/useCookies'
 
 interface IProduct {
   name: string
@@ -410,19 +405,56 @@ export default function BillOfSale({ data }: DataProps) {
   )
 }
 
-export const getServerSideProps = async ({ params, ctx }: IParams) => {
-  const idOrder = params.index
+export const getServerSideProps = async (ctx: any) => {
+  const idOrder = ctx.params.index
   const api = setupAPIClient(ctx)
+
   try {
     const { data } = await api.get(`/store/orders/${idOrder}/`)
-    return {
-      props: {
-        data,
-      },
+
+    const user = await api
+      .get('/store/me')
+      .then((response) => {
+        return response
+      })
+      .catch(() => {
+        return null
+      })
+
+    if (data[0].order.user.id !== user!.data.id) {
+      setCookie(
+        ctx,
+        '@BuyPhone:Error-Bill-Of-Sale',
+        `/bill-of-sale/${idOrder}`,
+        {
+          maxAge: 60, // 24h
+          path: '/',
+        }
+      )
+
+      return {
+        redirect: {
+          destination: '/account/login',
+          permanent: false,
+        },
+      }
+    } else {
+      return {
+        props: {
+          data,
+        },
+      }
     }
   } catch (error) {
+    setCookie(ctx, '@BuyPhone:Error-Bill-Of-Sale', `/bill-of-sale/${idOrder}`, {
+      maxAge: 60, // 24h
+      path: '/',
+    })
     return {
-      props: { data: null },
+      redirect: {
+        destination: '/account/login',
+        permanent: false,
+      },
     }
   }
 }

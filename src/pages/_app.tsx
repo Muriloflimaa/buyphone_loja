@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { setCookie } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
@@ -14,6 +14,7 @@ import * as gtag from '../../gtag'
 import { AuthProvider } from '../context/AuthContext'
 import { CartProvider } from '../context/UseCartContext'
 import Container from '../components/Container'
+import { ToastCustom } from '../utils/toastCustom'
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -45,6 +46,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     hotjar.initialize(3219704, 6)
+    const { '@BuyPhone:Error-Bill-Of-Sale': error } = parseCookies()
+    if (error) {
+      ToastCustom(
+        6000,
+        'Você precisa ser dono da nota fiscal para visualizá-la',
+        'error'
+      )
+    }
   }, [])
 
   return (
