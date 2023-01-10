@@ -71,7 +71,9 @@ export default function Cart() {
                     color={res.product.color}
                     price={res.subTotal}
                     memory={res.product.memory}
-                    image={res.product.media[0].original_url}
+                    image={
+                      res.product.media[0] && res.product.media[0].original_url
+                    }
                     blackfriday={res.product.blackfriday}
                   />
                 )

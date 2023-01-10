@@ -33,7 +33,10 @@ export default function ItsModal() {
             <div className="flex flex-col justify-center items-center rounded-full w-36 h-36 bg-[#212B36] relative overflow-hidden">
               {values.length > 0 && (
                 <Image
-                  src={values[values.length - 1].product.media[0].original_url}
+                  src={
+                    values[values.length - 1].product.media[0] &&
+                    values[values.length - 1].product.media[0].original_url
+                  }
                   layout="fixed"
                   width={60}
                   height={70}
