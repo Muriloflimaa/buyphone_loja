@@ -245,7 +245,7 @@ export default function Products({
                         (item.name == 'Magazine Luiza' && 'bg-[#4595DE]') ||
                         (item.name == 'Ponto Frio' && 'bg-[#ED981A]') ||
                         (item.name == 'Americanas' && 'bg-[#D33131]') ||
-                        (item.name == 'Buy Phone' && 'bg-[#201942]')
+                        (item.name == 'BuyPhone' && 'bg-[#201942]')
                       }  `}
                     ></span>
 
@@ -275,7 +275,7 @@ export default function Products({
                   (entry.value == 'Magazine Luiza' && 'bg-[#4595DE]') ||
                   (entry.value == 'Ponto Frio' && 'bg-[#ED981A]') ||
                   (entry.value == 'Americanas' && 'bg-[#D33131]') ||
-                  (entry.value == 'Buy Phone' && 'bg-[#201942]')
+                  (entry.value == 'BuyPhone' && 'bg-[#201942]')
                 }  `}
               ></span>
 
@@ -778,7 +778,7 @@ export default function Products({
                   />
                   <Area
                     strokeWidth={4}
-                    name="Buy Phone"
+                    name="BuyPhone"
                     type="monotone"
                     dataKey="buyphone"
                     stroke="#201942"

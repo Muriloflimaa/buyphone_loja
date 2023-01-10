@@ -47,18 +47,6 @@ interface GetInfoCreditProps {
   }
 }
 
-interface DataProps {
-  data: {
-    amount: number
-    created_at: string
-    id: number
-    invoice_id: string
-    order_id: number
-    status: string
-    updated_at: string
-  }
-}
-
 export default function creditFinally({
   GetInfoCredit,
   address,
@@ -69,11 +57,11 @@ export default function creditFinally({
   const discountValue = 15000
   const [stateModalSuccess, setStateModalSuccess] = useState(false)
   const [stateModalError, setStateModalError] = useState(false)
-  const [disableFinally, setDisableFinally] = useState(false)
   const [loading, setLoading] = useState(false)
   const [loadingInstallments, setLoadingInstallments] = useState(true)
   const [installments, setInstallments] = useState(0)
   const router = useRouter()
+  const [dataSuccess, setDataSuccess] = useState<any>()
 
   useEffect(() => {
     if (values) {
@@ -107,7 +95,6 @@ export default function creditFinally({
   }
 
   async function handlePayment() {
-    setDisableFinally(true)
     setLoading(true)
     const setDat: ProductPayment[] = []
     values.map(async (item: ArrayProduct) => {
@@ -119,46 +106,27 @@ export default function creditFinally({
       setDat.push(response)
     })
     try {
+      const mobile_phone =
+        GetInfoCredit.card_holder_phone !== undefined
+          ? '+55' + GetInfoCredit.card_holder_phone
+          : user?.mobile_phone //pega o mobile phone digitado, se for undefined pega o do context
+
       const infoData = {
         ...GetInfoCredit,
         user_id: user?.id,
-        card_holder_phone: '+55' + GetInfoCredit.card_holder_phone,
+        card_holder_phone: mobile_phone,
         amount: somaTotalInteger,
         items: setDat,
       }
 
-      const { data }: any = await axios.post(
+      const { data } = await axios.post(
         `/api/api/store/checkout/credit-card`,
         infoData
       )
 
-      setDisableFinally(false)
+      setDataSuccess(data)
       setLoading(false)
-      if (
-        data.status === 'created' ||
-        data.status === 'paid' ||
-        data[0].status === 'created' ||
-        data[0].status === 'paid'
-      ) {
-        setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
-        setCookies('@BuyPhone:OrderId', data[0].order_id, 60 * 5)
-        setCookies('@BuyPhone:ValueOrder', somaTotalInteger, 60 * 5)
-        setStateModalSuccess(true)
-        CleanCart()
-        destroyCookie(null, '@BuyPhone:GetCep')
-        destroyCookie(null, '@BuyPhone:CreditCardInfo')
-        destroyCookie(undefined, '@BuyPhone:GetCep')
-        destroyCookie(undefined, '@BuyPhone:CreditCardInfo')
-        destroyCookie({}, '@BuyPhone:CreditCardInfo')
-        destroyCookie({}, '@BuyPhone:GetCep')
-        return
-      } else {
-        setDisableFinally(false)
-
-        setLoading(false)
-        setStateModalError(true)
-        return
-      }
+      setStateModalSuccess(true)
     } catch (error: any) {
       if (error.response.data.errors) {
         if (error.response.data.errors.document) {
@@ -182,10 +150,23 @@ export default function creditFinally({
           return
         }
       }
-      setDisableFinally(false)
       setLoading(false)
       setStateModalError(true)
     }
+  }
+
+  function handlePurchased() {
+    destroyCookie(null, '@BuyPhone:GetCep')
+    destroyCookie(null, '@BuyPhone:CreditCardInfo')
+    destroyCookie(undefined, '@BuyPhone:GetCep')
+    destroyCookie(undefined, '@BuyPhone:CreditCardInfo')
+    destroyCookie({}, '@BuyPhone:CreditCardInfo')
+    destroyCookie({}, '@BuyPhone:GetCep')
+    setCookies('@BuyPhone:SuccessShipping', 'true', 60 * 5)
+    setCookies('@BuyPhone:OrderId', dataSuccess.order_id, 60 * 5)
+    setCookies('@BuyPhone:ValueOrder', somaTotalInteger, 60 * 5)
+    CleanCart()
+    router.push('/purchased')
   }
 
   return (
@@ -225,11 +206,12 @@ export default function creditFinally({
               e-mail.
             </span>
 
-            <Link href={'/purchased'} passHref>
-              <button className="btn btn-primary max-w-xs text-white w-full shadow-md shadow-primary/60">
-                Ok
-              </button>
-            </Link>
+            <button
+              onClick={handlePurchased}
+              className="btn btn-primary max-w-xs text-white w-full shadow-md shadow-primary/60"
+            >
+              Ok
+            </button>
           </div>
         </div>
       )}
@@ -411,12 +393,10 @@ export default function creditFinally({
                   onClick={() => handlePayment()}
                   className={
                     'flex btn btn-info text-white w-full ' +
-                    (disableFinally && 'btn-disabled')
+                    (loading && 'btn-disabled')
                   }
                 >
-                  {disableFinally
-                    ? 'Processando pedido...'
-                    : 'Finalizar Compra'}
+                  {loading ? 'Processando pedido...' : 'Finalizar Compra'}
                 </a>
               </div>
             </div>

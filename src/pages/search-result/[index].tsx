@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
-import { parseCookies } from 'nookies'
 import { useContext, useEffect, useState } from 'react'
-import JuninhoImg from '../../assets/images/juninho.webp'
+import BelaSad from '../../assets/images/bela_sad.webp'
 import ProductCard from '../../components/ProductCard'
 import { AuthContext } from '../../context/AuthContext'
 import { setupAPIClient } from '../../services/newApi/api'
@@ -76,7 +75,7 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
   }, 1400)
 
   return (
-    <div className="my-5">
+    <div className="mb-5 mt-8 sm:mt-16">
       {!!products ? (
         <>
           <h1 className="md:text-4xl text-3xl font-medium text-center my-10">
@@ -130,7 +129,14 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
           </h1>
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 py-24 md:py-10">
             <div>
-              <Image src={JuninhoImg} layout="fixed" width={200} height={250} />
+              <Image
+                src={BelaSad}
+                layout="fixed"
+                quality={100}
+                width={220}
+                height={250}
+                alt="Imagem personagem Belatriz"
+              />
             </div>
             <div className="mt-4">
               <span className="text-lg text-info-content">

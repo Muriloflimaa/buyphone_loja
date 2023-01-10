@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import ImageJuninho from '../../../assets/images/its-a-match-juninho.webp'
+import BelaItsAMatch from '../../../assets/images/bela_its_a_match.webp'
 import ImageItsMatch from '../../../assets/images/its-a-match.webp'
 import { useCart } from '../../../context/UseCartContext'
 
@@ -24,11 +24,10 @@ export default function ItsModal() {
           <div className="flex gap-2.5 my-8">
             <div className="rounded-full w-36 h-36 bg-[#212B36] relative overflow-hidden">
               <Image
-                src={ImageJuninho}
+                src={BelaItsAMatch}
                 quality={100}
-                layout="fixed"
-                width={145}
-                height={145}
+                layout="responsive"
+                alt="Imagem personagem Belatriz"
               />
             </div>
             <div className="flex flex-col justify-center items-center rounded-full w-36 h-36 bg-[#212B36] relative overflow-hidden">

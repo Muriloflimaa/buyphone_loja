@@ -98,6 +98,7 @@ export interface IUser {
   profile_photo_url: string
   type: number
   promotion: boolean
+  mobile_phone: string
 }
 
 export interface IUserOrder {
