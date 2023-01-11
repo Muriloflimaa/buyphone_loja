@@ -829,7 +829,7 @@ export default function Products({
         >
           {categoryData.map((product) => {
             const returnPrice = verificationPrice(product, user, isUser)
-            return (
+            return product.name === 'capinha' ? null : (
               <Carousel.Item key={product.id}>
                 <ProductRelationCard
                   id={product.id}
@@ -840,7 +840,7 @@ export default function Products({
                   idCategory={product.id}
                   slug={product.slug}
                   slugCategory={data.category_slug}
-                  image={product.media[0]?.original_url}
+                  image={product.media[0] && product.media[0]?.original_url}
                   memory={product.memory}
                   blackfriday={product.blackfriday}
                 />

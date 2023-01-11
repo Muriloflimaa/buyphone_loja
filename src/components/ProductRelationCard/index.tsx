@@ -62,12 +62,14 @@ const ProductRelationCard = ({
                 />
               )}
             <div className="w-[50%] mx-auto">
-              <Image
-                src={image}
-                className="object-contain"
-                width={250}
-                height={350}
-              />
+              {image ? (
+                <Image
+                  src={image}
+                  className="object-contain"
+                  width={250}
+                  height={350}
+                />
+              ) : null}
             </div>
             <div className="mb-2">
               <h2 className="card-title text-base justify-center flex-col font-medium">
