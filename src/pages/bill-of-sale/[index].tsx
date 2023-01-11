@@ -1,15 +1,8 @@
-import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
-import { useEffect, useState } from 'react'
+import { setCookie } from 'nookies'
 import Logo from '../../assets/images/LogoPurple.webp'
-import { apiStore } from '../../services/api'
 import { setupAPIClient } from '../../services/newApi/api'
-import { IInvoice } from '../../types'
 import { cpfMask, maskNewCep, moneyMask } from '../../utils/masks'
-import { ToastCustom } from '../../utils/toastCustom'
-import { useCookies } from '../../utils/useCookies'
 
 interface IProduct {
   name: string

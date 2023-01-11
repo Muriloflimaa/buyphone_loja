@@ -4,8 +4,10 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import BelaSad from '../../assets/images/bela_sad.webp'
 import ListProducts from '../../components/ListProducts'
+import { setupAPIClient } from '../../services/newApi/api'
 import { IInvoice } from '../../types'
 import { PersistentLogin } from '../../utils/PersistentLogin'
+import { ToastCustom } from '../../utils/toastCustom'
 
 interface DataProps {
   current_page: number
@@ -55,46 +57,21 @@ interface PedidosProps {
   utm_source: null
 }
 
-function MyShopping() {
-  const [data, setData] = useState<DataProps>()
-  const [errorData, setErrorData] = useState(false)
-
-  async function GetInvoice() {
-    try {
-      const { data: user } = await axios.get('/api/api/store/me')
-      if (user) {
-        const { data: Orders } = await axios.get(
-          `/api/api/store/orders/user/${user?.id}`
-        )
-        setData(Orders)
-      }
-    } catch (error) {
-      setErrorData(true)
-    }
-  }
-
-  useEffect(() => {
-    GetInvoice()
-  }, [])
+export default function MyShopping({ data }: { data: DataProps }) {
+  const [dataOrders, setDataOrders] = useState<DataProps>(data)
 
   async function handleChangePagination(page: string) {
     try {
-      const { data: user } = await axios.get('/api/api/store/me')
-      if (user) {
-        const { data } = await axios.get(
-          `/api/api/store/orders/user/${user?.id}?page=${page
-            .replace(
-              `https://beta-api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-              ''
-            )
-            .replace(
-              `https://api.buyphone.com.br/store/orders/user/${user.id}?page=`,
-              ''
-            )}`
-        )
-        setData(data)
-      }
-    } catch (error) {}
+      const { data } = await axios.get(page)
+
+      setDataOrders(data)
+    } catch (error) {
+      ToastCustom(
+        2000,
+        'Não foi possível chamar a próxima página, tente mais tarde.',
+        'error'
+      )
+    }
   }
 
   return (
@@ -103,8 +80,8 @@ function MyShopping() {
         Minhas Compras
       </h1>
       <div className="grid border rounded-md border-b-0">
-        {data && data?.data.length >= 0 ? (
-          data?.data.map((pedido) => {
+        {dataOrders && dataOrders?.data.length >= 0 ? (
+          dataOrders?.data.map((pedido) => {
             return (
               <React.Fragment key={pedido.id}>
                 <ListProducts
@@ -128,7 +105,7 @@ function MyShopping() {
               </React.Fragment>
             )
           })
-        ) : !!errorData ? (
+        ) : (
           <div className="flex flex-col text-center md:text-left md:flex-row justify-center items-center gap-8 h-[500px]">
             <Image
               src={BelaSad}
@@ -146,40 +123,13 @@ function MyShopping() {
               </Link>
             </div>
           </div>
-        ) : (
-          <div className="flex gap-3">
-            <svg
-              className="animate-spin h-5 w-5 text-black"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            <h1>Carregando...</h1>
-          </div>
         )}
         <div className="btn-group mx-auto md:mx-0 border border-t-0 border-x-0 border-gray-300 rounded-b-md">
-          {data?.links.map((link) => (
+          {dataOrders?.links.map((link) => (
             <button
               key={link.label}
               onClick={() => {
-                handleChangePagination(
-                  link.label
-                    .replace('&laquo; Previous', link.url)
-                    .replace('Next &raquo;', link.url)
-                )
+                handleChangePagination(link.url)
                 window.scrollTo(0, 0)
               }}
               className={`btn btn-xs font-thin normal-case md:btn-sm btn-ghost ${
@@ -198,9 +148,25 @@ function MyShopping() {
 }
 
 export const getServerSideProps = PersistentLogin(async (ctx) => {
+  const api = setupAPIClient(ctx)
+  try {
+    const { data: user } = await api.get('/store/me')
+    if (user) {
+      const { data } = await api.get(`/store/orders/user/${user?.id}`)
+      return {
+        props: {
+          data: data,
+        },
+      }
+    }
+  } catch (error) {
+    return {
+      props: {
+        data: null,
+      },
+    }
+  }
   return {
     props: {},
   }
 }, '/user/myshopping')
-
-export default MyShopping
