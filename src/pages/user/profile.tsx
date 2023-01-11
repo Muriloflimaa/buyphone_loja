@@ -9,9 +9,10 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
 import { Input } from '../../components/InputElement'
-import { link } from '../../services/newApi/api'
+import { link, setupAPIClient } from '../../services/newApi/api'
 import { UserData } from '../../types'
 import { masktel } from '../../utils/masks'
+import { PersistentLogin } from '../../utils/PersistentLogin'
 import { ToastCustom } from '../../utils/toastCustom'
 
 type SignInFormData = {
@@ -301,57 +302,22 @@ export default function profile({ data }: user) {
   )
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const cookies = parseCookies(ctx)
-
-  //se existe um token entrar aqui!
-  if (cookies['@BuyPhone:Token']) {
-    const decodedToken = jwt_decode<any>(cookies['@BuyPhone:Token']) //decodifica o token
-
-    //se existir um token e estiver expirado, mandar para o login
-    if (Date.now() >= decodedToken.exp * 1000) {
-      setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
-        maxAge: 60 * 60 * 24, // 24h
-        path: '/',
-      })
-      destroyCookie(ctx, '@BuyPhone:User')
-      destroyCookie(ctx, '@BuyPhone:Token')
-      return {
-        redirect: {
-          destination: '/account/login',
-          permanent: false,
-        },
-      }
-    }
-  }
-
-  //verifica se não existe um token, se nao existir voltar para a home
-  if (!cookies['@BuyPhone:Token']) {
-    setCookie(ctx, '@BuyPhone:Router', '/user/profile', {
-      maxAge: 60 * 60 * 24, // 24h
-      path: '/',
-    })
-    return {
-      redirect: {
-        destination: '/account/login',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps = PersistentLogin(async (ctx) => {
+  const api = setupAPIClient(ctx)
 
   try {
     //pega o user no cookies
-    const { '@BuyPhone:User': user } = parseCookies(ctx)
-
-    //transforma em objeto json
-    const userjson = JSON.parse(user)
+    const user = await api
+      .get('/store/me')
+      .then((response) => {
+        return response
+      })
+      .catch(() => {
+        return null
+      })
 
     //chamada api com id do user obtido + bearer token do cookies
-    const { data } = await axios.get(`${link}/store/users/${userjson.id}`, {
-      headers: {
-        Authorization: `Bearer ${cookies['@BuyPhone:Token']}`,
-      },
-    })
+    const { data } = await api.get(`${link}/store/users/${user?.data.id}`)
 
     //envia o data para a aplicacao com sucesso
     return {
@@ -361,11 +327,21 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
 
     //caso der erro retornar null
-  } catch (error) {
+  } catch {
+    setCookie(
+      ctx,
+      '@BuyPhone:Error',
+      'Ocorreu um erro na busca dos seus dados, tente novamente mais tarde',
+      {
+        maxAge: 60, // 24h
+        path: '/',
+      }
+    )
     return {
-      props: {
-        data: null,
+      redirect: {
+        destination: '/account/login',
+        permanent: false,
       },
     }
   }
-}
+}, '/user/profile')

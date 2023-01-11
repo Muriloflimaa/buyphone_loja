@@ -96,7 +96,10 @@ export default function SearchResult({ data, query }: ResultSearchProps) {
                     price={returnPrice.ourPrice}
                     averagePrice={returnPrice.averagePrice}
                     slug={products.slug}
-                    slugCategory={products.category_slug}
+                    slugCategory={products.category_slug.replace(
+                      '-3-geracao',
+                      ''
+                    )}
                     image={products.media[0]?.original_url}
                     memory={products.memory}
                     blackfriday={products.blackfriday}

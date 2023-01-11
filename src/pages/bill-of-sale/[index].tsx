@@ -1,20 +1,15 @@
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { useEffect, useState } from 'react'
 import Logo from '../../assets/images/LogoPurple.webp'
 import { apiStore } from '../../services/api'
 import { setupAPIClient } from '../../services/newApi/api'
 import { IInvoice } from '../../types'
 import { cpfMask, maskNewCep, moneyMask } from '../../utils/masks'
-
-interface IParams {
-  params: {
-    index: string
-  }
-  ctx: GetServerSidePropsContext
-}
+import { ToastCustom } from '../../utils/toastCustom'
+import { useCookies } from '../../utils/useCookies'
 
 interface IProduct {
   name: string
@@ -31,6 +26,9 @@ interface IOrder {
   tracking_code: null
   tracking_url: null
   product: Array<IProduct>
+  code: string
+  imei: string
+  nf_key: string
   order: {
     id: number
     user_id: number
@@ -83,7 +81,7 @@ interface IOrder {
     }
   }
 }
-
+// --
 interface DataProps {
   data: Array<IOrder>
 }
@@ -124,9 +122,7 @@ export default function BillOfSale({ data }: DataProps) {
           <div className="px-2">
             <div className="rounded-md border p-2 text-xs">
               <span className="block">CHAVE DE ACESSO</span>
-              <span>
-                3322 0933 0412 6004 8604 5500 0010 3744 2011 2185 0055
-              </span>
+              <span>{data[0].nf_key}</span>
             </div>
             <p className="text-xs p-2">
               Consulta de autenticidade no portal nacional da NF-e
@@ -360,9 +356,9 @@ export default function BillOfSale({ data }: DataProps) {
           <h1 className="font-semibold mb-2">DADOS ADICIONAIS</h1>
           <div className="rounded-md border p-2">
             <p>
-              N.PEDIDO: #C131O118I104 Venda realizada pela Internet (Comercio
+              N.PEDIDO: {data[0].code} Venda realizada pela Internet (Comercio
               Eletronico) no site https://buyphone.com.br/O IMEI DESTE
-              EQUIPAMENTO E:(358688605338383)
+              EQUIPAMENTO É:({data[0].imei})
             </p>
           </div>
         </div>
@@ -410,19 +406,62 @@ export default function BillOfSale({ data }: DataProps) {
   )
 }
 
-export const getServerSideProps = async ({ params, ctx }: IParams) => {
-  const idOrder = params.index
+export const getServerSideProps = async (ctx: any) => {
+  const idOrder = ctx.params.index
   const api = setupAPIClient(ctx)
+
   try {
     const { data } = await api.get(`/store/orders/${idOrder}/`)
-    return {
-      props: {
-        data,
-      },
+
+    const user = await api
+      .get('/store/me')
+      .then((response) => {
+        return response
+      })
+      .catch(() => {
+        return null
+      })
+
+    if (data[0].order.user.id !== user!.data.id) {
+      setCookie(
+        ctx,
+        '@BuyPhone:Error-Bill-Of-Sale',
+        `/bill-of-sale/${idOrder}`,
+        {
+          maxAge: 60, // 24h
+          path: '/',
+        }
+      )
+
+      return {
+        redirect: {
+          destination: '/account/login',
+          permanent: false,
+        },
+      }
+    } else {
+      return {
+        props: {
+          data,
+        },
+      }
     }
   } catch (error) {
+    console.log(error)
+    setCookie(
+      ctx,
+      '@BuyPhone:Error',
+      'Você precisa ser dono da nota fiscal para visualizá-la',
+      {
+        maxAge: 60, // 24h
+        path: '/',
+      }
+    )
     return {
-      props: { data: null },
+      redirect: {
+        destination: '/account/login',
+        permanent: false,
+      },
     }
   }
 }

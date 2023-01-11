@@ -47,14 +47,9 @@ import MiniBannerConhecaDark from '../assets/images/entendaMiniBanner.webp'
 import MeetImgDark from '../assets/images/meetdark.webp'
 import BannerIphone14Dark from '../assets/images/banner3desktopdark.webp'
 
-import BannerCopaDesktop from '../assets/images/BannerCopaDesktop.webp'
-import BannerCopaMobile from '../assets/images/BannerCopaMobile.webp'
-
-import MiniBannerBlackFriday from '../assets/images/MiniBannerBlackFriday.webp'
-
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { parseCookies, setCookie } from 'nookies'
+import { setCookie } from 'nookies'
 import BannerDepoiments from '../assets/images/depoiments.webp'
 import BannerIphone13Dark from '../assets/images/iphone13prodark.webp'
 import BannerIphone13Light from '../assets/images/iphone13prolight.webp'
@@ -62,7 +57,6 @@ import CardMatch from '../components/CardMatch'
 import ItsModal from '../components/Modals/Its-Match'
 import { ToastCustom } from '../utils/toastCustom'
 import { verificationPrice } from '../utils/verificationPrice'
-import BannerProductPromotion from '../components/BannerProductPromotion'
 import BlurImage from '../components/BlurImage'
 import ProductComponentPromotion from '../components/ProductComponentPromotion'
 import BannerDesktopPromotion from '../components/BannerDesktopPromotion'
@@ -404,7 +398,7 @@ const Home: NextPage<DataProps> = ({
                       '-3-geracao',
                       ''
                     )}
-                    image={products.media[0].original_url}
+                    image={products.media[0] && products.media[0].original_url}
                     memory={products.memory}
                     blackfriday={products.blackfriday}
                   />
@@ -582,6 +576,7 @@ const Home: NextPage<DataProps> = ({
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const api = setupAPIClient(ctx)
+
   const decodesEmail =
     ctx.query.email &&
     new Buffer(ctx.query.email.toString(), 'base64').toString('ascii')
